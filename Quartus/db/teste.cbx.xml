@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="teste">
+		<CBX_INST_ENTRY INSTANCE_NAME="|MAC|lpm_mult:Mult0" CBX_FILE_NAME="mult_17t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|MAC|lpm_mult:Mult1" CBX_FILE_NAME="mult_17t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|MAC|lpm_mult:Mult2" CBX_FILE_NAME="mult_17t.tdf"/>
+	</PROJECT>
+</LOG_ROOT>

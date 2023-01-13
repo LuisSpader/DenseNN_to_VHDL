@@ -1,0 +1,236 @@
+Parei o script 'Python_vhd_script' em: 
+  Top Neuronio > tree > NEURON_LeakyReLU_INPUT_NET
+
+Reselecionar vhds do projeto: C:\Users\luisa\Desktop\NN_vhdl\Projeto-TCC-FPGA\HW\NNs\NN_2
+  Estão na pasta: C:\Users\luisa\Desktop\NN_vhdl\Projeto-TCC-FPGA\HW\Neuron
+  Porém primeiro precisa arrumar o script 'Python_vhd_script' e testar se está tudo funcionando
+
+Organizar pastas excedentes:
+  - Fazer nova branch e deixar como está agora
+  - Voltar para branch atual e apagar pastas excedentes
+    Pastas excedentes: neurônios que não estão na pasta: C:\Users\luisa\Desktop\NN_vhdl\Projeto-TCC-FPGA\HW\Neuron
+
+===================================================
+Próximos passos Script 2022 04 05 23 34 16
+https://www.youtube.com/watch?v=D-MFQopyXPc
+
+
+=======================  07/04/2022 ==========================
+Próximos passos Script 2 2022 04 07 21 46 25
+https://youtu.be/uvcHM7DVWxw
+
+ - dicionário de camada
+    - número de entradas - OK
+    - número de neurônios - OK
+    - dict neurônio selecionado da camada
+    - tipo de neurônio - OK
+      - combinacional - OK
+      - sequencial - OK
+      - f(x) de ativação - OK
+    Fazer agora:
+      - geração automática das IO da camada com base no IO do neurônio
+    Futuro:
+      - mapeamento dos componentes (que neurônio da camada anterior vai para a camada atual)
+
+- alterar função vhd_name() - OK
+  - Combinacional ou Sequencial: comb, seq - OK
+  - Multiplier number & version: mul1v1, mul1v2, mul2v1 - OK
+  - Adder number & version: add1v1, add1v2, add2v1 - OK
+
+============== AUTOMATIZAÇÃO DICTs ==============
+https://youtu.be/Ps3sYh0P5sY
+ - gerar dicionários automaticamente com base em relatório de NN treinada:
+  - lista de : dict_neuron
+  - lista de : dict_layers
+
+
+============== PRÓXIMOS PASSOS SCRIPT NN ==============
+ - gerar o relatório do tensorflow
+ - script para ler relatório tensorflow e gerar NN
+
+============== PRÓXIMOS PASSOS SCRIPT Neuronio ==============
+ - teriam que ter classes ou métodos (funções) para cada tipo de lógica interna do MAC
+    - combinacional
+        - A
+          - multiplicadores (sinal de pronto que ativa registrador)
+            - multiplicador 1
+            - multiplicador 2 
+          - somadores (sinal de pronto?? talvez, tem que ver)
+            - somador 1
+            - somador 2
+        - B
+          - multiplicadores (sinal de pronto que ativa registrador)
+            - multiplicador 1
+            - multiplicador 2 
+          - somadores (sinal de pronto?? talvez, tem que ver)
+            - somador 1
+            - somador 2         
+    - sequencial
+        - A
+          - multiplicadores (sinal de pronto que ativa registrador)
+            - multiplicador 1
+            - multiplicador 2 
+          - somadores (sinal de pronto?? talvez, tem que ver)
+            - somador 1
+            - somador 2        
+        - B
+          - multiplicadores (sinal de pronto que ativa registrador)
+            - multiplicador 1
+            - multiplicador 2 
+          - somadores (sinal de pronto?? talvez, tem que ver)
+            - somador 1
+            - somador 2        
+
+============== PESOS PODEM SER ARMAZENADOS ==============
+ - No neurônio
+  - 1 entrada para cada peso (wi)
+  - mux que alterna saída entre:
+    - xi (inputs)
+    - wi (pesos)
+
+=======================  10/04/2022 ==========================
+Próximos passos & Planejamento final de ano 2022-04-10 23-20-07
+https://youtu.be/5uJFbyL7TU8
+- Fazer com que camada e neurônio sejam gerados  com base no dicionário 'layer_dict'
+  - camada -
+  - neurônio -> 
+- lista de dicionários camada 
+  - cada um com sua versão de neurônio
+- loop de geração para cada camada -> irá gerar toda a NN (versão com multiplicadores e adders operadores '+' '*')
+  - alterará 'ID_camada'
+  - alterará também o restante do '.vhd'
+  -----------------------------------
+  FÉRIAS AGOSTO
+- Tensorflow (deep learning)
+  - ver como gerar um relatório da NN
+    Por camada (parâmetros layer_dict):
+    - pesos
+    - bias
+    ...
+  - Fazer script de conversão do relatório para a lista de dicionários de camada (lista de 'layer_dict')
+  Mais para frente:
+  - Fazer script de conversão do relatório de pesos e bias para uma memória (essa memória precisa transferir para os neurônios)
+    - vhd de controle para ter 'estados de update_NN' (utilizando shift_registers)
+  ----------------------------------------------
+  FINAL DO ANO -> TCC
+  - Fazer com que alterações no dicionário do neurônio, gere diferentes arquiteturas de neurônio. Mudando multiplicadores, somadores, fx_ativação, etc...
+  - Camadas convolucionais **difícil
+
+=======================  11/04/2022 ==========================
+Próximos passos quase terminando layer dict gerar camada 2022 04 11 22 29 27
+https://youtu.be/TJf9CSw-DC8
+
+- Fazer com que camada e neurônio sejam gerados  com base no dicionário 'layer_dict'
+  - camada - OK -> FAZER ANTES 1
+  - neurônio -> vai demorar -> FAZER DEPOIS 6
+    - neuronio com operadores
+    - neuronio com componentes
+      - geracao automatica de componentes com base no 'layer_dict' conforme
+      ** se atentar para geraçao atraves de funçoes: if, else, -> se eu fizer uma descriçao em hardware para um neuronio de 3 entradas e 5 bits, gostaria de que jogando isso em algum tipo de funçao, esta automaticamente geraria o '.vhd' e alterar os parametros, automaticamente ja faria a funcao gerar arquiteturas em outras configuracoes
+        - MAC
+          - combinacional
+          - sequencial
+        - top_neuron
+          - fx_activation
+- lista de dicionários camada -> FAZER ANTES 2
+  - cada um com sua versão de neurônio
+- loop de geração para cada camada -> irá gerar toda a NN (versão com multiplicadores e adders operadores '+' '*') -> FAZER ANTES 3
+  - alterará 'ID_camada'
+  - alterará também o restante do '.vhd'
+ - fazer 5: tesztbench da NN
+- fazer 4: script para geração do topo da NN com base na lista de dicionários de camada (lista de 'layer_dict') -> FAZER ANTES
+- fazer 7: versões sequenciais
+  -----------------------------------
+  FÉRIAS AGOSTO
+- Tensorflow (deep learning)
+  - ver como gerar um relatório da NN
+    Por camada (parâmetros layer_dict):
+    - pesos
+    - bias
+    ...
+  - Fazer script de conversão do relatório para a lista de dicionários de camada (lista de 'layer_dict')
+  Mais para frente:
+  - Fazer script de conversão do relatório de pesos e bias para uma memória (essa memória precisa transferir para os neurônios)
+    - vhd de controle para ter 'estados de update_NN' (utilizando shift_registers)
+  ----------------------------------------------
+  FINAL DO ANO -> TCC
+  - Fazer com que alterações no dicionário do neurônio, gere diferentes arquiteturas de neurônio. Mudando multiplicadores, somadores, fx_ativação, etc...
+  - Camadas convolucionais **difícil
+=======================================
+20/05/2022
+parâmetro 'shift_register: bool':
+    deve ser incluído em:
+        função que altera dict do neurônio
+
+    oq o parametro deve alterar:
+        alterar PORT MAP de cada neurônio:
+            incluir saídas:
+                reg_peso_out => reg_peso_out
+                reg_bias_out => reg_bias_out
+                w<j>_out => w<j>_out
+
+        no gerador de camadas:
+            incluir saídas:
+                camada_reg_peso_out => camada_neuronio_reg_peso_out
+                camada_reg_bias_out => camada_neuronio_reg_bias_out
+                c<i>_n<k>_w<j>_out => c<i>_n<k>_w<j>_out
+
+            alterar PORT MAP de cada camada:
+
+        no gerador de topo:
+-----------------------------
+parâmetro 'gen_dead_neurons' deve alterar a quantidade de entradas de todas as camadas - OK
+
+=======================================
+27/05/2022
+
+com neuronios mortos
+	apenas passar pesos zerados
+	shift register genérico e fácil -> estou fazendo
+
+  2 versões de neurônios:
+    1- tem saída para shift_registers
+    2- não tem saída para shift_registers
+
+  na camada softmax utilizar neuronio versão 2
+	
+sem neuronios mortos
+	shift register modificado
+		2 versões de neurônios
+			1- tem saída para shift_registers
+			2- não tem saída para shift_registers
+
+TO-DO topo:
+  xi deve pegar saída camada xi-1
+    entrada camada 
+    entrada registradores
+      pesos
+      bias
+  última camada (softmax) não deve ter saídas shift: neurônio sem saída dos registradores
+  saída ultima camada = saída topo
+
+TO-DO camada:
+  incluir saídas dos registradores para executar shift_register
+    no PORT MAP
+      pesos
+      bias
+    no entity
+      pesos
+      bias
+
+TO-DO neuronio:
+  incluir saídas dos registradores para executar shift_register
+    no PORT MAP
+      pesos
+      bias
+    no entity
+      pesos
+      bias      
+
+** Se atentar para quanto temos
+  camada_0: 3 neurônios de 5 entradas (5n)
+    neste caso 2 das 5 saídas de cada neuronio, não serão mapeadas para a próxima camada
+      serão aterradas ou algo do tipo
+      ou o neurônio deverá ser uma versão modificada onde só 3 dos 5 registradores de peso possuem saída no neurônio
+      
+  camada_1: 3 neurônios de 3 entradas (3n) | 3 entradas pois só precisam da saídas da camada anterior (que são saídas de 3 neurônios)

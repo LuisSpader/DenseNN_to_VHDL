@@ -1,0 +1,41 @@
+https://stackoverflow.com/questions/11509830/how-to-add-color-to-githubs-readme-md-file
+
+
+This is a workaround to change text font , color and also size in GFM using MathJaX
+
+this is a preview for how it looks like:
+
+enter image description here possible fonts :
+
+mathcal - mathbb - mathscr - mathfrak - mathcal
+
+possible colors :
+
+black, blue, brown, cyan, darkgray, gray, green, lightgray, lime, magenta, olive, orange, pink, purple, red, teal, violet, white, yellow
+
+use $..$ for inline code and $$..$$ for centered
+u can use \color or \textcolor
+u can use \ between text as a space (or \ \ for double space)
+
+
+
+---------------
+$\mathcal{\color{purple}{this \ is \ a \ paragraph} \ \color{cyan}{in \ another \ font}}$
+
+$\mathbb{\color{teal}{this \ is \ a } \ \color{magenta}{paragraph \ in \ another \ font}}$
+
+$\mathscr{\color{red}{this} \ \ \color{blue}{is \ \ a \ \ paragraph} \ \ \color{yellow}{in \ \ another \ \ font}}$
+
+$\mathfrak{\color{lime}{this \ is \ a \ paragraph \ in \ another \ font}}$
+
+$\mathscr{\color{red}{mon}\color{white}{day}}$
+
+$\textcolor{olive}{\TeX} \ \textcolor{darkgray}{workaround \ found \ by \ Dassalem \ Mohammed \ Yasser}$
+
+$\textit{hello}$  #italic
+
+$\text{hello}$    #normal
+
+$\Large{hello}$$   #Bigger text size
+
+$$\LaTeX$$
