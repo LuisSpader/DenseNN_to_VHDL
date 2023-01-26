@@ -69,7 +69,7 @@ ARCHITECTURE behavior OF neuron_ReLU_5n_out IS
 
   ---------- SIGNALS ----------
   -- # ROM_component
-  SIGNAL out_reg_MAC  : signed((2 * BITS) - 1 DOWNTO 0) --reg da saida do MAC --todo: trocar para 2xBITS
+  SIGNAL out_reg_MAC : signed((2 * BITS) - 1 DOWNTO 0); --reg da saida do MAC --todo: trocar para 2xBITS
 
   -- SIGNAL reg_Xi       : signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);
   SIGNAL en_registers : STD_LOGIC;                      -- SHIFT_REGISTER
