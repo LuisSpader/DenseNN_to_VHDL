@@ -4,29 +4,29 @@ USE ieee.numeric_std.ALL;
 USE ieee.math_real.ALL;
 USE work.parameters.ALL;
 
-  ENTITY  MAC_3n IS
-    GENERIC (
-        BITS : NATURAL := BITS;
-        NUM_INPUTS : NATURAL := 3;
-        TOTAL_BITS : NATURAL := 24
-    );
-    PORT (
-      clk, rst: IN STD_LOGIC;
-      Xi : IN signed(TOTAL_BITS - 1 DOWNTO 0);
-      Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
-      ----------------------------------------------
-      y: OUT signed(7 DOWNTO 0)
-    );
-  end ENTITY;
+ENTITY MAC_3n IS
+  GENERIC (
+    BITS       : NATURAL := BITS;
+    NUM_INPUTS : NATURAL := 3;
+    TOTAL_BITS : NATURAL := 24
+  );
+  PORT (
+    clk, rst : IN STD_LOGIC;
+    Xi       : IN signed(TOTAL_BITS - 1 DOWNTO 0);
+    Win      : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
+    ----------------------------------------------
+    y        : OUT signed((2 * BITS) - 1 DOWNTO 0) --todo: colocar 2xBITS
+  );
+END ENTITY;
 
-ARCHITECTURE arch OF  MAC_3n  IS
+ARCHITECTURE arch OF MAC_3n IS
 
-    ---------- SINAIS ----------
-	SIGNAL sum_all : signed((2*BITS) - 1 DOWNTO 0);
-  SIGNAL s_Xi : signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);
-  SIGNAL s_Win : signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
-  SIGNAL s_mult : signed(((2 * BITS) * (NUM_INPUTS)) - 1 DOWNTO 0);
-    
+  ---------- SINAIS ----------
+  SIGNAL sum_all : signed((2 * BITS) - 1 DOWNTO 0);
+  SIGNAL s_Xi    : signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);
+  SIGNAL s_Win   : signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
+  SIGNAL s_mult  : signed(((2 * BITS) * (NUM_INPUTS)) - 1 DOWNTO 0);
+
   COMPONENT mult0_v0 IS
     GENERIC (
       BITS : NATURAL := BITS
@@ -39,16 +39,14 @@ ARCHITECTURE arch OF  MAC_3n  IS
   END COMPONENT;
 
 BEGIN
-  s_Xi <= Xi;
-  s_Win <= Win;
+  s_Xi    <= Xi;
+  s_Win   <= Win;
+  sum_all <= (s_mult(((2 * BITS) * (0 + 1)) - 1 DOWNTO ((2 * BITS) * (0))) +
+    s_mult(((2 * BITS) * (1 + 1)) - 1 DOWNTO ((2 * BITS) * (1))) +
+    s_mult(((2 * BITS) * (2 + 1)) - 1 DOWNTO ((2 * BITS) * (2))) +
+    s_Win((BITS * (3 + 1)) - 1 DOWNTO (BITS * (3))));
 
-
-  sum_all <= (s_mult(((2 * BITS) * (0 + 1)) - 1 DOWNTO ((2 * BITS) * (0))) + 
-    s_mult(((2 * BITS) * (1 + 1)) - 1 DOWNTO ((2 * BITS) * (1))) + 
-    s_mult(((2 * BITS) * (2 + 1)) - 1 DOWNTO ((2 * BITS) * (2))) + 
-    s_Win((BITS * (3 + 1)) - 1 DOWNTO (BITS * (3)))); 
-
-loop_Mult_port_map : FOR i IN 0 TO (NUM_INPUTS - 1) GENERATE
+  loop_Mult_port_map : FOR i IN 0 TO (NUM_INPUTS - 1) GENERATE
     mult0_v0_inst_loop : mult0_v0
     PORT MAP(
       X => s_Xi((BITS * (i + 1)) - 1 DOWNTO (BITS * (i))),
@@ -56,16 +54,16 @@ loop_Mult_port_map : FOR i IN 0 TO (NUM_INPUTS - 1) GENERATE
       Y => s_mult(((2 * BITS) * (i + 1)) - 1 DOWNTO ((2 * BITS) * (i)))
     );
   END GENERATE;
-	PROCESS (rst, clk)
-	BEGIN
-		IF (rst = '1') THEN
-                        y <= (OTHERS => '0');
-		ELSE
-			IF (clk'event AND clk = '1') THEN --se tem evento de clock
-                                y <= signed(sum_all(15 DOWNTO 8));
-			END IF;
-		END IF;
-	END PROCESS;
-
-
+  -- PROCESS (rst, clk)
+  -- BEGIN
+  --   IF (rst = '1') THEN
+  --     y <= (OTHERS => '0');
+  --   ELSE
+  --     IF (clk'event AND clk = '1') THEN --se tem evento de clock
+  --       -- y <= signed(sum_all(15 DOWNTO 8));
+  --       y <= signed(sum_all);
+  --     END IF;
+  --   END IF;
+  -- END PROCESS;
+  y <= signed(sum_all); --todo: isso ao invés do process
 END arch;
