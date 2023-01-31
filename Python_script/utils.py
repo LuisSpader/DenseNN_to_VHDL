@@ -884,7 +884,7 @@ camada_inputs_teste = [['clk', 'rst', 'update_weights'], [], [],
                        [], [], [], ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']]
 
 
-def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN') -> str:
+def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = False) -> str:
     """Função para gerar entradas e saídas 'manual' com base no dicionário (IO_dict) e uma lista de IO do layers (IO_list), comparando assim a qual grupo cada item da IO_list pertence.
 
     Args:
@@ -933,9 +933,10 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN') -> str:
         position = item.find(f"{find}")
         txt_antes = item[:position].strip()  # nome variavel
         txt_depois = item[position:].strip()  # tipo de variavel
-        print(f"txt_antes: {txt_antes}")
-        print(f"txt_depois: {txt_depois}")
-        print(" ")
+        if DEBUG:
+            print(f"txt_antes: {txt_antes}")
+            print(f"txt_depois: {txt_depois}")
+            print(" ")
 
         if not txt_depois in tipos:
             tipos.append(txt_depois)
@@ -961,7 +962,8 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN') -> str:
     # print("for item in IO_list:")
     # print(f"IO_list: {IO_list}")
     for item in IO_list[IO_type]['manual']:
-        print(f"item: {item}")  # clk, ... , Xi, c0_n0_Win, ...
+        if DEBUG:
+            print(f"item: {item}")  # clk, ... , Xi, c0_n0_Win, ...
         # para o caso em que IO_type = 'IN'
         #  dict_list_value_manual = [
         #     ['clk', 'rst', 'update_weights'],
@@ -1017,6 +1019,147 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN') -> str:
     # text_list can be an splitted text or a list of texts
     final_string = '\n'.join(map(str, (text_list)))
     # print(f"utils.py :: IO_manual() -> final_string: {final_string}")
+    return final_string
+
+
+# def IO_manual_Top(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = False) -> str:
+    """Função para gerar entradas e saídas 'manual' com base no dicionário (IO_dict) e uma lista de IO do layers (IO_list), comparando assim a qual grupo cada item da IO_list pertence.
+
+    Args:
+        IO_dict (dict): dicionário padrão do arquivo 'standar_dicts'
+        IO_list (list): lista de nome das entradas da camada. 
+            Exemplo :
+                IO_list = [
+                    ['clk', 'rst', 'update_weights'], -- STD_LOGIC
+                    [], -- STD_LOGIC_VECTOR
+                    [], -- SIGNED
+                    [], -- STD_LOGIC_num_inputs
+                    [], -- STD_LOGIC_VECTOR_num_inputs
+                    [], -- SIGNED_num_inputs
+                    ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win'] -- manual
+                    ]
+        IO_type (str, optional): _description_. Defaults to 'IN'.
+
+    Returns:
+        final_string (str): Retorna texto com as IO. Exemplo para entradas compartilhadas entre os neurônios ('shared_IO'): 
+            Xi : IN signed((TOTAL_BITS) - 1 DOWNTO 0);
+
+            Ou por exemplo para entradas únicas a cada neurônio ('unique_IO'):
+            c0_n0_Win, c0_n1_Win, c0_n2_Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
+    """
+    nomes = []  # usado para comparação
+    nomes2 = []  # usado para armazenar os items da lista que são similares a 'nomes'
+    tipos = []
+    tipos2 = []
+    dict_list_value_manual = []
+
+    dict_list_value_manual.append(dict_list_exceptNone(
+        dict_slice=IO_dict[IO_type]['manual'], return_value_or_key='value', is_list=True))
+    dict_list_value_manual = [j for i in dict_list_value_manual for j in i]
+    print(f"dict_list_value_manual: {dict_list_value_manual}")
+
+    find = ":"
+
+    for item in dict_list_value_manual:
+        #  Para o caso em que IO_type = 'IN'
+        # dict_list_value_manual = [
+        # ['Xi : IN signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);'],
+        # ['Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
+        #   ]
+
+        position = item.find(f"{find}")
+        txt_antes = item[:position].strip()  # nome variavel
+        txt_depois = item[position:].strip()  # tipo de variavel
+        if True:
+            # if DEBUG:
+            print(f"txt_antes: {txt_antes}")
+            print(f"txt_depois: {txt_depois}")
+            print(" ")
+
+        if not txt_depois in tipos:
+            tipos.append(txt_depois)
+            nomes.append(txt_antes)
+        else:
+            for i in range(0, len(tipos)):
+                if tipos[i] == txt_depois:  # quando temos itens do mesmo tipo
+                    nomes[i] = f"{nomes[i]}, {txt_antes}"
+
+    # print(f"nomes: {nomes}")
+    # print(f"tipos: {tipos}")
+    # print("---")
+    find = "_"
+
+    # nomes = ['Xi', 'Win']
+    # tipos = ['IN signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);',
+    # 'IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
+
+    # criando listas com mesmo formato e tamanho
+    nomes2 = ['']*len(nomes)
+    tipos2 = ['']*len(tipos)
+
+    # print("for item in IO_list:")
+    # print(f"IO_list: {IO_list}")
+    for item in IO_list[IO_type]['manual']:
+        # if DEBUG:
+        if True:
+            print(f"item: {item}")  # clk, ... , Xi, c0_n0_Win, ...
+        # para o caso em que IO_type = 'IN'
+        #  dict_list_value_manual = [
+        #     ['clk', 'rst', 'update_weights'],
+        #     [],
+        #     [],
+        #     [],
+        #     [],
+        #     [],
+        #     ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']
+        #     ]
+
+        if "_" in item:
+            position = item.find(f"{find}")
+            txt_depois = item.split(f"{find}")[-1]  # c0_n0_Win -> Win
+        else:
+            txt_depois = item  # clk -> clk
+        # print(f"txt_antes: {txt_antes}")
+        # print(f"txt_depois: {txt_depois}")  # -> Win
+        # print(" ")
+
+        # print("limpando listas: ")
+        # print(f"nomes2: {nomes2}")
+        # print(f"tipos2: {tipos2}")
+
+        # if 'Win' vindo de 'c0_n0_Win'(item) in nomes:['Xi','Win']
+        if txt_depois in nomes:
+            # print(" ------------ igualdade !! ---------------- ")
+
+            for i in range(0, len(nomes)):  # verificando os tipos que são iguais
+                # se 'Win'(txt_depois) vindo de 'c0_n0_Win'(item)  == 'Win'(nomes[i])
+                # em resumo: se 'Win'(txt_depois) == 'Win'(nomes[i])
+                if txt_depois == nomes[i]:
+                    if nomes2[i] == '':
+                        # print(f"quando está vazio:  nomes2[{i}] = {item}")
+                        nomes2[i] = f"{item}"  # 'c0_n0_Win'(item)
+                        tipos2[i] = tipos[i]  # 'c0_n0_Win'(item)
+                    else:
+                        # print(f"quando já tem algo:  nomes2[{i}] = {nomes2[i]}, {item}")
+                        nomes2[i] = f"{nomes2[i]}, {item}"  # 'c0_n0_Win'(item)
+                        tipos2[i] = tipos[i]  # 'c0_n0_Win'(item)
+        # nomes = ['Xi', 'Win']
+        # tipos = ['IN signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);',
+        # 'IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
+
+        # print(f"nomes: {nomes}")
+        # print(f"tipos: {tipos}")
+        # print(' ')
+        # print(f"nomes2: {nomes2}")
+        # print(f"tipos2: {tipos2}")
+        # print('---')
+
+    text_list = list(map(concat_func, nomes2, tipos2))  # list the map function
+    # text_list can be an splitted text or a list of texts
+    final_string = '\n'.join(map(str, (text_list)))
+    # print(f"utils.py :: IO_manual() -> final_string: {final_string}")
+    if DEBUG:
+        print(f"utils.py --> IO_manual_Top: final_string: {final_string}")
     return final_string
 
 # IO_dict_list = [layer_dict_hidden['IO']]
@@ -1295,6 +1438,127 @@ def IO_manager_layer(IO_dict: dict = {},
 #              num_inputs = 3,
 #              IO_dict_list = [layer_dict['Neuron_arch']['shared_IO']['IO'], layer_dict['Neuron_arch']['unique_IO']['IO']]
 #              ))
+
+
+def IO_manager_Top(IO_dict_list: list = [{}, {}],
+                   bits: int = 0,
+                   num_inputs: int = 3,
+                   onerow: bool = True,
+                   tab_space: int = 2,
+                   remove_dict_items=[]
+                   ) -> str:
+    """Função para gerar toda a declaração das portas (inputs & outputs) da parte 'entity' do módulo.vhd com base em um dicionário em formato padrão pré-estabelecido. Retorna um texto disso tudo.
+    -----------------------------------------------------
+    Exemplo de dicionário:
+      'IO': {  # INPUT & OUTPUT
+        'GENERIC': {
+            'BITS': lambda: top_dict['bits'],
+            'NUM_INPUTS': lambda: top_dict['Inputs_number'],
+            'TOTAL_BITS': None
+        },
+        'IN': {  # ENTRADAS
+            'STD_LOGIC': None,
+            'STD_LOGIC_VECTOR': None,
+            'SIGNED': None,
+            'manual': None
+        },
+        'OUT': {  # SAÍDAS
+            'STD_LOGIC': None,
+            'STD_LOGIC_VECTOR': None,
+            'SIGNED': None,
+            'manual': None
+        }
+    }
+    -----------------------------------------------------
+    Exemplo utilizando a função:
+      IO, traço = IO_manager([MAC_IO_dict], bits = 8,
+                             num_inputs = 3, onerow = 1,tab_space = 2)
+
+      Output: (veja que está 2 'tabs' a direita --> tab_space = 2)
+            clk, rst: IN STD_LOGIC;
+            bias: IN signed(7 DOWNTO 0);
+            x1, x2, x3: IN signed(7 DOWNTO 0);
+            w1, w2, w3: IN signed(7 DOWNTO 0);
+            ----------------------------------------------
+            output: OUT signed(7 DOWNTO 0)
+
+    -----------------------------------------------------
+    Args:
+        IO_dict_list (list, optional): lista de dicionários de INPUTS & OUTPUTS. Defaults to [{},{}].
+
+        bits (int, optional): número de bits de representação (WIDTH). Defaults to 0.
+
+        num_inputs (int, optional): número de entradas do neurônio (entradas que expandem por exemplo um 'x' para 'x1,x2,x3' caso num_inputs = 3). Defaults to 3.
+
+        onerow (bool, optional): _description_. Defaults to True.
+
+        tab_space (int, optional): número de 'tabs' a esquerda de cada linha (para melhor visualização e formatação de código). Defaults to 2.
+    """
+
+    from txt_utils import erase_empty_lines, tab_lines
+    IN_stdl = []
+    IN_stdl_v = []
+    IN_stdl_num_inputs = []
+    IN_stdl_v_num_inputs = []
+    IN_signed = []
+    IN_signed = []
+    IN_signed_num_inputs = []
+    IN_manual = []
+
+    OUT_stdl = []
+    OUT_stdl_v = []
+    OUT_stdl_num_inputs = []
+    OUT_stdl_v_num_inputs = []
+    OUT_signed = []
+    OUT_signed = []
+    OUT_signed_num_inputs = []
+    OUT_manual = []
+
+    for i in range(0, len(IO_dict_list)):
+        # INPUTS
+        IN_stdl.append(
+            IO_STDL(IO_dict_list[i], onerow, 'IN', remove_dict_items=remove_dict_items))
+        IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'IN'))
+        IN_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'IN'))
+        # IN_manual.append(dict_list_exceptNone(
+        #     dict_slice=IO_dict_list[i]['IN']['manual'], return_value_or_key='value', is_list=True))
+        # IN_manual.append(IO_manual_Top(
+        #     IO_dict=IO_dict_list[i], IO_list=IO_dict_list[i], IO_type='IN'))
+
+        # OUTPUTS
+        OUT_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'OUT'))
+        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'OUT'))
+        OUT_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'OUT'))
+        # OUT_manual.append(dict_list_exceptNone(
+        #     dict_slice=IO_dict_list[i]['OUT']['manual']))
+
+    # print(IN_manual)
+    # print("------")
+    # print(OUT_manual)
+
+    # # ---- Removendo I/O manuais que não queremos no MAC
+    # IN_manual = remove_all_lista_ocurrences(
+    #     lista=IN_manual, occurences_list=remove_dict_items)
+    # OUT_manual = remove_all_lista_ocurrences(
+    #     lista=OUT_manual, occurences_list=remove_dict_items)
+
+    text = [IN_stdl, IN_stdl_v, IN_stdl_num_inputs, IN_signed, IN_signed_num_inputs, IN_stdl_v_num_inputs,
+            # IN_manual,
+            ['----------------------------------------------'],
+            OUT_stdl, OUT_stdl_v, OUT_stdl_num_inputs, OUT_signed, OUT_signed_num_inputs, OUT_stdl_v_num_inputs
+            # , OUT_manual
+            ]
+
+    text = [j for i in text for j in i]
+    text = '\n'.join(map(str, (text)))
+    # text = ['\n'.join(l) for l in text]
+
+    traço = ' --'+'\n --'.join(map(str, (IO_dict_list[i].items())))
+
+    text = tab_lines(text, tab_space)
+    text = erase_empty_lines(text)[:-1]
+    # text = text[:-1] #tira ';' e uma linha em branco
+    return (text, traço)
 
 
 def inputs_vector(bits: int,

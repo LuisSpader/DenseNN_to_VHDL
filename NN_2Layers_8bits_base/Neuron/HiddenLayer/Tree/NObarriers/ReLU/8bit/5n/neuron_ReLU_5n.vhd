@@ -55,7 +55,7 @@ ARCHITECTURE behavior OF neuron_ReLU_5n IS
     GENERIC (
       BITS_FX_IN        : NATURAL := BITS_FX_IN;
       BITS_FX_OUT       : NATURAL := BITS_FX_OUT;
-      ACTIVATION_TYPE   : NATURAL := 2; -- 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
+      ACTIVATION_TYPE   : NATURAL := 0; -- 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
       Leaky_attenuation : NATURAL := Leaky_attenuation;
       Leaky_ReLU_ones   : signed  := Leaky_ReLU_ones
     );

@@ -3,7 +3,7 @@ from ast import If
 from PORT_MAP_utils import *
 from utils import *
 from list_utils import list_concatenation_all_sublists, list_concatenation, swap_empty_for_None
-from vhd_txt_utils import entity2_layer_dict
+from vhd_txt_utils import layerDict_to_entityTxt
 from Create_Folders import *
 import numpy as np
 from name import *
@@ -513,7 +513,7 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE work.parameters.ALL;
 
-{entity2_layer_dict(layer_dict = output_dict,  
+{layerDict_to_entityTxt(layer_dict = output_dict,  
                     remove_dict_items=[],
                     generic = True
              )}

@@ -2,7 +2,9 @@
 from neuron_primitivo import *
 from layer_utils import *
 from shift_reg import parameters_vhd_gen
-
+from standard_dicts import top_dict
+from top import topDict_to_entityTxt
+from itertools import chain
 # ! todo: colocar hierarquia na documentação -> de que forma quer essa hierarquia documentada?
 # Done: refatorar para GEN_TOP_LEVEL_HDL
 # TODO: modularizar FX ACTIVATION units
@@ -60,3 +62,122 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         OUTPUT_BASE_DIR_PATH=OUTPUT_BASE_DIR_PATH,
         create_path_folder=False
     )
+
+    # ============= TOPO ===============
+    txt_list = []
+    lista_camada_inputs = []
+    lista_camada_outputs = []
+    txt = ''
+
+    # if (n_max = 0): # caso não queiramos gerar neurônios mortos
+    for j in range(0, len(layer_dict_list)):
+
+        txt, camada_inputs, camada_outputs = (entity_port_map(
+            vhd_name=layer_dict_list[j]['Layer_name'],
+            i=j,
+            neuron_dict=layer_dict_list[j],
+            num_inputs=INPUTS_NUMBER,
+            ID_camada=str(j),
+            port_map_layers_to_top=True))
+
+        txt_list.append(txt)
+        if j == 0:  # PRIMEIRA CAMADA
+            lista_camada_inputs.append(camada_inputs)
+            print(camada_inputs)
+
+        if j == (len(layer_dict_list) - 1):  # ÚLTIMA CAMADA
+            lista_camada_outputs.append(camada_outputs)
+            print(camada_outputs)
+
+    txt_top_port_map = ''.join(map(str, txt_list))
+    # if DEBUG:
+    print(" ================== TOP ================== ")
+    print(txt_top_port_map)
+    print(" ------------------ IN  ------------------ ")
+    print(lista_camada_inputs)
+    print(" ------------------ OUT ------------------ ")
+    print(lista_camada_outputs)
+# ----------------
+    camada_inputs = extrai_lista_IO(list_IO=lista_camada_inputs)
+    camada_outputs = extrai_lista_IO(list_IO=lista_camada_outputs)
+
+    # if True:
+    if DEBUG:
+        print(
+            f"layer_neurons_port_map_ALL() -> camada_inputs: {camada_inputs}")
+        print(" \n")
+        print(
+            f"layer_neurons_port_map_ALL() -> camada_outputs: {camada_outputs}")
+        print("-/-/-///-//-------/-/-//-//-/-/")
+
+    l_inputs = list_concat_half(camada_inputs)
+    l_outputs = list_concat_half(camada_outputs)
+
+    # ['manual']
+    l_inputs.append(camada_inputs[6])
+    l_outputs.append(camada_outputs[6])
+
+    # if True:
+    if DEBUG:
+        print(f"layer_neurons_port_map_ALL() -> l_inputs: {l_inputs}")
+        print(f"layer_neurons_port_map_ALL() -> l_outputs: {l_outputs}")
+        print("-/-/-///-//-------/-/-//-//-/-/")
+
+    # substituindo '[]' por 'None'
+    l_inputs = swap_empty_for_None(l_inputs)
+    l_outputs = swap_empty_for_None(l_outputs)
+
+    top_dict['IO']['IN']['STD_LOGIC'] = l_inputs[0]
+    top_dict['IO']['IN']['STD_LOGIC_VECTOR'] = l_inputs[1]
+
+    # https://stackoverflow.com/questions/46367233/efficient-way-to-union-two-list-with-list-or-none-value
+    lista_concat = set(chain.from_iterable(
+        (l_inputs[2] or [], l_inputs[3] or [])))
+    top_dict['IO']['IN']['SIGNED'] = lista_concat
+
+    # TODO: adicionar função para transformar top_dict['IO']['IN']['manual']
+    # top_dict['IO']['IN']['manual'] = l_inputs[3]
+
+    top_dict['IO']['OUT']['STD_LOGIC'] = l_outputs[0]
+    top_dict['IO']['OUT']['STD_LOGIC_VECTOR'] = l_outputs[1]
+    lista_concat = set(chain.from_iterable(
+        (l_outputs[2] or [], l_outputs[3] or [])))
+
+    top_dict['IO']['OUT']['SIGNED'] = lista_concat
+
+    # TODO: adicionar função para transformar top_dict['IO']['OUT']['manual']
+    # top_dict['IO']['OUT']['manual'] = l_outputs[3]
+# ----------------
+    # if DEBUG:
+    # print(top_dict)
+
+    top_entity = topDict_to_entityTxt(top_dict=top_dict,
+                                      remove_dict_items=[],
+                                      generic=True
+                                      )
+#     print(f''' - -------- TOP ENTITY - --------
+# {top_entity}''')
+
+# topdict = {
+#     'Inputs_number': 3,
+#     'bits': 8,
+#     'IO_type': 'signed',
+#     'Neurons_number': 4,
+#     'Top_name': '',
+#     'IO': {
+#         'GENERIC': {
+#             'BITS': < function < lambda > at 0x000002223D701B80 > ,
+#             'NUM_INPUTS': < function < lambda > at 0x000002223D701C10 > ,
+#             'TOTAL_BITS': None},
+#         'IN': {
+#             'STD_LOGIC': ['clk', 'rst', 'update_weights'],
+#             'STD_LOGIC_VECTOR': None, 'SIGNED': None,
+#             'manual': ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']},
+#         'OUT': {
+#             'STD_LOGIC': None,
+#             'STD_LOGIC_VECTOR': None,
+#             'SIGNED': ['c1_n0_y', 'c1_n1_y'],
+#             'manual': ['c1_n0_Wout', 'c1_n1_Wout']
+#         }
+#     }
+# }

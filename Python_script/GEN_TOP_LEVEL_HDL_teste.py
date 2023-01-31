@@ -48,6 +48,6 @@ GEN_TOP_LEVEL_HDL(INPUTS_NUMBER=INPUTS_NUMBER,
                   INCLUDE_PARAMETERS_ON_FOLDERNAME=INCLUDE_PARAMETERS_ON_FOLDERNAME,
                   DOWNLOAD_VHD=DOWNLOAD_VHD,
                   DEAD_NEURONS=DEAD_NEURONS,
-                  DEBUG=True
+                  DEBUG=False
                   )
 print("====================== FIM =========================")

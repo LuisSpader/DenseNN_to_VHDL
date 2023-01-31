@@ -56,7 +56,7 @@ ARCHITECTURE behavior OF neuron_ReLU_5n_out IS
     GENERIC (
       BITS_FX_IN        : NATURAL := BITS_FX_IN;
       BITS_FX_OUT       : NATURAL := BITS_FX_OUT;
-      ACTIVATION_TYPE   : NATURAL := 2; -- 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
+      ACTIVATION_TYPE   : NATURAL := 0; -- 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
       Leaky_attenuation : NATURAL := Leaky_attenuation;
       Leaky_ReLU_ones   : signed  := Leaky_ReLU_ones
     );
@@ -69,10 +69,10 @@ ARCHITECTURE behavior OF neuron_ReLU_5n_out IS
 
   ---------- SIGNALS ----------
   -- # ROM_component
-  SIGNAL out_reg_MAC : signed((2 * BITS) - 1 DOWNTO 0); --reg da saida do MAC --todo: trocar para 2xBITS
+  SIGNAL out_reg_MAC  : signed((2 * BITS) - 1 DOWNTO 0); --reg da saida do MAC --todo: trocar para 2xBITS
 
   -- SIGNAL reg_Xi       : signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);
-  SIGNAL en_registers : STD_LOGIC;                      -- SHIFT_REGISTER
+  SIGNAL en_registers : STD_LOGIC;                       -- SHIFT_REGISTER
   SIGNAL s_Wout       : signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 BEGIN

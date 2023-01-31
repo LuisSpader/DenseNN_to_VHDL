@@ -14,6 +14,36 @@ fx_activation_dict = {
 dict_list = dict_to_list(target_dict=fx_activation_dict, key_or_value=True)
 # ['ReLU', 'Leaky ReLU', 'Sigmoid']
 
+top_dict = {
+    # ========================== Parâmetros da camada ===========================
+    'Inputs_number': 3,  # número de entradas da camada
+    'bits': 8,
+    'IO_type': 'signed',     # 'signed' | 'unsigned' | 'std_logic_vector'
+    'Neurons_number': 4,  # número de neurônios da camada
+    'Top_name': 'top',  # nome do '.vhd' da camada
+    # --------------------------
+    # DEVE SE ALTERAR AUTOMATICAMENTE COM BASE NA CONFIG DO NEURÔNIO
+    'IO': {  # INPUT & OUTPUT
+        'GENERIC': {
+            'BITS': lambda: top_dict['bits'],
+            'NUM_INPUTS': lambda: top_dict['Inputs_number'],
+            'TOTAL_BITS': None
+        },
+        'IN': {  # ENTRADAS
+            'STD_LOGIC': None,
+            'STD_LOGIC_VECTOR': None,
+            'SIGNED': None,
+            'manual': None
+        },
+        'OUT': {  # SAÍDAS
+            'STD_LOGIC': None,
+            'STD_LOGIC_VECTOR': None,
+            'SIGNED': None,
+            'manual': None
+        }
+    }
+}
+
 layer_dict_hidden = {
     # ========================== Parâmetros da camada ===========================
     'Inputs_number': 3,  # número de entradas da camada

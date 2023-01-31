@@ -190,7 +190,7 @@ end ENTITY;
     return txt
 
 
-def entity2_layer_dict(
+def layerDict_to_entityTxt(
         layer_dict: dict = {},
         remove_dict_items=[],
         generic: bool = False,
