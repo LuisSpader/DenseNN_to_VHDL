@@ -64,6 +64,8 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     )
 
     # ============= TOPO ===============
+    # https://youtube.com/watch?v=5mUUCl_4rGw&feature=shares
+    # ----- port map -----
     txt_list = []
     lista_camada_inputs = []
     lista_camada_outputs = []
@@ -91,18 +93,19 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
     txt_top_port_map = ''.join(map(str, txt_list))
     # if DEBUG:
-    print(" ================== TOP ================== ")
+    print(" ==================================== TOP ==================================== ")
     print(txt_top_port_map)
-    print(" ------------------ IN  ------------------ ")
+    print(" ---------------------- IN  ---------------------- ")
     print(lista_camada_inputs)
-    print(" ------------------ OUT ------------------ ")
+    print(" ---------------------- OUT ---------------------- ")
     print(lista_camada_outputs)
 # ----------------
+# ------- entity ---------
     camada_inputs = extrai_lista_IO(list_IO=lista_camada_inputs)
     camada_outputs = extrai_lista_IO(list_IO=lista_camada_outputs)
 
-    # if True:
     if DEBUG:
+        # if True:
         print(
             f"layer_neurons_port_map_ALL() -> camada_inputs: {camada_inputs}")
         print(" \n")
@@ -131,32 +134,35 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     top_dict['IO']['IN']['STD_LOGIC_VECTOR'] = l_inputs[1]
 
     # https://stackoverflow.com/questions/46367233/efficient-way-to-union-two-list-with-list-or-none-value
-    lista_concat = set(chain.from_iterable(
-        (l_inputs[2] or [], l_inputs[3] or [])))
-    top_dict['IO']['IN']['SIGNED'] = lista_concat
+    # lista_concat = set(chain.from_iterable(
+    #     (l_inputs[2] or [], l_inputs[3] or [])))
+    # top_dict['IO']['IN']['SIGNED'] = lista_concat
+    top_dict['IO']['IN']['SIGNED'] = l_inputs[2]
 
     # TODO: adicionar função para transformar top_dict['IO']['IN']['manual']
-    # top_dict['IO']['IN']['manual'] = l_inputs[3]
+    top_dict['IO']['IN']['manual'] = l_inputs[3]
 
     top_dict['IO']['OUT']['STD_LOGIC'] = l_outputs[0]
     top_dict['IO']['OUT']['STD_LOGIC_VECTOR'] = l_outputs[1]
-    lista_concat = set(chain.from_iterable(
-        (l_outputs[2] or [], l_outputs[3] or [])))
+    # lista_concat = set(chain.from_iterable(
+    #     (l_outputs[2] or [], l_outputs[3] or [])))
+    # top_dict['IO']['OUT']['SIGNED'] = lista_concat
 
-    top_dict['IO']['OUT']['SIGNED'] = lista_concat
-
+    top_dict['IO']['OUT']['SIGNED'] = l_outputs[2]
     # TODO: adicionar função para transformar top_dict['IO']['OUT']['manual']
-    # top_dict['IO']['OUT']['manual'] = l_outputs[3]
+    top_dict['IO']['OUT']['manual'] = l_outputs[3]
+
 # ----------------
     # if DEBUG:
-    # print(top_dict)
+    print(top_dict)
 
     top_entity = topDict_to_entityTxt(top_dict=top_dict,
+                                      IO_dict_compare=layer_dict_list[0],
                                       remove_dict_items=[],
                                       generic=True
                                       )
-#     print(f''' - -------- TOP ENTITY - --------
-# {top_entity}''')
+    print(f''' - -------- TOP ENTITY - --------
+{top_entity}''')
 
 # topdict = {
 #     'Inputs_number': 3,

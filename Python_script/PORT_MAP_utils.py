@@ -61,6 +61,8 @@ def port_map_dict(neuron_dict: dict,
     #  ------------ Para IO compartilhadas ['shared_IO'] ------------
     # ['shared_IO']: portas que são compartilhadas entre os neurônios: x1,x2,...
     # port_map_list = neuron_dict['shared_IO'][IO_type][port_type]
+
+    # PEGANDO DICIONÁRIO E GERANDO UMA LISTA DO MESMO
     if port_map_layers_to_top:
         port_map_list = dict_list_exceptNone(
             dict_slice=neuron_dict['IO'][IO_type][port_type],
@@ -94,6 +96,14 @@ def port_map_dict(neuron_dict: dict,
     )
     # txt = 'baaaa'
     # port_map_l = 'caaaa'
+    # if port_map_layers_to_top and port_type == 'manual':
+    #     top_dict = neuron_dict
+    #     teste_IO_manual = IO_manual_Top(
+    #         IO_dict=neuron_dict['IO'][IO_type], IO_list=port_map_l, IO_type=IO_type, DEBUG=True)
+    #     # IO_dict=top_dict['IO'], IO_list=port_map_l, IO_type=IO_type, DEBUG=True)
+
+    #     print(
+    #         f"||||||||||||||||||||||| ---> teste_IO_manual: {teste_IO_manual}")
 
     txt_port_map.append(txt)
     # print(port_map_l)

@@ -55,22 +55,20 @@ INPUTS_NUMBER = 5
 
 def topDict_to_entityTxt(
         top_dict: dict = {},
+        IO_dict_compare: dict = {},
         remove_dict_items=[],
         generic: bool = False,
         tab_space: int = 1,
         DEBUG: bool = False) -> str:
 
-    name = top_dict['Top_name']
     bits = top_dict['bits']
     num_inputs = top_dict['Inputs_number']
-    IO_dict_list = [top_dict['IO']]
 
     if not isinstance(bits, int):
         try:
             bits = bits()
         except:
             print("Error entity(): Formato de dicionário inválido para bit_WIDTH")
-
     if not isinstance(num_inputs, (int, np.integer)):
 
         try:
@@ -78,9 +76,8 @@ def topDict_to_entityTxt(
         except:
             print("Error entity(): Formato de dicionário inválido para num_inputs.")
 
-    # quando temos 6 tipos de IO, pode ser qualquer '.vhd', logo usamos 'IO_manager'
     IO, traço = IO_manager_Top(
-        IO_dict_list, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items
+        top_dict, IO_dict_compare, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items
     )
 
     # PEGANDO GENERIC DO DICIONÁRIO DA CAMADA
@@ -115,7 +112,7 @@ GENERIC (
 
     txt = (f'''
 
-ENTITY  {name} IS
+ENTITY  {top_dict['Top_name']} IS
 {generic_txt}
 PORT (
 {IO}

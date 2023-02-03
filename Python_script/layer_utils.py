@@ -240,7 +240,8 @@ def layer_neurons_port_map(number_of_neurons: int,
 
 def layer_neurons_port_map_ALL(layer_dict_arg: dict,
                                ID_camada: str = 'c1',
-                               n_max: int = 0
+                               n_max: int = 0,
+                               DEBUG: bool = False
                                ):
     """Função para gerar o mapeamento de TODOS OS NEURÔNIOS de uma camada, com base no dicionário do COMPONENTE desejado (neurônio).
 
@@ -318,30 +319,22 @@ def layer_neurons_port_map_ALL(layer_dict_arg: dict,
     # dependencias
     # output_dict = copy.deepcopy(layer_dict_arg)
     output_dict = layer_dict_arg
-    neuron_dict = output_dict['Neuron_arch']['IO']
-    neuron_vhd_name = output_dict['Neuron_arch']['Neuron_name']
-    number_of_neurons = output_dict['Neurons_number']
-    num_inputs = output_dict['Inputs_number']
+    # neuron_dict =
+    # neuron_vhd_name =
+    # number_of_neurons =
+    # num_inputs =
 
     # mapeamento de TODOS OS NEURÔNIOS da camada
     port_map_txt, camada_inputs, camada_outputs = layer_neurons_port_map(
-        number_of_neurons=number_of_neurons,
-        vhd_name=neuron_vhd_name,
-        neuron_dict=neuron_dict,
-        num_inputs=num_inputs,
+        number_of_neurons=output_dict['Neurons_number'],
+        vhd_name=output_dict['Neuron_arch']['Neuron_name'],
+        neuron_dict=output_dict['Neuron_arch']['IO'],
+        num_inputs=output_dict['Inputs_number'],
         ID_camada=ID_camada,
         n_max=n_max)
 
-    # print(f"layer_neurons_port_map() -> camada_inputs: {camada_inputs}")
-    # print(" \n")
-    # print(f"layer_neurons_port_map() -> camada_outputs: {camada_outputs}")
-    # print("---------------\n")
     camada_inputs = extrai_lista_IO(list_IO=camada_inputs)
     camada_outputs = extrai_lista_IO(list_IO=camada_outputs)
-    print(f"layer_neurons_port_map_ALL() -> camada_inputs: {camada_inputs}")
-    print(" \n")
-    print(f"layer_neurons_port_map_ALL() -> camada_outputs: {camada_outputs}")
-    print("-/-/-///-//-------/-/-//-//-/-/")
 
     l_inputs = list_concat_half(camada_inputs)
     l_outputs = list_concat_half(camada_outputs)
@@ -350,9 +343,19 @@ def layer_neurons_port_map_ALL(layer_dict_arg: dict,
     l_inputs.append(camada_inputs[6])
     l_outputs.append(camada_outputs[6])
 
-    print(f"layer_neurons_port_map_ALL() -> l_inputs: {l_inputs}")
-    print(f"layer_neurons_port_map_ALL() -> l_outputs: {l_outputs}")
-    print("-/-/-///-//-------/-/-//-//-/-/")
+    # if DEBUG:
+    if True:
+        print(f"*****************************************************")
+        print(
+            f"layer_neurons_port_map_ALL() -> camada_inputs: {camada_inputs}")
+        print(" \n")
+        print(
+            f"layer_neurons_port_map_ALL() -> camada_outputs: {camada_outputs}")
+        print("-/-/-///-//-------/-/-//-//-/-/")
+        print(f"layer_neurons_port_map_ALL() -> l_inputs: {l_inputs}")
+        print(f"layer_neurons_port_map_ALL() -> l_outputs: {l_outputs}")
+        print("-/-/-///-//-------/-/-//-//-/-/")
+        print(f"*****************************************************")
 
     # substituindo '[]' por 'None'
     l_inputs = swap_empty_for_None(l_inputs)

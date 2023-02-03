@@ -173,99 +173,6 @@ def input_sequences(sequence_id,
 # print(input_sequences(['x','w'] ,num_inputs,'list',1,1)) # (sequence_id ,num_inputs, list_or_string, port_map, new_line))
 
 
-# def input_sequences_number_choice(sequence_id: list,      # sequence_id:      id for this sequence
-#                                   port_map_list: list,    # funciona assim a escrita: sequence_id => port_map_list
-#                                   port_map_is_str: bool,  # True or False
-#                                   # port_map_is_str: se queremos igualar o tamanho de port_map_list ao sequence_id (necessario para casos em que sequence_id é uma lista e port_map_list é apenas uma string)
-#                                   num_inputs: int,       # num_inputs:       number of sequence elements
-#                                   list_or_string: str,   # list_or_string:   'list' = list; 'string' = string
-#                                   port_map: bool,         # port_map:         1: x1 => x1 | 0: x1, x2, ...'
-#                                   # new_line:         1: 1 string elements per line | 0: all on the same line
-#                                   new_line: bool,
-#                                   com_numero: bool) -> str:      # True: 'x' se torna 'x1, x2, ...'
-
-#     debug = 0
-#     i = 0
-#     sequence = []
-#     port_map_l = []
-
-#     if port_map_is_str == True:  # se temos apena uma string, criaremos uma lista de strings iguais para podermos iterar nos loops
-#         port_map_list = [port_map_list]*len(sequence_id)
-
-#     # if com_numero == True:
-#     #     number = str(i+1)
-#     # else:
-#     #     number = ''
-#     if ((sequence_id == None) or (port_map_list == None)):
-#         return ''
-#     else:
-#         while True:
-#             for m in range(0, len(sequence_id)):
-#                 for i in range(
-#                     0, num_inputs
-#                 ):  # Aqui formamos a sequência, exemplo para ID = 'x' | sequência = x1, x2, ...
-#                     if com_numero == True:
-#                         number = str(i+1)
-#                     else:
-#                         number = ''
-#                     if list_or_string == "string":
-#                         if i < (num_inputs):
-#                             sequence.append(f"{sequence_id}{number}")
-#                             port_map_l.append(f"{port_map_list}{number}")
-#                             # print(f"i={i}<{num_inputs-1}, m={m}")
-#                             if debug == 1:
-#                                 print(sequence)
-
-#                     if list_or_string == "list":
-#                         if i < (num_inputs):
-#                             sequence.append(f"{sequence_id[m]}{number}")
-#                             port_map_l.append(f"{port_map_list[m]}{number}")
-#                             # print(f"i={i}<{num_inputs-1}, m={m}")
-#                             if debug == 1:
-#                                 print(sequence)
-
-#                     if i == (num_inputs - 1):
-
-#                         # print(f"i={i}<{num_inputs-1}, m={m}")
-
-#                         #  ==================== APENAS STRING ==================== #
-#                         # se ID é apenas uma string, exemplo: 'x'
-#                         if list_or_string == "string":
-
-#                             if port_map == 1:  # sequência port_map
-#                                 for k in range(0, (num_inputs)):
-#                                     sequence[k] = f"{sequence[k]}=> {port_map_l[k]}"
-
-#                             if new_line == 1:  # sequência com cada item em uma nova linha
-#                                 for k in range(0, num_inputs):
-#                                     sequence[k] = f"{sequence[k]}, \n"
-#                                 return f"".join(map(str, (sequence)))
-
-#                             return f", ".join(map(str, (sequence)))
-
-#                         #  ==================== LISTA DE STRINGS ==================== #
-#                         # Se ID é uma lista de strings, exemplo: ['x','w']
-#                         if list_or_string == "list":
-#                             if m == len(sequence_id) - 1:
-
-#                                 if port_map == 1:  # sequência port_map
-#                                     for k in range(0, (num_inputs * (len(sequence_id)))):
-#                                         if debug == 1:
-#                                             print(
-#                                                 f"max = {(num_inputs*(len(sequence_id))  )}"
-#                                             )
-#                                             print(f"k = {k}")
-#                                         sequence[k] = f"{sequence[k]}=> {port_map_l[k]}"
-
-#                                 if (
-#                                     new_line == 1
-#                                 ):  # sequência com cada item em uma nova linha
-#                                     for k in range(0, (num_inputs * (len(sequence_id)))):
-#                                         sequence[k] = f"{sequence[k]}, \n"
-#                                     return f"".join(map(str, (sequence)))
-
-#                                 return sequence
-
 def input_sequences_number_choice(sequence_id: list,      # sequence_id:      id for this sequence
                                   port_map_list: list,    # funciona assim a escrita: sequence_id => port_map_list
                                   port_map_is_str: bool,  # True or False
@@ -880,15 +787,43 @@ def IO_signed_num_inputs(IO_dict: dict,
 def concat_func(x, y): return x + "" + y
 
 
-camada_inputs_teste = [['clk', 'rst', 'update_weights'], [], [],
-                       [], [], [], ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']]
+# camada_inputs_teste = [['clk', 'rst', 'update_weights'], [], [],
+#                        [], [], [], ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']]
 
 
 def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = False) -> str:
     """Função para gerar entradas e saídas 'manual' com base no dicionário (IO_dict) e uma lista de IO do layers (IO_list), comparando assim a qual grupo cada item da IO_list pertence.
 
+    https://youtube.com/watch?v=SKONAMjYGEo&feature=shares
+
     Args:
-        IO_dict (dict): dicionário padrão do arquivo 'standar_dicts'
+        IO_dict (dict): dicionário padrão do arquivo 'standar_dicts' (irá comparar a seção do neurônio) que vai estar mais ou menos dessa forma:
+        IO_dict =  {...
+                        'IO': {  # INPUT & OUTPUT
+                            'shared_IO': { 
+                                'GENERIC': {
+                                    'BITS': lambda: layer_dict_hidden['bits'],
+                                    'NUM_INPUTS': lambda: layer_dict_hidden['Inputs_number'],
+                                    'TOTAL_BITS': None
+                                },
+                                'IN': {  # ENTRADAS
+                                    'STD_LOGIC': None,
+                                    'STD_LOGIC_VECTOR': None,
+                                    'SIGNED': None,
+                                    'manual': ['Xi : IN signed(TOTAL_BITS - 1 DOWNTO 0);']
+                                },
+                                'OUT': {  # SAÍDAS
+                                    'STD_LOGIC': None,
+                                    'STD_LOGIC_VECTOR': None,
+                                    'SIGNED': None,
+                                    'manual': None
+                                }
+                            }
+                            ...
+                        }
+                        ...
+                    }
+
         IO_list (list): lista de nome das entradas da camada. 
             Exemplo :
                 IO_list = [
@@ -913,19 +848,20 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
     nomes2 = []  # usado para armazenar os items da lista que são similares a 'nomes'
     tipos = []
     tipos2 = []
-    dict_list_value_manual = []
+    Neuron_dict_list_value_manual = []
 
     for IO_class in ['shared_IO', 'unique_IO']:
-        dict_list_value_manual.append(dict_list_exceptNone(
+        Neuron_dict_list_value_manual.append(dict_list_exceptNone(
             dict_slice=IO_dict['Neuron_arch']['IO'][IO_class][IO_type]['manual'], return_value_or_key='value', is_list=True))
-    # print(f"dict_list_value_manual: {dict_list_value_manual}")
-    dict_list_value_manual = [j for i in dict_list_value_manual for j in i]
+
+    Neuron_dict_list_value_manual = [
+        j for i in Neuron_dict_list_value_manual for j in i]
 
     find = ":"
 
-    for item in dict_list_value_manual:
+    for item in Neuron_dict_list_value_manual:
         #  Para o caso em que IO_type = 'IN'
-        # dict_list_value_manual = [
+        # Neuron_dict_list_value_manual = [
         # ['Xi : IN signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);'],
         # ['Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
         #   ]
@@ -933,7 +869,9 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
         position = item.find(f"{find}")
         txt_antes = item[:position].strip()  # nome variavel
         txt_depois = item[position:].strip()  # tipo de variavel
+
         if DEBUG:
+            # if not DEBUG:
             print(f"txt_antes: {txt_antes}")
             print(f"txt_depois: {txt_depois}")
             print(" ")
@@ -949,7 +887,6 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
     # print(f"nomes: {nomes}")
     # print(f"tipos: {tipos}")
     # print("---")
-    find = "_"
 
     # nomes = ['Xi', 'Win']
     # tipos = ['IN signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);',
@@ -959,13 +896,14 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
     nomes2 = ['']*len(nomes)
     tipos2 = ['']*len(tipos)
 
+    find = "_"
     # print("for item in IO_list:")
     # print(f"IO_list: {IO_list}")
     for item in IO_list[IO_type]['manual']:
         if DEBUG:
             print(f"item: {item}")  # clk, ... , Xi, c0_n0_Win, ...
         # para o caso em que IO_type = 'IN'
-        #  dict_list_value_manual = [
+        #  Neuron_dict_list_value_manual = [
         #     ['clk', 'rst', 'update_weights'],
         #     [],
         #     [],
@@ -1022,7 +960,8 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
     return final_string
 
 
-# def IO_manual_Top(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = False) -> str:
+def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', DEBUG: bool = False) -> str:
+    # layer_dict_compare: dict,
     """Função para gerar entradas e saídas 'manual' com base no dicionário (IO_dict) e uma lista de IO do layers (IO_list), comparando assim a qual grupo cada item da IO_list pertence.
 
     Args:
@@ -1051,18 +990,32 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
     nomes2 = []  # usado para armazenar os items da lista que são similares a 'nomes'
     tipos = []
     tipos2 = []
-    dict_list_value_manual = []
+    Neuron_dict_list_value_manual = []
 
-    dict_list_value_manual.append(dict_list_exceptNone(
-        dict_slice=IO_dict[IO_type]['manual'], return_value_or_key='value', is_list=True))
-    dict_list_value_manual = [j for i in dict_list_value_manual for j in i]
-    print(f"dict_list_value_manual: {dict_list_value_manual}")
+    # for IO_class in ['shared_IO', 'unique_IO']:
+    # print(f'''
+
+    # IO_dict: {IO_dict}
+
+    # ''')
+    # IO_dict = layer_dict_compare
+    for IO_class in ['shared_IO', 'unique_IO']:
+        Neuron_dict_list_value_manual.append(dict_list_exceptNone(
+            dict_slice=IO_dict['Neuron_arch']['IO'][IO_class][IO_type]['manual'], return_value_or_key='value', is_list=True))
+    # print(f"Neuron_dict_list_value_manual: {Neuron_dict_list_value_manual}")
+    Neuron_dict_list_value_manual = [
+        j for i in Neuron_dict_list_value_manual for j in i]
+
+    # Neuron_dict_list_value_manual.append(dict_list_exceptNone(
+    #     dict_slice=IO_dict['IO'][IO_type]['manual'], return_value_or_key='value', is_list=True))
+    # # print(f"Neuron_dict_list_value_manual: {Neuron_dict_list_value_manual}")
+    # Neuron_dict_list_value_manual = [j for i in Neuron_dict_list_value_manual for j in i]
 
     find = ":"
 
-    for item in dict_list_value_manual:
+    for item in Neuron_dict_list_value_manual:
         #  Para o caso em que IO_type = 'IN'
-        # dict_list_value_manual = [
+        # Neuron_dict_list_value_manual = [
         # ['Xi : IN signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);'],
         # ['Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
         #   ]
@@ -1070,8 +1023,9 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
         position = item.find(f"{find}")
         txt_antes = item[:position].strip()  # nome variavel
         txt_depois = item[position:].strip()  # tipo de variavel
-        if True:
-            # if DEBUG:
+
+        if DEBUG:
+            # if not DEBUG:
             print(f"txt_antes: {txt_antes}")
             print(f"txt_depois: {txt_depois}")
             print(" ")
@@ -1099,12 +1053,12 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
 
     # print("for item in IO_list:")
     # print(f"IO_list: {IO_list}")
+    # for item in IO_list[IO_type]['manual']:
     for item in IO_list[IO_type]['manual']:
-        # if DEBUG:
-        if True:
+        if DEBUG:
             print(f"item: {item}")  # clk, ... , Xi, c0_n0_Win, ...
         # para o caso em que IO_type = 'IN'
-        #  dict_list_value_manual = [
+        #  Neuron_dict_list_value_manual = [
         #     ['clk', 'rst', 'update_weights'],
         #     [],
         #     [],
@@ -1158,18 +1112,7 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
     # text_list can be an splitted text or a list of texts
     final_string = '\n'.join(map(str, (text_list)))
     # print(f"utils.py :: IO_manual() -> final_string: {final_string}")
-    if DEBUG:
-        print(f"utils.py --> IO_manual_Top: final_string: {final_string}")
     return final_string
-
-# IO_dict_list = [layer_dict_hidden['IO']]
-# for i in range(0, len(IO_dict_list)):
-#     # print(IO_dict_list[i])
-
-
-#     print(f"saida[{i}]: {IO_manual(IO_dict=IO_dict_list[i], IO='IN')}")
-# print(IO_manual(IO_dict=layer_dict_hidden, IO_list=camada_inputs_teste, IO_type='IN')
-#       )
 
 
 def IO_manager(IO_dict_list: list = [{}, {}],
@@ -1388,15 +1331,13 @@ def IO_manager_layer(IO_dict: dict = {},
             IO_manual(IO_dict=IO_dict, IO_list=IO_dict_list[i], IO_type='IN'))
 
         # OUTPUTS
-        # print(
-        #     f" ------------------> IO_dict_list[{i}]['IN']: {IO_dict_list[i]['OUT']}")
         OUT_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'OUT'))
         OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'OUT'))
         OUT_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'OUT'))
-        # OUT_manual.append(dict_list_exceptNone(
-        #     dict_slice=IO_dict_list[i]['OUT']['manual']))
         OUT_manual.append(
             IO_manual(IO_dict=IO_dict, IO_list=IO_dict_list[i], IO_type='OUT'))
+        # OUT_manual.append(dict_list_exceptNone(
+        #     dict_slice=IO_dict_list[i]['OUT']['manual']))
         print(f"IO_manager_layer() -> IN_manual: {IN_manual}")
         print(f"IO_manager_layer() -> OUT_manual: {OUT_manual}")
 
@@ -1418,20 +1359,20 @@ def IO_manager_layer(IO_dict: dict = {},
     # text = [IN_stdl, IN_stdl_v, IN_signed,
     #         ['----------------------------------------------'],
     #         OUT_stdl, OUT_stdl_v, OUT_signed]
-    text = [IN_stdl, IN_stdl_v, IN_signed, IN_manual,
-            ['----------------------------------------------'],
-            OUT_stdl, OUT_stdl_v, OUT_signed, OUT_manual]
+    IO_text = [IN_stdl, IN_stdl_v, IN_signed, IN_manual,
+               ['----------------------------------------------'],
+               OUT_stdl, OUT_stdl_v, OUT_signed, OUT_manual]
 
-    text = [j for i in text for j in i]
-    text = '\n'.join(map(str, (text)))
-    # text = ['\n'.join(l) for l in text]
+    IO_text = [j for i in IO_text for j in i]
+    IO_text = '\n'.join(map(str, (IO_text)))
+    # IO_text = ['\n'.join(l) for l in IO_text]
 
     traço = ' --'+'\n --'.join(map(str, (IO_dict_list[i].items())))
 
-    text = tab_lines(text, tab_space)
-    text = erase_empty_lines(text)[:-1]
+    IO_text = tab_lines(IO_text, tab_space)
+    IO_text = erase_empty_lines(IO_text)[:-1]
     # text = text[:-1] #tira ';' e uma linha em branco
-    return (text, traço)
+    return (IO_text, traço)
 # EXEMPLO
 # print(entity(name = layer_dict['Neuron_arch']['Neuron_name'],
 #              bits = 8,
@@ -1440,7 +1381,8 @@ def IO_manager_layer(IO_dict: dict = {},
 #              ))
 
 
-def IO_manager_Top(IO_dict_list: list = [{}, {}],
+def IO_manager_Top(IO_dict: dict,
+                   IO_dict_compare: dict = {},
                    bits: int = 0,
                    num_inputs: int = 3,
                    onerow: bool = True,
@@ -1513,6 +1455,7 @@ def IO_manager_Top(IO_dict_list: list = [{}, {}],
     OUT_signed = []
     OUT_signed_num_inputs = []
     OUT_manual = []
+    IO_dict_list = [IO_dict['IO']]
 
     for i in range(0, len(IO_dict_list)):
         # INPUTS
@@ -1520,33 +1463,40 @@ def IO_manager_Top(IO_dict_list: list = [{}, {}],
             IO_STDL(IO_dict_list[i], onerow, 'IN', remove_dict_items=remove_dict_items))
         IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'IN'))
         IN_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'IN'))
+        IN_manual.append(
+            IO_manual_Top(IO_dict=IO_dict_compare, IO_list=IO_dict_list[i], IO_type='IN'))
         # IN_manual.append(dict_list_exceptNone(
-        #     dict_slice=IO_dict_list[i]['IN']['manual'], return_value_or_key='value', is_list=True))
-        # IN_manual.append(IO_manual_Top(
-        #     IO_dict=IO_dict_list[i], IO_list=IO_dict_list[i], IO_type='IN'))
+        #     dict_slice=IO_dict_list[i]['IN']['manual']))
 
         # OUTPUTS
         OUT_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'OUT'))
         OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'OUT'))
         OUT_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'OUT'))
+        OUT_manual.append(
+            IO_manual_Top(IO_dict=IO_dict_compare, IO_list=IO_dict_list[i], IO_type='OUT'))
         # OUT_manual.append(dict_list_exceptNone(
         #     dict_slice=IO_dict_list[i]['OUT']['manual']))
+        # OUT_manual.append(dict_list_exceptNone(
+        #     dict_slice=IO_dict_list[i]['OUT']['manual']))
+
+    # para ficarmos com uma lista de apenas 1 nível
+    IN_manual = [''.join(l) for l in IN_manual]
+    OUT_manual = [''.join(l) for l in OUT_manual]
 
     # print(IN_manual)
     # print("------")
     # print(OUT_manual)
 
-    # # ---- Removendo I/O manuais que não queremos no MAC
-    # IN_manual = remove_all_lista_ocurrences(
-    #     lista=IN_manual, occurences_list=remove_dict_items)
-    # OUT_manual = remove_all_lista_ocurrences(
-    #     lista=OUT_manual, occurences_list=remove_dict_items)
+    # # ---- Removendo I/O manuais que não queremos
+    IN_manual = remove_all_lista_ocurrences(
+        lista=IN_manual, occurences_list=remove_dict_items)
+    OUT_manual = remove_all_lista_ocurrences(
+        lista=OUT_manual, occurences_list=remove_dict_items)
 
     text = [IN_stdl, IN_stdl_v, IN_stdl_num_inputs, IN_signed, IN_signed_num_inputs, IN_stdl_v_num_inputs,
-            # IN_manual,
+            IN_manual,
             ['----------------------------------------------'],
-            OUT_stdl, OUT_stdl_v, OUT_stdl_num_inputs, OUT_signed, OUT_signed_num_inputs, OUT_stdl_v_num_inputs
-            # , OUT_manual
+            OUT_stdl, OUT_stdl_v, OUT_stdl_num_inputs, OUT_signed, OUT_signed_num_inputs, OUT_stdl_v_num_inputs, OUT_manual
             ]
 
     text = [j for i in text for j in i]
