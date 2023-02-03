@@ -63,7 +63,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         create_path_folder=False
     )
 
-    # ============= TOPO ===============
+    # ==================================== TOPO ====================================
     # https://youtube.com/watch?v=5mUUCl_4rGw&feature=shares
     # ----- port map -----
     txt_list = []

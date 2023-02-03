@@ -216,3 +216,28 @@ camada_inputs = [
 
 camada_outputs = [[['', ''], ['', ''], ['', ['c0_n0_y']], ['', ''], ['', ''], ['', ''], []], [['', ''], ['', ''], ['', [
     'c0_n1_y']], ['', ''], ['', ''], ['', ''], []], [['', ''], ['', ''], ['', ['c0_n2_y']], ['', ''], ['', ''], ['', ''], []]]
+
+dict_top = {'Inputs_number': 3,
+            'bits': 8,
+            'IO_type': 'signed',
+            'Neurons_number': 4,
+            'Top_name': 'top',
+            'IO': {
+                'GENERIC': {
+                    'BITS': < function
+                    < lambda > at 0x00000285E8022160 > ,
+                    'NUM_INPUTS': < function < lambda > at 0x00000285E80221F0 > ,
+                    'TOTAL_BITS': None},
+                'IN': {
+                    'STD_LOGIC': ['clk', 'rst', 'update_weights'],
+                    'STD_LOGIC_VECTOR': None,
+                    'SIGNED': None,
+                    'manual': ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']},
+                'OUT': {
+                    'STD_LOGIC': None,
+                    'STD_LOGIC_VECTOR': None,
+                    'SIGNED': ['c1_n0_y', 'c1_n1_y'],
+                    'manual': ['c1_n0_Wout', 'c1_n1_Wout']
+                }
+            }
+            }
