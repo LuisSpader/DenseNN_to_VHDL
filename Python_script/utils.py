@@ -899,60 +899,63 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
     find = "_"
     # print("for item in IO_list:")
     # print(f"IO_list: {IO_list}")
-    for item in IO_list[IO_type]['manual']:
-        if DEBUG:
-            print(f"item: {item}")  # clk, ... , Xi, c0_n0_Win, ...
-        # para o caso em que IO_type = 'IN'
-        #  Neuron_dict_list_value_manual = [
-        #     ['clk', 'rst', 'update_weights'],
-        #     [],
-        #     [],
-        #     [],
-        #     [],
-        #     [],
-        #     ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']
-        #     ]
+    try:
+        for item in IO_list[IO_type]['manual']:
+            if DEBUG:
+                print(f"item: {item}")  # clk, ... , Xi, c0_n0_Win, ...
+            # para o caso em que IO_type = 'IN'
+            #  Neuron_dict_list_value_manual = [
+            #     ['clk', 'rst', 'update_weights'],
+            #     [],
+            #     [],
+            #     [],
+            #     [],
+            #     [],
+            #     ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']
+            #     ]
 
-        if "_" in item:
-            position = item.find(f"{find}")
-            txt_depois = item.split(f"{find}")[-1]  # c0_n0_Win -> Win
-        else:
-            txt_depois = item  # clk -> clk
-        # print(f"txt_antes: {txt_antes}")
-        # print(f"txt_depois: {txt_depois}")  # -> Win
-        # print(" ")
+            if "_" in item:
+                position = item.find(f"{find}")
+                txt_depois = item.split(f"{find}")[-1]  # c0_n0_Win -> Win
+            else:
+                txt_depois = item  # clk -> clk
+            # print(f"txt_antes: {txt_antes}")
+            # print(f"txt_depois: {txt_depois}")  # -> Win
+            # print(" ")
 
-        # print("limpando listas: ")
-        # print(f"nomes2: {nomes2}")
-        # print(f"tipos2: {tipos2}")
+            # print("limpando listas: ")
+            # print(f"nomes2: {nomes2}")
+            # print(f"tipos2: {tipos2}")
 
-        # if 'Win' vindo de 'c0_n0_Win'(item) in nomes:['Xi','Win']
-        if txt_depois in nomes:
-            # print(" ------------ igualdade !! ---------------- ")
+            # if 'Win' vindo de 'c0_n0_Win'(item) in nomes:['Xi','Win']
+            if txt_depois in nomes:
+                # print(" ------------ igualdade !! ---------------- ")
 
-            for i in range(0, len(nomes)):  # verificando os tipos que são iguais
-                # se 'Win'(txt_depois) vindo de 'c0_n0_Win'(item)  == 'Win'(nomes[i])
-                # em resumo: se 'Win'(txt_depois) == 'Win'(nomes[i])
-                if txt_depois == nomes[i]:
-                    if nomes2[i] == '':
-                        # print(f"quando está vazio:  nomes2[{i}] = {item}")
-                        nomes2[i] = f"{item}"  # 'c0_n0_Win'(item)
-                        tipos2[i] = tipos[i]  # 'c0_n0_Win'(item)
-                    else:
-                        # print(f"quando já tem algo:  nomes2[{i}] = {nomes2[i]}, {item}")
-                        nomes2[i] = f"{nomes2[i]}, {item}"  # 'c0_n0_Win'(item)
-                        tipos2[i] = tipos[i]  # 'c0_n0_Win'(item)
-        # nomes = ['Xi', 'Win']
-        # tipos = ['IN signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);',
-        # 'IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
+                for i in range(0, len(nomes)):  # verificando os tipos que são iguais
+                    # se 'Win'(txt_depois) vindo de 'c0_n0_Win'(item)  == 'Win'(nomes[i])
+                    # em resumo: se 'Win'(txt_depois) == 'Win'(nomes[i])
+                    if txt_depois == nomes[i]:
+                        if nomes2[i] == '':
+                            # print(f"quando está vazio:  nomes2[{i}] = {item}")
+                            nomes2[i] = f"{item}"  # 'c0_n0_Win'(item)
+                            tipos2[i] = tipos[i]  # 'c0_n0_Win'(item)
+                        else:
+                            # print(f"quando já tem algo:  nomes2[{i}] = {nomes2[i]}, {item}")
+                            # 'c0_n0_Win'(item)
+                            nomes2[i] = f"{nomes2[i]}, {item}"
+                            tipos2[i] = tipos[i]  # 'c0_n0_Win'(item)
+            # nomes = ['Xi', 'Win']
+            # tipos = ['IN signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);',
+            # 'IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
 
-        # print(f"nomes: {nomes}")
-        # print(f"tipos: {tipos}")
-        # print(' ')
-        # print(f"nomes2: {nomes2}")
-        # print(f"tipos2: {tipos2}")
-        # print('---')
-
+            # print(f"nomes: {nomes}")
+            # print(f"tipos: {tipos}")
+            # print(' ')
+            # print(f"nomes2: {nomes2}")
+            # print(f"tipos2: {tipos2}")
+            # print('---')
+    except:
+        pass
     text_list = list(map(concat_func, nomes2, tipos2))  # list the map function
     # text_list can be an splitted text or a list of texts
     final_string = '\n'.join(map(str, (text_list)))
@@ -992,24 +995,11 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', DEBUG: boo
     tipos2 = []
     Neuron_dict_list_value_manual = []
 
-    # for IO_class in ['shared_IO', 'unique_IO']:
-    # print(f'''
-
-    # IO_dict: {IO_dict}
-
-    # ''')
-    # IO_dict = layer_dict_compare
     for IO_class in ['shared_IO', 'unique_IO']:
         Neuron_dict_list_value_manual.append(dict_list_exceptNone(
             dict_slice=IO_dict['Neuron_arch']['IO'][IO_class][IO_type]['manual'], return_value_or_key='value', is_list=True))
-    # print(f"Neuron_dict_list_value_manual: {Neuron_dict_list_value_manual}")
     Neuron_dict_list_value_manual = [
         j for i in Neuron_dict_list_value_manual for j in i]
-
-    # Neuron_dict_list_value_manual.append(dict_list_exceptNone(
-    #     dict_slice=IO_dict['IO'][IO_type]['manual'], return_value_or_key='value', is_list=True))
-    # # print(f"Neuron_dict_list_value_manual: {Neuron_dict_list_value_manual}")
-    # Neuron_dict_list_value_manual = [j for i in Neuron_dict_list_value_manual for j in i]
 
     find = ":"
 
@@ -1038,9 +1028,6 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', DEBUG: boo
                 if tipos[i] == txt_depois:  # quando temos itens do mesmo tipo
                     nomes[i] = f"{nomes[i]}, {txt_antes}"
 
-    # print(f"nomes: {nomes}")
-    # print(f"tipos: {tipos}")
-    # print("---")
     find = "_"
 
     # nomes = ['Xi', 'Win']
@@ -1050,64 +1037,47 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', DEBUG: boo
     # criando listas com mesmo formato e tamanho
     nomes2 = ['']*len(nomes)
     tipos2 = ['']*len(tipos)
+    try:
+        for item in IO_list[IO_type]['manual']:
+            if DEBUG:
+                print(f"item: {item}")
+            # clk, ... , Xi, c0_n0_Win, ...
+            # para o caso em que IO_type = 'IN'
+            #  Neuron_dict_list_value_manual = [
+            #     ['clk', 'rst', 'update_weights'],
+            #     [],
+            #     [],
+            #     [],
+            #     [],
+            #     [],
+            #     ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']
+            #     ]
 
-    # print("for item in IO_list:")
-    # print(f"IO_list: {IO_list}")
-    # for item in IO_list[IO_type]['manual']:
-    for item in IO_list[IO_type]['manual']:
-        if DEBUG:
-            print(f"item: {item}")  # clk, ... , Xi, c0_n0_Win, ...
-        # para o caso em que IO_type = 'IN'
-        #  Neuron_dict_list_value_manual = [
-        #     ['clk', 'rst', 'update_weights'],
-        #     [],
-        #     [],
-        #     [],
-        #     [],
-        #     [],
-        #     ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']
-        #     ]
+            if "_" in item:
+                position = item.find(f"{find}")
+                txt_depois = item.split(f"{find}")[-1]  # c0_n0_Win -> Win
+            else:
+                txt_depois = item  # clk -> clk
 
-        if "_" in item:
-            position = item.find(f"{find}")
-            txt_depois = item.split(f"{find}")[-1]  # c0_n0_Win -> Win
-        else:
-            txt_depois = item  # clk -> clk
-        # print(f"txt_antes: {txt_antes}")
-        # print(f"txt_depois: {txt_depois}")  # -> Win
-        # print(" ")
+            # if 'Win' vindo de 'c0_n0_Win'(item) in nomes:['Xi','Win']
+            if txt_depois in nomes:
+                # print(" ------------ igualdade !! ---------------- ")
 
-        # print("limpando listas: ")
-        # print(f"nomes2: {nomes2}")
-        # print(f"tipos2: {tipos2}")
-
-        # if 'Win' vindo de 'c0_n0_Win'(item) in nomes:['Xi','Win']
-        if txt_depois in nomes:
-            # print(" ------------ igualdade !! ---------------- ")
-
-            for i in range(0, len(nomes)):  # verificando os tipos que são iguais
-                # se 'Win'(txt_depois) vindo de 'c0_n0_Win'(item)  == 'Win'(nomes[i])
-                # em resumo: se 'Win'(txt_depois) == 'Win'(nomes[i])
-                if txt_depois == nomes[i]:
-                    if nomes2[i] == '':
-                        # print(f"quando está vazio:  nomes2[{i}] = {item}")
-                        nomes2[i] = f"{item}"  # 'c0_n0_Win'(item)
-                        tipos2[i] = tipos[i]  # 'c0_n0_Win'(item)
-                    else:
-                        # print(f"quando já tem algo:  nomes2[{i}] = {nomes2[i]}, {item}")
-                        nomes2[i] = f"{nomes2[i]}, {item}"  # 'c0_n0_Win'(item)
-                        tipos2[i] = tipos[i]  # 'c0_n0_Win'(item)
-        # nomes = ['Xi', 'Win']
-        # tipos = ['IN signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);',
-        # 'IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
-
-        # print(f"nomes: {nomes}")
-        # print(f"tipos: {tipos}")
-        # print(' ')
-        # print(f"nomes2: {nomes2}")
-        # print(f"tipos2: {tipos2}")
-        # print('---')
-
+                for i in range(0, len(nomes)):  # verificando os tipos que são iguais
+                    # se 'Win'(txt_depois) vindo de 'c0_n0_Win'(item)  == 'Win'(nomes[i])
+                    # em resumo: se 'Win'(txt_depois) == 'Win'(nomes[i])
+                    if txt_depois == nomes[i]:
+                        if nomes2[i] == '':
+                            # print(f"quando está vazio:  nomes2[{i}] = {item}")
+                            nomes2[i] = f"{item}"  # 'c0_n0_Win'(item)
+                            tipos2[i] = tipos[i]  # 'c0_n0_Win'(item)
+                        else:
+                            # print(f"quando já tem algo:  nomes2[{i}] = {nomes2[i]}, {item}")
+                            # 'c0_n0_Win'(item)
+                            nomes2[i] = f"{nomes2[i]}, {item}"
+                            tipos2[i] = tipos[i]  # 'c0_n0_Win'(item)
+    except:
+        pass
     text_list = list(map(concat_func, nomes2, tipos2))  # list the map function
     # text_list can be an splitted text or a list of texts
     final_string = '\n'.join(map(str, (text_list)))

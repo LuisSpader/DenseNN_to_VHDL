@@ -14,8 +14,7 @@ USE work.parameters.ALL;
       Xi: IN signed(TOTAL_BITS - 1 DOWNTO 0);
       c1_n0_Win, c1_n1_Win: IN signed(BITS - 1 DOWNTO 0);
       ----------------------------------------------
-      c1_n0_y, c1_n1_y: OUT signed(7 DOWNTO 0);
-      c1_n0_Wout, c1_n1_Wout: OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
+      c1_n0_y, c1_n1_y: OUT signed(7 DOWNTO 0)
   );
   end ENTITY;
 
@@ -34,9 +33,7 @@ neuron_inst_0: ENTITY work.neuron_Sigmoid_3n
             Win=> c1_n0_Win, 
             ---------- Saidas ----------
             -- ['OUT']['SIGNED'] 
-            y=> c1_n0_y, 
-            -- ['OUT']['manual'] 
-            Wout=> c1_n0_Wout
+            y=> c1_n0_y
    );
             
 neuron_inst_1: ENTITY work.neuron_Sigmoid_3n
@@ -51,9 +48,7 @@ neuron_inst_1: ENTITY work.neuron_Sigmoid_3n
             Win=> c1_n1_Win, 
             ---------- Saidas ----------
             -- ['OUT']['SIGNED'] 
-            y=> c1_n1_y, 
-            -- ['OUT']['manual'] 
-            Wout=> c1_n1_Wout
+            y=> c1_n1_y
    );
              
 END ARCHITECTURE;

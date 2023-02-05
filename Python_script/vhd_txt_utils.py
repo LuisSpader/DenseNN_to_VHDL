@@ -194,7 +194,8 @@ def layerDict_to_entityTxt(
         layer_dict: dict = {},
         remove_dict_items=[],
         generic: bool = False,
-        tab_space: int = 1) -> str:
+        tab_space: int = 1,
+        DEBUG: bool = False) -> str:
 
     name = layer_dict['Layer_name']
     bits = layer_dict['bits']
@@ -216,60 +217,44 @@ def layerDict_to_entityTxt(
 
     # quando temos 6 tipos de IO, pode ser qualquer '.vhd', logo usamos 'IO_manager'
     # try:
-    try:
-        # print("tentativa dic 1")
-        if (4 != len(IO_dict_list[0]['IN'].keys())):
-            IO, traço = IO_manager(
-                IO_dict_list, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
+    # try:
+        # # print("tentativa dic 1")
+        # if (7 == len(IO_dict_list[0]['IN'].keys())):
+        #     IO, traço = IO_manager(
+        #         IO_dict_list, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
 
-        else:  # quando temos 3 IO é dicionário no formato de uma camada, aí usamos 'IO_manager_layer'
-            # print(
-            #     f"é layer --> len(IO_dict_list[0]['IN'].keys()):{len(IO_dict_list[0]['IN'].keys())}")
-            # print(
-            #     f"é layer --> IO_dict_list[0]['IN'].keys():{IO_dict_list[0]['IN'].keys()})")
+        # else:  # quando temos 3 IO é dicionário no formato de uma camada, aí usamos 'IO_manager_layer'
 
-            IO, traço = IO_manager_layer(
-                layer_dict, bits, onerow=1, tab_space=2)
-    except:
-        # print("tentativa dic 2 exceção")
-        if (4 != len(IO_dict_list[0]['shared_IO']['IN'].keys())):
-            IO, traço = IO_manager(
-                IO_dict_list, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
-
-        else:  # quando temos 3 IO é dicionário no formato de uma camada, aí usamos 'IO_manager_layer'
-            IO, traço = IO_manager_layer(
-                IO_dict_list, bits, onerow=1, tab_space=2)
+    IO, traço = IO_manager_layer(
+        layer_dict, bits, onerow=1, tab_space=2)
     # except:
-    #     print("Error entity(): Formato de dicionário inválido")
-    #     return
+    #     # # print("tentativa dic 2 exceção")
+    #     # if (7 == len(IO_dict_list[0]['shared_IO']['IN'].keys())):
+    #     #     IO, traço = IO_manager(
+    #     #         IO_dict_list, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
+
+    #     # else:  # quando temos 3 IO é dicionário no formato de uma camada, aí usamos 'IO_manager_layer'
+    #     IO, traço = IO_manager_layer(
+    #         IO_dict_list, bits, onerow=1, tab_space=2)
 
     # PEGANDO GENERIC DO DICIONÁRIO DA CAMADA
     # pegando nome das variáveis
     generic_names = dict_list_exceptNone(
         dict_slice=layer_dict['IO']['GENERIC'], return_value_or_key='key', is_list=False)
-    print(
-        f"vhd_txt_utils.py :: entity2_layer_dict -> generic_names: {generic_names}")
 
     # pegando o valor das variáveis
     generic_values = dict_list_exceptNone_Callable(
         dict_slice=layer_dict['IO']['GENERIC'], return_value_or_key='value', is_list=False)
-    print(
-        f"vhd_txt_utils.py :: entity2_layer_dict -> generic_values: {generic_values}")
-    for i in generic_values:
-        print(f"generic_values():{generic_values}")
-    # gerando texto de atribuições
-    generic_definiton = ''
-    # for i in range(0, len(generic_names)):
-    #     generic_definiton += f"{('  '*tab_space)}{generic_names[i]} : NATURAL := {generic_values[i]};\n"
+    if DEBUG:
+        print(
+            f"vhd_txt_utils.py :: entity2_layer_dict -> generic_names: {generic_names}")
+        print(
+            f"vhd_txt_utils.py :: entity2_layer_dict -> generic_values: {generic_values}")
+        for i in generic_values:
+            print(f"generic_values():{generic_values}")
 
+    # gerando texto de atribuições
     if generic:
-        #         generic_txt = (f'''
-        # GENERIC (
-        #     BITS : NATURAL := {bits};
-        #     NUM_INPUTS : NATURAL := {num_inputs}
-        # );
-        #   ''')
-        # {generic_definiton[:-1]}
         generic_txt = (f'''
 GENERIC (
 {('  '*tab_space)}BITS : NATURAL := BITS;

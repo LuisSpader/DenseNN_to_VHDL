@@ -1,0 +1,14 @@
+﻿[dict_A, dict_B, dict_C]
+A --> B --> C
+
+
+=======
+entender melhor que função cria (ci_ni_...)
+		ci_...
+		.._ni_...
+
+colocar no desenho
+
+arrumar port map entre camadas
+como são gerados os sinais na camada?
+limpar port_map_layers_to_top

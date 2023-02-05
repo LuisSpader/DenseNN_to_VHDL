@@ -472,7 +472,7 @@ layer_dict_softmax = {
                     'STD_LOGIC_VECTOR_num_inputs': None,
                     'STD_LOGIC_num_inputs': None,
                     'SIGNED_num_inputs': None,
-                    'manual': ['Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
+                    'manual': None
                 }
                 # }
             }

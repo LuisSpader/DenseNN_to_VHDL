@@ -72,13 +72,13 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     txt = ''
 
     # if (n_max = 0): # caso não queiramos gerar neurônios mortos
-    for j in range(0, len(layer_dict_list)):
+    lista_camadas_IO = [0, len(layer_dict_list)-1]
+    for j in lista_camadas_IO:
 
-        txt, camada_inputs, camada_outputs = (entity_port_map(
-            vhd_name=layer_dict_list[j]['Layer_name'],
+        txt, camada_inputs, camada_outputs = (entity_port_map_i_iplus1(
             i=j,
-            neuron_dict=layer_dict_list[j],
-            num_inputs=INPUTS_NUMBER,
+            dict_list=layer_dict_list[j],
+            # num_inputs=INPUTS_NUMBER,
             ID_camada=str(j),
             port_map_layers_to_top=True))
 
@@ -153,37 +153,37 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     top_dict['IO']['OUT']['manual'] = l_outputs[3]
 
 # ----------------
-    # if DEBUG:
-    print(top_dict)
 
     top_entity = topDict_to_entityTxt(top_dict=top_dict,
                                       IO_dict_compare=layer_dict_list[0],
                                       remove_dict_items=[],
                                       generic=True
                                       )
-    print(f''' - -------- TOP ENTITY - --------
+    if DEBUG:
+        print(top_dict)
+        print(f''' - -------- TOP ENTITY - --------
 {top_entity}''')
 
-# topdict = {
-#     'Inputs_number': 3,
-#     'bits': 8,
-#     'IO_type': 'signed',
-#     'Neurons_number': 4,
-#     'Top_name': '',
-#     'IO': {
-#         'GENERIC': {
-#             'BITS': < function < lambda > at 0x000002223D701B80 > ,
-#             'NUM_INPUTS': < function < lambda > at 0x000002223D701C10 > ,
-#             'TOTAL_BITS': None},
-#         'IN': {
-#             'STD_LOGIC': ['clk', 'rst', 'update_weights'],
-#             'STD_LOGIC_VECTOR': None, 'SIGNED': None,
-#             'manual': ['Xi', 'c0_n0_Win', 'c0_n1_Win', 'c0_n2_Win']},
-#         'OUT': {
-#             'STD_LOGIC': None,
-#             'STD_LOGIC_VECTOR': None,
-#             'SIGNED': ['c1_n0_y', 'c1_n1_y'],
-#             'manual': ['c1_n0_Wout', 'c1_n1_Wout']
-#         }
-#     }
-# }
+    top_text = (f'''LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+USE work.parameters.ALL;
+
+{top_entity}
+
+ARCHITECTURE arch OF  {top_dict['Top_name']}  IS 
+BEGIN
+{txt_top_port_map} 
+END ARCHITECTURE;
+'''
+                )
+    download_vhd = True
+    # salvando VHDL
+    if (download_vhd == True):
+        top_dir = f"{OUTPUT_BASE_DIR_PATH}/{top_dict['Top_name']}.vhd"
+        with open(top_dir, "w") as writer:
+            writer.write(top_text)
+        # print(f"3 - layer_dict_list[{i}]: {layer_dict_list[i]['IO']['OUT']}")
+        if DEBUG:
+            print(
+                f"top_gen() -> Criando Top: {top_dir}")

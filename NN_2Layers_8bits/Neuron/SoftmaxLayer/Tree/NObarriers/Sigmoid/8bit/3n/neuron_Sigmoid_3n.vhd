@@ -16,8 +16,7 @@ USE work.parameters.ALL;
       Xi : IN signed(TOTAL_BITS - 1 DOWNTO 0);
       Win : IN signed(BITS - 1 DOWNTO 0);
       ----------------------------------------------
-      y: OUT signed(7 DOWNTO 0);
-      Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
+      y: OUT signed(7 DOWNTO 0)
     );
   end ENTITY;
 
