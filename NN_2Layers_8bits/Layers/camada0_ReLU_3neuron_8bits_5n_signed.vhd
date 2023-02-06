@@ -11,11 +11,11 @@ USE work.parameters.ALL;
   );
   PORT (
       clk, rst, update_weights: IN STD_LOGIC;
-      Xi: IN signed(TOTAL_BITS - 1 DOWNTO 0);
-      c0_n0_Win, c0_n1_Win, c0_n2_Win: IN signed(BITS - 1 DOWNTO 0);
+      IO_in: IN signed(TOTAL_BITS - 1 DOWNTO 0);
+      c0_n0_W_in, c0_n1_W_in, c0_n2_W_in: IN signed(BITS - 1 DOWNTO 0);
       ----------------------------------------------
-      c0_n0_y, c0_n1_y, c0_n2_y: OUT signed(7 DOWNTO 0);
-      c0_n0_Wout, c0_n1_Wout, c0_n2_Wout: OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
+      c0_n0_IO_out, c0_n1_IO_out, c0_n2_IO_out: OUT signed(7 DOWNTO 0);
+      c0_n0_W_out, c0_n1_W_out, c0_n2_W_out: OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
   );
   end ENTITY;
 
@@ -30,13 +30,13 @@ neuron_inst_0: ENTITY work.neuron_ReLU_5n
             rst=> rst, 
             update_weights=> update_weights, 
             -- ['IN']['manual'] 
-            Xi=> Xi, 
-            Win=> c0_n0_Win, 
+            IO_in=> IO_in, 
+            W_in=> c0_n0_W_in, 
             ---------- Saidas ----------
             -- ['OUT']['SIGNED'] 
-            y=> c0_n0_y, 
+            IO_out=> c0_n0_IO_out, 
             -- ['OUT']['manual'] 
-            Wout=> c0_n0_Wout
+            W_out=> c0_n0_W_out
    );
             
 neuron_inst_1: ENTITY work.neuron_ReLU_5n
@@ -47,13 +47,13 @@ neuron_inst_1: ENTITY work.neuron_ReLU_5n
             rst=> rst, 
             update_weights=> update_weights, 
             -- ['IN']['manual'] 
-            Xi=> Xi, 
-            Win=> c0_n1_Win, 
+            IO_in=> IO_in, 
+            W_in=> c0_n1_W_in, 
             ---------- Saidas ----------
             -- ['OUT']['SIGNED'] 
-            y=> c0_n1_y, 
+            IO_out=> c0_n1_IO_out, 
             -- ['OUT']['manual'] 
-            Wout=> c0_n1_Wout
+            W_out=> c0_n1_W_out
    );
             
 neuron_inst_2: ENTITY work.neuron_ReLU_5n
@@ -64,13 +64,13 @@ neuron_inst_2: ENTITY work.neuron_ReLU_5n
             rst=> rst, 
             update_weights=> update_weights, 
             -- ['IN']['manual'] 
-            Xi=> Xi, 
-            Win=> c0_n2_Win, 
+            IO_in=> IO_in, 
+            W_in=> c0_n2_W_in, 
             ---------- Saidas ----------
             -- ['OUT']['SIGNED'] 
-            y=> c0_n2_y, 
+            IO_out=> c0_n2_IO_out, 
             -- ['OUT']['manual'] 
-            Wout=> c0_n2_Wout
+            W_out=> c0_n2_W_out
    );
              
 END ARCHITECTURE;

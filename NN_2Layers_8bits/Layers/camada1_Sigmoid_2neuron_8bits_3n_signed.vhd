@@ -11,10 +11,10 @@ USE work.parameters.ALL;
   );
   PORT (
       clk, rst, update_weights: IN STD_LOGIC;
-      Xi: IN signed(TOTAL_BITS - 1 DOWNTO 0);
-      c1_n0_Win, c1_n1_Win: IN signed(BITS - 1 DOWNTO 0);
+      IO_in: IN signed(TOTAL_BITS - 1 DOWNTO 0);
+      c1_n0_W_in, c1_n1_W_in: IN signed(BITS - 1 DOWNTO 0);
       ----------------------------------------------
-      c1_n0_y, c1_n1_y: OUT signed(7 DOWNTO 0)
+      c1_n0_IO_out, c1_n1_IO_out: OUT signed(7 DOWNTO 0)
   );
   end ENTITY;
 
@@ -29,11 +29,11 @@ neuron_inst_0: ENTITY work.neuron_Sigmoid_3n
             rst=> rst, 
             update_weights=> update_weights, 
             -- ['IN']['manual'] 
-            Xi=> Xi, 
-            Win=> c1_n0_Win, 
+            IO_in=> IO_in, 
+            W_in=> c1_n0_W_in, 
             ---------- Saidas ----------
             -- ['OUT']['SIGNED'] 
-            y=> c1_n0_y
+            IO_out=> c1_n0_IO_out
    );
             
 neuron_inst_1: ENTITY work.neuron_Sigmoid_3n
@@ -44,11 +44,11 @@ neuron_inst_1: ENTITY work.neuron_Sigmoid_3n
             rst=> rst, 
             update_weights=> update_weights, 
             -- ['IN']['manual'] 
-            Xi=> Xi, 
-            Win=> c1_n1_Win, 
+            IO_in=> IO_in, 
+            W_in=> c1_n1_W_in, 
             ---------- Saidas ----------
             -- ['OUT']['SIGNED'] 
-            y=> c1_n1_y
+            IO_out=> c1_n1_IO_out
    );
              
 END ARCHITECTURE;

@@ -12,10 +12,10 @@ USE work.parameters.ALL;
     );
     PORT (
       clk, rst: IN STD_LOGIC;
-      Xi : IN signed(TOTAL_BITS - 1 DOWNTO 0);
+      IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
       Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
       ----------------------------------------------
-      y: OUT signed(7 DOWNTO 0)
+      IO_out: OUT signed(7 DOWNTO 0)
     );
   end ENTITY;
 
@@ -59,10 +59,10 @@ loop_Mult_port_map : FOR i IN 0 TO (NUM_INPUTS - 1) GENERATE
 	PROCESS (rst, clk)
 	BEGIN
 		IF (rst = '1') THEN
-                        y <= (OTHERS => '0');
+                        IO_out <= (OTHERS => '0');
 		ELSE
 			IF (clk'event AND clk = '1') THEN --se tem evento de clock
-                                y <= signed(sum_all(15 DOWNTO 8));
+                                IO_out <= signed(sum_all(15 DOWNTO 8));
 			END IF;
 		END IF;
 	END PROCESS;

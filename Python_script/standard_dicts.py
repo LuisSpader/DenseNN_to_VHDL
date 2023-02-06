@@ -111,7 +111,7 @@ layer_dict_hidden = {
                     'STD_LOGIC_num_inputs': None,
                     'STD_LOGIC_VECTOR_num_inputs': None,
                     'SIGNED_num_inputs': None,
-                    'manual': ['Xi : IN signed(TOTAL_BITS - 1 DOWNTO 0);']
+                    'manual': ['IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);']
                 },
                 'OUT': {  # SAÍDAS
                     'STD_LOGIC': None,
@@ -132,16 +132,16 @@ layer_dict_hidden = {
                     'STD_LOGIC_num_inputs': None,
                     'STD_LOGIC_VECTOR_num_inputs': None,
                     'SIGNED_num_inputs': None,
-                    'manual': ['Win : IN signed(BITS - 1 DOWNTO 0);']
+                    'manual': ['W_in : IN signed(BITS - 1 DOWNTO 0);']
                 },
                 'OUT': {  # SAÍDAS
                     'STD_LOGIC': None,
                     'STD_LOGIC_VECTOR': None,
-                    'SIGNED': ['y'],
+                    'SIGNED': ['IO_out'],
                     'STD_LOGIC_VECTOR_num_inputs': None,
                     'STD_LOGIC_num_inputs': None,
                     'SIGNED_num_inputs': None,
-                    'manual': ['Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
+                    'manual': ['W_out : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
                 }
                 # }
             }
@@ -442,7 +442,7 @@ layer_dict_softmax = {
                     'STD_LOGIC_num_inputs': None,
                     'STD_LOGIC_VECTOR_num_inputs': None,
                     'SIGNED_num_inputs': None,
-                    'manual': ['Xi : IN signed(TOTAL_BITS - 1 DOWNTO 0);']
+                    'manual': ['IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);']
                 },
                 'OUT': {  # SAÍDAS
                     'STD_LOGIC': None,
@@ -463,12 +463,12 @@ layer_dict_softmax = {
                     'STD_LOGIC_num_inputs': None,
                     'STD_LOGIC_VECTOR_num_inputs': None,
                     'SIGNED_num_inputs': None,
-                    'manual': ['Win : IN signed(BITS - 1 DOWNTO 0);']
+                    'manual': ['W_in : IN signed(BITS - 1 DOWNTO 0);']
                 },
                 'OUT': {  # SAÍDAS
                     'STD_LOGIC': None,
                     'STD_LOGIC_VECTOR': None,
-                    'SIGNED': ['y'],
+                    'SIGNED': ['IO_out'],
                     'STD_LOGIC_VECTOR_num_inputs': None,
                     'STD_LOGIC_num_inputs': None,
                     'SIGNED_num_inputs': None,

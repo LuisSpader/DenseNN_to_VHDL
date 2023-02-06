@@ -9,8 +9,8 @@ def port_map_dict(neuron_dict: dict,
                   IO_type: str = 'IN',
                   port_type: str = 'STD_LOGIC_VECTOR',
                   num_inputs: int = 1,
-                  com_numero: bool = True,
-                  port_map_layers_to_top: bool = False) -> str:      # True: 'x' se torna 'x1, x2, ...'):
+                  com_numero: bool = True  # True: 'x' se torna 'x1, x2, ...'):
+                  ) -> str:
     """Função para gerar o mapeamento PORT MAP de entradas ou saídas com base numa lista de dicionários. Também retorna uma lista com as IO (Inputs & Outputs). Esta função é apenas um 'quebra galho' da função Neuron_port_map_IO(). O formato de dicionário deve ser conforme abaixo:
         dict = {
                 'IN': { # ENTRADAS
@@ -63,13 +63,8 @@ def port_map_dict(neuron_dict: dict,
     # port_map_list = neuron_dict['shared_IO'][IO_type][port_type]
 
     # PEGANDO DICIONÁRIO E GERANDO UMA LISTA DO MESMO
-    if port_map_layers_to_top:
-        port_map_list = dict_list_exceptNone(
-            dict_slice=neuron_dict['IO'][IO_type][port_type],
-            return_value_or_key='key', is_list=True)
-    else:
-        port_map_list = dict_list_exceptNone(
-            dict_slice=neuron_dict['shared_IO'][IO_type][port_type], return_value_or_key='key', is_list=True)
+    port_map_list = dict_list_exceptNone(
+        dict_slice=neuron_dict['shared_IO'][IO_type][port_type], return_value_or_key='key', is_list=True)
 
     # print("------------ Para IO compartilhadas ['shared_IO'] ------------")
     for i in range(0, len(port_map_list)):
@@ -114,55 +109,55 @@ def port_map_dict(neuron_dict: dict,
     # print(lista_camada_IO)
     # lista_camada_IO.append(port_map_l)
 
-    if (not port_map_layers_to_top):
-        #  ------------ Para IO únicas ['unique_IO'] ------------
-        # ['unique_IO']: portas que NÃO são compartilhadas entre os neurônios
-        # gerando entradas únicas:
-        lista = neuron_dict['unique_IO'][IO_type][port_type]
-        # conseguindo lidar com lista mesmo quando é 'None'
-        s = dict_list_exceptNone(dict_slice=lista)
-        # unindo ID_camada com cada elemento da lista
+    # if (not port_map_layers_to_top):
+    #  ------------ Para IO únicas ['unique_IO'] ------------
+    # ['unique_IO']: portas que NÃO são compartilhadas entre os neurônios
+    # gerando entradas únicas:
+    lista = neuron_dict['unique_IO'][IO_type][port_type]
+    # conseguindo lidar com lista mesmo quando é 'None'
+    s = dict_list_exceptNone(dict_slice=lista)
+    # unindo ID_camada com cada elemento da lista
 
-        for i in range(0, len(s)):
-            if ' ' in s[i]:
-                # separa em blocos de strings divididos pelo caractere (vírgula) especificada
-                s[i] = s[i].split(' ')[0]
-                # estamos retirando o desnecessário e pegando apenas o nome da entrada
+    for i in range(0, len(s)):
+        if ' ' in s[i]:
+            # separa em blocos de strings divididos pelo caractere (vírgula) especificada
+            s[i] = s[i].split(' ')[0]
+            # estamos retirando o desnecessário e pegando apenas o nome da entrada
 
-        lista_var = [ID_camada + item for item in s]
-        s = [item for item in s]
-        # for item in s:
-        #     print(f"item: {item}")
-        #     print(f"ID_camada:{ID_camada}")
+    # print("------------ Para IO únicas ['unique_IO'] ------------")
+    lista_var = [ID_camada + item for item in s]
+    s = [item for item in s]
+    # for item in s:
+    #     print(f"item: {item}")
+    #     print(f"ID_camada:{ID_camada}")
 
-        # print("------------ Para IO únicas ['unique_IO'] ------------")
-        # print(f"s['{port_type}']['{IO_type}']: {s}")
-        # print(f"lista['{port_type}']['{IO_type}']: {lista}")
-        # print(f"lista_var['{port_type}']['{IO_type}']: {lista_var}")
+    # print(f"s['{port_type}']['{IO_type}']: {s}")
+    # print(f"lista['{port_type}']['{IO_type}']: {lista}")
+    # print(f"lista_var['{port_type}']['{IO_type}']: {lista_var}")
 
-        txt, port_map_l = input_sequences_number_choice(
-            # sequence_id=lista,
-            sequence_id=s,
-            port_map_list=lista_var,
-            port_map_is_str=False,
-            num_inputs=num_inputs,
-            list_or_string='list',
-            port_map=1,
-            new_line=1,
-            com_numero=com_numero  # True: 'x' se torna 'x1, x2, ...'
-        )
+    txt, port_map_l = input_sequences_number_choice(
+        # sequence_id=lista,
+        sequence_id=s,
+        port_map_list=lista_var,
+        port_map_is_str=False,
+        num_inputs=num_inputs,
+        list_or_string='list',
+        port_map=1,
+        new_line=1,
+        com_numero=com_numero  # True: 'x' se torna 'x1, x2, ...'
+    )
 
-        # print(f"txt['{port_type}']['{IO_type}']: {txt}")
-        # print(" ")
-        # print(f"port_map_l['{port_type}']['{IO_type}']: {port_map_l}")
+    # print(f"txt['{port_type}']['{IO_type}']: {txt}")
+    # print(" ")
+    # print(f"port_map_l['{port_type}']['{IO_type}']: {port_map_l}")
 
-        lista_camada_IO = lista_camada_IO + [port_map_l]
-        # print(lista_camada_IO)
-        # lista_camada_IO.append(port_map_l)
-        # if (lista_camada_IO != None): # remove duplicates
-        #     lista_camada_IO = list(dict.fromkeys(lista_camada_IO))
+    lista_camada_IO = lista_camada_IO + [port_map_l]
+    # print(lista_camada_IO)
+    # lista_camada_IO.append(port_map_l)
+    # if (lista_camada_IO != None): # remove duplicates
+    #     lista_camada_IO = list(dict.fromkeys(lista_camada_IO))
 
-        txt_port_map.append(txt)
+    txt_port_map.append(txt)
 
     txt_port_map = '\n'.join(map(str, txt_port_map))
     txt_port_map = erase_empty_lines_2(txt_port_map)
@@ -176,8 +171,8 @@ def port_map_dict(neuron_dict: dict,
 def Neuron_port_map_IO(neuron_dict_list: list,
                        num_inputs: int,
                        i: int,
-                       ID_camada: str,
-                       port_map_layers_to_top: bool = False):
+                       ID_camada: str
+                       ):
     """Função para gerar o texto de todas as ATRIBUIÇÕES das entradas e saídas de um componente. Ou seja, serve para ser utilizado quando instanciamos um componente. Será utilizada quando queremos dentro de uma camada, instanciar múltiplos neurônios.
 
     Exemplo:
@@ -234,8 +229,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='IN',
         port_type='STD_LOGIC',
         num_inputs=1,
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
 
     # Neuron_IN_port_map = Neuron_IN_port_map + input_sequences_number_choice(neuron_dict_list[i]['IN']['STD_LOGIC'], neuron_dict_list[i]['IN']['STD_LOGIC'], False, 1, 'list', 1, 1, False)
@@ -251,8 +245,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='IN',
         port_type='STD_LOGIC_VECTOR',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     # --------------------------------------------------
 
@@ -266,8 +259,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='IN',
         port_type='SIGNED',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
 
     # --------------------------------------------------
@@ -282,8 +274,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='IN',
         port_type='STD_LOGIC_num_inputs',
         num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-        com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=True  # True: 'x' se torna 'x1, x2, ...'
     )
 
     # --------------------------------------------------
@@ -298,8 +289,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='IN',
         port_type='STD_LOGIC_VECTOR_num_inputs',
         num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-        com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=True  # True: 'x' se torna 'x1, x2, ...'
     )
     # --------------------------------------------------
 
@@ -313,8 +303,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='IN',
         port_type='SIGNED_num_inputs',
         num_inputs=num_inputs,
-        com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=True  # True: 'x' se torna 'x1, x2, ...'
     )
 
     # ========================== OUT =============================
@@ -328,8 +317,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='OUT',
         port_type='STD_LOGIC',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     # --------------------------------------------------
 
@@ -343,8 +331,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='OUT',
         port_type='STD_LOGIC_VECTOR',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     # --------------------------------------------------
 
@@ -357,8 +344,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='OUT',
         port_type='SIGNED',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     # --------------------------------------------------
 
@@ -372,8 +358,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='OUT',
         port_type='STD_LOGIC_num_inputs',
         num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-        com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=True  # True: 'x' se torna 'x1, x2, ...'
     )
     # --------------------------------------------------
 
@@ -387,8 +372,7 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         IO_type='OUT',
         port_type='STD_LOGIC_VECTOR_num_inputs',
         num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-        com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=True  # True: 'x' se torna 'x1, x2, ...'
     )
     # --------------------------------------------------
 
@@ -403,7 +387,6 @@ def Neuron_port_map_IO(neuron_dict_list: list,
         port_type='SIGNED_num_inputs',
         num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
         com_numero=True,  # True: 'x' se torna 'x1, x2, ...',
-
     )
     # --------------------------------------------------
 
@@ -415,7 +398,6 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
                               num_inputs: int,
                               i: int,
                               ID_camada: str,
-                              port_map_layers_to_top: bool = False,
                               DEBUG: bool = False):
     """Função para gerar o texto de todas as ATRIBUIÇÕES das entradas e saídas de um componente. Ou seja, serve para ser utilizado quando instanciamos um componente. Será utilizada quando queremos dentro de uma camada, instanciar múltiplos neurônios.
 
@@ -477,8 +459,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
         IO_type='IN',
         port_type='STD_LOGIC',
         num_inputs=1,
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...',
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...',
     )
     if (x != ''):
         Neuron_IN_port_map = "-- ['IN']['STD_LOGIC'] \n"
@@ -496,8 +477,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
         IO_type='IN',
         port_type='STD_LOGIC_VECTOR',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):
         Neuron_IN_port_map = Neuron_IN_port_map + \
@@ -514,8 +494,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
         IO_type='IN',
         port_type='SIGNED',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):
         Neuron_IN_port_map = Neuron_IN_port_map + \
@@ -532,8 +511,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
             IO_type='IN',
             port_type='STD_LOGIC_num_inputs',
             num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -551,8 +529,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
             IO_type='IN',
             port_type='STD_LOGIC_VECTOR_num_inputs',
             num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -570,8 +547,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
             IO_type='IN',
             port_type='SIGNED_num_inputs',
             num_inputs=num_inputs,
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -590,8 +566,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
         IO_type='IN',
         port_type='manual',
         num_inputs=1,
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if DEBUG:
         print(f"PORT_MAP_utils :: Neuron_port_map_IO_unique -> x: {x}")
@@ -612,8 +587,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
         IO_type='OUT',
         port_type='STD_LOGIC',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):  # só irá adicionar texto caso ele não seja nulo
         Neuron_OUT_port_map = Neuron_OUT_port_map + \
@@ -629,8 +603,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
         IO_type='OUT',
         port_type='STD_LOGIC_VECTOR',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):  # só irá adicionar texto caso ele não seja nulo
         Neuron_OUT_port_map = Neuron_OUT_port_map + \
@@ -646,8 +619,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
         IO_type='OUT',
         port_type='SIGNED',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):  # só irá adicionar texto caso ele não seja nulo
         Neuron_OUT_port_map = Neuron_OUT_port_map + "-- ['OUT']['SIGNED'] \n"
@@ -662,8 +634,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
             IO_type='OUT',
             port_type='STD_LOGIC_num_inputs',
             num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -682,8 +653,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
             IO_type='OUT',
             port_type='STD_LOGIC_VECTOR_num_inputs',
             num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -701,8 +671,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
             IO_type='OUT',
             port_type='SIGNED_num_inputs',
             num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -720,8 +689,7 @@ def Neuron_port_map_IO_unique(neuron_dict: dict,
         IO_type='OUT',
         port_type='manual',
         num_inputs=1,
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):
         Neuron_OUT_port_map = Neuron_OUT_port_map + \
@@ -741,8 +709,7 @@ def entity_port_map(vhd_name: str,
                     neuron_dict: dict,
                     num_inputs: int,
                     ID_camada: str,
-                    vhd_name_final_str: str = '',
-                    port_map_layers_to_top: bool = False
+                    vhd_name_final_str: str = ''
                     ):
     """Função para gerar o instanciamento de 1 componente.
     Exemplo:
@@ -797,8 +764,8 @@ def entity_port_map(vhd_name: str,
         neuron_dict=neuron_dict,
         i=i,
         num_inputs=num_inputs,
-        ID_camada=ID_camada,
-        port_map_layers_to_top=port_map_layers_to_top)
+        ID_camada=ID_camada
+    )
     # adicionando espaço no início de cada linha (formatação de código)
     inputs_txt = txt_add_space_begin(txt=Neuron_IN_port_map, space=6)
     outputs_txt = txt_add_space_begin(txt=Neuron_OUT_port_map, space=6)
@@ -819,79 +786,69 @@ def entity_port_map(vhd_name: str,
 # ---------------------------------------------------------------------------------
 
 
-def port_map_dict_i_iplus1(neuron_dict: dict,
+def port_map_dict_i_iplus1(dict_list: dict,
+                           i: int,
                            ID_camada: str,
                            lista_camada_IO: list,
                            IO_type: str = 'IN',
                            port_type: str = 'STD_LOGIC_VECTOR',
                            num_inputs: int = 1,
-                           com_numero: bool = True,
-                           port_map_layers_to_top: bool = False) -> str:      # True: 'x' se torna 'x1, x2, ...'):
-    """Função para gerar o mapeamento PORT MAP de entradas ou saídas com base numa lista de dicionários. Também retorna uma lista com as IO (Inputs & Outputs). Esta função é apenas um 'quebra galho' da função Neuron_port_map_IO(). O formato de dicionário deve ser conforme abaixo:
-        dict = {
-                'IN': { # ENTRADAS
-                    'STD_LOGIC': None,
-                    'STD_LOGIC_VECTOR': None,
-                    'SIGNED': ['bias'],
-                    'STD_LOGIC_num_inputs': None,
-                    'STD_LOGIC_VECTOR_num_inputs': None,
-                    'SIGNED_num_inputs': ['x','w']
-                },
-                'OUT': { #SAÍDAS
-                    'STD_LOGIC': None,
-                    'STD_LOGIC_VECTOR': None,
-                    'SIGNED': ['y'],
-                    'STD_LOGIC_VECTOR_num_inputs': None,
-                    'STD_LOGIC_num_inputs': None,
-                    'SIGNED_num_inputs': None
-                }
-            }
+                           com_numero: bool = True      # True: 'x' se torna 'x1, x2, ...'
+                           ) -> str:
 
-    Args:
-        neuron_dict (dict): dicionário
-
-        ID_camada (str): exemplo: ID_camada = 'c1'
-
-        lista_camada_IO (list): lista de IO que será acumulada
-        para ser utilizada no 'entity' do gerador de camadas
-
-        IO_type (str, optional): 'IN' ou 'OUT'. Defaults to 'IN'.
-
-        port_type (str, optional): tipo de porta com base no exemplo de dicionário acima. Defaults to 'STD_LOGIC_VECTOR'.
-
-        num_inputs (int, optional): número de entradas que se repetem caso 'com_número' == True
-
-        com_numero (bool, optional):  True: 'x' se torna 'x1, x2, ...'
-
-    Returns:
-        txt_port_map(str): retorna um texto com mapeamento entre as entradas e saídas
-        lista_camada_IO (list): retorna lista de sublistas das Inputs & Outputs. Sendo cada sublista 1 tipo de entrada ou saída.
-
-    """
     txt_port_map = []
 
     #  ------------ Para IO compartilhadas ['shared_IO'] ------------
     # ['shared_IO']: portas que são compartilhadas entre os neurônios: x1,x2,...
     # port_map_list = neuron_dict['shared_IO'][IO_type][port_type]
 
-    # PEGANDO DICIONÁRIO E GERANDO UMA LISTA DO MESMO
-    if port_map_layers_to_top:
-        port_map_list = dict_list_exceptNone(
-            dict_slice=neuron_dict['IO'][IO_type][port_type],
-            return_value_or_key='key', is_list=True)
-    else:
-        port_map_list = dict_list_exceptNone(
-            dict_slice=neuron_dict['shared_IO'][IO_type][port_type], return_value_or_key='key', is_list=True)
+    # PEGANDO DICIONÁRIO DA CAMADA E GERANDO UMA LISTA DAS IOs DO MESMO
+    # if port_map_layers_to_top:
+    IO_list = dict_list_exceptNone(
+        dict_slice=dict_list[i]['IO'][IO_type][port_type],
+        return_value_or_key='key', is_list=True)
+
+    for j in range(0, len(IO_list)):
+        if ' ' in IO_list[j]:
+            # separa em blocos de strings divididos pelo caractere (vírgula) especificada
+            # estamos retirando o desnecessário e pegando apenas o nome da entrada
+            IO_list[j] = IO_list[j].split(' ')[0]
+    # print(f"IO_list: -> IO_list: {IO_list}")
+
+    # se for a primeira camada 'c0': todo o port_map das IOs continua normal (a => a)
+    # port_map_list = IO_list
+    port_map_list = dict_list_exceptNone(
+        dict_slice=dict_list[i]['IO'][IO_type][port_type],
+        return_value_or_key='key', is_list=True)
+
+    # print(f"port_map_dict_i_iplus1: -> port_map_list: {port_map_list}")
+
+    # lista_out = []
+    # if dict_list[i]['Layer_num'] > 0:
+    #     # se for a segunda camada 'c1' ou em diante:
+    #     port_map_list_previous = dict_list_exceptNone(
+    #         dict_slice=dict_list[i-1]['IO']['OUT'][port_type],
+    #         return_value_or_key='key', is_list=True)
+
+    #     if IO_type == 'IN':
+    #         # if IO_type == 'IN' : as entradas devem ser igual as saídas (IO_type=='OUT') de 'c0' & deve ser gerado um sinal desta variável de mesmo nome
+
+    #         for j in range(0, len(port_map_list)):  # iterando sobre 'OUT'
+
+    #             # port_map pesos W_out
+    #             if 'W_in' in port_map_list[j]:
+    #                 # if 'X' in port_map_list[i]:
+    #                 # if 'Win' in port_map_list_previous[i]:
+    #                 buff = port_map_list[j].replace('_out', '_in')
+    #                 buff = buff.replace(f"c{i}", f"c{i-1}")
+    #                 lista_out.append(buff)
+
+    # if IO_type == 'OUT': continua normal
 
     # print("------------ Para IO compartilhadas ['shared_IO'] ------------")
-    for i in range(0, len(port_map_list)):
-        if ' ' in port_map_list[i]:
-            # separa em blocos de strings divididos pelo caractere (vírgula) especificada
-            port_map_list[i] = port_map_list[i].split(' ')[0]
-            # estamos retirando o desnecessário e pegando apenas o nome da entrada
     txt, port_map_l = input_sequences_number_choice(
-        sequence_id=port_map_list,
-        port_map_list=port_map_list,
+        sequence_id=IO_list,
+        port_map_list=IO_list,
         port_map_is_str=False,
         num_inputs=num_inputs,
         list_or_string='list',
@@ -903,41 +860,41 @@ def port_map_dict_i_iplus1(neuron_dict: dict,
     txt_port_map.append(txt)
     lista_camada_IO = lista_camada_IO + [port_map_l]
 
-    if (not port_map_layers_to_top):
-        #  ------------ Para IO únicas ['unique_IO'] ------------
-        # ['unique_IO']: portas que NÃO são compartilhadas entre os neurônios
-        # gerando entradas únicas:
-        lista = neuron_dict['unique_IO'][IO_type][port_type]
-        # conseguindo lidar com lista mesmo quando é 'None'
-        s = dict_list_exceptNone(dict_slice=lista)
-        # unindo ID_camada com cada elemento da lista
+    # if (not port_map_layers_to_top):
+    # #  ------------ Para IO únicas ['unique_IO'] ------------
+    # # ['unique_IO']: portas que NÃO são compartilhadas entre os neurônios
+    # # gerando entradas únicas:
+    # lista = dict_list[i]['unique_IO'][IO_type][port_type]
+    # # conseguindo lidar com lista mesmo quando é 'None'
+    # s = dict_list_exceptNone(dict_slice=lista)
+    # # unindo ID_camada com cada elemento da lista
 
-        for i in range(0, len(s)):
-            if ' ' in s[i]:
-                # separa em blocos de strings divididos pelo caractere (vírgula) especificada
-                s[i] = s[i].split(' ')[0]
-                # estamos retirando o desnecessário e pegando apenas o nome da entrada
+    # for i in range(0, len(s)):
+    #     if ' ' in s[i]:
+    #         # separa em blocos de strings divididos pelo caractere (vírgula) especificada
+    #         s[i] = s[i].split(' ')[0]
+    #         # estamos retirando o desnecessário e pegando apenas o nome da entrada
 
-        lista_var = [ID_camada + item for item in s]
-        s = [item for item in s]
+    # lista_var = [ID_camada + item for item in s]
+    # s = [item for item in s]
 
-        # print("------------ Para IO únicas ['unique_IO'] ------------")
+    # # print("------------ Para IO únicas ['unique_IO'] ------------")
 
-        txt, port_map_l = input_sequences_number_choice(
-            # sequence_id=lista,
-            sequence_id=s,
-            port_map_list=lista_var,
-            port_map_is_str=False,
-            num_inputs=num_inputs,
-            list_or_string='list',
-            port_map=1,
-            new_line=1,
-            com_numero=com_numero  # True: 'x' se torna 'x1, x2, ...'
-        )
+    # txt, port_map_l = input_sequences_number_choice(
+    #     # sequence_id=lista,
+    #     sequence_id=s,
+    #     port_map_list=lista_var,
+    #     port_map_is_str=False,
+    #     num_inputs=num_inputs,
+    #     list_or_string='list',
+    #     port_map=1,
+    #     new_line=1,
+    #     com_numero=com_numero  # True: 'x' se torna 'x1, x2, ...'
+    # )
 
-        lista_camada_IO = lista_camada_IO + [port_map_l]
+    # lista_camada_IO = lista_camada_IO + [port_map_l]
 
-        txt_port_map.append(txt)
+    # txt_port_map.append(txt)
 
     txt_port_map = '\n'.join(map(str, txt_port_map))
     txt_port_map = erase_empty_lines_2(txt_port_map)
@@ -963,15 +920,14 @@ def Layers_port_map_IO(dict_list: dict,
     x = ''
 
     x, lista_camada_inputs[0] = port_map_dict_i_iplus1(
-        dict_i=dict_list[i],
-        dict_i_plus1=dict_list[i+1],
+        dict_list=dict_list,
+        i=i,
         ID_camada=ID_camada,
         lista_camada_IO=lista_camada_inputs[0],
         IO_type='IN',
         port_type='STD_LOGIC',
         num_inputs=1,
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...',
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):
         Neuron_IN_port_map = "-- ['IN']['STD_LOGIC'] \n"
@@ -980,15 +936,14 @@ def Layers_port_map_IO(dict_list: dict,
     # --------------------------------------------------
     # ['IN']['STD_LOGIC_VECTOR'] - OK
     x, lista_camada_inputs[1] = port_map_dict_i_iplus1(
-        dict_i=dict_list[i],
-        dict_i_plus1=dict_list[i+1],
+        dict_list=dict_list,
+        i=i,
         ID_camada=ID_camada,
         lista_camada_IO=lista_camada_inputs[1],
         IO_type='IN',
         port_type='STD_LOGIC_VECTOR',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):
         Neuron_IN_port_map = Neuron_IN_port_map + \
@@ -998,15 +953,14 @@ def Layers_port_map_IO(dict_list: dict,
 
     # ['IN']['SIGNED'] - OK
     x, lista_camada_inputs[2] = port_map_dict_i_iplus1(
-        dict_i=dict_list[i],
-        dict_i_plus1=dict_list[i+1],
+        dict_list=dict_list,
+        i=i,
         ID_camada=ID_camada,
         lista_camada_IO=lista_camada_inputs[2],
         IO_type='IN',
         port_type='SIGNED',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):
         Neuron_IN_port_map = Neuron_IN_port_map + \
@@ -1017,15 +971,14 @@ def Layers_port_map_IO(dict_list: dict,
     try:
         # ['IN']['STD_LOGIC_num_inputs'] - OK
         x, lista_camada_inputs[3] = port_map_dict_i_iplus1(
-            dict_i=dict_list[i],
-            dict_i_plus1=dict_list[i+1],
+            dict_list=dict_list,
+            i=i,
             ID_camada=ID_camada,
             lista_camada_IO=lista_camada_inputs[3],
             IO_type='IN',
             port_type='STD_LOGIC_num_inputs',
             num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -1037,15 +990,14 @@ def Layers_port_map_IO(dict_list: dict,
     try:
         # ['IN']['STD_LOGIC_VECTOR_num_inputs'] - OK
         x, lista_camada_inputs[4] = port_map_dict_i_iplus1(
-            dict_i=dict_list[i],
-            dict_i_plus1=dict_list[i+1],
+            dict_list=dict_list,
+            i=i,
             ID_camada=ID_camada,
             lista_camada_IO=lista_camada_inputs[4],
             IO_type='IN',
             port_type='STD_LOGIC_VECTOR_num_inputs',
             num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -1057,15 +1009,14 @@ def Layers_port_map_IO(dict_list: dict,
     try:
         # ['IN']['SIGNED_num_inputs'] -
         x, lista_camada_inputs[5] = port_map_dict_i_iplus1(
-            dict_i=dict_list[i],
-            dict_i_plus1=dict_list[i+1],
+            dict_list=dict_list,
+            i=i,
             ID_camada=ID_camada,
             lista_camada_IO=lista_camada_inputs[5],
             IO_type='IN',
             port_type='SIGNED_num_inputs',
             num_inputs=num_inputs,
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -1078,15 +1029,14 @@ def Layers_port_map_IO(dict_list: dict,
 
     # ['IN']['manual'] -
     x, lista_camada_inputs[6] = port_map_dict_i_iplus1(
-        dict_i=dict_list[i],
-        dict_i_plus1=dict_list[i+1],
+        dict_list=dict_list,
+        i=i,
         ID_camada=ID_camada,
         lista_camada_IO=lista_camada_inputs[6],
         IO_type='IN',
         port_type='manual',
         num_inputs=1,
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if DEBUG:
         print(f"PORT_MAP_utils :: Neuron_port_map_IO_unique -> x: {x}")
@@ -1101,15 +1051,14 @@ def Layers_port_map_IO(dict_list: dict,
 
     # ['OUT']['STD_LOGIC']
     x, lista_camada_outputs[0] = port_map_dict_i_iplus1(
-        dict_i=dict_list[i],
-        dict_i_plus1=dict_list[i+1],
+        dict_list=dict_list,
+        i=i,
         ID_camada=ID_camada,
         lista_camada_IO=lista_camada_outputs[0],
         IO_type='OUT',
         port_type='STD_LOGIC',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):  # só irá adicionar texto caso ele não seja nulo
         Neuron_OUT_port_map = Neuron_OUT_port_map + \
@@ -1119,15 +1068,14 @@ def Layers_port_map_IO(dict_list: dict,
 
     # ['OUT']['STD_LOGIC_VECTOR']
     x, lista_camada_outputs[1] = port_map_dict_i_iplus1(
-        dict_i=dict_list[i],
-        dict_i_plus1=dict_list[i+1],
+        dict_list=dict_list,
+        i=i,
         ID_camada=ID_camada,
         lista_camada_IO=lista_camada_outputs[1],
         IO_type='OUT',
         port_type='STD_LOGIC_VECTOR',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):  # só irá adicionar texto caso ele não seja nulo
         Neuron_OUT_port_map = Neuron_OUT_port_map + \
@@ -1137,15 +1085,14 @@ def Layers_port_map_IO(dict_list: dict,
 
     # ['OUT']['SIGNED']
     x, lista_camada_outputs[2] = port_map_dict_i_iplus1(
-        dict_i=dict_list[i],
-        dict_i_plus1=dict_list[i+1],
+        dict_list=dict_list,
+        i=i,
         ID_camada=ID_camada,
         lista_camada_IO=lista_camada_outputs[2],
         IO_type='OUT',
         port_type='SIGNED',
         num_inputs=1,  # colocar = 1 quando 'com_numero' = False
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):  # só irá adicionar texto caso ele não seja nulo
         Neuron_OUT_port_map = Neuron_OUT_port_map + "-- ['OUT']['SIGNED'] \n"
@@ -1154,15 +1101,14 @@ def Layers_port_map_IO(dict_list: dict,
     try:
         # ['OUT']['STD_LOGIC_num_inputs']
         x, lista_camada_outputs[3] = port_map_dict_i_iplus1(
-            dict_i=dict_list[i],
-            dict_i_plus1=dict_list[i+1],
+            dict_list=dict_list,
+            i=i,
             ID_camada=ID_camada,
             lista_camada_IO=lista_camada_outputs[3],
             IO_type='OUT',
             port_type='STD_LOGIC_num_inputs',
             num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -1175,15 +1121,14 @@ def Layers_port_map_IO(dict_list: dict,
     try:
         # ['OUT']['STD_LOGIC_VECTOR_num_inputs']
         x, lista_camada_outputs[4] = port_map_dict_i_iplus1(
-            dict_i=dict_list[i],
-            dict_i_plus1=dict_list[i+1],
+            dict_list=dict_list,
+            i=i,
             ID_camada=ID_camada,
             lista_camada_IO=lista_camada_outputs[4],
             IO_type='OUT',
             port_type='STD_LOGIC_VECTOR_num_inputs',
             num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -1195,14 +1140,14 @@ def Layers_port_map_IO(dict_list: dict,
     try:
         # ['OUT']['SIGNED_num_inputs']
         x, lista_camada_outputs[5] = port_map_dict_i_iplus1(
-            dict_i=dict_list[i],
+            dict_list=dict_list,
+            i=i,
             ID_camada=ID_camada,
             lista_camada_IO=lista_camada_outputs[5],
             IO_type='OUT',
             port_type='SIGNED_num_inputs',
             num_inputs=num_inputs,  # colocar = 1 quando 'com_numero' = False
-            com_numero=True,  # True: 'x' se torna 'x1, x2, ...'
-            port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+            com_numero=True  # True: 'x' se torna 'x1, x2, ...'
         )
     except:
         x = ''
@@ -1214,15 +1159,14 @@ def Layers_port_map_IO(dict_list: dict,
 
     # ['OUT']['manual'] -
     x, lista_camada_outputs[6] = port_map_dict_i_iplus1(
-        dict_i=dict_list[i],
-        dict_i_plus1=dict_list[i+1],
+        dict_list=dict_list,
+        i=i,
         ID_camada=ID_camada,
         lista_camada_IO=lista_camada_outputs[6],
         IO_type='OUT',
         port_type='manual',
         num_inputs=1,
-        com_numero=False,  # True: 'x' se torna 'x1, x2, ...'
-        port_map_layers_to_top=port_map_layers_to_top  # se está mapeando o top ou não
+        com_numero=False  # True: 'x' se torna 'x1, x2, ...'
     )
     if (x != ''):
         Neuron_OUT_port_map = Neuron_OUT_port_map + \

@@ -899,7 +899,7 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
     find = "_"
     # print("for item in IO_list:")
     # print(f"IO_list: {IO_list}")
-    try:
+    try:  # pois IO_list[IO_type]['manual'] poder ser == None
         for item in IO_list[IO_type]['manual']:
             if DEBUG:
                 print(f"item: {item}")  # clk, ... , Xi, c0_n0_Win, ...
@@ -915,8 +915,12 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
             #     ]
 
             if "_" in item:
-                position = item.find(f"{find}")
-                txt_depois = item.split(f"{find}")[-1]  # c0_n0_Win -> Win
+                if '_in' or '_out' in item:
+                    txt_depois = '_'.join(
+                        map(str, (item.split(f"{find}")[-2:])))  # c0_n0_Win -> Win
+
+                else:
+                    txt_depois = item.split(f"{find}")[-1]  # c0_n0_Win -> Win
             else:
                 txt_depois = item  # clk -> clk
             # print(f"txt_antes: {txt_antes}")
@@ -1054,8 +1058,12 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', DEBUG: boo
             #     ]
 
             if "_" in item:
-                position = item.find(f"{find}")
-                txt_depois = item.split(f"{find}")[-1]  # c0_n0_Win -> Win
+                if '_in' or '_out' in item:
+                    txt_depois = '_'.join(
+                        map(str, (item.split(f"{find}")[-2:])))  # c0_n0_Win -> Win
+
+                else:
+                    txt_depois = item.split(f"{find}")[-1]  # c0_n0_Win -> Win
             else:
                 txt_depois = item  # clk -> clk
 

@@ -371,6 +371,8 @@ def layer_neurons_port_map_ALL(layer_dict_arg: dict,
     output_dict['IO']['OUT']['SIGNED'] = l_outputs[2]
     output_dict['IO']['OUT']['manual'] = l_outputs[3]
 
+    # print(f"output_dict['IO']: {output_dict['IO']}")
+
     return port_map_txt, output_dict
 # Neuron_IO_dict = {
 #   'IN': { # ENTRADAS

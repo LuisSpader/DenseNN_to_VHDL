@@ -77,10 +77,9 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
         txt, camada_inputs, camada_outputs = (entity_port_map_i_iplus1(
             i=j,
-            dict_list=layer_dict_list[j],
+            dict_list=layer_dict_list,
             # num_inputs=INPUTS_NUMBER,
-            ID_camada=str(j),
-            port_map_layers_to_top=True))
+            ID_camada=str(j)))
 
         txt_list.append(txt)
         if j == 0:  # PRIMEIRA CAMADA

@@ -13,11 +13,11 @@ USE work.parameters.ALL;
     );
     PORT (
       clk, rst, update_weights: IN STD_LOGIC;
-      Xi : IN signed(TOTAL_BITS - 1 DOWNTO 0);
-      Win : IN signed(BITS - 1 DOWNTO 0);
+      IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
+      W_in : IN signed(BITS - 1 DOWNTO 0);
       ----------------------------------------------
-      y: OUT signed(7 DOWNTO 0);
-      Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
+      IO_out: OUT signed(7 DOWNTO 0);
+      W_out : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
     );
   end ENTITY;
 
@@ -30,10 +30,11 @@ ARCHITECTURE behavior of neuron_ReLU_5n is
     );
     PORT (
       clk, rst: IN STD_LOGIC;
-      Xi : IN signed(TOTAL_BITS - 1 DOWNTO 0);
+      IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
       Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
       ----------------------------------------------
-      y: OUT signed(7 DOWNTO 0)
+      IO_out: OUT signed(7 DOWNTO 0);
+      W_out : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
     );
   end COMPONENT;
 
