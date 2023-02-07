@@ -15,7 +15,7 @@ USE work.parameters.ALL;
       c0_n0_W_in, c0_n1_W_in, c0_n2_W_in: IN signed(BITS - 1 DOWNTO 0);
       ----------------------------------------------
       c0_n0_IO_out, c0_n1_IO_out, c0_n2_IO_out: OUT signed(7 DOWNTO 0);
-      c0_n0_W_out, c0_n1_W_out, c0_n2_W_out: OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
+      c0_n0_W_out, c0_n1_W_out, c0_n2_W_out: OUT signed(BITS - 1 DOWNTO 0)
   );
   end ENTITY;
 

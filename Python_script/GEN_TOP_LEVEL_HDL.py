@@ -162,26 +162,155 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
 
 # ----------------
-    # for j in lista_camadas_IO:
-    #     for type in ['IN', 'OUT']:
-    #         _ = IO_manual_Top(
-    #             IO_dict=layer_dict_list[j],
-    #             IO_list=top_dict['IO'],
-    #             IO_type=type,
-    #             DEBUG=False)
+
     list_IN = []
     list_OUT = []
-    list_IN.append(dict_list_exceptNone(
-        dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN'], return_value_or_key='value', is_list=False))
-    list_IN.append(dict_list_exceptNone(
-        dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN'], return_value_or_key='value', is_list=False))
-    list_OUT.append(dict_list_exceptNone(
-        dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT'], return_value_or_key='value', is_list=False))
-    list_OUT.append(dict_list_exceptNone(
-        dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT'], return_value_or_key='value', is_list=False))
-    # todo: gerador de lista para entradas comuns ['nome_sinal', 'tipo_sinal']
-    # todo: gerador para entradas 'manual'
-    # todo: tratamento diferente para ci_IO_in devido ao 'TOTAL_BITS' ser diferente para cada camada
+    list_IN_manual = []
+    list_OUT_manual = []
+    nomes = [None]*len(layer_dict_list)
+    tipos = [None]*len(layer_dict_list)
+
+    # criando lista das entradas e saídas (IO) e seus tipos
+    for j in range(0, len(layer_dict_list)):
+        # INPUTs shared_IO: salvando o nome
+        list_IN.append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['IN'],
+                                    key_or_value=True))
+        # INPUTs shared_IO: salvando o tipo
+        list_IN.append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['IN'],
+                                    key_or_value=False))
+        # INPUTs unique_IO: salvando o nome
+        list_IN.append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['IN'],
+                                    key_or_value=True))
+        # INPUTs unique_IO: salvando o tipo
+        list_IN.append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['IN'],
+                                    key_or_value=False))
+
+        # OUTPUTs shared_IO: salvando o nome
+        list_OUT.append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['OUT'],
+                                     key_or_value=True))
+        # OUTPUTs shared_IO: salvando o tipo
+        list_OUT.append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['OUT'],
+                                     key_or_value=False))
+        # OUTPUTs unique_IO: salvando o nome
+        list_OUT.append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['OUT'],
+                                     key_or_value=True))
+        # OUTPUTs unique_IO: salvando o tipo
+        list_OUT.append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['OUT'],
+                                     key_or_value=False))
+        # for j in lista_camadas_IO:
+        #     for type in ['IN', 'OUT']:
+        #         _ = IO_manual_Top(
+        #             IO_dict=layer_dict_list[j],
+        #             IO_list=top_dict['IO'],
+        #             IO_type=type,
+        #             SIGNALS=True,
+        #             DEBUG=False)
+
+        # removendo 'manual'
+        for i in range(0, len(list_IN)):
+            list_IN_manual.append(list_IN[i][-1])
+            list_OUT_manual.append(list_OUT[i][-1])
+            list_IN[i].pop()
+            list_OUT[i].pop()
+
+        buff_nomes = []
+        buff_tipos = []
+        # lista de nomes dos sinais
+        for item in list_IN_manual:
+            if item != None:
+                if ':' in item[0]:
+                    buff_nomes.append(item[0].split(':')[0].replace(' ', ''))
+                    buff_tipos.append(item[0].split(':')[1])
+        # lista dos tipos dos sinais
+        for item in list_OUT_manual:
+            if item != None:
+                if ':' in item[0]:
+                    buff_nomes.append(item[0].split(':')[0].replace(' ', ''))
+                    buff_tipos.append(item[0].split(':')[1])
+
+        nomes[j] = buff_nomes
+        tipos[j] = buff_tipos
+
+        # substituindo 'TOTAL_BITS' e 'NUM_INPUTS'
+        for i, item in enumerate(tipos[j]):
+            if 'TOTAL_BITS' in item:
+                tipos[j][i] = item.replace(
+                    'TOTAL_BITS', f"(BITS*{str(layer_dict_list[j]['Inputs_number'])})")
+            if 'NUM_INPUTS' in item:
+                tipos[j][i] = item.replace('NUM_INPUTS', str(
+                    layer_dict_list[j]['Inputs_number']))
+        # nomes2 = copy.deepcopy(nomes)
+        # tipos2 = copy.deepcopy(tipos)
+
+        # comparando pilha de sinais salvos em settings.signals_stack e concatenando na lista 'nomes'
+        for i, signal in enumerate(settings.signals_stack):
+            txt_depois = '_'.join(
+                map(str, (signal[0].split(f"_")[-2:])))
+
+            if signal[1] == j:
+                for k, name in enumerate(nomes[j]):
+                    if txt_depois in name:
+                        # nomes[j][k] = [nomes[j][k]].append(signal)
+                        s = signal[0]
+                        if isinstance(nomes[j][k], str):
+                            nomes[j][k] = [nomes[j][k]]
+                        nomes[j][k].append(s)
+
+    # removendo itens que não sejam sinais, foram apenas pegos do dicionário base ()
+    for y, name_1 in enumerate(nomes):
+
+        # itens da lista: remove nome e tipo
+        for j, name_2 in enumerate(name_1):
+            i = 0
+            length = len(nomes[y])
+            while i < length and j < length:
+                # buff_nomes = f"nomes[{y}][{j}]: {nomes[y][j]}"
+                # buff_tipos = f"tipos[{y}][{j}]:{tipos[y][j]}"
+                buff = name_1[j]
+
+                if buff == 'IO_in' or buff == 'W_in' or buff == 'W_out':
+                    del nomes[y][j]
+                    del tipos[y][j]
+                    i -= 1
+
+                else:
+                    # sub_itens da lista: remove só o nome
+                    for k, name3 in enumerate(name_1[j]):
+                        length2 = len(name_1[j])
+                        f = 0
+                        while f < length2:
+                            # buff_nomes = f"nomes[{y}][{j}][{k}]: {nomes[y][j][k]}"
+                            # buff_tipos = f"tipos[{y}][{j}]: {tipos[y][j]}"
+                            buff = name_1[j][k]
+
+                            if buff == 'IO_in' or buff == 'W_in' or buff == 'W_out':
+                                del nomes[y][j][k]
+                                f -= 1
+                            length2 -= 1
+                            f += 1
+                length -= 1
+                i += 1
+
+    for i, item in enumerate(nomes):
+        for i2, item2 in enumerate(item):
+            print(
+                f"nomes[c{i}][{i2}]:{nomes[i][i2]}, tipos[c{i}][{i2}]:{tipos[i][i2]}")
+    print("  ")
+# list = [' IN signed(TOTAL_BITS - 1 DOWNTO 0);', ' IN signed(BITS - 1 DOWNTO 0);']
+# layer_dict_list = [{"Inputs_number": 2}]
+
+ # list_IN.append(dict_list_exceptNone(
+ #     dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN'], return_value_or_key='value', is_list=False))
+ # list_IN.append(dict_list_exceptNone(
+ #     dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN'], return_value_or_key='value', is_list=False))
+ # list_OUT.append(dict_list_exceptNone(
+ #     dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT'], return_value_or_key='value', is_list=False))
+ # list_OUT.append(dict_list_exceptNone(
+ #     dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT'], return_value_or_key='value', is_list=False))
+    # todo: gerador de lista para entradas comuns ['nome_sinal', 'tipo_sinal'] --> FALTA FAZER PARA IO_out (signed)
+    # OK todo: gerador para entradas 'manual'
+    # OK todo: tratamento diferente para ci_IO_in devido ao 'TOTAL_BITS' ser diferente para cada camada
+    # https://youtu.be/aWCWZpIZYjY
 
     settings.append_signals_stack_to_signals()
     top_entity = topDict_to_entityTxt(top_dict=top_dict,
@@ -201,11 +330,11 @@ USE work.parameters.ALL;
 
 {top_entity}
 
-ARCHITECTURE arch OF  {top_dict['Top_name']}  IS 
+ARCHITECTURE arch OF  {top_dict['Top_name']}  IS
 -- SIGNALS
-
+-- COLOCAR SINAIS AQUI!!!
 BEGIN
-  en_registers <= update_weights AND clk; 
+  en_registers <= update_weights AND clk;
   PROCESS (clk, rst)
   BEGIN
     IF rst = '1' THEN
@@ -214,7 +343,7 @@ BEGIN
       reg_IO_in <= IO_in;
     END IF;
   END PROCESS;
-{txt_top_port_map} 
+{txt_top_port_map}
 END ARCHITECTURE;
 '''
                 )

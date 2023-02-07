@@ -968,7 +968,7 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
     return final_string
 
 
-def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', DEBUG: bool = False) -> str:
+def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', SIGNALS: bool = False, DEBUG: bool = False) -> str:
     # layer_dict_compare: dict,
     """Função para gerar entradas e saídas 'manual' com base no dicionário (IO_dict) e uma lista de IO do layers (IO_list), comparando assim a qual grupo cada item da IO_list pertence.
 
@@ -1091,7 +1091,8 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', DEBUG: boo
     # text_list can be an splitted text or a list of texts
     final_string = '\n'.join(map(str, (text_list)))
     # print(f"utils.py :: IO_manual() -> final_string: {final_string}")
-    # settings.append_signals(nomes2, tipos2)
+    if SIGNALS:
+        settings.append_signals(nomes2, tipos2)
     return final_string
 
 

@@ -7,9 +7,9 @@ def init():
     signals_stack = []
 
 
-def append_signals_stack(item):
-    if not item in signals_stack:
-        signals_stack.append(item)
+def append_signals_stack(item, layer_number):
+    if not [item, layer_number] in signals_stack:
+        signals_stack.append([item, layer_number])
 
 
 def append_signals(signal_name, signal_type):

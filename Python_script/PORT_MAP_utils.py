@@ -846,10 +846,10 @@ def port_map_dict_i_iplus1(dict_list: dict,
             if 'IO_out' in item:
                 if concat_OUT == '':
                     concat_OUT = item
-                    settings.append_signals_stack(item)
+                    settings.append_signals_stack(item, i-1)
                 else:
                     concat_OUT = f"{concat_OUT} & {item}"
-                    settings.append_signals_stack(item)
+                    settings.append_signals_stack(item, i-1)
 
         if IO_type == 'IN':
             # if IO_type == 'IN' : as entradas devem ser igual as saídas (IO_type=='OUT') de 'c0' & deve ser gerado um sinal desta variável de mesmo nome
@@ -864,7 +864,7 @@ def port_map_dict_i_iplus1(dict_list: dict,
                     buff = buff.replace(f"c{i}", f"c{i-1}")
                     port_map_list[j] = buff
                     # settings.signals.append([buff, port_map_list_value[j]])
-                    settings.append_signals_stack(buff)
+                    settings.append_signals_stack(buff, i-1)
 
                 if 'IO_in' in port_map_list[j]:
                     buff = f"{ID_camada.split('_')[0]}_{port_map_list[j]}"
@@ -875,7 +875,7 @@ def port_map_dict_i_iplus1(dict_list: dict,
                     #     IO_list: list,  # top
                     #     IO_type='IN',
                     #     DEBUG=False)
-                    settings.append_signals_stack(buff)
+                    settings.append_signals_stack(buff, i)
 
                     # list_concat_IN_to_signal.append(buff)
 
