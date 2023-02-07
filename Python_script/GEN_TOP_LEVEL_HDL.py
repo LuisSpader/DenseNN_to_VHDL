@@ -162,7 +162,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
 
 # ----------------
-
+# https://youtu.be/oHSrqVhee_8
     list_IN = []
     list_OUT = []
     list_IN_manual = []
