@@ -1091,7 +1091,7 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', DEBUG: boo
     # text_list can be an splitted text or a list of texts
     final_string = '\n'.join(map(str, (text_list)))
     # print(f"utils.py :: IO_manual() -> final_string: {final_string}")
-    settings.append_signals(nomes2, tipos2)
+    # settings.append_signals(nomes2, tipos2)
     return final_string
 
 

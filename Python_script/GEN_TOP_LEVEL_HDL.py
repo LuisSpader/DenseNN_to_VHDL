@@ -162,20 +162,33 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
 
 # ----------------
-    for j in lista_camadas_IO:
-        for type in ['IN', 'OUT']:
-            _ = IO_manual_Top(
-                IO_dict=layer_dict_list[j],
-                IO_list=top_dict['IO'],
-                IO_type=type,
-                DEBUG=False)
+    # for j in lista_camadas_IO:
+    #     for type in ['IN', 'OUT']:
+    #         _ = IO_manual_Top(
+    #             IO_dict=layer_dict_list[j],
+    #             IO_list=top_dict['IO'],
+    #             IO_type=type,
+    #             DEBUG=False)
+    list_IN = []
+    list_OUT = []
+    list_IN.append(dict_list_exceptNone(
+        dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN'], return_value_or_key='value', is_list=False))
+    list_IN.append(dict_list_exceptNone(
+        dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN'], return_value_or_key='value', is_list=False))
+    list_OUT.append(dict_list_exceptNone(
+        dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT'], return_value_or_key='value', is_list=False))
+    list_OUT.append(dict_list_exceptNone(
+        dict_slice=layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT'], return_value_or_key='value', is_list=False))
+    # todo: gerador de lista para entradas comuns ['nome_sinal', 'tipo_sinal']
+    # todo: gerador para entradas 'manual'
+    # todo: tratamento diferente para ci_IO_in devido ao 'TOTAL_BITS' ser diferente para cada camada
 
     settings.append_signals_stack_to_signals()
     top_entity = topDict_to_entityTxt(top_dict=top_dict,
                                       IO_dict_compare=layer_dict_list[0],
                                       remove_dict_items=[],
-                                      generic=True
-                                      )
+                                      generic=True)
+
     if DEBUG:
         print(top_dict)
         print(f''' - -------- TOP ENTITY - --------
