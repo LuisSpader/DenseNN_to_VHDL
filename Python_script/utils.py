@@ -1,4 +1,5 @@
 # from standard_dicts import layer_dict_hidden
+import settings
 from txt_utils import replace_chars
 from dict_utils import dict_list_exceptNone
 from txt_utils import erase_empty_lines, tab_lines
@@ -1090,6 +1091,7 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', DEBUG: boo
     # text_list can be an splitted text or a list of texts
     final_string = '\n'.join(map(str, (text_list)))
     # print(f"utils.py :: IO_manual() -> final_string: {final_string}")
+    settings.append_signals(nomes2, tipos2)
     return final_string
 
 
@@ -1362,7 +1364,6 @@ def IO_manager_layer(IO_dict: dict = {},
 def IO_manager_Top(IO_dict: dict,
                    IO_dict_compare: dict = {},
                    bits: int = 0,
-                   num_inputs: int = 3,
                    onerow: bool = True,
                    tab_space: int = 2,
                    remove_dict_items=[]

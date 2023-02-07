@@ -56,7 +56,7 @@ ARCHITECTURE arch OF top_shift IS
 
 BEGIN
   -- TODO EN_REGISTERS
-  en_registers <= update_weights AND clk; -- tirar isso depois e colocar fora dos neuronios
+  en_registers <= update_weights AND clk;
   -- TODO PROCESS
   PROCESS (clk, rst)
   BEGIN

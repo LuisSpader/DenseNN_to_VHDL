@@ -20,6 +20,15 @@ USE work.parameters.ALL;
 
 ARCHITECTURE arch OF  top  IS 
 BEGIN
+  en_registers <= update_weights AND clk; 
+  PROCESS (clk, rst)
+  BEGIN
+    IF rst = '1' THEN
+      reg_IO_in <= (OTHERS => '0');
+    ELSIF clk'event AND clk = '1' THEN
+      reg_IO_in <= IO_in;
+    END IF;
+  END PROCESS;
 
 camada0_inst_0: ENTITY work.camada0_ReLU_3neuron_8bits_5n_signed
    PORT MAP (
@@ -29,7 +38,7 @@ camada0_inst_0: ENTITY work.camada0_ReLU_3neuron_8bits_5n_signed
             rst=> rst, 
             update_weights=> update_weights, 
             -- ['IN']['manual'] 
-            IO_in=> IO_in, 
+            IO_in=> reg_IO_in, 
             c0_n0_W_in=> c0_n0_W_in, 
             c0_n1_W_in=> c0_n1_W_in, 
             c0_n2_W_in=> c0_n2_W_in, 
@@ -52,9 +61,9 @@ camada1_inst_1: ENTITY work.camada1_Sigmoid_2neuron_8bits_3n_signed
             rst=> rst, 
             update_weights=> update_weights, 
             -- ['IN']['manual'] 
-            IO_in=> IO_in, 
-            c1_n0_W_in=> c1_n0_W_in, 
-            c1_n1_W_in=> c1_n1_W_in, 
+            IO_in=> c1_IO_in, 
+            c1_n0_W_in=> c0_n0_W_out, 
+            c1_n1_W_in=> c0_n1_W_out, 
             ---------- Saidas ----------
             -- ['OUT']['SIGNED'] 
             c1_n0_IO_out=> c1_n0_IO_out, 

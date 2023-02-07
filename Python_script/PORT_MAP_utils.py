@@ -1,3 +1,4 @@
+import settings
 from utils import *
 from dict_utils import *
 from txt_utils import *
@@ -783,6 +784,7 @@ def entity_port_map(vhd_name: str,
 
     return txt, lista_camada_inputs, lista_camada_outputs
 
+
 # ---------------------------------------------------------------------------------
 
 
@@ -800,10 +802,7 @@ def port_map_dict_i_iplus1(dict_list: dict,
 
     #  ------------ Para IO compartilhadas ['shared_IO'] ------------
     # ['shared_IO']: portas que são compartilhadas entre os neurônios: x1,x2,...
-    # port_map_list = neuron_dict['shared_IO'][IO_type][port_type]
-
     # PEGANDO DICIONÁRIO DA CAMADA E GERANDO UMA LISTA DAS IOs DO MESMO
-    # if port_map_layers_to_top:
     IO_list = dict_list_exceptNone(
         dict_slice=dict_list[i]['IO'][IO_type][port_type],
         return_value_or_key='key', is_list=True)
@@ -821,34 +820,71 @@ def port_map_dict_i_iplus1(dict_list: dict,
         dict_slice=dict_list[i]['IO'][IO_type][port_type],
         return_value_or_key='key', is_list=True)
 
-    # print(f"port_map_dict_i_iplus1: -> port_map_list: {port_map_list}")
+    print(f"port_map_dict_i_iplus1: -> port_map_list: {port_map_list}")
 
-    # lista_out = []
-    # if dict_list[i]['Layer_num'] > 0:
-    #     # se for a segunda camada 'c1' ou em diante:
-    #     port_map_list_previous = dict_list_exceptNone(
-    #         dict_slice=dict_list[i-1]['IO']['OUT'][port_type],
-    #         return_value_or_key='key', is_list=True)
+    # list_concat_IN_to_signal = []  # lista de sinais à serem criados no topo
 
-    #     if IO_type == 'IN':
-    #         # if IO_type == 'IN' : as entradas devem ser igual as saídas (IO_type=='OUT') de 'c0' & deve ser gerado um sinal desta variável de mesmo nome
+    concat_OUT = ''
+    layer_IO_in_concat = []
+    # global signals
 
-    #         for j in range(0, len(port_map_list)):  # iterando sobre 'OUT'
+    if dict_list[i]['Layer_num'] == 0:
+        if IO_type == 'IN':
+            for j in range(0, len(port_map_list)):  # iterando sobre 'OUT'
+                if 'IO_in' in port_map_list[j]:
+                    buff = f"reg_{port_map_list[j]}"
+                    port_map_list[j] = buff
 
-    #             # port_map pesos W_out
-    #             if 'W_in' in port_map_list[j]:
-    #                 # if 'X' in port_map_list[i]:
-    #                 # if 'Win' in port_map_list_previous[i]:
-    #                 buff = port_map_list[j].replace('_out', '_in')
-    #                 buff = buff.replace(f"c{i}", f"c{i-1}")
-    #                 lista_out.append(buff)
+    if dict_list[i]['Layer_num'] > 0:
+        # se for a segunda camada 'c1' ou em diante:
+        port_map_list_previous = dict_list_exceptNone(
+            dict_slice=dict_list[i-1]['IO']['OUT'][port_type],
+            return_value_or_key='key', is_list=True)
+
+        # criando texto de concatenação das saídas de cada camada
+        for item in port_map_list_previous:
+            if 'IO_out' in item:
+                if concat_OUT == '':
+                    concat_OUT = item
+                    settings.append_signals_stack(item)
+                else:
+                    concat_OUT = f"{concat_OUT} & {item}"
+                    settings.append_signals_stack(item)
+
+        if IO_type == 'IN':
+            # if IO_type == 'IN' : as entradas devem ser igual as saídas (IO_type=='OUT') de 'c0' & deve ser gerado um sinal desta variável de mesmo nome
+
+            for j in range(0, len(port_map_list)):  # iterando sobre 'OUT'
+
+                # port_map pesos W_out
+                if 'W_in' in port_map_list[j]:
+                    # if 'X' in port_map_list[i]:
+                    # if 'Win' in port_map_list_previous[i]:
+                    buff = port_map_list[j].replace('_in', '_out')
+                    buff = buff.replace(f"c{i}", f"c{i-1}")
+                    port_map_list[j] = buff
+                    # settings.signals.append([buff, port_map_list_value[j]])
+                    settings.append_signals_stack(buff)
+
+                if 'IO_in' in port_map_list[j]:
+                    buff = f"{ID_camada.split('_')[0]}_{port_map_list[j]}"
+                    port_map_list[j] = buff
+                    layer_IO_in_concat.append(f"{buff} <= {concat_OUT};\n")
+                    # IO_manual_Top(
+                    #     IO_dict=dict_list[i],  # layer
+                    #     IO_list: list,  # top
+                    #     IO_type='IN',
+                    #     DEBUG=False)
+                    settings.append_signals_stack(buff)
+
+                    # list_concat_IN_to_signal.append(buff)
 
     # if IO_type == 'OUT': continua normal
 
     # print("------------ Para IO compartilhadas ['shared_IO'] ------------")
     txt, port_map_l = input_sequences_number_choice(
         sequence_id=IO_list,
-        port_map_list=IO_list,
+        port_map_list=port_map_list,
         port_map_is_str=False,
         num_inputs=num_inputs,
         list_or_string='list',
@@ -857,44 +893,10 @@ def port_map_dict_i_iplus1(dict_list: dict,
         com_numero=com_numero  # True: 'x' se torna 'x1, x2, ...'
     )
 
+    # txt_port_map.append(text_concat)
     txt_port_map.append(txt)
-    lista_camada_IO = lista_camada_IO + [port_map_l]
-
-    # if (not port_map_layers_to_top):
-    # #  ------------ Para IO únicas ['unique_IO'] ------------
-    # # ['unique_IO']: portas que NÃO são compartilhadas entre os neurônios
-    # # gerando entradas únicas:
-    # lista = dict_list[i]['unique_IO'][IO_type][port_type]
-    # # conseguindo lidar com lista mesmo quando é 'None'
-    # s = dict_list_exceptNone(dict_slice=lista)
-    # # unindo ID_camada com cada elemento da lista
-
-    # for i in range(0, len(s)):
-    #     if ' ' in s[i]:
-    #         # separa em blocos de strings divididos pelo caractere (vírgula) especificada
-    #         s[i] = s[i].split(' ')[0]
-    #         # estamos retirando o desnecessário e pegando apenas o nome da entrada
-
-    # lista_var = [ID_camada + item for item in s]
-    # s = [item for item in s]
-
-    # # print("------------ Para IO únicas ['unique_IO'] ------------")
-
-    # txt, port_map_l = input_sequences_number_choice(
-    #     # sequence_id=lista,
-    #     sequence_id=s,
-    #     port_map_list=lista_var,
-    #     port_map_is_str=False,
-    #     num_inputs=num_inputs,
-    #     list_or_string='list',
-    #     port_map=1,
-    #     new_line=1,
-    #     com_numero=com_numero  # True: 'x' se torna 'x1, x2, ...'
-    # )
-
     # lista_camada_IO = lista_camada_IO + [port_map_l]
-
-    # txt_port_map.append(txt)
+    lista_camada_IO = lista_camada_IO + [IO_list]
 
     txt_port_map = '\n'.join(map(str, txt_port_map))
     txt_port_map = erase_empty_lines_2(txt_port_map)

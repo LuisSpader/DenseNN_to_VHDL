@@ -8,6 +8,9 @@ from itertools import chain
 # ! todo: colocar hierarquia na documentação -> de que forma quer essa hierarquia documentada?
 # Done: refatorar para GEN_TOP_LEVEL_HDL
 # TODO: modularizar FX ACTIVATION units
+import settings
+
+settings.init()          # Call only once
 
 
 def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
@@ -79,7 +82,13 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
             i=j,
             dict_list=layer_dict_list,
             # num_inputs=INPUTS_NUMBER,
-            ID_camada=str(j)))
+            ID_camada=f"c{str(j)}"))
+
+        # port_map_list = dict_list_exceptNone(
+        # dict_slice=dict_list[i]['IO']['OUT'][port_type],
+        # return_value_or_key='key', is_list=True)
+        # for i in
+        # layer_dict_list[j]
 
         txt_list.append(txt)
         if j == 0:  # PRIMEIRA CAMADA
@@ -151,8 +160,17 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # TODO: adicionar função para transformar top_dict['IO']['OUT']['manual']
     top_dict['IO']['OUT']['manual'] = l_outputs[3]
 
-# ----------------
 
+# ----------------
+    for j in lista_camadas_IO:
+        for type in ['IN', 'OUT']:
+            _ = IO_manual_Top(
+                IO_dict=layer_dict_list[j],
+                IO_list=top_dict['IO'],
+                IO_type=type,
+                DEBUG=False)
+
+    settings.append_signals_stack_to_signals()
     top_entity = topDict_to_entityTxt(top_dict=top_dict,
                                       IO_dict_compare=layer_dict_list[0],
                                       remove_dict_items=[],
@@ -171,7 +189,18 @@ USE work.parameters.ALL;
 {top_entity}
 
 ARCHITECTURE arch OF  {top_dict['Top_name']}  IS 
+-- SIGNALS
+
 BEGIN
+  en_registers <= update_weights AND clk; 
+  PROCESS (clk, rst)
+  BEGIN
+    IF rst = '1' THEN
+      reg_IO_in <= (OTHERS => '0');
+    ELSIF clk'event AND clk = '1' THEN
+      reg_IO_in <= IO_in;
+    END IF;
+  END PROCESS;
 {txt_top_port_map} 
 END ARCHITECTURE;
 '''

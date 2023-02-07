@@ -78,7 +78,7 @@ def topDict_to_entityTxt(
             print("Error entity(): Formato de dicionário inválido para num_inputs.")
 
     IO, traço = IO_manager_Top(
-        top_dict, IO_dict_compare, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items
+        top_dict, IO_dict_compare, bits, onerow=1, tab_space=2, remove_dict_items=remove_dict_items
     )
 
     # PEGANDO GENERIC DO DICIONÁRIO DA CAMADA
