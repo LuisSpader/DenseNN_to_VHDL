@@ -482,12 +482,12 @@ def remove_Non_Signals(nomes, tipos, lista_IO_base):
                     #             f -= 1
                     #         length2 -= 1
                     #         f += 1
-                    remove_Non_Signals2(name_2)
+                    remove_Non_Signals_nested(name_2)
                 length -= 1
                 i += 1
 
 
-def remove_Non_Signals2(name_2):
+def remove_Non_Signals_nested(name_2):
 
     # sub_itens da lista: remove só o nome
     for k, name3 in enumerate(name_2):
@@ -506,4 +506,4 @@ def remove_Non_Signals2(name_2):
                 length2 -= 1
                 f += 1
         else:
-            remove_Non_Signals2(name3)
+            remove_Non_Signals_nested(name3)
