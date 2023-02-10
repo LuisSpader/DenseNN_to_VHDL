@@ -229,12 +229,6 @@ def Neuron_Gen_from_dict(
     neuron_ReLU_name = vhd_name(
         fx_activation_dict['ReLU'], bits, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
 
-    # if DEBUG:
-    #     # print(
-    #     #     f"Neuron_Gen_from_dict() -> neuron_ReLU_name: {neuron_ReLU_name}")
-    #     print(
-    #         f"Neuron_Gen_from_dict() -> Include_MAC_type: {Include_MAC_type}")
-
     neuron_Leaky_name = vhd_name(
         fx_activation_dict['Leaky ReLU'], bits, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
     neuron_Sigmoid_name = vhd_name(
