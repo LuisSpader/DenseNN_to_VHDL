@@ -320,6 +320,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # remove_Non_Signals(nomes_all, tipos_all, list_IN[j])
     # remove_Non_Signals(nomes_all, tipos_all, list_OUT[j])
 
+# loop para remover itens que não são os sinais descritos (usa a lista remove_signals_list)
     for l, layer in enumerate(nomes):  # layer
         for item_s in remove_signals_list:  # lista de itens para excluir
 
