@@ -11,6 +11,7 @@ from itertools import chain
 import settings
 
 settings.init()          # Call only once
+global remove_signals_list
 
 
 def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
@@ -180,6 +181,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                  for _ in range(len(layer_dict_list))]
     tipos_all = [[None]*2
                  for _ in range(len(layer_dict_list))]
+    remove_list = []
 
     # criando lista das entradas e saídas (IO) e seus tipos
     for j in range(0, len(layer_dict_list)):
@@ -208,6 +210,19 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         # OUTPUTs unique_IO: salvando o tipo
         list_OUT[j].append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['OUT'],
                                         key_or_value=False))
+
+        remove_list = remove_list + dict_list_exceptNone(
+            dict_slice=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['IN'], return_value_or_key='value', is_list=False)
+
+        remove_list = remove_list + dict_list_exceptNone(
+            dict_slice=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['IN'], return_value_or_key='value', is_list=False)
+
+        remove_list = remove_list + dict_list_exceptNone(
+            dict_slice=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['OUT'], return_value_or_key='value', is_list=False)
+
+        remove_list = remove_list + dict_list_exceptNone(
+            dict_slice=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['OUT'], return_value_or_key='value', is_list=False)
+
         # for j in lista_camadas_IO:
         #     for type in ['IN', 'OUT']:
         #         _ = IO_manual_Top(
@@ -230,13 +245,17 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         buff_nomes = []
         buff_tipos = []
 
-        buff_nomes, buff_tipos = get_namesANDtypes_normal_IO(list_IN[j])
+        # buff_nomes, buff_tipos = get_namesANDtypes_normal_IO(list_IN[j])
+        # nomes_all[j][0] = buff_nomes  # nomes_all[layer[IN,OUT]]
+        # tipos_all[j][0] = buff_tipos  # IN
+        buff_nomes = get_namesANDtypes_normal_IO(list_IN[j])
         nomes_all[j][0] = buff_nomes  # nomes_all[layer[IN,OUT]]
-        tipos_all[j][0] = buff_tipos  # IN
 
-        buff_nomes, buff_tipos = get_namesANDtypes_normal_IO(list_OUT[j])
+        # buff_nomes, buff_tipos = get_namesANDtypes_normal_IO(list_OUT[j])
+        # nomes_all[j][1] = buff_nomes  # nomes_all[layer[IN,OUT]]
+        # tipos_all[j][1] = buff_tipos  # OUT
+        buff_nomes = get_namesANDtypes_normal_IO(list_OUT[j])
         nomes_all[j][1] = buff_nomes  # nomes_all[layer[IN,OUT]]
-        tipos_all[j][1] = buff_tipos  # OUT
 
         # ------------ MANUAL --------------
         buff_nomes = []
@@ -245,25 +264,29 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         for item in list_IN_manual[j]:
             if item != []:
                 if ':' in item[0]:
-                    buff_nomes.append(item[0].split(':')[0].replace(' ', ''))
-                    buff_tipos.append(item[0].split(':')[1])
+                    buff_nomes.append(
+                        [item[0].split(':')[0].replace(' ', ''), item[0].split(':')[1]])
+                    # buff_nomes.append(item[0].split(':')[0].replace(' ', ''))
+                    # buff_tipos.append(item[0].split(':')[1])
         # lista dos tipos dos sinais
         for item in list_OUT_manual[j]:
             if item != [] and item != None:
                 if ':' in item[0]:
-                    buff_nomes.append(item[0].split(':')[0].replace(' ', ''))
-                    buff_tipos.append(item[0].split(':')[1])
+                    buff_nomes.append(
+                        [item[0].split(':')[0].replace(' ', ''), item[0].split(':')[1]])
+                    # buff_nomes.append(item[0].split(':')[0].replace(' ', ''))
+                    # buff_tipos.append(item[0].split(':')[1])
 
         nomes[j] = buff_nomes
         tipos[j] = buff_tipos
 
         # substituindo 'TOTAL_BITS' e 'NUM_INPUTS'
-        for i, item in enumerate(tipos[j]):
-            if 'TOTAL_BITS' in item:
-                tipos[j][i] = item.replace(
+        for i, item in enumerate(nomes[j]):
+            if 'TOTAL_BITS' in item[1]:
+                nomes[j][i][1] = item[1].replace(
                     'TOTAL_BITS', f"(BITS*{str(layer_dict_list[j]['Inputs_number'])})")
-            if 'NUM_INPUTS' in item:
-                tipos[j][i] = item.replace('NUM_INPUTS', str(
+            if 'NUM_INPUTS' in item[1]:
+                nomes[j][i][1] = item[1].replace('NUM_INPUTS', str(
                     layer_dict_list[j]['Inputs_number']))
         # nomes2 = copy.deepcopy(nomes)
         # tipos2 = copy.deepcopy(tipos)
@@ -274,20 +297,57 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                 map(str, (signal[0].split(f"_")[-2:])))
 
             if signal[1] == j:  # checa se é da mesma camada
-                for k, name in enumerate(nomes[j]):
-                    if txt_depois in name:
+                for k, item in enumerate(nomes[j]):
+                    if txt_depois in item[0]:
                         # nomes[j][k] = [nomes[j][k]].append(signal)
                         s = signal[0]
-                        if isinstance(nomes[j][k], str):
-                            nomes[j][k] = [nomes[j][k]]
-                        nomes[j][k].append(s)
+                        if isinstance(nomes[j][k][0], str):
+                            nomes[j][k][0] = [nomes[j][k][0]]
+                        nomes[j][k][0].append(s)
 
+    for i, item in enumerate(remove_list):
+        for j, item2 in enumerate(item):
+            if ':' in item2:
+                remove_list[i][j] = item2.split(':')[0].replace(' ', '')
+
+    remove_list = [item for sublist in remove_list for item in sublist]
+
+    global remove_signals_list
+    remove_signals_list = list(dict.fromkeys(remove_list))
     # removendo itens que não sejam sinais, foram apenas pegos do dicionário base ()
-    # lista_IO_base =
-    remove_Non_Signals(nomes, tipos, list_IN_manual[j])
-    remove_Non_Signals(nomes, tipos, list_OUT_manual[j])
-    remove_Non_Signals(nomes_all, tipos_all, list_IN[j])
-    remove_Non_Signals(nomes_all, tipos_all, list_OUT[j])
+    # remove_Non_Signals(nomes, tipos, list_IN_manual[j])
+    # remove_Non_Signals(nomes, tipos, list_OUT_manual[j])
+    # remove_Non_Signals(nomes_all, tipos_all, list_IN[j])
+    # remove_Non_Signals(nomes_all, tipos_all, list_OUT[j])
+
+    for l, layer in enumerate(nomes):  # layer
+        for item_s in remove_signals_list:  # lista de itens para excluir
+
+            length = len(nomes[l])
+            f = 0
+            while f < length:  # loop para lista que diminui seu tamanho
+
+                buff = f"nomes[{l}][{f}]: {nomes[l][f]}"
+                buff = nomes[l][f]
+
+                if isinstance(nomes[l][f][0], str):
+                    nomes[l] = [x for x in nomes[l] if item_s not in x[0]]
+                    f -= 1
+                    length -= 1
+                elif isinstance(nomes[l][f][0], list):
+                    if item_s in nomes[l][f][0]:
+                        nomes[l][f][0].remove(item_s)
+                        f -= 1
+                        length -= 1
+                f += 1
+
+            # [[type], [names], [type], [names]]
+            # [['shared_IO_type'], ['shared_IO_name'], ['unique_IO_type'],['unique_IO_name']]
+
+            # nomes, tipos = remove_Non_Signals(nomes, tipos, list_IN_manual[j])
+            # nomes, tipos = remove_Non_Signals(nomes, tipos, list_OUT_manual[j])
+            # nomes_all, tipos_all = remove_Non_Signals(nomes_all, tipos_all, list_IN[j])
+            # nomes_all, tipos_all = remove_Non_Signals(nomes_all, tipos_all, list_OUT[j])
 
     for i, item in enumerate(nomes):
         for i2, item2 in enumerate(item):
@@ -383,58 +443,58 @@ def get_namesANDtypes_normal_IO(list_IO):
                             if not IO_name in buff_nomes[k]:
                                 buff_nomes[k].append(IO_name)
                     else:
-                        buff_nomes.append(IO_name)
-                        buff_tipos.append(tipo)
+                        buff_nomes.append([IO_name, tipo])
+                        # buff_nomes.append(IO_name)
+                        # buff_tipos.append(tipo)
                 except:
-                    buff_nomes.append(IO_name)
-                    buff_tipos.append(tipo)
+                    buff_nomes.append([IO_name, tipo])
+                    # buff_nomes.append(IO_name)
+                    # buff_tipos.append(tipo)
 
-        # buff_nomes = list(set(tuple(sorted(sub)) for s    ub in buff_nomes))
-    for i, item in enumerate(buff_nomes):
-        buff_nomes[i] = list(dict.fromkeys(item))
-    return buff_nomes, buff_tipos
+    #     # buff_nomes = list(set(tuple(sorted(sub)) for s    ub in buff_nomes))
+    # for i, item in enumerate(buff_nomes):  # removendo repetidos
+    #     buff_nomes[i] = list(dict.fromkeys(item))
+    # return buff_nomes, buff_tipos
+    return buff_nomes
+
+# def get_namesANDtypes_normal_IO(list_IO):
+#     buff_nomes = []
+#     buff_tipos = []
+#     # lista de nomes dos sinais
+#     for i in range(0, len(list_IO), 2):  # itera sobre 'shared_IO' ou 'unique_IO'
+#         item = list_IO[i]
+#         for k, tipo in enumerate(item):  # itera sobre tipos e nomes
+#             IO_name = list_IO[i+1][k]
+#             # for m, item3 enumerate(item2):
+#             if IO_name != None:
+#                 # verificando se já existe o mesmo tipo, ex 'SIGNED' e coloca nos mesmos índices
+#                 tipo_anterior = list_IO[i-2][k]
+#                 try:
+#                     if tipo == tipo_anterior and (i-2 >= 0) and buff_nomes[k] != []:
+
+#                         if isinstance(IO_name, list):  # se for do tipo lista
+#                             for name in IO_name:  # itera sobre itens da lista
+#                                 # se já n possui item igual
+#                                 if not name in buff_nomes[k]:
+#                                     buff_nomes[k].append(name)
+#                         else:  # se não for lista
+#                             # se já n possui item igual
+#                             if not IO_name in buff_nomes[k]:
+#                                 buff_nomes[k].append(IO_name)
+#                     else:
+#                         buff_nomes.append(IO_name)
+#                         buff_tipos.append(tipo)
+#                 except:
+#                     buff_nomes.append(IO_name)
+#                     buff_tipos.append(tipo)
+
+#         # buff_nomes = list(set(tuple(sorted(sub)) for s    ub in buff_nomes))
+#     for i, item in enumerate(buff_nomes):
+#         buff_nomes[i] = list(dict.fromkeys(item))
+#     return buff_nomes, buff_tipos
 
 
-# def remove_Non_Signals(nomes, tipos):
-#     # for x, name_0 in enumerate(nomes):
-#     for y, name_1 in enumerate(nomes):
-#         # itens da lista: remove nome e tipo
-#         for j, name_2 in enumerate(name_1):
-#             i = 0
-#             # length = len(nomes[x][y])
-#             length = len(nomes[y])
-#             while i < length and j < length:
-#                 # buff_nomes = f"nomes[{y}][{j}]: {nomes[y][j]}"
-#                 # buff_tipos = f"tipos[{y}][{j}]:{tipos[y][j]}"
-#                 buff = name_1[j]
-
-#                 if buff == 'IO_in' or buff == 'W_in' or buff == 'W_out':
-#                     # del nomes[x][y][j]
-#                     # del tipos[x][y][j]
-#                     del nomes[y][j]
-#                     del tipos[y][j]
-#                     i -= 1
-
-#                 else:
-#                     # sub_itens da lista: remove só o nome
-#                     for k, name3 in enumerate(name_1[j]):
-#                         length2 = len(name_1[j])
-#                         f = 0
-#                         while f < length2:
-#                             # buff_nomes = f"nomes[{y}][{j}][{k}]: {nomes[y][j][k]}"
-#                             # buff_tipos = f"tipos[{y}][{j}]: {tipos[y][j]}"
-#                             buff = name_1[j][k]
-
-#                             if buff == 'IO_in' or buff == 'W_in' or buff == 'W_out':
-#                                 # del nomes[x][y][j][k]
-#                                 del nomes[y][j][k]
-#                                 f -= 1
-#                             length2 -= 1
-#                             f += 1
-#                 length -= 1
-#                 i += 1
-
-def remove_Non_Signals(nomes, tipos, lista_IO_base):
+def remove_Non_Signals(nomes, tipos):
     # for x, name_0 in enumerate(nomes):
     for y, name_1 in enumerate(nomes):
         # itens da lista: remove nome e tipo
@@ -446,64 +506,132 @@ def remove_Non_Signals(nomes, tipos, lista_IO_base):
                 # buff_nomes = f"nomes[{y}][{j}]: {nomes[y][j]}"
                 # buff_tipos = f"tipos[{y}][{j}]:{tipos[y][j]}"
                 buff = name_1[j]
-                for item in lista_IO_base:
-                    if isinstance(item, str):
-                        if ':' in item:
-                            if buff == item:
-                                # del nomes[x][y][j]
-                                # del tipos[x][y][j]
-                                del nomes[y][j]
-                                del tipos[y][j]
-                                i -= 1
-                    else:
-                        for item2 in item:
-                            if ':' in item2:
-                                txt_antes = item2.split(
-                                    f":")[0].replace(' ', '')
-                                if buff == txt_antes:
-                                    # del nomes[x][y][j]
-                                    # del tipos[x][y][j]
-                                    del nomes[y][j]
-                                    del tipos[y][j]
-                                    i -= 1
-                else:
-                    # # sub_itens da lista: remove só o nome
-                    # for k, name3 in enumerate(name_1[j]):
-                    #     length2 = len(name_1[j])
-                    #     f = 0
-                    #     while f < length2:
-                    #         # buff_nomes = f"nomes[{y}][{j}][{k}]: {nomes[y][j][k]}"
-                    #         # buff_tipos = f"tipos[{y}][{j}]: {tipos[y][j]}"
-                    #         buff = name_1[j][k]
 
-                    #         if buff == 'IO_in' or buff == 'W_in' or buff == 'W_out':
-                    #             # del nomes[x][y][j][k]
-                    #             del nomes[y][j][k]
-                    #             f -= 1
-                    #         length2 -= 1
-                    #         f += 1
-                    remove_Non_Signals_nested(name_2)
+                if buff == 'IO_in' or buff == 'W_in' or buff == 'W_out':
+                    # del nomes[x][y][j]
+                    # del tipos[x][y][j]
+                    del nomes[y][j]
+                    del tipos[y][j]
+                    i -= 1
+
+                else:
+                    # sub_itens da lista: remove só o nome
+                    for k, name3 in enumerate(name_1[j]):
+                        length2 = len(name_1[j])
+                        f = 0
+                        while f < length2:
+                            # buff_nomes = f"nomes[{y}][{j}][{k}]: {nomes[y][j][k]}"
+                            # buff_tipos = f"tipos[{y}][{j}]: {tipos[y][j]}"
+                            buff = name_1[j][k]
+
+                            if buff == 'IO_in' or buff == 'W_in' or buff == 'W_out':
+                                # del nomes[x][y][j][k]
+                                del nomes[y][j][k]
+                                f -= 1
+                            length2 -= 1
+                            f += 1
                 length -= 1
                 i += 1
 
+# def remove_Non_Signals(nomes, tipos, lista_IO_base):
+#     global remove_signals_list
+#     # for x, name_0 in enumerate(nomes):
+#     for y, name_1 in enumerate(nomes):  # level 0
+#         # itens da lista: remove nome e tipo
+#         for j, name_2 in enumerate(name_1):
+#             i = 0
+#             # length = len(nomes[x][y])
+#             length = len(nomes[y])
+#             while i < length and j < length:
+#                 buff_nomes = f"nomes[{y}][{j}]: {nomes[y][j]}"
+#                 buff_tipos = f"tipos[{y}][{j}]:{tipos[y][j]}"
+#                 buff = name_1[j]
+#                 for t in range(1, len(lista_IO_base), 2):
+#                     item = lista_IO_base[t]
+#                     if isinstance(item, str):  # is string
+#                         if ':' in item:
+#                             if buff == item:
+#                                 # del nomes[x][y][j]
+#                                 # del tipos[x][y][j]
+#                                 del nomes[y][j]
+#                                 del tipos[y][j]
+#                                 i -= 1
+#                         else:
+#                             if isinstance(nomes[y][j], str):
+#                                 for item_s in remove_signals_list:
+#                                     if nomes[y][j] == item_s:
+#                                         del nomes[y][j]
+#                                         break
 
-def remove_Non_Signals_nested(name_2):
+#                     else:
+#                         if isinstance(item, list):  # is nested list
+#                             for j, item2 in enumerate(item):  # item in list
+#                                 buff_nomes = f"nomes[{y}][{j}]: {item2}"
+#                                 if isinstance(item2, str):
+#                                     if ':' in item2:
+#                                         txt_antes = item2.split(
+#                                             f":")[0].replace(' ', '')
+#                                         if buff == txt_antes:
+#                                             # del nomes[x][y][j]
+#                                             # del tipos[x][y][j]
+#                                             del nomes[y][j]
+#                                             del tipos[y][j]
+#                                             i -= 1
+#                                     else:
 
-    # sub_itens da lista: remove só o nome
-    for k, name3 in enumerate(name_2):
-        if isinstance(name3, str):
-            length2 = len(name_2)
-            f = 0
-            while f < length2:
-                # buff_nomes = f"nomes[{y}][{j}][{k}]: {nomes[y][j][k]}"
-                # buff_tipos = f"tipos[{y}][{j}]: {tipos[y][j]}"
-                buff = name_2[k]
+#                                         if isinstance(nomes[y][j], str):
+#                                             for item_s in remove_signals_list:
+#                                                 if nomes[y][j] == item_s:
+#                                                     del nomes[y][j]
+#                                                     break
 
-                if buff == 'IO_in' or buff == 'W_in' or buff == 'W_out':
-                    # del nomes[x][y][j][k]
-                    del name_2[k]
-                    f -= 1
-                length2 -= 1
-                f += 1
-        else:
-            remove_Non_Signals_nested(name3)
+#                                         # remove_Non_Signals_nested(nomes[y][j])
+#                 # else:
+#                     # remove_Non_Signals_nested(name_2)
+
+#                     # # sub_itens da lista: remove só o nome
+#                     # for k, name3 in enumerate(name_1[j]):
+#                     #     length2 = len(name_1[j])
+#                     #     f = 0
+#                     #     while f < length2:
+#                     #         # buff_nomes = f"nomes[{y}][{j}][{k}]: {nomes[y][j][k]}"
+#                     #         # buff_tipos = f"tipos[{y}][{j}]: {tipos[y][j]}"
+#                     #         buff = name_1[j][k]
+
+#                     #         if buff == 'IO_in' or buff == 'W_in' or buff == 'W_out':
+#                     #             # del nomes[x][y][j][k]
+#                     #             del nomes[y][j][k]
+#                     #             f -= 1
+#                     #         length2 -= 1
+#                     #         f += 1
+#                 length -= 1
+#                 i += 1
+
+
+# def remove_Non_Signals_nested(name_2):
+#     # ['W_in', 'W_out', 'clk', 'rst', 'update_weights']
+#     global remove_signals_list
+#     # sub_itens da lista: remove só o nome
+#     if isinstance(name_2, str):
+#         for item in remove_signals_list:
+#             if name_2 == item:
+#                 del name_2
+#                 return
+#     else:
+#         for k, name3 in enumerate(name_2):
+#             if isinstance(name3, str):
+#                 length2 = len(name_2)
+#                 f = 0
+#                 while f < length2:
+#                     # buff_nomes = f"nomes[{y}][{j}][{k}]: {nomes[y][j][k]}"
+#                     # buff_tipos = f"tipos[{y}][{j}]: {tipos[y][j]}"
+#                     buff = name_2[k]
+#                     for item in remove_signals_list:
+#                         if buff == item:
+#                             # del nomes[x][y][j][k]
+#                             del name_2[k]
+#                         f -= 1
+#                     length2 -= 1
+#                     f += 1
+#             else:
+#                 remove_Non_Signals_nested(name3)
