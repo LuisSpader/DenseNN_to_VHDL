@@ -10,9 +10,11 @@ ENTITY top IS
     TOTAL_BITS : NATURAL := 24
   );
   PORT (
-    clk, rst, update_weights   : IN STD_LOGIC;
+    clk, rst, update_weights           : IN STD_LOGIC;
+    IO_in                              : IN signed(TOTAL_BITS - 1 DOWNTO 0);
+    c0_n0_W_in, c0_n1_W_in, c0_n2_W_in : IN signed(BITS - 1 DOWNTO 0);
     ----------------------------------------------
-    c1_n0_IO_out, c1_n1_IO_out : OUT signed(7 DOWNTO 0)
+    c1_n0_IO_out, c1_n1_IO_out         : OUT signed(7 DOWNTO 0)
   );
 END ENTITY;
 

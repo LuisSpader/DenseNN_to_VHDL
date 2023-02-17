@@ -328,13 +328,32 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                                 #     nomes_all[j][k][0] = [nomes_all[j][k][0]]
                                 nomes_all[j][k][0][0].append(s)
 
+    obs = [
+        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN']['manual'],
+        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN']['manual'],
+        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT']['manual'],
+        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT']['manual']
+    ]
+    remove_list = copy.deepcopy(remove_list)
     for i, item in enumerate(remove_list):
         for j, item2 in enumerate(item):
             if ':' in item2:
                 remove_list[i][j] = item2.split(':')[0].replace(' ', '')
 
+    obs = [
+        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN']['manual'],
+        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN']['manual'],
+        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT']['manual'],
+        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT']['manual']
+    ]
     remove_list = [item for sublist in remove_list for item in sublist]
 
+    obs = [
+        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN']['manual'],
+        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN']['manual'],
+        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT']['manual'],
+        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT']['manual']
+    ]
     global remove_signals_list
     remove_signals_list = list(dict.fromkeys(remove_list))
     # for r, itemr in enumerate(remove_signals_list):
@@ -446,6 +465,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # https://youtu.be/aWCWZpIZYjY
 
     # settings.append_signals_stack_to_signals()
+    # https://www.youtube.com/watch?v=hdPC2G8NPHI&list=PL35tBJQqzeIuV6qlkvqiZy9ivc9IROLWh&index=29&t=1597s
     top_entity = topDict_to_entityTxt(top_dict=top_dict,
                                       IO_dict_compare=layer_dict_list[0],
                                       remove_dict_items=[],
@@ -466,7 +486,8 @@ USE work.parameters.ALL;
 ARCHITECTURE arch OF  {top_dict['Top_name']}  IS
 -- SIGNALS
 {signals.signals_txt}
-
+    SIGNAL reg_IO_in: signed(TOTAL_BITS - 1 DOWNTO 0);
+    SIGNAL en_registers: STD_LOGIC;
 BEGIN
   en_registers <= update_weights AND clk;
   PROCESS (clk, rst)

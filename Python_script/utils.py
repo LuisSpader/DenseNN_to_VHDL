@@ -968,15 +968,21 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
     return final_string
 
 
-def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', SIGNALS: bool = False, DEBUG: bool = False) -> str:
+def IO_manual_Top(
+        top_dict: dict,  # top_dict
+        IO_dict_compare: list,  # dict_to_compare
+        IO_type: str = 'IN',
+        SIGNALS: bool = False,
+        DEBUG: bool = False
+) -> str:
     # layer_dict_compare: dict,
-    """Função para gerar entradas e saídas 'manual' com base no dicionário (IO_dict) e uma lista de IO do layers (IO_list), comparando assim a qual grupo cada item da IO_list pertence.
+    """Função para gerar entradas e saídas 'manual' com base no dicionário (top_dict) e uma lista de IO do layers (IO_dict_compare), comparando assim a qual grupo cada item da IO_dict_compare pertence.
 
     Args:
-        IO_dict (dict): dicionário padrão do arquivo 'standar_dicts'
-        IO_list (list): lista de nome das entradas da camada. 
+        top_dict (dict): dicionário padrão do arquivo 'standar_dicts'
+        IO_dict_compare (list): lista de nome das entradas da camada. 
             Exemplo :
-                IO_list = [
+                IO_dict_compare = [
                     ['clk', 'rst', 'update_weights'], -- STD_LOGIC
                     [], -- STD_LOGIC_VECTOR
                     [], -- SIGNED
@@ -1000,9 +1006,15 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', SIGNALS: b
     tipos2 = []
     Neuron_dict_list_value_manual = []
 
+# pegando IOs do neurônio (pq essas não possuem ci_ni no nome das IOs) do layer_dict para comparar com as do top_dict
     for IO_class in ['shared_IO', 'unique_IO']:
         Neuron_dict_list_value_manual.append(dict_list_exceptNone(
-            dict_slice=IO_dict['Neuron_arch']['IO'][IO_class][IO_type]['manual'], return_value_or_key='value', is_list=True))
+            dict_slice=IO_dict_compare['Neuron_arch']['IO'][IO_class][IO_type]['manual'], return_value_or_key='value', is_list=True))
+
+    # for IO_class in ['shared_IO', 'unique_IO']:
+    # Neuron_dict_list_value_manual.append(dict_list_exceptNone(
+    #     dict_slice=top_dict['IO'][IO_type]['manual'], return_value_or_key='value', is_list=True))
+
     Neuron_dict_list_value_manual = [
         j for i in Neuron_dict_list_value_manual for j in i]
 
@@ -1014,7 +1026,7 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', SIGNALS: b
         # ['Xi : IN signed((BITS * NUM_INPUTS) - 1 DOWNTO 0);'],
         # ['Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);']
         #   ]
-
+        # if find in item:
         position = item.find(f"{find}")
         txt_antes = item[:position].strip()  # nome variavel
         txt_depois = item[position:].strip()  # tipo de variavel
@@ -1043,7 +1055,10 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', SIGNALS: b
     nomes2 = ['']*len(nomes)
     tipos2 = ['']*len(tipos)
     try:
-        for item in IO_list[IO_type]['manual']:
+        # IO_dict_compare = top_dict['IO']
+        # for item in IO_dict_compare[IO_type]['manual']:
+        # for item in IO_dict_compare['IO'][IO_type]['manual']:
+        for item in top_dict[IO_type]['manual']:
             if DEBUG:
                 print(f"item: {item}")
             # clk, ... , Xi, c0_n0_Win, ...
@@ -1362,7 +1377,7 @@ def IO_manager_layer(IO_dict: dict = {},
 #              ))
 
 
-def IO_manager_Top(IO_dict: dict,
+def IO_manager_Top(top_dict: dict,
                    IO_dict_compare: dict = {},
                    bits: int = 0,
                    onerow: bool = True,
@@ -1435,7 +1450,7 @@ def IO_manager_Top(IO_dict: dict,
     OUT_signed = []
     OUT_signed_num_inputs = []
     OUT_manual = []
-    IO_dict_list = [IO_dict['IO']]
+    IO_dict_list = [top_dict['IO']]
 
     for i in range(0, len(IO_dict_list)):
         # INPUTS
@@ -1444,7 +1459,7 @@ def IO_manager_Top(IO_dict: dict,
         IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'IN'))
         IN_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'IN'))
         IN_manual.append(
-            IO_manual_Top(IO_dict=IO_dict_compare, IO_list=IO_dict_list[i], IO_type='IN'))
+            IO_manual_Top(IO_dict_compare=IO_dict_compare, top_dict=IO_dict_list[i], IO_type='IN'))
         # IN_manual.append(dict_list_exceptNone(
         #     dict_slice=IO_dict_list[i]['IN']['manual']))
 
@@ -1453,7 +1468,7 @@ def IO_manager_Top(IO_dict: dict,
         OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'OUT'))
         OUT_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'OUT'))
         OUT_manual.append(
-            IO_manual_Top(IO_dict=IO_dict_compare, IO_list=IO_dict_list[i], IO_type='OUT'))
+            IO_manual_Top(IO_dict_compare=IO_dict_compare, top_dict=IO_dict_list[i], IO_type='OUT'))
         # OUT_manual.append(dict_list_exceptNone(
         #     dict_slice=IO_dict_list[i]['OUT']['manual']))
         # OUT_manual.append(dict_list_exceptNone(

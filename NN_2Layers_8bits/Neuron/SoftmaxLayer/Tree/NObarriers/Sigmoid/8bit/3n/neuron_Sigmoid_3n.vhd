@@ -79,9 +79,9 @@ BEGIN
         s_Wout,
         out_reg_MAC );
 
-        en_registers <= update_weights AND clk; -- tirar isso depois e colocar fora dos neurônios
-        inst_shift_reg : shift_reg_3n PORT MAP(en_registers, rst, Win, s_Wout ); 
-        Wout <= s_Wout;
+   en_registers <= update_weights AND clk; -- tirar isso depois e colocar fora dos neurï¿½nios
+   inst_shift_reg : shift_reg_3n PORT MAP(en_registers, rst, Win, s_Wout ); 
+   Wout <= s_Wout;
 
 	U_ROM : ROM_fx_8bitaddr_8width PORT MAP(
 		STD_LOGIC_VECTOR(out_reg_MAC), out_ROM_act
