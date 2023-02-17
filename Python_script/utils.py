@@ -1,5 +1,5 @@
 # from standard_dicts import layer_dict_hidden
-import settings
+from settings import signals
 from txt_utils import replace_chars
 from dict_utils import dict_list_exceptNone
 from txt_utils import erase_empty_lines, tab_lines
@@ -1092,7 +1092,7 @@ def IO_manual_Top(IO_dict: dict, IO_list: list,  IO_type: str = 'IN', SIGNALS: b
     final_string = '\n'.join(map(str, (text_list)))
     # print(f"utils.py :: IO_manual() -> final_string: {final_string}")
     if SIGNALS:
-        settings.append_signals(nomes2, tipos2)
+        signals.append_signals(nomes2, tipos2)
     return final_string
 
 

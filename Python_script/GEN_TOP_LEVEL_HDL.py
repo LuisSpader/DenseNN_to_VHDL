@@ -8,9 +8,10 @@ from itertools import chain
 # ! todo: colocar hierarquia na documentação -> de que forma quer essa hierarquia documentada?
 # Done: refatorar para GEN_TOP_LEVEL_HDL
 # TODO: modularizar FX ACTIVATION units
-import settings
+# import settings
+from settings import signals
 
-settings.init()          # Call only once
+# settings.init()          # Call only once
 global remove_signals_list
 
 
@@ -179,8 +180,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
     nomes_all = [[None]*2
                  for _ in range(len(layer_dict_list))]
-    tipos_all = [[None]*2
-                 for _ in range(len(layer_dict_list))]
+    # tipos_all = [[None]*2 for _ in range(len(layer_dict_list))]
     remove_list = []
 
     # criando lista das entradas e saídas (IO) e seus tipos
@@ -243,7 +243,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         # list_IN[j][3][0] = ['a', 'clk']
         # list_IN[j][3][1] = 'b'
         buff_nomes = []
-        buff_tipos = []
+        # buff_tipos = []
 
         # buff_nomes, buff_tipos = get_namesANDtypes_normal_IO(list_IN[j])
         # nomes_all[j][0] = buff_nomes  # nomes_all[layer[IN,OUT]]
@@ -278,7 +278,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                     # buff_tipos.append(item[0].split(':')[1])
 
         nomes[j] = buff_nomes
-        tipos[j] = buff_tipos
+        # tipos[j] = buff_tipos
 
         # substituindo 'TOTAL_BITS' e 'NUM_INPUTS'
         for i, item in enumerate(nomes[j]):
@@ -292,7 +292,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         # tipos2 = copy.deepcopy(tipos)
 
         # comparando pilha de sinais salvos em settings.signals_stack e concatenando na lista 'nomes'
-        for i, signal in enumerate(settings.signals_stack):
+        for i, signal in enumerate(signals.signals_stack):
             txt_depois = '_'.join(
                 map(str, (signal[0].split(f"_")[-2:])))
 
@@ -305,6 +305,29 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                             nomes[j][k][0] = [nomes[j][k][0]]
                         nomes[j][k][0].append(s)
 
+     # comparando pilha de sinais salvos em settings.signals_stack e concatenando na lista 'nomes_all' = quando não é do tipo 'manual'
+        for i, signal in enumerate(signals.signals_stack):
+            txt_depois = '_'.join(
+                map(str, (signal[0].split(f"_")[-2:])))
+
+            if signal[1] == j:  # checa se é da mesma camada
+                for k, item in enumerate(nomes_all[j]):
+                    if isinstance(item[0], str):
+                        if txt_depois in item[0]:
+                            # nomes[j][k] = [nomes[j][k]].append(signal)
+                            s = signal[0]
+                            if isinstance(nomes_all[j][k][0], str):
+                                nomes_all[j][k][0] = [nomes_all[j][k][0]]
+                            nomes_all[j][k][0].append(s)
+                    elif isinstance(item[0], list):
+                        for item_l in item[0]:
+                            if txt_depois in item_l:
+                                # nomes[j][k] = [nomes[j][k]].append(signal)
+                                s = signal[0]
+                                # if isinstance(nomes_all[j][k][0], str):
+                                #     nomes_all[j][k][0] = [nomes_all[j][k][0]]
+                                nomes_all[j][k][0][0].append(s)
+
     for i, item in enumerate(remove_list):
         for j, item2 in enumerate(item):
             if ':' in item2:
@@ -314,13 +337,18 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
     global remove_signals_list
     remove_signals_list = list(dict.fromkeys(remove_list))
+    # for r, itemr in enumerate(remove_signals_list):
+    for j in range(0, len(layer_dict_list)):
+        remove_signals_list = [
+            x for x in remove_signals_list if f"c{j}" not in x]
+
     # removendo itens que não sejam sinais, foram apenas pegos do dicionário base ()
     # remove_Non_Signals(nomes, tipos, list_IN_manual[j])
     # remove_Non_Signals(nomes, tipos, list_OUT_manual[j])
     # remove_Non_Signals(nomes_all, tipos_all, list_IN[j])
     # remove_Non_Signals(nomes_all, tipos_all, list_OUT[j])
 
-# loop para remover itens que não são os sinais descritos (usa a lista remove_signals_list)
+    # loop para remover itens que não são os sinais descritos (usa a lista remove_signals_list)
     for l, layer in enumerate(nomes):  # layer
         for item_s in remove_signals_list:  # lista de itens para excluir
 
@@ -342,6 +370,35 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                         length -= 1
                 f += 1
 
+    for l, layer in enumerate(nomes_all):  # layer
+        for item_s in remove_signals_list:  # lista de itens para excluir
+
+            length = len(nomes_all[l])
+            f = 0
+            while f < length:  # loop para lista que diminui seu tamanho
+
+                buff = f"nomes_all[{l}][{f}]: {nomes_all[l][f]}"
+                buff = nomes_all[l][f]
+                # if nomes_all[l][f] == []:
+                #     pass
+                # else:
+                if isinstance(nomes_all[l][f][0], str):
+                    nomes_all[l] = [x for x in nomes_all[l]
+                                    if item_s not in x[0]]
+                    f -= 1
+                    length -= 1
+                elif isinstance(nomes_all[l][f][0], list):
+                    for x, itemx in enumerate(nomes_all[l][f][0][0]):
+                        if item_s == itemx:
+                            del nomes_all[l][f][0][0][x]
+                            # del itemx
+                            # nomes_all[l][f][0][0].remove(item_s)
+                            if nomes_all[l][f][0][0] == []:
+                                del nomes_all[l][f]
+                                f -= 1
+                                length -= 1
+                f += 1
+
             # [[type], [names], [type], [names]]
             # [['shared_IO_type'], ['shared_IO_name'], ['unique_IO_type'],['unique_IO_name']]
 
@@ -349,30 +406,46 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
             # nomes, tipos = remove_Non_Signals(nomes, tipos, list_OUT_manual[j])
             # nomes_all, tipos_all = remove_Non_Signals(nomes_all, tipos_all, list_IN[j])
             # nomes_all, tipos_all = remove_Non_Signals(nomes_all, tipos_all, list_OUT[j])
+    # for a, item_a in enumerate(nomes_all):
+    #     for b, item_b in enumerate(nomes_all[a]):
+    #         for c, item_c in enumerate(nomes_all[a][b]):
+    #             nomes_all[a][b][c] = list(dict.fromkeys(nomes_all[a][b][c]))
 
+    import itertools
+    # list2d = [[1,2,3], [4,5,6], [7], [8,9]]
+    nomes_all = list(itertools.chain.from_iterable(nomes_all))
+
+    # manual
     for i, item in enumerate(nomes):
-        for i2, item2 in enumerate(item):
-            print(
-                f"nomes[c{i}][{i2}]:{nomes[i][i2]}, tipos[c{i}][{i2}]:{tipos[i][i2]}")
+        for j, itemj in enumerate(item):
+            # for i2, item2 in enumerate(item):
+            if 'IN' in nomes[i][j][1]:
+                nomes[i][j][1] = nomes[i][j][1].replace('IN', '')
+            if 'OUT' in nomes[i][j][1]:
+                nomes[i][j][1] = nomes[i][j][1].replace('OUT', '')
 
-    for j, item in enumerate(nomes_all):  # itera sobre camadas
-        for io, item2 in enumerate(item):  # itera sobre ['IN','OUT']
-            if io == 0:
-                type_IO = 'IN'
-            else:
-                type_IO = 'OUT'
+        names = f"{', '.join(map(str, (nomes[i][0][0])))}"
+        type_s = nomes[i][0][1]
+        # print(f"nomes[c{i}]--> {names}:{type_s};")
+        signals.signals_dec.append(f"SIGNAL {names}:{type_s}")
 
-            for i, name in enumerate(item2):
-                print(
-                    f"nomes_all[c{j}][{type_IO}][{i}]: {nomes_all[j][io][i]}, tipos_all[c{j}][{type_IO}][{i}]: {tipos_all[j][io][i]}, ")
+    # normal (all other IOs)
+    for i, item in enumerate(nomes_all):
+
+        names = f"{', '.join(map(str, (nomes_all[i][0][0])))}"
+        type_s = nomes_all[i][0][1]
+        # print(f"nomes_all[c{i}]--> {names}: {type_s}(BITS -1 DOWNTO 0);")
+        signals.signals_dec.append(
+            f"SIGNAL {names}: {type_s}(BITS -1 DOWNTO 0);")
+
     print("  ")
-
+    signals.signals_to_text()
     # todo: gerador de lista para entradas comuns ['nome_sinal', 'tipo_sinal'] --> FALTA FAZER PARA IO_out (signed)
     # OK todo: gerador para entradas 'manual'
     # OK todo: tratamento diferente para ci_IO_in devido ao 'TOTAL_BITS' ser diferente para cada camada
     # https://youtu.be/aWCWZpIZYjY
 
-    settings.append_signals_stack_to_signals()
+    # settings.append_signals_stack_to_signals()
     top_entity = topDict_to_entityTxt(top_dict=top_dict,
                                       IO_dict_compare=layer_dict_list[0],
                                       remove_dict_items=[],
@@ -392,7 +465,8 @@ USE work.parameters.ALL;
 
 ARCHITECTURE arch OF  {top_dict['Top_name']}  IS
 -- SIGNALS
--- COLOCAR SINAIS AQUI!!!
+{signals.signals_txt}
+
 BEGIN
   en_registers <= update_weights AND clk;
   PROCESS (clk, rst)
