@@ -288,7 +288,7 @@ def Neuron_Gen_from_dict(
             reg_Xi <= (OTHERS => '0');
 
         ELSIF clk'event AND clk = '1' THEN
-            reg_Xi <= Xi;
+            reg_Xi <= IO_in;
 
         END IF;
     END PROCESS;
@@ -332,7 +332,7 @@ def Neuron_Gen_from_dict(
                 reg_Xi <= (OTHERS => '0');
 
             ELSIF clk'event AND clk = '1' THEN
-                reg_Xi <= Xi;
+                reg_Xi <= IO_in;
         {mux_ReLU}
             END IF;
         END PROCESS;
@@ -408,6 +408,7 @@ def Neuron_Gen_from_dict(
 
     # MAC_component = mac_component(MAC_name=MAC_name, x=x, w=w,
     #                               bits=bits, input_output_type=IO_type, output_sum=output_sum)
+    W_in = layer_dict['Neuron_arch']['IO']['unique_IO']['IN']['manual'][0]
 
     mac_entity_txt = entity(name=MAC_name,
                             bits=layer_dict['Neuron_arch']['Bit_WIDTH'],
@@ -419,11 +420,13 @@ def Neuron_Gen_from_dict(
                             generic=True,
                             tab_space=1
                             )
+
     MAC_component = entity_to_component(mac_entity_txt)
     MAC_component = entity_to_component(
         entity_text=MAC_component,
         word=layer_dict['Neuron_arch']['IO']['unique_IO']['IN']['manual'][0],
-        word_subs="Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);")
+        word_subs=f"{W_in.split(':')[0]} : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);")
+
     # PORT_MAP_MAC = ('''
     # -- MAC ja registra a saida \n'''
     #                 "	U_MAC : " + str(MAC_name) + " PORT MAP(" '''
@@ -437,7 +440,7 @@ def Neuron_Gen_from_dict(
         -- MAC ja registra a saida 
     U_MAC : {MAC_name} PORT MAP(
         clk, rst,
-        reg_Xi,
+        IO_in,
         s_Wout,
         out_reg_MAC );''')
     # ----------------------------------
@@ -454,16 +457,21 @@ def Neuron_Gen_from_dict(
         );
         PORT (
             clk, rst : IN STD_LOGIC;
-            Win : IN signed(BITS - 1 DOWNTO 0);
-            Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
+            {W_in}
+            -- Win : IN signed(BITS - 1 DOWNTO 0);
+            W_out : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
         );
     END COMPONENT;
         ''')
 
+        # port_map_shift_reg = (f'''
+        # en_registers <= update_weights AND clk; -- tirar isso depois e colocar fora dos neurônios
+        # inst_shift_reg : {shift_reg_name_abrv} PORT MAP(en_registers, rst, Win, s_Wout );
+        # Wout <= s_Wout;''')
         port_map_shift_reg = (f'''
-        en_registers <= update_weights AND clk; -- tirar isso depois e colocar fora dos neurônios
-        inst_shift_reg : {shift_reg_name_abrv} PORT MAP(en_registers, rst, Win, s_Wout ); 
-        Wout <= s_Wout;''')
+        inst_shift_reg : {shift_reg_name_abrv} PORT MAP(update_weights, rst, {W_in.split(':')[0]}, s_Wout ); 
+        W_out <= s_Wout((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO (BITS * (NUM_INPUTS + 0)));
+''')
     else:
         component_shift_reg = ''
         port_map_shift_reg = ''
@@ -487,9 +495,8 @@ ARCHITECTURE behavior of {neuron_Leaky_name} is
                             # {s_reg_x}
                             # {s_reg_w}
                             f'''
-    SIGNAL reg_Xi : {IO_type}((BITS * NUM_INPUTS) - 1 DOWNTO 0);
-    SIGNAL en_registers : STD_LOGIC; -- SHIFT_REGISTER
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
+    
 
 
 BEGIN
@@ -547,16 +554,16 @@ ARCHITECTURE behavior of {neuron_ReLU_name} is
                            # {s_reg_w}
                            # SIGNAL reg_bias : {IO_type} ({str(bits - 1)} DOWNTO 0);
                            f'''
-    SIGNAL reg_Xi : {IO_type}((BITS * NUM_INPUTS) - 1 DOWNTO 0);
-    SIGNAL en_registers : STD_LOGIC; -- SHIFT_REGISTER
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 BEGIN
 {PORT_MAP_MAC}
 {port_map_shift_reg}
-{NEURON_ReLU_INPUT_NET}
+{f"{layer_dict['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= out_reg_MAC;"}
 END behavior;'''
                            )
+# {NEURON_ReLU_INPUT_NET}
+
     # top_neuron_ReLU_txt = ""
 
     # init_text = 1450
@@ -590,7 +597,9 @@ END behavior;'''
     PORT_MAP_ROM = port_map_ROM(ROM_name, input_mem_bits, output_mem_bits)
 
     # ------
-
+    # shift_reg_sigmoid_port_map = port_map_shift_reg.splitlines()[0]
+    shift_reg_sigmoid_port_map = port_map_shift_reg.split(
+        ';')[0].replace('\n', '') + ';'
     top_neuron_soft_txt = (f'''LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.std_logic_unsigned.ALL;
@@ -614,22 +623,21 @@ ARCHITECTURE behavior of {neuron_Sigmoid_name} is
                            # SIGNAL reg_out_ROM_act : {IO_type} ( {str(bits - 1)} DOWNTO 0); --reg saida da ROM
                            f'''
     SIGNAL out_ROM_act : STD_LOGIC_VECTOR( {str(bits - 1)} DOWNTO 0); --saida da ROM
-    SIGNAL reg_Xi : {IO_type}((BITS * NUM_INPUTS) - 1 DOWNTO 0);
-    SIGNAL en_registers : STD_LOGIC; -- SHIFT_REGISTER
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 
 
 BEGIN
 {PORT_MAP_MAC}
-{port_map_shift_reg}
+{shift_reg_sigmoid_port_map}
 {PORT_MAP_ROM}
-{NEURON_SOFT_INPUT_NET}
 
-    y <= {IO_type} (out_ROM_act);
+    {f"{layer_dict['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= signed(out_ROM_act);"}
+
 
 END behavior;'''
                            )
+# {NEURON_SOFT_INPUT_NET}
 
     # init_text = 1450
     # print(top_neuron_soft_txt[init_text : (init_text+2000) ]) #Separa em linhas

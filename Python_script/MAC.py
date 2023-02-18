@@ -268,7 +268,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict(MAC_name='MAC',
     mac_entity = entity_to_component(
         entity_text=mac_entity,
         word=layer_dict['Neuron_arch']['IO']['unique_IO']['IN']['manual'][0],
-        word_subs="Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);")
+        word_subs="W_in : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);")
 
     vhd_txt = (f'''LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
@@ -396,7 +396,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict2(MAC_name='MAC',
     mac_entity = entity_to_component(
         entity_text=mac_entity,
         word=layer_dict['Neuron_arch']['IO']['unique_IO']['IN']['manual'][0],
-        word_subs="Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);")
+        word_subs="W_in : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);")
     print(
         f"------------------------ ///////// ))))))))))) mac_entity: {mac_entity}")
     vhd_txt = (f'''LIBRARY ieee;
@@ -412,8 +412,8 @@ ARCHITECTURE arch OF  {MAC_name}  IS
 {MAC_components}
 
 BEGIN
-  s_Xi <= Xi;
-  s_Win <= Win;
+  s_Xi <= IO_in;
+  s_Win <= W_in;
 
   -- ----------------- MULTIPLIERS ------------------------------
   -- # multiplicadores
@@ -717,7 +717,7 @@ def MAC_Tree_NoBarriers_TxtGen_from_dict(MAC_name='MAC',
     mac_entity = entity_to_component(
         entity_text=mac_entity,
         word=layer_dict['Neuron_arch']['IO']['unique_IO']['IN']['manual'][0],
-        word_subs="Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);")
+        word_subs="W_in : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);")
     vhd_txt = (f'''LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -731,8 +731,8 @@ ARCHITECTURE arch OF  {MAC_name}  IS
 {MAC_components}
 
 BEGIN
-  s_Xi <= Xi;
-  s_Win <= Win;
+  s_Xi <= IO_in;
+  s_Win <= W_in;
 {MAC_Tree_TxtGen_NoBarriers_Logic(ReceiveStr_list=[sum_all_string,f"{rst_space}{output_name} <= (OTHERS => '0');", multiplication_mantissa(
     bits=bits, n_bin=n_bin, last_sum_name='sum_all',output_name = output_name, IO_type=IO_type, tab_space=clk_space)])}
 END arch;

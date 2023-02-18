@@ -4,7 +4,7 @@ from layer_utils import *
 from shift_reg import parameters_vhd_gen
 from standard_dicts import top_dict
 from top import topDict_to_entityTxt
-from itertools import chain
+from itertools import chain, zip_longest
 # ! todo: colocar hierarquia na documentação -> de que forma quer essa hierarquia documentada?
 # Done: refatorar para GEN_TOP_LEVEL_HDL
 # TODO: modularizar FX ACTIVATION units
@@ -54,6 +54,24 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         OUTPUT_BASE_DIR_PATH = f"{path_parameters}"
     else:
         OUTPUT_BASE_DIR_PATH = f"{OUTPUT_BASE_DIR_PATH}"
+
+    # tentando lidar com port_map entre camadas irregulares
+    port_map_neurons_list = []
+    for i, item in enumerate(layer_dict_list):
+        port_map_neurons_list.append(layer_dict_list[i]['Neurons_number'])
+    # port_map_neurons_list.pop()
+    port_map_neurons_list = [4, 1, 2, 3]
+    buff = [[] for _ in range(len(port_map_neurons_list))]
+
+    for i, item in enumerate(port_map_neurons_list):
+        for j in range(0, item):
+            buff[i].append(f"c{i}_n{j}_W_out")
+
+    buff = list(map(list, zip_longest(*buff, fillvalue=None)))
+
+    for i, item in enumerate(buff):
+        buff[i] = [x for x in item if x != None]
+    # -------------------
 
     print(" ================================== FAZENDO NEURONIOS ==================================")
     for layer_dict_i in layer_dict_list:
@@ -139,7 +157,8 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # substituindo '[]' por 'None'
     l_inputs = swap_empty_for_None(l_inputs)
     l_outputs = swap_empty_for_None(l_outputs)
-
+    top_dict['Inputs_number'] = layer_dict_list[0]['Inputs_number']
+    top_dict['bits'] = layer_dict_list[0]['bits']
     top_dict['IO']['IN']['STD_LOGIC'] = l_inputs[0]
     top_dict['IO']['IN']['STD_LOGIC_VECTOR'] = l_inputs[1]
 
@@ -149,7 +168,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # top_dict['IO']['IN']['SIGNED'] = lista_concat
     top_dict['IO']['IN']['SIGNED'] = l_inputs[2]
 
-    # TODO: adicionar função para transformar top_dict['IO']['IN']['manual']
+    # OK TODO: adicionar função para transformar top_dict['IO']['IN']['manual']
     top_dict['IO']['IN']['manual'] = l_inputs[3]
 
     top_dict['IO']['OUT']['STD_LOGIC'] = l_outputs[0]
@@ -433,8 +452,9 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     import itertools
     # list2d = [[1,2,3], [4,5,6], [7], [8,9]]
     nomes_all = list(itertools.chain.from_iterable(nomes_all))
+    # --------------------------
 
-    # manual
+    # SIGNALS manual
     for i, item in enumerate(nomes):
         for j, itemj in enumerate(item):
             # for i2, item2 in enumerate(item):
@@ -448,7 +468,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         # print(f"nomes[c{i}]--> {names}:{type_s};")
         signals.signals_dec.append(f"SIGNAL {names}:{type_s}")
 
-    # normal (all other IOs)
+    # SIGNALS normal (all other IOs)
     for i, item in enumerate(nomes_all):
 
         names = f"{', '.join(map(str, (nomes_all[i][0][0])))}"
@@ -456,20 +476,38 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         # print(f"nomes_all[c{i}]--> {names}: {type_s}(BITS -1 DOWNTO 0);")
         signals.signals_dec.append(
             f"SIGNAL {names}: {type_s}(BITS -1 DOWNTO 0);")
+    # --------------------------
 
     print("  ")
     signals.signals_to_text()
-    # todo: gerador de lista para entradas comuns ['nome_sinal', 'tipo_sinal'] --> FALTA FAZER PARA IO_out (signed)
+
+    # ASSIGN: l1 <= l0; l2 <= l1; ...
+    buff = [[] for _ in range(len(layer_dict_list))]
+
+    for i, item in enumerate(signals.signals_stack):
+        if 'IO_out' in item[0]:
+            buff[item[1]+1].append(item[0])  # colocando na proxima camada
+
+    for i, item in enumerate(signals.signals_stack):
+        if 'IO_in' in item[0]:
+            buff[item[1]
+                 ] = f"{item[0]} <= {' & '.join(map(str, (buff[item[1]])))};"
+
+    signals_assign_stack = [x for x in buff if x != []]
+    signals_assign_txt = '\n'.join(map(str, (signals_assign_stack)))
+    # --------------------------
+
+    # ok todo: gerador de lista para entradas comuns ['nome_sinal', 'tipo_sinal'] --> FALTA FAZER PARA IO_out (signed)
     # OK todo: gerador para entradas 'manual'
     # OK todo: tratamento diferente para ci_IO_in devido ao 'TOTAL_BITS' ser diferente para cada camada
     # https://youtu.be/aWCWZpIZYjY
-
-    # settings.append_signals_stack_to_signals()
     # https://www.youtube.com/watch?v=hdPC2G8NPHI&list=PL35tBJQqzeIuV6qlkvqiZy9ivc9IROLWh&index=29&t=1597s
     top_entity = topDict_to_entityTxt(top_dict=top_dict,
                                       IO_dict_compare=layer_dict_list[0],
                                       remove_dict_items=[],
                                       generic=True)
+    txt_top_port_map = txt_top_port_map.replace(
+        'update_weights=> update_weights,', 'update_weights=> en_registers,')
 
     if DEBUG:
         print(top_dict)
@@ -490,6 +528,8 @@ ARCHITECTURE arch OF  {top_dict['Top_name']}  IS
     SIGNAL en_registers: STD_LOGIC;
 BEGIN
   en_registers <= update_weights AND clk;
+  {signals_assign_txt}
+
   PROCESS (clk, rst)
   BEGIN
     IF rst = '1' THEN

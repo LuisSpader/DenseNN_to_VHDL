@@ -7,6 +7,8 @@ class Signals():
         self.signals_stack = []
         self.signals_dec = []
         self.signals_txt = ''
+        # self.signals_assign_stack = []
+        # self.signals_assign_txt = []
 
     def append_signals_stack(self, item, layer_number) -> None:
         if not [item, layer_number] in self.signals_stack:

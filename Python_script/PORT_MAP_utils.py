@@ -858,8 +858,6 @@ def port_map_dict_i_iplus1(dict_list: dict,
 
                 # port_map pesos W_out
                 if 'W_in' in port_map_list[j]:
-                    # if 'X' in port_map_list[i]:
-                    # if 'Win' in port_map_list_previous[i]:
                     buff = port_map_list[j].replace('_in', '_out')
                     buff = buff.replace(f"c{i}", f"c{i-1}")
                     port_map_list[j] = buff

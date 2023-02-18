@@ -18,8 +18,6 @@ top_dict = {
     # ========================== Parâmetros da camada ===========================
     'Inputs_number': 3,  # número de entradas da camada
     'bits': 8,
-    'IO_type': 'signed',     # 'signed' | 'unsigned' | 'std_logic_vector'
-    'Neurons_number': 4,  # número de neurônios da camada
     'Top_name': 'top',  # nome do '.vhd' da camada
     # --------------------------
     # DEVE SE ALTERAR AUTOMATICAMENTE COM BASE NA CONFIG DO NEURÔNIO

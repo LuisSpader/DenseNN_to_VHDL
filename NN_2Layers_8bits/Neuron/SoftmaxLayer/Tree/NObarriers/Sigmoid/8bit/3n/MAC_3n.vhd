@@ -13,7 +13,7 @@ USE work.parameters.ALL;
     PORT (
       clk, rst: IN STD_LOGIC;
       IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
-      Win : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
+      W_in : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
       ----------------------------------------------
       IO_out: OUT signed(7 DOWNTO 0)
     );
@@ -39,8 +39,8 @@ ARCHITECTURE arch OF  MAC_3n  IS
   END COMPONENT;
 
 BEGIN
-  s_Xi <= Xi;
-  s_Win <= Win;
+  s_Xi <= IO_in;
+  s_Win <= W_in;
 
 
   sum_all <= (s_mult(((2 * BITS) * (0 + 1)) - 1 DOWNTO ((2 * BITS) * (0))) + 

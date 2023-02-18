@@ -57,9 +57,9 @@ def shift_reg_gen(num_inputs: int, reg_name: str = 'Reg', shift_reg_name: str = 
         );
         PORT (
             clk, rst : IN STD_LOGIC;
-            Win : IN signed(BITS - 1 DOWNTO 0);
+            W_in : IN signed(BITS - 1 DOWNTO 0);
             -- w1, w2, w3, w4, w5 : OUT signed(7 DOWNTO 0)
-            Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
+            W_out : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
         );
     END ENTITY;
 
@@ -75,8 +75,8 @@ def shift_reg_gen(num_inputs: int, reg_name: str = 'Reg', shift_reg_name: str = 
         END COMPONENT;
 
     BEGIN
-        s_shift_reg(BITS - 1 DOWNTO 0) <= Win;
-        -- Wout <= s_shift_reg((BITS * (NUM_INPUTS)) - 1 DOWNTO (BITS * (NUM_INPUTS - 1)));
+        s_shift_reg(BITS - 1 DOWNTO 0) <= W_in;
+        -- W_out <= s_shift_reg((BITS * (NUM_INPUTS)) - 1 DOWNTO (BITS * (NUM_INPUTS - 1)));
 
         loop_port_map : FOR i IN 1 TO ((NUM_INPUTS + 1) - 1) GENERATE
             Reg_inst_loop : {reg_name}
@@ -88,7 +88,7 @@ def shift_reg_gen(num_inputs: int, reg_name: str = 'Reg', shift_reg_name: str = 
             );
         END GENERATE;
 
-        Wout <= s_shift_reg;
+        W_out <= s_shift_reg;
 
     END ARCHITECTURE;
     ''')
