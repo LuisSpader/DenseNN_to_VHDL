@@ -1,16 +1,25 @@
+# layer0		layer1		layer2		layer3
+# n0_out	    n0_out	    n0_out	    n0
+# n1_out			        n1_out	    n1
+# n2_out					            n2
+# n3
+
 [
     ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out'],
     ['c0_n1_W_out', 'c2_n1_W_out', 'c3_n1_W_out'],
     ['c0_n2_W_out', 'c3_n2_W_out'],
     ['c0_n3_W_out']
 ]
-# c3_n0_W_out => c2_n0_W_out;
-# c3_n1_W_out => c2_n1_W_out;
-# c3_n2_W_out => c0_n2_W_out;
+#   c0_n0_W_out    => c0_n0_W_out,
+#   c0_n1_W_out    => c0_n1_W_out,
+#   c0_n2_W_out    => c0_n2_W_out
+
+#   c1_n0_W_in     => c0_n0_W_out,
+
 [
-    ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out'],
-    ['c0_n1_W_out', 'c2_n1_W_out'],
-    ['c0_n2_W_out'],
+    ['', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out'],
+    ['', 'c2_n1_W_out', 'c3_n1_W_out'],
+    ['', 'c3_n2_W_out'],
     ['c0_n3_W_out']
 ]
 # c2_n0_W_out => c1_n0_W_out;

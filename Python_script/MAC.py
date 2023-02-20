@@ -571,7 +571,7 @@ for i in range(0, int(len(lista_join)/2)):
         f"{adder_name}{i}_inst: {adder_name} PORT MAP (A => {lista_join[(2*i)]}, B => {lista_join[(2*i)+1]}, S => {lista_soma[i]});")
 
 port_map_adder = '\n'.join(map(str, port_map_adder_list))
-print(f"port_map_adder: {port_map_adder}")
+# print(f"port_map_adder: {port_map_adder}")
 
 
 # ======================================================================================

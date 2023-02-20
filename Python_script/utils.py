@@ -1315,8 +1315,8 @@ def IO_manager_layer(IO_dict: dict = {},
     IO_dict_list = [IO_dict['IO']]
 
     for i in range(0, len(IO_dict_list)):
-        print(
-            f" ------------------> IO_dict_list[{i}]['IN']: {IO_dict_list[i]['IN']}")
+        # print(
+        #     f" ------------------> IO_dict_list[{i}]['IN']: {IO_dict_list[i]['IN']}")
         # INPUTS
         IN_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'IN'))
         IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'IN'))
@@ -1334,8 +1334,8 @@ def IO_manager_layer(IO_dict: dict = {},
             IO_manual(IO_dict=IO_dict, IO_list=IO_dict_list[i], IO_type='OUT'))
         # OUT_manual.append(dict_list_exceptNone(
         #     dict_slice=IO_dict_list[i]['OUT']['manual']))
-        print(f"IO_manager_layer() -> IN_manual: {IN_manual}")
-        print(f"IO_manager_layer() -> OUT_manual: {OUT_manual}")
+        # print(f"IO_manager_layer() -> IN_manual: {IN_manual}")
+        # print(f"IO_manager_layer() -> OUT_manual: {OUT_manual}")
 
     # IN_stdl = '\n'.join(map(str, (IN_stdl)))
 

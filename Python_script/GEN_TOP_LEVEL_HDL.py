@@ -60,17 +60,18 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     for i, item in enumerate(layer_dict_list):
         port_map_neurons_list.append(layer_dict_list[i]['Neurons_number'])
     # port_map_neurons_list.pop()
-    port_map_neurons_list = [4, 1, 2, 3]
-    buff = [[] for _ in range(len(port_map_neurons_list))]
+    # port_map_neurons_list = [4, 1, 2, 3]
+    neurons_PM_matrix = [[] for _ in range(len(port_map_neurons_list))]
 
     for i, item in enumerate(port_map_neurons_list):
         for j in range(0, item):
-            buff[i].append(f"c{i}_n{j}_W_out")
+            neurons_PM_matrix[i].append(f"c{i}_n{j}_W_out")
 
-    buff = list(map(list, zip_longest(*buff, fillvalue=None)))
+    neurons_PM_matrix = list(
+        map(list, zip_longest(*neurons_PM_matrix, fillvalue=None)))
 
-    for i, item in enumerate(buff):
-        buff[i] = [x for x in item if x != None]
+    for i, item in enumerate(neurons_PM_matrix):
+        neurons_PM_matrix[i] = [x for x in item if x != None]
     # -------------------
 
     print(" ================================== FAZENDO NEURONIOS ==================================")
@@ -78,7 +79,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         Neuron_Gen_from_dict(download_vhd=DOWNLOAD_VHD,
                              layer_dict=layer_dict_i,
                              OUTPUT_BASE_DIR_PATH=f"{OUTPUT_BASE_DIR_PATH}/Neuron",
-                             DEBUG=True)
+                             DEBUG=DEBUG)
     parameters_vhd_gen(
         BIT_WIDTH,
         parameters_vhd_name='parameters',
@@ -123,12 +124,52 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # if DEBUG:
     print(" ==================================== TOP ==================================== ")
     print(txt_top_port_map)
-    print(" ---------------------- IN  ---------------------- ")
-    print(lista_camada_inputs)
-    print(" ---------------------- OUT ---------------------- ")
-    print(lista_camada_outputs)
-# ----------------
-# ------- entity ---------
+    # print(" ---------------------- IN  ---------------------- ")
+    # print(lista_camada_inputs)
+    # print(" ---------------------- OUT ---------------------- ")
+    # print(lista_camada_outputs)
+
+    # ---------------- PORT MAP NEURONS MATRIX
+    assign_list = []
+    cp_list = []
+    # neurons_PM_matrix = [
+    # ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out'],
+    # ['c0_n1_W_out', 'c2_n1_W_out', 'c3_n1_W_out'],
+    # ['c0_n2_W_out', 'c3_n2_W_out'],
+    # ['c0_n3_W_out']
+    # ]
+    # iterando entre camadas
+    for l in range(len(layer_dict_list)-1, 0, -1):
+        # for l in range(0, len(layer_dict_list)):
+        for n, neuron_number in enumerate(neurons_PM_matrix):
+            buff = f'c{l}_n{n}'
+            for i, item in enumerate(neuron_number):
+                buff2 = f"neurons_PM_matrix[{n}][{l}]: {neurons_PM_matrix[n][i]}"
+
+                if buff in neurons_PM_matrix[n][i]:
+                    try:
+                        # assign_list.append(
+                        #     f"{neurons_PM_matrix[n][i]} => {neurons_PM_matrix[n][i+1]}")
+                        # signal_in = neurons_PM_matrix[n][i +
+                        #                                  1].replace('out', 'in')
+                        # signal_in = neurons_PM_matrix[n][i].replace(
+                        #     'out', 'in')
+                        signal_in = neurons_PM_matrix[n][i]
+                        assign_list.append(
+                            f"{signal_in} => {neurons_PM_matrix[n][i-1]}")
+                        cp_list.append(signal_in)
+                    except:
+                        pass
+
+    # neurons_PM_matrix = list(dict.fromkeys(neurons_PM_matrix))
+    neurons_PM_matrix = [
+        item for sublist in neurons_PM_matrix for item in sublist]
+
+    for thing in cp_list:
+        if thing in neurons_PM_matrix:
+            neurons_PM_matrix.remove(thing)
+
+    # ------- entity ---------
     camada_inputs = extrai_lista_IO(list_IO=lista_camada_inputs)
     camada_outputs = extrai_lista_IO(list_IO=lista_camada_outputs)
 

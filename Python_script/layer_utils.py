@@ -343,8 +343,8 @@ def layer_neurons_port_map_ALL(layer_dict_arg: dict,
     l_inputs.append(camada_inputs[6])
     l_outputs.append(camada_outputs[6])
 
-    # if DEBUG:
-    if True:
+    if DEBUG:
+        # if True:
         print(f"*****************************************************")
         print(
             f"layer_neurons_port_map_ALL() -> camada_inputs: {camada_inputs}")

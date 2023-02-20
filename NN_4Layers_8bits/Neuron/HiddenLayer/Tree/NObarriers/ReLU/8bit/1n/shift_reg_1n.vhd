@@ -4,10 +4,10 @@
     USE ieee.numeric_std.ALL;
     USE work.parameters.ALL;
 
-    ENTITY shift_reg_2n IS
+    ENTITY shift_reg_1n IS
         GENERIC (
             BITS : NATURAL := BITS;
-            NUM_INPUTS : NATURAL := 2
+            NUM_INPUTS : NATURAL := 1
         );
         PORT (
             clk, rst : IN STD_LOGIC;
@@ -17,7 +17,7 @@
         );
     END ENTITY;
 
-    ARCHITECTURE rtl OF shift_reg_2n IS
+    ARCHITECTURE rtl OF shift_reg_1n IS
         SIGNAL s_shift_reg : signed (BITS * (NUM_INPUTS + 1) - 1 DOWNTO 0);
 
         COMPONENT Reg IS

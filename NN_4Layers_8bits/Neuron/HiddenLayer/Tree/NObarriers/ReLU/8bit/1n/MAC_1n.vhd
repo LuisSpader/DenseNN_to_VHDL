@@ -4,22 +4,23 @@ USE ieee.numeric_std.ALL;
 USE ieee.math_real.ALL;
 USE work.parameters.ALL;
 
-  ENTITY  MAC_2n IS
+  ENTITY  MAC_1n IS
     GENERIC (
         BITS : NATURAL := BITS;
-        NUM_INPUTS : NATURAL := 2;
-        TOTAL_BITS : NATURAL := 16
+        NUM_INPUTS : NATURAL := 1;
+        TOTAL_BITS : NATURAL := 8
     );
     PORT (
       clk, rst: IN STD_LOGIC;
       IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
       W_in : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
       ----------------------------------------------
-      IO_out: OUT signed(7 DOWNTO 0)
+      IO_out: OUT signed(7 DOWNTO 0);
+      W_out : OUT signed(BITS - 1 DOWNTO 0)
     );
   end ENTITY;
 
-ARCHITECTURE arch OF  MAC_2n  IS
+ARCHITECTURE arch OF  MAC_1n  IS
 
     ---------- SINAIS ----------
 	SIGNAL sum_all : signed((2*BITS) - 1 DOWNTO 0);
@@ -44,8 +45,7 @@ BEGIN
 
 
   sum_all <= (s_mult(((2 * BITS) * (0 + 1)) - 1 DOWNTO ((2 * BITS) * (0))) + 
-    s_mult(((2 * BITS) * (1 + 1)) - 1 DOWNTO ((2 * BITS) * (1))) + 
-    s_Win((BITS * (2 + 1)) - 1 DOWNTO (BITS * (2)))); 
+    s_Win((BITS * (1 + 1)) - 1 DOWNTO (BITS * (1)))); 
 
 loop_Mult_port_map : FOR i IN 0 TO (NUM_INPUTS - 1) GENERATE
     mult0_v0_inst_loop : mult0_v0
