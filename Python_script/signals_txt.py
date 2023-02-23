@@ -1,3 +1,7 @@
+#   SIGNAL c0_n0_W_out, c0_n1_W_out, c0_n2_W_out                  : signed(BITS - 1 DOWNTO 0); --todo
+#   SIGNAL c1_n0_W_out                                            : signed(BITS - 1 DOWNTO 0); --todo
+#   SIGNAL c2_n0_W_out, c2_n1_W_out                               : signed(BITS - 1 DOWNTO 0); --todo
+#
 # layer0		layer1		layer2		layer3
 # n0_out	    n0_out	    n0_out	    n0
 # n1_out			        n1_out	    n1

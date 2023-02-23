@@ -65,7 +65,7 @@ def port_map_dict(neuron_dict: dict,
 
     # PEGANDO DICIONÁRIO E GERANDO UMA LISTA DO MESMO
     port_map_list = dict_list_exceptNone(
-        dict_slice=neuron_dict['shared_IO'][IO_type][port_type], return_value_or_key='key', is_list=True)
+        dict_slice=neuron_dict['IO']['shared_IO'][IO_type][port_type], return_value_or_key='key', is_list=True)
 
     # print("------------ Para IO compartilhadas ['shared_IO'] ------------")
     for i in range(0, len(port_map_list)):
@@ -114,7 +114,7 @@ def port_map_dict(neuron_dict: dict,
     #  ------------ Para IO únicas ['unique_IO'] ------------
     # ['unique_IO']: portas que NÃO são compartilhadas entre os neurônios
     # gerando entradas únicas:
-    lista = neuron_dict['unique_IO'][IO_type][port_type]
+    lista = neuron_dict['IO']['unique_IO'][IO_type][port_type]
     # conseguindo lidar com lista mesmo quando é 'None'
     s = dict_list_exceptNone(dict_slice=lista)
     # unindo ID_camada com cada elemento da lista

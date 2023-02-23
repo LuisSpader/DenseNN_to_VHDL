@@ -5,11 +5,11 @@ USE ieee.numeric_std.ALL;
 USE ieee.math_real.ALL;
 USE work.parameters.ALL;
 
-  ENTITY  neuron_ReLU_4n IS
+  ENTITY  neuron_ReLU_1n_out IS
     GENERIC (
         BITS : NATURAL := BITS;
-        NUM_INPUTS : NATURAL := 4;
-        TOTAL_BITS : NATURAL := 32
+        NUM_INPUTS : NATURAL := 1;
+        TOTAL_BITS : NATURAL := 8
     );
     PORT (
       clk, rst, update_weights: IN STD_LOGIC;
@@ -21,12 +21,12 @@ USE work.parameters.ALL;
     );
   end ENTITY;
 
-ARCHITECTURE behavior of neuron_ReLU_4n is
-  COMPONENT  MAC_4n IS
+ARCHITECTURE behavior of neuron_ReLU_1n_out is
+  COMPONENT  MAC_1n IS
     GENERIC (
         BITS : NATURAL := BITS;
-        NUM_INPUTS : NATURAL := 4;
-        TOTAL_BITS : NATURAL := 32
+        NUM_INPUTS : NATURAL := 1;
+        TOTAL_BITS : NATURAL := 8
     );
     PORT (
       clk, rst: IN STD_LOGIC;
@@ -38,7 +38,7 @@ ARCHITECTURE behavior of neuron_ReLU_4n is
     );
   end COMPONENT;
 
-    COMPONENT shift_reg_4n IS
+    COMPONENT shift_reg_1n IS
         GENERIC (
             BITS : NATURAL := BITS;
             NUM_INPUTS : NATURAL := NUM_INPUTS
@@ -53,19 +53,18 @@ ARCHITECTURE behavior of neuron_ReLU_4n is
         
     -- # ROM_component
     SIGNAL out_reg_MAC : signed (BITS-1 DOWNTO 0);	--reg da saida do MAC
-    
     SIGNAL s_Wout : signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 BEGIN
 
         -- MAC ja registra a saida 
-    U_MAC : MAC_4n PORT MAP(
+    U_MAC : MAC_1n PORT MAP(
         clk, rst,
         IO_in,
         s_Wout,
         out_reg_MAC );
 
-        inst_shift_reg : shift_reg_4n PORT MAP(update_weights, rst, W_in , s_Wout ); 
+        inst_shift_reg : shift_reg_1n PORT MAP(update_weights, rst, W_in , s_Wout ); 
         W_out <= s_Wout((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO (BITS * (NUM_INPUTS + 0)));
 
 IO_out <= out_reg_MAC;

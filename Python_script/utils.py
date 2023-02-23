@@ -769,11 +769,12 @@ def IO_signed_num_inputs(IO_dict: dict,
             text.append(f"{i}")
         # text_list can be an splitted text or a list of
         text = ', '.join(map(str, (text)))
-        text = f"{text}: {IO} signed({str(bits -1)} DOWNTO 0);"
+        text = f"{text}: {IO} signed(BITS -1 DOWNTO 0);"
 
     else:
         for i in x_sequence_string:
-            text.append(f"{i}: {IO} signed({str(bits -1)} DOWNTO 0);")
+            text.append(f"{i}: {IO} signed(BITS -1 DOWNTO 0);")
+            # text.append(f"{i}: {IO} signed({str(bits -1)} DOWNTO 0);")
         # text_list can be an splitted text or a list of texts
         text = '\n'.join(map(str, (text)))
 

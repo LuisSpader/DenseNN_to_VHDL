@@ -5,6 +5,8 @@ from shift_reg import parameters_vhd_gen
 from standard_dicts import top_dict
 from top import topDict_to_entityTxt
 from itertools import chain, zip_longest
+from globals import neurons_PM_matrix
+
 # ! todo: colocar hierarquia na documentação -> de que forma quer essa hierarquia documentada?
 # Done: refatorar para GEN_TOP_LEVEL_HDL
 # TODO: modularizar FX ACTIVATION units
@@ -29,7 +31,30 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                       ):
 
     NUMBER_OF_LAYERS = len(LAYER_NEURONS_NUMBER_LIST)
+    global layer_dict_list
     layer_dict_list = []
+
+    # tentando lidar com port_map entre camadas irregulares
+    port_map_neurons_list = []
+    for i, item in enumerate(LAYER_NEURONS_NUMBER_LIST):
+        port_map_neurons_list.append(LAYER_NEURONS_NUMBER_LIST[i])
+        # port_map_neurons_list.append(layer_dict_list[i]['Neurons_number'])
+
+    # port_map_neurons_list = [4, 1, 2, 3]
+    global neurons_PM_matrix
+    neurons_PM_matrix = [[] for _ in range(len(port_map_neurons_list))]
+
+    for i, item in enumerate(port_map_neurons_list):
+        for j in range(0, item):
+            neurons_PM_matrix[i].append(f"c{i}_n{j}_W_out")
+
+    # ! comentei aqui
+    neurons_PM_matrix = list(
+        map(list, zip_longest(*neurons_PM_matrix, fillvalue=None)))
+
+    for i, item in enumerate(neurons_PM_matrix):
+        neurons_PM_matrix[i] = [x for x in item if x != None]
+
     print(" ================================== FAZENDO CAMADAS ==================================")
     layer_dict_list = all_dense_layers_gen(
         Inputs_number=INPUTS_NUMBER,
@@ -55,31 +80,22 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     else:
         OUTPUT_BASE_DIR_PATH = f"{OUTPUT_BASE_DIR_PATH}"
 
-    # tentando lidar com port_map entre camadas irregulares
-    port_map_neurons_list = []
-    for i, item in enumerate(layer_dict_list):
-        port_map_neurons_list.append(layer_dict_list[i]['Neurons_number'])
-    # port_map_neurons_list.pop()
-    # port_map_neurons_list = [4, 1, 2, 3]
-    neurons_PM_matrix = [[] for _ in range(len(port_map_neurons_list))]
-
-    for i, item in enumerate(port_map_neurons_list):
-        for j in range(0, item):
-            neurons_PM_matrix[i].append(f"c{i}_n{j}_W_out")
-
-    neurons_PM_matrix = list(
-        map(list, zip_longest(*neurons_PM_matrix, fillvalue=None)))
-
-    for i, item in enumerate(neurons_PM_matrix):
-        neurons_PM_matrix[i] = [x for x in item if x != None]
     # -------------------
 
     print(" ================================== FAZENDO NEURONIOS ==================================")
-    for layer_dict_i in layer_dict_list:
-        Neuron_Gen_from_dict(download_vhd=DOWNLOAD_VHD,
-                             layer_dict=layer_dict_i,
-                             OUTPUT_BASE_DIR_PATH=f"{OUTPUT_BASE_DIR_PATH}/Neuron",
-                             DEBUG=DEBUG)
+    # for layer_dict_i in layer_dict_list:
+    #     Neuron_Gen_from_dict(download_vhd=DOWNLOAD_VHD,
+    #                          layer_dict=layer_dict_i,
+    #                          OUTPUT_BASE_DIR_PATH=f"{OUTPUT_BASE_DIR_PATH}/Neuron",
+    #                          DEBUG=DEBUG)
+
+    for i, item in enumerate(layer_dict_list):
+        Neuron_Gen_from_dict2(download_vhd=DOWNLOAD_VHD,
+                              i=i,
+                              layer_dict_list=layer_dict_list,
+                              OUTPUT_BASE_DIR_PATH=f"{OUTPUT_BASE_DIR_PATH}/Neuron",
+                              DEBUG=DEBUG)
+
     parameters_vhd_gen(
         BIT_WIDTH,
         parameters_vhd_name='parameters',
@@ -96,8 +112,8 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     txt = ''
 
     # if (n_max = 0): # caso não queiramos gerar neurônios mortos
-    lista_camadas_IO = [0, len(layer_dict_list)-1]
-    for j in lista_camadas_IO:
+    # lista_camadas_IO = [0, len()-1]
+    for j, item_j in enumerate(layer_dict_list):
 
         txt, camada_inputs, camada_outputs = (entity_port_map_i_iplus1(
             i=j,
@@ -123,51 +139,83 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     txt_top_port_map = ''.join(map(str, txt_list))
     # if DEBUG:
     print(" ==================================== TOP ==================================== ")
-    print(txt_top_port_map)
+    # print(txt_top_port_map)
     # print(" ---------------------- IN  ---------------------- ")
     # print(lista_camada_inputs)
     # print(" ---------------------- OUT ---------------------- ")
     # print(lista_camada_outputs)
 
     # ---------------- PORT MAP NEURONS MATRIX
+    txt_top_port_map_split = txt_top_port_map.split("\n")
     assign_list = []
-    cp_list = []
     # neurons_PM_matrix = [
     # ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out'],
     # ['c0_n1_W_out', 'c2_n1_W_out', 'c3_n1_W_out'],
     # ['c0_n2_W_out', 'c3_n2_W_out'],
     # ['c0_n3_W_out']
     # ]
-    # iterando entre camadas
-    for l in range(len(layer_dict_list)-1, 0, -1):
-        # for l in range(0, len(layer_dict_list)):
-        for n, neuron_number in enumerate(neurons_PM_matrix):
-            buff = f'c{l}_n{n}'
-            for i, item in enumerate(neuron_number):
-                buff2 = f"neurons_PM_matrix[{n}][{l}]: {neurons_PM_matrix[n][i]}"
+    signals_Wout_list = []
+    neurons_PM_matrix_local = copy.deepcopy(neurons_PM_matrix)
 
-                if buff in neurons_PM_matrix[n][i]:
-                    try:
-                        # assign_list.append(
-                        #     f"{neurons_PM_matrix[n][i]} => {neurons_PM_matrix[n][i+1]}")
-                        # signal_in = neurons_PM_matrix[n][i +
-                        #                                  1].replace('out', 'in')
-                        # signal_in = neurons_PM_matrix[n][i].replace(
-                        #     'out', 'in')
-                        signal_in = neurons_PM_matrix[n][i]
-                        assign_list.append(
-                            f"{signal_in} => {neurons_PM_matrix[n][i-1]}")
-                        cp_list.append(signal_in)
-                    except:
-                        pass
+    for l, layer in enumerate(layer_dict_list):
+        for n, neuron in enumerate(neurons_PM_matrix_local):
+            # todo: dá pra retirar o loop assign da primeira camada, pois fica igual o original
+            if l == 0:  # primeira camada, só atribuímos normalmente
+                # for n, neuron in enumerate(layer):
+                try:
+                    # quando n tem neurônio em camada próxima, a atribuição irá falhar
+                    trash = neurons_PM_matrix_local[n][1]
+                    # c0_n0_W_out = > c0_n0_W_out;  neurons_PM_matrix_local[0][0] => neurons_PM_matrix_local[0][0];
+                    assign_list.append(
+                        f"            {neurons_PM_matrix_local[n][0]}=> {neurons_PM_matrix_local[n][0]},")
+                    # lista para declaração dos sinals 'SIGNAL c0_n0_W_out, ... : signed(BITS -1 DOWNTO 0);
+                    signals_Wout_list.append(neurons_PM_matrix_local[n][0])
 
-    # neurons_PM_matrix = list(dict.fromkeys(neurons_PM_matrix))
-    neurons_PM_matrix = [
-        item for sublist in neurons_PM_matrix for item in sublist]
+                except:  # após a atribuição falhar, deletamos, pois é uma saída W_out que n precisamos
+                    for i, item in enumerate(txt_top_port_map_split):
+                        if neurons_PM_matrix_local[n][0] in item:
+                            # deletando da lista port_map do topo (entre camadas)
+                            del txt_top_port_map_split[i]
 
-    for thing in cp_list:
-        if thing in neurons_PM_matrix:
-            neurons_PM_matrix.remove(thing)
+                    del neurons_PM_matrix_local[n]  # c0_n3_W_out retirar
+                    # retirando a vírgula da última linha
+                    assign_list[n-1] = assign_list[n-1][:-1]
+
+            else:  # segunda camada em diante
+                try:
+                    # (c1_n0_W_out).replace('out','in') => c0_n0_W_out;
+                    assign_list.append(
+                        f"            {neurons_PM_matrix_local[n][1].replace('out','in')}=> {neurons_PM_matrix_local[n][0]},")
+                    # lista para declaração dos sinals 'SIGNAL c0_n0_W_out, ... : signed(BITS -1 DOWNTO 0);
+                    signals_Wout_list.append(neurons_PM_matrix_local[n][0])
+                    del neurons_PM_matrix_local[n][0]
+
+                except:
+                    del neurons_PM_matrix_local[n]  # c0_n3_W_out retirar
+
+    signals.signals_dec.append(
+        f"SIGNAL {', '.join(map(str, (signals_Wout_list)))}: {layer_dict_list[0]['IO_type']}(BITS - 1 DOWNTO 0);")
+
+    # assign_list = [
+    #     'c0_n0_W_out => c0_n0_W_out,',
+    #     'c0_n1_W_out => c0_n1_W_out,',
+    #     'c0_n2_W_out => c0_n2_W_out',
+    #     'c1_n0_W_in => c0_n0_W_out,',
+    #     'c2_n1_W_in => c0_n1_W_out,',
+    #     'c3_n2_W_in => c0_n2_W_out,',
+    #     'c2_n0_W_in => c1_n0_W_out,',
+    #     'c3_n1_W_in => c2_n1_W_out,',
+    #     'c3_n0_W_in => c2_n0_W_out,'
+    # ]
+    # txt_top_port_map
+
+    # substituindo atribuição antiga (errada) por atribuição certa entre camadas
+    for j, itemj in enumerate(txt_top_port_map_split):
+        for i, item in enumerate(assign_list):
+            if item.split('=>')[0].strip() in itemj:
+                txt_top_port_map_split[j] = item
+
+    txt_top_port_map = '\n'.join(map(str, txt_top_port_map_split))
 
     # ------- entity ---------
     camada_inputs = extrai_lista_IO(list_IO=lista_camada_inputs)
@@ -504,10 +552,11 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
             if 'OUT' in nomes[i][j][1]:
                 nomes[i][j][1] = nomes[i][j][1].replace('OUT', '')
 
-        names = f"{', '.join(map(str, (nomes[i][0][0])))}"
-        type_s = nomes[i][0][1]
-        # print(f"nomes[c{i}]--> {names}:{type_s};")
-        signals.signals_dec.append(f"SIGNAL {names}:{type_s}")
+        if nomes[i] != []:
+            names = f"{', '.join(map(str, (nomes[i][0][0])))}"
+            type_s = nomes[i][0][1]
+            # print(f"nomes[c{i}]--> {names}:{type_s};")
+            signals.signals_dec.append(f"SIGNAL {names}:{type_s}")
 
     # SIGNALS normal (all other IOs)
     for i, item in enumerate(nomes_all):
