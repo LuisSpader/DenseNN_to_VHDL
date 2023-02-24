@@ -33,8 +33,7 @@ ARCHITECTURE behavior of neuron_ReLU_1n_out is
       IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
       W_in  : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
       ----------------------------------------------
-      IO_out: OUT signed(7 DOWNTO 0);
-      W_out : OUT signed(BITS - 1 DOWNTO 0)
+      IO_out: OUT signed(7 DOWNTO 0)
     );
   end COMPONENT;
 

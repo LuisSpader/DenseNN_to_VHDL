@@ -1,7 +1,8 @@
 from dict_utils import find_True_dict_Output_print, find_True_dict_Output_print_above_level
 from dict_utils import dict_to_list, find_True_dict_split
 from name import vhd_name
-
+# WEIGHTs_ID = 'W'
+# IOs_ID = 'IO'
 prefix_neuron = 'neuron_'
 fx_activation_dict = {
     'ReLU': f'{prefix_neuron}ReLU',

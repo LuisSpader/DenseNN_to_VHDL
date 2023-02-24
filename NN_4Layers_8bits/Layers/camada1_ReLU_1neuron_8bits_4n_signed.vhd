@@ -22,7 +22,7 @@ USE work.parameters.ALL;
 ARCHITECTURE arch OF  camada1_ReLU_1neuron_8bits_4n_signed  IS 
 BEGIN
 
-neuron_inst_0: ENTITY work.neuron_ReLU_4n
+neuron_inst_0: ENTITY work.neuron_ReLU_4n_out
    PORT MAP (
             ---------- Entradas ----------
             -- ['IN']['STD_LOGIC'] 

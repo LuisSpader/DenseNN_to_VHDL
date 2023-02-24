@@ -5,7 +5,7 @@ from dict_utils import dict_list_exceptNone
 from txt_utils import erase_empty_lines, tab_lines
 # from name import *
 import copy
-from list_utils import remove_all_lista_ocurrences
+from list_utils import remove_all_lista_ocurrences, remove_all_lista_ocurrences2
 
 # Insert_string
 #
@@ -1204,6 +1204,8 @@ def IO_manager(IO_dict_list: list = [{}, {}],
         # print(f"IO_dict_list[i]['IN']: {IO_dict_list[i]['IN']}")
         IN_manual.append(dict_list_exceptNone(
             dict_slice=IO_dict_list[i]['IN']['manual']))
+        # IN_manual = remove_all_lista_ocurrences2(
+        #     lista=IN_manual, occurences_list=remove_dict_items)
 
         # OUTPUTS
         OUT_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'OUT'))
@@ -1217,6 +1219,8 @@ def IO_manager(IO_dict_list: list = [{}, {}],
             IO_dict_list[i], bits, num_inputs, 0, 'OUT'))
         OUT_manual.append(dict_list_exceptNone(
             dict_slice=IO_dict_list[i]['OUT']['manual']))
+        OUT_manual = remove_all_lista_ocurrences2(
+            lista=OUT_manual, occurences_list=remove_dict_items)
 
     # para ficarmos com uma lista de apenas 1 nível
     IN_manual = [''.join(l) for l in IN_manual]

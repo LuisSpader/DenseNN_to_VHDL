@@ -390,7 +390,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict2(MAC_name='MAC',
                         IO_dict_list=[layer_dict['Neuron_arch']['IO']['shared_IO'],
                                       layer_dict['Neuron_arch']['IO']['unique_IO']],
                         remove_dict_items=[
-                            'Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);', 'update_weights'],
+                            'Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);', 'W_out : OUT signed(BITS - 1 DOWNTO 0);', 'update_weights'],
                         generic=True
                         )
     mac_entity = entity_to_component(
@@ -711,7 +711,7 @@ def MAC_Tree_NoBarriers_TxtGen_from_dict(MAC_name='MAC',
                         IO_dict_list=[layer_dict['Neuron_arch']['IO']['shared_IO'],
                                       layer_dict['Neuron_arch']['IO']['unique_IO']],
                         remove_dict_items=[
-                            'Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);', 'update_weights'],
+                            'Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);', 'W_out : OUT signed(BITS - 1 DOWNTO 0);', 'update_weights'],
                         generic=True
                         )
     mac_entity = entity_to_component(

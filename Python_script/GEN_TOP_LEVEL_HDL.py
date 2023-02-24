@@ -5,13 +5,12 @@ from shift_reg import parameters_vhd_gen
 from standard_dicts import top_dict
 from top import topDict_to_entityTxt
 from itertools import chain, zip_longest
-from globals import neurons_PM_matrix
 
 # ! todo: colocar hierarquia na documentação -> de que forma quer essa hierarquia documentada?
 # Done: refatorar para GEN_TOP_LEVEL_HDL
 # TODO: modularizar FX ACTIVATION units
 # import settings
-from settings import signals
+from settings import signals, PM
 
 # settings.init()          # Call only once
 global remove_signals_list
@@ -41,19 +40,24 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         # port_map_neurons_list.append(layer_dict_list[i]['Neurons_number'])
 
     # port_map_neurons_list = [4, 1, 2, 3]
-    global neurons_PM_matrix
-    neurons_PM_matrix = [[] for _ in range(len(port_map_neurons_list))]
+    # global neurons_PM_matrix
+    PM.neurons_PM_matrix = [[] for _ in range(len(port_map_neurons_list))]
 
     for i, item in enumerate(port_map_neurons_list):
         for j in range(0, item):
-            neurons_PM_matrix[i].append(f"c{i}_n{j}_W_out")
+            PM.neurons_PM_matrix[i].append(f"c{i}_n{j}_W_out")
 
     # ! comentei aqui
-    neurons_PM_matrix = list(
-        map(list, zip_longest(*neurons_PM_matrix, fillvalue=None)))
+    PM.neurons_PM_matrix = list(
+        map(list, zip_longest(*PM.neurons_PM_matrix, fillvalue=None)))
 
-    for i, item in enumerate(neurons_PM_matrix):
-        neurons_PM_matrix[i] = [x for x in item if x != None]
+    neurons_PM_matrix_local = copy.deepcopy(PM.neurons_PM_matrix)
+    # for neuron in PM.neurons_PM_matrix:  # retirando itens da última camada, para evitar mapeamento na função layer_neurons_port_map() no arquivo layer_utils.py
+    #     neuron.pop()
+
+    for i, item in enumerate(PM.neurons_PM_matrix):
+        neurons_PM_matrix_local[i] = [x for x in item if x != None]
+        # PM.neurons_PM_matrix[i] = [x for x in item if x != None]
 
     print(" ================================== FAZENDO CAMADAS ==================================")
     layer_dict_list = all_dense_layers_gen(
@@ -154,32 +158,34 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # ['c0_n2_W_out', 'c3_n2_W_out'],
     # ['c0_n3_W_out']
     # ]
+    # lista de sinais para declarar dps: SIGNAL .... (... -1 downto 0);
     signals_Wout_list = []
-    neurons_PM_matrix_local = copy.deepcopy(neurons_PM_matrix)
 
     for l, layer in enumerate(layer_dict_list):
         for n, neuron in enumerate(neurons_PM_matrix_local):
             # todo: dá pra retirar o loop assign da primeira camada, pois fica igual o original
             if l == 0:  # primeira camada, só atribuímos normalmente
-                # for n, neuron in enumerate(layer):
-                try:
-                    # quando n tem neurônio em camada próxima, a atribuição irá falhar
-                    trash = neurons_PM_matrix_local[n][1]
-                    # c0_n0_W_out = > c0_n0_W_out;  neurons_PM_matrix_local[0][0] => neurons_PM_matrix_local[0][0];
-                    assign_list.append(
-                        f"            {neurons_PM_matrix_local[n][0]}=> {neurons_PM_matrix_local[n][0]},")
-                    # lista para declaração dos sinals 'SIGNAL c0_n0_W_out, ... : signed(BITS -1 DOWNTO 0);
-                    signals_Wout_list.append(neurons_PM_matrix_local[n][0])
+                pass
+                # # for n, neuron in enumerate(layer):
+                # try:
+                #     # quando n tem neurônio em camada próxima, a atribuição irá falhar
+                #     trash = neurons_PM_matrix_local[n][1]
+                #     # c0_n0_W_out = > c0_n0_W_out;  neurons_PM_matrix_local[0][0] => neurons_PM_matrix_local[0][0];
+                #     assign_list.append(
+                #         f"            {neurons_PM_matrix_local[n][0]}=> {neurons_PM_matrix_local[n][0]},")
+                #     # lista para declaração dos sinals 'SIGNAL c0_n0_W_out, ... : signed(BITS -1 DOWNTO 0);
+                #     signals_Wout_list.append(neurons_PM_matrix_local[n][0])
 
-                except:  # após a atribuição falhar, deletamos, pois é uma saída W_out que n precisamos
-                    for i, item in enumerate(txt_top_port_map_split):
-                        if neurons_PM_matrix_local[n][0] in item:
-                            # deletando da lista port_map do topo (entre camadas)
-                            del txt_top_port_map_split[i]
+                # except:  # após a atribuição falhar, deletamos, pois é uma saída W_out que n precisamos
 
-                    del neurons_PM_matrix_local[n]  # c0_n3_W_out retirar
-                    # retirando a vírgula da última linha
-                    assign_list[n-1] = assign_list[n-1][:-1]
+                #     # for i, item in enumerate(txt_top_port_map_split):
+                #     #     if neurons_PM_matrix_local[n][0] in item:
+                #     #         # deletando da lista port_map do topo (entre camadas)
+                #     #         del txt_top_port_map_split[i]
+
+                #     del neurons_PM_matrix_local[n]  # c0_n3_W_out retirar
+                #     # retirando a vírgula da última linha
+                #     # assign_list[n-1] = assign_list[n-1][:-1]
 
             else:  # segunda camada em diante
                 try:
@@ -212,7 +218,9 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # substituindo atribuição antiga (errada) por atribuição certa entre camadas
     for j, itemj in enumerate(txt_top_port_map_split):
         for i, item in enumerate(assign_list):
-            if item.split('=>')[0].strip() in itemj:
+            buff_original = itemj.split('=>')[0].strip()
+            buff_subs = item.split('=>')[0].strip()
+            if buff_subs in buff_original:
                 txt_top_port_map_split[j] = item
 
     txt_top_port_map = '\n'.join(map(str, txt_top_port_map_split))
@@ -554,9 +562,10 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
         if nomes[i] != []:
             names = f"{', '.join(map(str, (nomes[i][0][0])))}"
-            type_s = nomes[i][0][1]
-            # print(f"nomes[c{i}]--> {names}:{type_s};")
-            signals.signals_dec.append(f"SIGNAL {names}:{type_s}")
+            if not 'W_out' in names:
+                type_s = nomes[i][0][1]
+                # print(f"nomes[c{i}]--> {names}:{type_s};")
+                signals.signals_dec.append(f"SIGNAL {names}:{type_s}")
 
     # SIGNALS normal (all other IOs)
     for i, item in enumerate(nomes_all):
@@ -677,47 +686,7 @@ def get_namesANDtypes_normal_IO(list_IO):
                     # buff_nomes.append(IO_name)
                     # buff_tipos.append(tipo)
 
-    #     # buff_nomes = list(set(tuple(sorted(sub)) for s    ub in buff_nomes))
-    # for i, item in enumerate(buff_nomes):  # removendo repetidos
-    #     buff_nomes[i] = list(dict.fromkeys(item))
-    # return buff_nomes, buff_tipos
     return buff_nomes
-
-# def get_namesANDtypes_normal_IO(list_IO):
-#     buff_nomes = []
-#     buff_tipos = []
-#     # lista de nomes dos sinais
-#     for i in range(0, len(list_IO), 2):  # itera sobre 'shared_IO' ou 'unique_IO'
-#         item = list_IO[i]
-#         for k, tipo in enumerate(item):  # itera sobre tipos e nomes
-#             IO_name = list_IO[i+1][k]
-#             # for m, item3 enumerate(item2):
-#             if IO_name != None:
-#                 # verificando se já existe o mesmo tipo, ex 'SIGNED' e coloca nos mesmos índices
-#                 tipo_anterior = list_IO[i-2][k]
-#                 try:
-#                     if tipo == tipo_anterior and (i-2 >= 0) and buff_nomes[k] != []:
-
-#                         if isinstance(IO_name, list):  # se for do tipo lista
-#                             for name in IO_name:  # itera sobre itens da lista
-#                                 # se já n possui item igual
-#                                 if not name in buff_nomes[k]:
-#                                     buff_nomes[k].append(name)
-#                         else:  # se não for lista
-#                             # se já n possui item igual
-#                             if not IO_name in buff_nomes[k]:
-#                                 buff_nomes[k].append(IO_name)
-#                     else:
-#                         buff_nomes.append(IO_name)
-#                         buff_tipos.append(tipo)
-#                 except:
-#                     buff_nomes.append(IO_name)
-#                     buff_tipos.append(tipo)
-
-#         # buff_nomes = list(set(tuple(sorted(sub)) for s    ub in buff_nomes))
-#     for i, item in enumerate(buff_nomes):
-#         buff_nomes[i] = list(dict.fromkeys(item))
-#     return buff_nomes, buff_tipos
 
 
 def remove_Non_Signals(nomes, tipos):
@@ -758,106 +727,3 @@ def remove_Non_Signals(nomes, tipos):
                             f += 1
                 length -= 1
                 i += 1
-
-# def remove_Non_Signals(nomes, tipos, lista_IO_base):
-#     global remove_signals_list
-#     # for x, name_0 in enumerate(nomes):
-#     for y, name_1 in enumerate(nomes):  # level 0
-#         # itens da lista: remove nome e tipo
-#         for j, name_2 in enumerate(name_1):
-#             i = 0
-#             # length = len(nomes[x][y])
-#             length = len(nomes[y])
-#             while i < length and j < length:
-#                 buff_nomes = f"nomes[{y}][{j}]: {nomes[y][j]}"
-#                 buff_tipos = f"tipos[{y}][{j}]:{tipos[y][j]}"
-#                 buff = name_1[j]
-#                 for t in range(1, len(lista_IO_base), 2):
-#                     item = lista_IO_base[t]
-#                     if isinstance(item, str):  # is string
-#                         if ':' in item:
-#                             if buff == item:
-#                                 # del nomes[x][y][j]
-#                                 # del tipos[x][y][j]
-#                                 del nomes[y][j]
-#                                 del tipos[y][j]
-#                                 i -= 1
-#                         else:
-#                             if isinstance(nomes[y][j], str):
-#                                 for item_s in remove_signals_list:
-#                                     if nomes[y][j] == item_s:
-#                                         del nomes[y][j]
-#                                         break
-
-#                     else:
-#                         if isinstance(item, list):  # is nested list
-#                             for j, item2 in enumerate(item):  # item in list
-#                                 buff_nomes = f"nomes[{y}][{j}]: {item2}"
-#                                 if isinstance(item2, str):
-#                                     if ':' in item2:
-#                                         txt_antes = item2.split(
-#                                             f":")[0].replace(' ', '')
-#                                         if buff == txt_antes:
-#                                             # del nomes[x][y][j]
-#                                             # del tipos[x][y][j]
-#                                             del nomes[y][j]
-#                                             del tipos[y][j]
-#                                             i -= 1
-#                                     else:
-
-#                                         if isinstance(nomes[y][j], str):
-#                                             for item_s in remove_signals_list:
-#                                                 if nomes[y][j] == item_s:
-#                                                     del nomes[y][j]
-#                                                     break
-
-#                                         # remove_Non_Signals_nested(nomes[y][j])
-#                 # else:
-#                     # remove_Non_Signals_nested(name_2)
-
-#                     # # sub_itens da lista: remove só o nome
-#                     # for k, name3 in enumerate(name_1[j]):
-#                     #     length2 = len(name_1[j])
-#                     #     f = 0
-#                     #     while f < length2:
-#                     #         # buff_nomes = f"nomes[{y}][{j}][{k}]: {nomes[y][j][k]}"
-#                     #         # buff_tipos = f"tipos[{y}][{j}]: {tipos[y][j]}"
-#                     #         buff = name_1[j][k]
-
-#                     #         if buff == 'IO_in' or buff == 'W_in' or buff == 'W_out':
-#                     #             # del nomes[x][y][j][k]
-#                     #             del nomes[y][j][k]
-#                     #             f -= 1
-#                     #         length2 -= 1
-#                     #         f += 1
-#                 length -= 1
-#                 i += 1
-
-
-# def remove_Non_Signals_nested(name_2):
-#     # ['W_in', 'W_out', 'clk', 'rst', 'update_weights']
-#     global remove_signals_list
-#     # sub_itens da lista: remove só o nome
-#     if isinstance(name_2, str):
-#         for item in remove_signals_list:
-#             if name_2 == item:
-#                 del name_2
-#                 return
-#     else:
-#         for k, name3 in enumerate(name_2):
-#             if isinstance(name3, str):
-#                 length2 = len(name_2)
-#                 f = 0
-#                 while f < length2:
-#                     # buff_nomes = f"nomes[{y}][{j}][{k}]: {nomes[y][j][k]}"
-#                     # buff_tipos = f"tipos[{y}][{j}]: {tipos[y][j]}"
-#                     buff = name_2[k]
-#                     for item in remove_signals_list:
-#                         if buff == item:
-#                             # del nomes[x][y][j][k]
-#                             del name_2[k]
-#                         f -= 1
-#                     length2 -= 1
-#                     f += 1
-#             else:
-#                 remove_Non_Signals_nested(name3)

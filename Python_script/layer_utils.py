@@ -7,8 +7,7 @@ from vhd_txt_utils import layerDict_to_entityTxt
 from Create_Folders import *
 import numpy as np
 from name import *
-from globals import neurons_PM_matrix
-
+from settings import PM
 # from dict_utils import *
 # from txt_utils import *
 
@@ -186,23 +185,32 @@ def layer_neurons_port_map(number_of_neurons: int,
 
     # criando dicionário sem W_out
     neuron_dict_NO_W_out = copy.deepcopy(neuron_dict)
-    for i, item in enumerate(neuron_dict_NO_W_out['IO']['unique_IO']['OUT']['manual']):
-        if 'W_out' in item:
-            del neuron_dict_NO_W_out['IO']['unique_IO']['OUT']['manual'][i]
-    if neuron_dict_NO_W_out['IO']['unique_IO']['OUT']['manual'] == []:
-        neuron_dict_NO_W_out['IO']['unique_IO']['OUT']['manual'] = None
+    if neuron_dict_NO_W_out['IO']['unique_IO']['OUT']['manual'] != None:
+        for i, item in enumerate(neuron_dict_NO_W_out['IO']['unique_IO']['OUT']['manual']):
+            if 'W_out' in item:
+                del neuron_dict_NO_W_out['IO']['unique_IO']['OUT']['manual'][i]
+        if neuron_dict_NO_W_out['IO']['unique_IO']['OUT']['manual'] == []:
+            neuron_dict_NO_W_out['IO']['unique_IO']['OUT']['manual'] = None
 
-    # global neurons_PM_matrix
     l = int(ID_camada[1])  # layer number
-    for n, neurons in enumerate(neurons_PM_matrix):
-        try:  # quando tem próxima camada recebendo peso W_out
+    # for n, neurons in enumerate(PM.neurons_PM_matrix):
+    for n in range(0, number_of_neurons):
+        # try:  # quando tem próxima camada recebendo peso W_out
 
-            # quando tem próxima item na matrix de neurônios, significa que é um neurônio que irá receber peso, logo devemos fazer o port_map com o W_out (dict: neuron_dict)
-            trash = neurons_PM_matrix[n][l+1]
+        # quando tem próxima item na matrix de neurônios, significa que é um neurônio que irá receber peso, logo devemos fazer o port_map com o W_out (dict: neuron_dict)
+        # trash = PM.neurons_PM_matrix[n][l+1]
+        has_to_pass_Weight = False
+        for layer in range(l+1, len(PM.neurons_PM_matrix[n])):
+            buff = PM.neurons_PM_matrix[n][layer]
+            if buff != None:
+                has_to_pass_Weight = True
+
+        if has_to_pass_Weight:
+            # quando tem próxima camada recebendo peso W_out
 
             txt, camada_inputs, camada_outputs = (entity_port_map(
-                vhd_name=vhd_name,
-                i=j,
+                vhd_name=f"{vhd_name}_out",
+                i=n,
                 num_inputs=num_inputs,
                 neuron_dict=neuron_dict,
                 ID_camada=ID_camada))
@@ -211,11 +219,12 @@ def layer_neurons_port_map(number_of_neurons: int,
             lista_camada_inputs.append(camada_inputs)
             lista_camada_outputs.append(camada_outputs)
 
-        # caso falhe a opção de cima, significa que NÂO TEM PRÓXIMO item na matrix de neurônios, ou seja, não tem neurônio pra receber peso em nenhuma outra camada, logo devemos fazer o port_map SEM o W_out (dict: neuron_dict_NO_W_out)
-        except:
+        else:
+            # significa que NÂO TEM PRÓXIMO item na matrix de neurônios, ou seja, não tem neurônio pra receber peso em nenhuma outra camada, logo devemos fazer o port_map SEM o W_out (dict: neuron_dict_NO_W_out)
+
             txt, camada_inputs, camada_outputs = (entity_port_map(
                 vhd_name=vhd_name,
-                i=j,
+                i=n,
                 num_inputs=num_inputs,
                 neuron_dict=neuron_dict_NO_W_out,
                 ID_camada=ID_camada))
@@ -223,6 +232,19 @@ def layer_neurons_port_map(number_of_neurons: int,
             txt_list.append(txt)
             lista_camada_inputs.append(camada_inputs)
             lista_camada_outputs.append(camada_outputs)
+
+        # caso falhe a opção de cima, significa que NÂO TEM PRÓXIMO item na matrix de neurônios, ou seja, não tem neurônio pra receber peso em nenhuma outra camada, logo devemos fazer o port_map SEM o W_out (dict: neuron_dict_NO_W_out)
+        # except:
+        # txt, camada_inputs, camada_outputs = (entity_port_map(
+        #     vhd_name=vhd_name,
+        #     i=n,
+        #     num_inputs=num_inputs,
+        #     neuron_dict=neuron_dict_NO_W_out,
+        #     ID_camada=ID_camada))
+
+        # txt_list.append(txt)
+        # lista_camada_inputs.append(camada_inputs)
+        # lista_camada_outputs.append(camada_outputs)
 
     # iterando sobre todos os neurônios (assim pegamos a lista de todas as IO de cada um e o texto de 'PORT MAP' de cada um também)
     # # if (n_max = 0): # caso não queiramos gerar neurônios mortos

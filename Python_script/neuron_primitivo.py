@@ -672,7 +672,7 @@ def Neuron_Gen_from_dict2(
             layer_dict_list[i]['Neuron_arch']['IO']['shared_IO'],
             layer_dict_list[i]['Neuron_arch']['IO']['unique_IO']],
         remove_dict_items=[
-            'Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);', 'update_weights'],
+            'Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);', 'W_out : OUT signed(BITS - 1 DOWNTO 0);', 'update_weights'],
         generic=True,
         tab_space=1
     )
