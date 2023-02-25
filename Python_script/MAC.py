@@ -341,9 +341,6 @@ def MAC_Tree_Barriers_TxtGen_from_dict2(MAC_name='MAC',
         split_str='-', dict=layer_dict['Neuron_arch']['Adder'], position=0)
     adder_name = (f"add{adder_number}_v{adder_version}")
 
-    sum_all_string = MAC_Txt_Gen2(IO_type=IO_type, num_inputs=num_inputs,
-                                  receive_sum_all='sum_all', Multiplier_name=multiplier_name, DEBUG=DEBUG)
-
     # signal_receive_string = signal_receive_string + "\n" + sum_all_string
     #  ---------- SINAIS ----------
     MAC_signals = (f'''
@@ -769,6 +766,7 @@ def MAC_TxtGen(MAC_name='MAC',
                                                     rst_space=rst_space,
                                                     clk_space=clk_space,
                                                     layer_dict=layer_dict)
+    print(text)
     # if download_vhd == True:
     #     # pegando dados do dicionário
     #     bits = layer_dict['Neuron_arch']['Bit_WIDTH']()

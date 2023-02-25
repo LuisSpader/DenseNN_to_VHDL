@@ -6,8 +6,8 @@ from datetime import date
 INPUTS_NUMBER = 10
 BIT_WIDTH = 8
 IO_TYPE_STR = 'signed'
-# LAYER_NEURONS_NUMBER_LIST = [6, 5, 3, 1]
-LAYER_NEURONS_NUMBER_LIST = [2, 3, 2, 1]
+LAYER_NEURONS_NUMBER_LIST = [6, 5, 3, 1]
+# LAYER_NEURONS_NUMBER_LIST = [2, 3, 2, 1]
 # LAYER_NEURONS_NUMBER_LIST = [32, 64, 32, 3]
 # LAYER_NEURONS_NUMBER_LIST = [4, 1, 2, 3]
 # LAYER_NEURONS_NUMBER_LIST = [75, 25, 75]
@@ -39,7 +39,7 @@ BASE_DICT_SOFTMAX['Neuron_arch']['Include_MAC_type'] = INCLUDE_MAC_TYPE
 
 # TODO: colocar opção inteiramente combinacional -> Reg só dps FX ACTIVATION
 # TODO: gerar top level e controles(update_NN)
-BARRIERS = False
+BARRIERS = True
 BASE_DICT_HIDDEN['Neuron_arch']['Barriers'] = BARRIERS
 BASE_DICT_SOFTMAX['Neuron_arch']['Barriers'] = BARRIERS
 
