@@ -1,16 +1,39 @@
-# from standard_dicts import layer_dict_hidden, layer_dict_softmax
-from neuron_primitivo import *
-from layer_utils import *
-from shift_reg import parameters_vhd_gen
-from standard_dicts import top_dict
-from top import topDict_to_entityTxt
+# from SETTINGS import PARAMS
+# from GLOBALS import GLOBAL
+# from itertools import chain, zip_longest
+# from top import topDict_to_entityTxt
+# from standard_dicts import top_dict
+# from shift_reg import parameters_vhd_gen
+# from layer_utils import *
+# from neuron_primitivo import *
+import copy
+from utils.top import topDict_to_entityTxt
+from utils.GLOBALS import GLOBAL
+from utils.SETTINGS import PARAMS
+from utils.neuron_primitivo import *
+from utils.layer_utils import *
+from utils.standard_dicts import top_dict
+from utils.general.shift_reg import parameters_vhd_gen
+
 from itertools import chain, zip_longest
+import sys
+sys.path.append('./utils')
+# -----------
+
+# import sys
+# from pathlib import Path
+# FILE = Path(__file__).resolve()
+# ROOT = FILE.parents[0]  # YOLOv5 root directory
+# if str(ROOT) not in sys.path:
+#     sys.path.append(str(ROOT))  # add ROOT to PATH
+# # ROOT = ROOT.relative_to(Path.cwd())  # relative
+
+# from standard_dicts import layer_dict_hidden, layer_dict_softmax
 
 # ! todo: colocar hierarquia na documentação -> de que forma quer essa hierarquia documentada?
 # Done: refatorar para GEN_TOP_LEVEL_HDL
 # TODO: modularizar FX ACTIVATION units
 # import settings
-from settings import signals, PM
 
 # settings.init()          # Call only once
 global remove_signals_list
@@ -30,44 +53,47 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                       ):
 
     NUMBER_OF_LAYERS = len(LAYER_NEURONS_NUMBER_LIST)
-    global layer_dict_list
-    layer_dict_list = []
-
+    global layers_dict_list
+    layers_dict_list = []
     # port_map between layers ()
     port_map_neurons_list = copy.deepcopy(LAYER_NEURONS_NUMBER_LIST)
-    PM.neurons_PM_matrix = [[] for _ in range(len(port_map_neurons_list))]
+    GLOBAL.PM_MATRIX.neurons_PM_matrix = [
+        [] for _ in range(len(port_map_neurons_list))]
 
     # generating signal matrix
     for i, item in enumerate(port_map_neurons_list):
         for j in range(0, item):
-            PM.neurons_PM_matrix[i].append(f"c{i}_n{j}_W_out")
+            GLOBAL.PM_MATRIX.neurons_PM_matrix[i].append(
+                f"c{i}_n{j}_W_out")
 
     # ! comentei aqui
-    PM.neurons_PM_matrix = list(
-        map(list, zip_longest(*PM.neurons_PM_matrix, fillvalue=None)))
+    GLOBAL.PM_MATRIX.neurons_PM_matrix = list(
+        map(list, zip_longest(*GLOBAL.PM_MATRIX.neurons_PM_matrix, fillvalue=None)))
 
-    neurons_PM_matrix_local = copy.deepcopy(PM.neurons_PM_matrix)
-    # for neuron in PM.neurons_PM_matrix:  # retirando itens da última camada, para evitar mapeamento na função layer_neurons_port_map() no arquivo layer_utils.py
+    neurons_PM_matrix_local = copy.deepcopy(
+        GLOBAL.PM_MATRIX.neurons_PM_matrix)
+    # for neuron in GLOBAL.PM_MATRIX.neurons_PM_matrix:  # retirando itens da última camada, para evitar mapeamento na função layer_neurons_port_map() no arquivo layer_utils.py
     #     neuron.pop()
 
-    for i, item in enumerate(PM.neurons_PM_matrix):
+    for i, item in enumerate(GLOBAL.PM_MATRIX.neurons_PM_matrix):
         neurons_PM_matrix_local[i] = [x for x in item if x != None]
-        # PM.neurons_PM_matrix[i] = [x for x in item if x != None]
+        # GLOBAL.PM_MATRIX.neurons_PM_matrix[i] = [x for x in item if x != None]
 
     barriers = ''
     if BASE_DICT_HIDDEN['Neuron_arch']['Barriers']:
         barriers = '_Barriers'
     # text_list can be an splitted text or a list of texts
-    arch = '_' + '-'.join(map(str, (LAYER_NEURONS_NUMBER_LIST)))
+    arch = '_' + '_'.join(map(str, (LAYER_NEURONS_NUMBER_LIST)))
 
     if INCLUDE_PARAMETERS_ON_FOLDERNAME:
-        path_parameters = f"{OUTPUT_BASE_DIR_PATH}_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits{barriers}{arch}"
+        path_parameters = f"{OUTPUT_BASE_DIR_PATH}/NN_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits{arch}{barriers}"
         OUTPUT_BASE_DIR_PATH = f"{path_parameters}"
     else:
         OUTPUT_BASE_DIR_PATH = f"{OUTPUT_BASE_DIR_PATH}"
+    PARAMS.path = f"{OUTPUT_BASE_DIR_PATH}"
 
     print(" ================================== FAZENDO CAMADAS ==================================")
-    layer_dict_list = all_dense_layers_gen(
+    layers_dict_list = all_dense_layers_gen(
         Inputs_number=INPUTS_NUMBER,
         bits=BIT_WIDTH,
         IO_type_str=IO_TYPE_STR,  # 'signed' or 'unsigned'
@@ -80,23 +106,25 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         gen_dead_neurons=DEAD_NEURONS,  # gera neurônios mortos
         DEBUG=DEBUG
     )
-    # for i in range(0, len(layer_dict_list)):
+    PARAMS.layers_dict_list = layers_dict_list
+    # for i in range(0, len(layers_dict_list)):
     #     print(
-    #         f"All_NN() _> dict[{i}] -> num_inputs: {layer_dict_list[i]['Neuron_arch']['Inputs_number']()}")
+    #         f"All_NN() _> dict[{i}] -> num_inputs: {layers_dict_list[i]['Neuron_arch']['Inputs_number']()}")
 
     # -------------------
 
     print(" ================================== FAZENDO NEURONIOS ==================================")
-    # for layer_dict_i in layer_dict_list:
+    # for layer_dict_i in layers_dict_list:
     #     Neuron_Gen_from_dict(download_vhd=DOWNLOAD_VHD,
     #                          layer_dict=layer_dict_i,
     #                          OUTPUT_BASE_DIR_PATH=f"{OUTPUT_BASE_DIR_PATH}/Neuron",
     #                          DEBUG=DEBUG)
 
-    for i, item in enumerate(layer_dict_list):
+    for i, item in enumerate(layers_dict_list):
+        PARAMS.layer_iteration = i
         Neuron_Gen_from_dict2(download_vhd=DOWNLOAD_VHD,
                               i=i,
-                              layer_dict_list=layer_dict_list,
+                              layers_dict_list=layers_dict_list,
                               OUTPUT_BASE_DIR_PATH=f"{OUTPUT_BASE_DIR_PATH}/Neuron",
                               DEBUG=DEBUG)
 
@@ -117,11 +145,11 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
     # if (n_max = 0): # caso não queiramos gerar neurônios mortos
     # lista_camadas_IO = [0, len()-1]
-    for j, item_j in enumerate(layer_dict_list):
+    for j, item_j in enumerate(layers_dict_list):
 
         txt, camada_inputs, camada_outputs = (entity_port_map_i_iplus1(
             i=j,
-            dict_list=layer_dict_list,
+            dict_list=layers_dict_list,
             # num_inputs=INPUTS_NUMBER,
             ID_camada=f"c{str(j)}"))
 
@@ -129,14 +157,14 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         # dict_slice=dict_list[i]['IO']['OUT'][port_type],
         # return_value_or_key='key', is_list=True)
         # for i in
-        # layer_dict_list[j]
+        # layers_dict_list[j]
 
         txt_list.append(txt)
         if j == 0:  # PRIMEIRA CAMADA
             lista_camada_inputs.append(camada_inputs)
             print(camada_inputs)
 
-        if j == (len(layer_dict_list) - 1):  # ÚLTIMA CAMADA
+        if j == (len(layers_dict_list) - 1):  # ÚLTIMA CAMADA
             lista_camada_outputs.append(camada_outputs)
             print(camada_outputs)
 
@@ -161,7 +189,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # lista de sinais para declarar dps: SIGNAL .... (... -1 downto 0);
     signals_Wout_list = []
 
-    for l, layer in enumerate(layer_dict_list):
+    for l, layer in enumerate(layers_dict_list):
         for n, neuron in enumerate(neurons_PM_matrix_local):
             # todo: dá pra retirar o loop assign da primeira camada, pois fica igual o original
             if l == 0:  # primeira camada, só atribuímos normalmente
@@ -200,7 +228,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                     del neurons_PM_matrix_local[n]  # c0_n3_W_out retirar
 
     signals.signals_dec.append(
-        f"SIGNAL {', '.join(map(str, (signals_Wout_list)))}: {layer_dict_list[0]['IO_type']}(BITS - 1 DOWNTO 0);")
+        f"SIGNAL {', '.join(map(str, (signals_Wout_list)))}: {layers_dict_list[0]['IO_type']}(BITS - 1 DOWNTO 0);")
 
     # assign_list = [
     #     'c0_n0_W_out => c0_n0_W_out,',
@@ -254,8 +282,8 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # substituindo '[]' por 'None'
     l_inputs = swap_empty_for_None(l_inputs)
     l_outputs = swap_empty_for_None(l_outputs)
-    top_dict['Inputs_number'] = layer_dict_list[0]['Inputs_number']
-    top_dict['bits'] = layer_dict_list[0]['bits']
+    top_dict['Inputs_number'] = layers_dict_list[0]['Inputs_number']
+    top_dict['bits'] = layers_dict_list[0]['bits']
     top_dict['IO']['IN']['STD_LOGIC'] = l_inputs[0]
     top_dict['IO']['IN']['STD_LOGIC_VECTOR'] = l_inputs[1]
 
@@ -285,64 +313,64 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # list_OUT = []
     # list_IN_manual = []
     # list_OUT_manual = []
-    list_IN = [[] for _ in range(len(layer_dict_list))]
-    list_OUT = [[] for _ in range(len(layer_dict_list))]
-    list_IN_manual = [[] for _ in range(len(layer_dict_list))]
-    list_OUT_manual = [[] for _ in range(len(layer_dict_list))]
-    nomes = [None]*len(layer_dict_list)
-    tipos = [None]*len(layer_dict_list)
-    # nomes_all = list([[None, None]])*len(layer_dict_list)  # [layer_j[IN,OUT]]
-    # tipos_all = list([[None, None]])*len(layer_dict_list)  # [layer_j[IN,OUT]]
+    list_IN = [[] for _ in range(len(layers_dict_list))]
+    list_OUT = [[] for _ in range(len(layers_dict_list))]
+    list_IN_manual = [[] for _ in range(len(layers_dict_list))]
+    list_OUT_manual = [[] for _ in range(len(layers_dict_list))]
+    nomes = [None]*len(layers_dict_list)
+    tipos = [None]*len(layers_dict_list)
+    # nomes_all = list([[None, None]])*len(layers_dict_list)  # [layer_j[IN,OUT]]
+    # tipos_all = list([[None, None]])*len(layers_dict_list)  # [layer_j[IN,OUT]]
 
     nomes_all = [[None]*2
-                 for _ in range(len(layer_dict_list))]
-    # tipos_all = [[None]*2 for _ in range(len(layer_dict_list))]
+                 for _ in range(len(layers_dict_list))]
+    # tipos_all = [[None]*2 for _ in range(len(layers_dict_list))]
     remove_list = []
 
     # criando lista das entradas e saídas (IO) e seus tipos
-    for j in range(0, len(layer_dict_list)):
+    for j in range(0, len(layers_dict_list)):
         # INPUTs shared_IO: salvando o nome
-        list_IN[j].append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['IN'],
+        list_IN[j].append(dict_to_list(target_dict=layers_dict_list[j]['Neuron_arch']['IO']['shared_IO']['IN'],
                                        key_or_value=True))
         # INPUTs shared_IO: salvando o tipo
-        list_IN[j].append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['IN'],
+        list_IN[j].append(dict_to_list(target_dict=layers_dict_list[j]['Neuron_arch']['IO']['shared_IO']['IN'],
                                        key_or_value=False))
         # INPUTs unique_IO: salvando o nome
-        list_IN[j].append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['IN'],
+        list_IN[j].append(dict_to_list(target_dict=layers_dict_list[j]['Neuron_arch']['IO']['unique_IO']['IN'],
                                        key_or_value=True))
         # INPUTs unique_IO: salvando o tipo
-        list_IN[j].append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['IN'],
+        list_IN[j].append(dict_to_list(target_dict=layers_dict_list[j]['Neuron_arch']['IO']['unique_IO']['IN'],
                                        key_or_value=False))
 
         # OUTPUTs shared_IO: salvando o nome
-        list_OUT[j].append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['OUT'],
+        list_OUT[j].append(dict_to_list(target_dict=layers_dict_list[j]['Neuron_arch']['IO']['shared_IO']['OUT'],
                                         key_or_value=True))
         # OUTPUTs shared_IO: salvando o tipo
-        list_OUT[j].append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['OUT'],
+        list_OUT[j].append(dict_to_list(target_dict=layers_dict_list[j]['Neuron_arch']['IO']['shared_IO']['OUT'],
                                         key_or_value=False))
         # OUTPUTs unique_IO: salvando o nome
-        list_OUT[j].append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['OUT'],
+        list_OUT[j].append(dict_to_list(target_dict=layers_dict_list[j]['Neuron_arch']['IO']['unique_IO']['OUT'],
                                         key_or_value=True))
         # OUTPUTs unique_IO: salvando o tipo
-        list_OUT[j].append(dict_to_list(target_dict=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['OUT'],
+        list_OUT[j].append(dict_to_list(target_dict=layers_dict_list[j]['Neuron_arch']['IO']['unique_IO']['OUT'],
                                         key_or_value=False))
 
         remove_list = remove_list + dict_list_exceptNone(
-            dict_slice=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['IN'], return_value_or_key='value', is_list=False)
+            dict_slice=layers_dict_list[j]['Neuron_arch']['IO']['unique_IO']['IN'], return_value_or_key='value', is_list=False)
 
         remove_list = remove_list + dict_list_exceptNone(
-            dict_slice=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['IN'], return_value_or_key='value', is_list=False)
+            dict_slice=layers_dict_list[j]['Neuron_arch']['IO']['shared_IO']['IN'], return_value_or_key='value', is_list=False)
 
         remove_list = remove_list + dict_list_exceptNone(
-            dict_slice=layer_dict_list[j]['Neuron_arch']['IO']['unique_IO']['OUT'], return_value_or_key='value', is_list=False)
+            dict_slice=layers_dict_list[j]['Neuron_arch']['IO']['unique_IO']['OUT'], return_value_or_key='value', is_list=False)
 
         remove_list = remove_list + dict_list_exceptNone(
-            dict_slice=layer_dict_list[j]['Neuron_arch']['IO']['shared_IO']['OUT'], return_value_or_key='value', is_list=False)
+            dict_slice=layers_dict_list[j]['Neuron_arch']['IO']['shared_IO']['OUT'], return_value_or_key='value', is_list=False)
 
         # for j in lista_camadas_IO:
         #     for type in ['IN', 'OUT']:
         #         _ = IO_manual_Top(
-        #             IO_dict=layer_dict_list[j],
+        #             IO_dict=layers_dict_list[j],
         #             IO_list=top_dict['IO'],
         #             IO_type=type,
         #             SIGNALS=True,
@@ -400,10 +428,10 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         for i, item in enumerate(nomes[j]):
             if 'TOTAL_BITS' in item[1]:
                 nomes[j][i][1] = item[1].replace(
-                    'TOTAL_BITS', f"(BITS*{str(layer_dict_list[j]['Inputs_number'])})")
+                    'TOTAL_BITS', f"(BITS*{str(layers_dict_list[j]['Inputs_number'])})")
             if 'NUM_INPUTS' in item[1]:
                 nomes[j][i][1] = item[1].replace('NUM_INPUTS', str(
-                    layer_dict_list[j]['Inputs_number']))
+                    layers_dict_list[j]['Inputs_number']))
         # nomes2 = copy.deepcopy(nomes)
         # tipos2 = copy.deepcopy(tipos)
 
@@ -445,10 +473,10 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                                 nomes_all[j][k][0][0].append(s)
 
     obs = [
-        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN']['manual'],
-        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN']['manual'],
-        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT']['manual'],
-        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT']['manual']
+        layers_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN']['manual'],
+        layers_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN']['manual'],
+        layers_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT']['manual'],
+        layers_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT']['manual']
     ]
     remove_list = copy.deepcopy(remove_list)
     for i, item in enumerate(remove_list):
@@ -457,23 +485,23 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                 remove_list[i][j] = item2.split(':')[0].replace(' ', '')
 
     obs = [
-        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN']['manual'],
-        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN']['manual'],
-        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT']['manual'],
-        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT']['manual']
+        layers_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN']['manual'],
+        layers_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN']['manual'],
+        layers_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT']['manual'],
+        layers_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT']['manual']
     ]
     remove_list = [item for sublist in remove_list for item in sublist]
 
     obs = [
-        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN']['manual'],
-        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN']['manual'],
-        layer_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT']['manual'],
-        layer_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT']['manual']
+        layers_dict_list[0]['Neuron_arch']['IO']['shared_IO']['IN']['manual'],
+        layers_dict_list[0]['Neuron_arch']['IO']['unique_IO']['IN']['manual'],
+        layers_dict_list[0]['Neuron_arch']['IO']['shared_IO']['OUT']['manual'],
+        layers_dict_list[0]['Neuron_arch']['IO']['unique_IO']['OUT']['manual']
     ]
     global remove_signals_list
     remove_signals_list = list(dict.fromkeys(remove_list))
     # for r, itemr in enumerate(remove_signals_list):
-    for j in range(0, len(layer_dict_list)):
+    for j in range(0, len(layers_dict_list)):
         remove_signals_list = [
             x for x in remove_signals_list if f"c{j}" not in x]
 
@@ -581,7 +609,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     signals.signals_to_text()
 
     # ASSIGN: l1 <= l0; l2 <= l1; ...
-    buff = [[] for _ in range(len(layer_dict_list))]
+    buff = [[] for _ in range(len(layers_dict_list))]
 
     for i, item in enumerate(signals.signals_stack):
         if 'IO_out' in item[0]:
@@ -602,7 +630,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # https://youtu.be/aWCWZpIZYjY
     # https://www.youtube.com/watch?v=hdPC2G8NPHI&list=PL35tBJQqzeIuV6qlkvqiZy9ivc9IROLWh&index=29&t=1597s
     top_entity = topDict_to_entityTxt(top_dict=top_dict,
-                                      IO_dict_compare=layer_dict_list[0],
+                                      IO_dict_compare=layers_dict_list[0],
                                       remove_dict_items=[],
                                       generic=True)
     txt_top_port_map = txt_top_port_map.replace(
@@ -647,7 +675,7 @@ END ARCHITECTURE;
         top_dir = f"{OUTPUT_BASE_DIR_PATH}/{top_dict['Top_name']}.vhd"
         with open(top_dir, "w") as writer:
             writer.write(top_text)
-        # print(f"3 - layer_dict_list[{i}]: {layer_dict_list[i]['IO']['OUT']}")
+        # print(f"3 - layers_dict_list[{i}]: {layers_dict_list[i]['IO']['OUT']}")
         if DEBUG:
             print(
                 f"top_gen() -> Criando Top: {top_dir}")

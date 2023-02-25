@@ -17,7 +17,7 @@ NUMBER_OF_LAYERS = len(LAYER_NEURONS_NUMBER_LIST)
 
 BASE_DICT_HIDDEN = layer_dict_hidden
 BASE_DICT_SOFTMAX = layer_dict_softmax
-OUTPUT_BASE_DIR_PATH = './NN'
+OUTPUT_BASE_DIR_PATH = './NNs'
 # today = date.today()
 # PATH = f'./NN{today}'
 
@@ -39,7 +39,7 @@ BASE_DICT_SOFTMAX['Neuron_arch']['Include_MAC_type'] = INCLUDE_MAC_TYPE
 
 # TODO: colocar opção inteiramente combinacional -> Reg só dps FX ACTIVATION
 # TODO: gerar top level e controles(update_NN)
-BARRIERS = True
+BARRIERS = False
 BASE_DICT_HIDDEN['Neuron_arch']['Barriers'] = BARRIERS
 BASE_DICT_SOFTMAX['Neuron_arch']['Barriers'] = BARRIERS
 
