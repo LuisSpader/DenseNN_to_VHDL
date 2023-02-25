@@ -648,7 +648,6 @@ def all_dense_layers_gen(
     base_dict_hidden_layers: dict,
     base_dict_softmax_layer: dict,
     OUTPUT_BASE_DIR_PATH: str,
-    Include_parameters_on_FolderName: bool = False,
     download_vhd: bool = True,
     gen_dead_neurons: bool = False,
     DEBUG: bool = False
@@ -746,15 +745,9 @@ def all_dense_layers_gen(
     #     create=download_vhd)  # (path_list, path_level, create)
     # path = path[0]
 
-    if Include_parameters_on_FolderName:
-        path_parameters = f"{OUTPUT_BASE_DIR_PATH}_{number_of_layers}Layers_{bits}bits/Layers"
-        path_parameters = f"{path_parameters}"
-        OUTPUT_BASE_DIR_PATH = create_folder_path(
-            path=path_parameters, create=True)
-    else:
-        OUTPUT_BASE_DIR_PATH = f"{OUTPUT_BASE_DIR_PATH}/Layers"
-        OUTPUT_BASE_DIR_PATH = create_folder_path(
-            path=OUTPUT_BASE_DIR_PATH, create=True)
+    OUTPUT_BASE_DIR_PATH_layers = f"{OUTPUT_BASE_DIR_PATH}/Layers"
+    OUTPUT_BASE_DIR_PATH_layers = create_folder_path(
+        path=OUTPUT_BASE_DIR_PATH_layers, create=True)
 
     # LOOP PARA GERAR TEXTO DE CADA CAMADA CONFORME RESPECTIVO DICIONÁRIO E JÁ SALVAR COMO ARQUIVO '.vhd'
 
@@ -778,12 +771,12 @@ def all_dense_layers_gen(
 
         # salvando VHDL
         if (download_vhd == True):
-            with open(f"{OUTPUT_BASE_DIR_PATH}/{layer_dict_list[i]['Layer_name']}.vhd", "w") as writer:
+            with open(f"{OUTPUT_BASE_DIR_PATH_layers}/{layer_dict_list[i]['Layer_name']}.vhd", "w") as writer:
                 writer.write(layer_text)
             # print(f"3 - layer_dict_list[{i}]: {layer_dict_list[i]['IO']['OUT']}")
             if DEBUG:
                 print(
-                    f"all_dense_layers_gen() -> Criando camada: {OUTPUT_BASE_DIR_PATH}/{layer_dict_list[i]['Layer_name']}.vhd")
+                    f"all_dense_layers_gen() -> Criando camada: {OUTPUT_BASE_DIR_PATH_layers}/{layer_dict_list[i]['Layer_name']}.vhd")
             # print("all_dense_layers_gen() -> All Dense Layers Created!!")
     # if DEBUG:
     #     try:

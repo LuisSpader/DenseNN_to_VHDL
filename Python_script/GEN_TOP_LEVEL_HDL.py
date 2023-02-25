@@ -33,16 +33,11 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     global layer_dict_list
     layer_dict_list = []
 
-    # tentando lidar com port_map entre camadas irregulares
-    port_map_neurons_list = []
-    for i, item in enumerate(LAYER_NEURONS_NUMBER_LIST):
-        port_map_neurons_list.append(LAYER_NEURONS_NUMBER_LIST[i])
-        # port_map_neurons_list.append(layer_dict_list[i]['Neurons_number'])
-
-    # port_map_neurons_list = [4, 1, 2, 3]
-    # global neurons_PM_matrix
+    # port_map between layers ()
+    port_map_neurons_list = copy.deepcopy(LAYER_NEURONS_NUMBER_LIST)
     PM.neurons_PM_matrix = [[] for _ in range(len(port_map_neurons_list))]
 
+    # generating signal matrix
     for i, item in enumerate(port_map_neurons_list):
         for j in range(0, item):
             PM.neurons_PM_matrix[i].append(f"c{i}_n{j}_W_out")
@@ -59,6 +54,18 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         neurons_PM_matrix_local[i] = [x for x in item if x != None]
         # PM.neurons_PM_matrix[i] = [x for x in item if x != None]
 
+    barriers = ''
+    if BASE_DICT_HIDDEN['Neuron_arch']['Barriers']:
+        barriers = '_Barriers'
+    # text_list can be an splitted text or a list of texts
+    arch = '_' + '-'.join(map(str, (LAYER_NEURONS_NUMBER_LIST)))
+
+    if INCLUDE_PARAMETERS_ON_FOLDERNAME:
+        path_parameters = f"{OUTPUT_BASE_DIR_PATH}_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits{barriers}{arch}"
+        OUTPUT_BASE_DIR_PATH = f"{path_parameters}"
+    else:
+        OUTPUT_BASE_DIR_PATH = f"{OUTPUT_BASE_DIR_PATH}"
+
     print(" ================================== FAZENDO CAMADAS ==================================")
     layer_dict_list = all_dense_layers_gen(
         Inputs_number=INPUTS_NUMBER,
@@ -69,7 +76,6 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         base_dict_hidden_layers=BASE_DICT_HIDDEN,
         base_dict_softmax_layer=BASE_DICT_SOFTMAX,
         OUTPUT_BASE_DIR_PATH=f"{OUTPUT_BASE_DIR_PATH}",
-        Include_parameters_on_FolderName=INCLUDE_PARAMETERS_ON_FOLDERNAME,
         download_vhd=DOWNLOAD_VHD,
         gen_dead_neurons=DEAD_NEURONS,  # gera neurônios mortos
         DEBUG=DEBUG
@@ -77,12 +83,6 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # for i in range(0, len(layer_dict_list)):
     #     print(
     #         f"All_NN() _> dict[{i}] -> num_inputs: {layer_dict_list[i]['Neuron_arch']['Inputs_number']()}")
-    OUTPUT_BASE_DIR_PATH = OUTPUT_BASE_DIR_PATH
-    if INCLUDE_PARAMETERS_ON_FOLDERNAME:
-        path_parameters = f"{OUTPUT_BASE_DIR_PATH}_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits"
-        OUTPUT_BASE_DIR_PATH = f"{path_parameters}"
-    else:
-        OUTPUT_BASE_DIR_PATH = f"{OUTPUT_BASE_DIR_PATH}"
 
     # -------------------
 
