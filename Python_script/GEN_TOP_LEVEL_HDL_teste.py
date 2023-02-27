@@ -2,8 +2,8 @@ from GEN_TOP_LEVEL_HDL import *
 from datetime import date
 
 
-# INPUTS_NUMBER = 5
-INPUTS_NUMBER = 10
+INPUTS_NUMBER = 5
+# INPUTS_NUMBER = 10
 BIT_WIDTH = 8
 IO_TYPE_STR = 'signed'
 LAYER_NEURONS_NUMBER_LIST = [6, 5, 3, 1]
