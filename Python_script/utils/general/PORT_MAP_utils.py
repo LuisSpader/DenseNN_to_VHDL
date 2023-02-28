@@ -795,8 +795,8 @@ def port_map_dict_i_iplus1(dict_list: dict,
                            IO_type: str = 'IN',
                            port_type: str = 'STD_LOGIC_VECTOR',
                            num_inputs: int = 1,
-                           com_numero: bool = True      # True: 'x' se torna 'x1, x2, ...'
-                           ) -> str:
+                           com_numero: bool = True,      # True: 'x' se torna 'x1, x2, ...'
+                           DEBUG: bool = False) -> str:
 
     txt_port_map = []
 
@@ -820,7 +820,8 @@ def port_map_dict_i_iplus1(dict_list: dict,
         dict_slice=dict_list[i]['IO'][IO_type][port_type],
         return_value_or_key='key', is_list=True)
 
-    print(f"port_map_dict_i_iplus1: -> port_map_list: {port_map_list}")
+    if DEBUG:
+        print(f"port_map_dict_i_iplus1: -> port_map_list: {port_map_list}")
 
     # list_concat_IN_to_signal = []  # lista de sinais à serem criados no topo
 

@@ -162,11 +162,11 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         txt_list.append(txt)
         if j == 0:  # PRIMEIRA CAMADA
             lista_camada_inputs.append(camada_inputs)
-            print(camada_inputs)
+            # print(camada_inputs)
 
         if j == (len(layers_dict_list) - 1):  # ÚLTIMA CAMADA
             lista_camada_outputs.append(camada_outputs)
-            print(camada_outputs)
+            # print(camada_outputs)
 
     txt_top_port_map = ''.join(map(str, txt_list))
     # if DEBUG:
@@ -605,7 +605,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
             f"SIGNAL {names}: {type_s}(BITS -1 DOWNTO 0);")
     # --------------------------
 
-    print("  ")
+    # print("  ")
     signals.signals_to_text()
 
     # ASSIGN: l1 <= l0; l2 <= l1; ...
@@ -676,9 +676,8 @@ END ARCHITECTURE;
         with open(top_dir, "w") as writer:
             writer.write(top_text)
         # print(f"3 - layers_dict_list[{i}]: {layers_dict_list[i]['IO']['OUT']}")
-        if DEBUG:
-            print(
-                f"top_gen() -> Criando Top: {top_dir}")
+        # if DEBUG:
+        print(f"top_gen() -> Criando Top: {top_dir}")
 
 
 def get_namesANDtypes_normal_IO(list_IO):

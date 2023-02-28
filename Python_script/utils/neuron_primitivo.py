@@ -4,7 +4,7 @@ from pickle import TRUE
 
 from utils.GLOBALS import GLOBAL
 from utils.MAC import *
-from utils.components.Multipliers import multiplier_txt_gen
+# from utils.components.Multipliers import multiplier_txt_gen
 
 from utils.standard_dicts import layer_dict_hidden, layer_dict_softmax
 
@@ -186,7 +186,7 @@ def Neuron_Gen_from_dict(
         download_vhd (bool, optional): Se deseja fazer o download do arquivo '.vhd' do neurônio. True = download. Defaults to True.
         DEBUG (bool, optional): Parâmetro para imprimir algumas etapas da função. True = imprime. Defaults to False.
     """
-    if DEBUG == True:
+    if DEBUG:
         print(" ====================================  COMEÇO Neuron_Gen_from_dict() ==================================== ")
 
     # ADDER_obj = Adder(layer_dict)
@@ -309,7 +309,7 @@ def Neuron_Gen_from_dict(
     # W_in = 'W_in : IN signed(BITS - 1 DOWNTO 0);'
 
     MAC_component = entity_to_component(mac_entity_txt)
-    print(MAC_component)
+    # print(MAC_component)
     # mesma coisa que mac_entity_txt porém trocando a palavra 'ENTITY' por 'COMPONENT'
 
     W_in_subs = f"{W_in.split(':')[0]} : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);"
@@ -501,9 +501,9 @@ END behavior;'''
     path_others = path_soft[0].split('/')[0:3]
     path_others = '/'.join(map(str, (path_others)))
     path_others = f"{path_others}/Others/"
-    print(f"----------->>>>>>>>>>> path_others {path_others}")
+    # print(f"----------->>>>>>>>>>> path_others {path_others}")
     # adder_txt_gen(layer_dict, path_others, create_path_folder=False)
-    multiplier_txt_gen(layer_dict, path_others, create_path_folder=False)
+    # multiplier_txt_gen(layer_dict, path_others, create_path_folder=False)
 
     if download_vhd == True:
 
@@ -528,7 +528,8 @@ END behavior;'''
 
             with open(f"{path_ReLU}/{shift_reg_name_abrv}.vhd", "w") as writer:
                 writer.write(shift_reg_txt)  # download neurônio
-            print("tentando gerar adder e multiplicador")
+            if DEBUG:
+                print("tentando gerar adder e multiplicador")
 
         if neuron_type == 'Leaky_ReLU':  # Leaky ReLU
             if DEBUG:
@@ -582,9 +583,12 @@ def Neuron_Gen_from_dict2(
         download_vhd (bool, optional): Se deseja fazer o download do arquivo '.vhd' do neurônio. True = download. Defaults to True.
         DEBUG (bool, optional): Parâmetro para imprimir algumas etapas da função. True = imprime. Defaults to False.
     """
+
     # ADDER_obj = Adder(layers_dict_list[i])
-    GLOBAL.ADDERS.New_adder(layers_dict_list[i])
-    if DEBUG == True:
+    GLOBAL.ADDERS.New_obj(layers_dict_list[i], create=True)
+    GLOBAL.MULTIPLIERS.New_obj(layers_dict_list[i], create=True)
+
+    if DEBUG:
         print(" ====================================  COMEÇO Neuron_Gen_from_dict() ==================================== ")
 
     #! problema: MAC está pegando nome_MAC do dicionário (por padrão está sendo do 'layer_dict_hidden'), mas esta função está gernado o 'MAC_name' de outra forma, não pega do dict
@@ -660,8 +664,8 @@ def Neuron_Gen_from_dict2(
         # Versão do modelo de multiplicador (pois podem existir melhorias em um modelo). Exemplo: mult_version = 4 --> v4
         mult_version=0,
         # análogo ao 'mult_number'
-        adder_number=GLOBAL.ADDERS.adders_obj_list[i].adder_number,
-        adder_version=GLOBAL.ADDERS.adders_obj_list[i].adder_version)
+        adder_number=GLOBAL.ADDERS.adders_obj_list[i].arch_id,
+        adder_version=GLOBAL.ADDERS.adders_obj_list[i].arch_version)
 
     output_name = dict_list_exceptNone(
         dict_slice=layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT'], return_value_or_key='value', is_list=False)
@@ -984,10 +988,10 @@ END behavior;'''
         path_ReLU = OUTPUT_BASE_DIR_PATH
         path_LeakyReLU = OUTPUT_BASE_DIR_PATH
 
-    print(f"----------->>>>>>>>>>> path_others {path_others}")
-    # adder_txt_gen(layers_dict_list[i], path_others, create_path_folder=False)
-    multiplier_txt_gen(layers_dict_list[i],
-                       path_others, create_path_folder=False)
+    # print(f"----------->>>>>>>>>>> path_others {path_others}")
+    # # adder_txt_gen(layers_dict_list[i], path_others, create_path_folder=False)
+    # # multiplier_txt_gen(layers_dict_list[i],
+    # #                    path_others, create_path_folder=False)
 
     if download_vhd == True:
 
@@ -1016,7 +1020,8 @@ END behavior;'''
 
             with open(f"{path_ReLU}/{shift_reg_name_abrv}.vhd", "w") as writer:
                 writer.write(shift_reg_txt)  # download neurônio
-            print("tentando gerar adder e multiplicador")
+            if DEBUG:
+                print("tentando gerar adder e multiplicador")
 
         if neuron_type == 'Leaky_ReLU':  # Leaky ReLU
             if DEBUG:

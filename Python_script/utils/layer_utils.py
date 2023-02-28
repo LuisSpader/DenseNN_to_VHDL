@@ -773,12 +773,14 @@ def all_dense_layers_gen(
 
         # salvando VHDL
         if (download_vhd == True):
-            with open(f"{OUTPUT_BASE_DIR_PATH_layers}/{layers_dict_list[i]['Layer_name']}.vhd", "w") as writer:
+            path_layer = f"{OUTPUT_BASE_DIR_PATH_layers}/{layers_dict_list[i]['Layer_name']}.vhd"
+            with open(path_layer, "w") as writer:
                 writer.write(layer_text)
             # print(f"3 - layers_dict_list[{i}]: {layers_dict_list[i]['IO']['OUT']}")
-            if DEBUG:
-                print(
-                    f"all_dense_layers_gen() -> Criando camada: {OUTPUT_BASE_DIR_PATH_layers}/{layers_dict_list[i]['Layer_name']}.vhd")
+
+            # if DEBUG:
+            print(
+                f"all_dense_layers_gen() -> Criando camada: {path_layer}")
             # print("all_dense_layers_gen() -> All Dense Layers Created!!")
     # if DEBUG:
     #     try:

@@ -52,7 +52,7 @@ def MAC_Txt_Gen(IO_type: str = 'signed', num_inputs: int = 3, receive_sum_all: s
     # tab_space = ''
     text = ('\n'+tab_space).join(map(str, text))
 
-    if (DEBUG == 1):
+    if DEBUG:
         print(text)
 
     return text
@@ -915,7 +915,7 @@ def MAC_TxtGen(MAC_name='MAC',
                                                     rst_space=rst_space,
                                                     clk_space=clk_space,
                                                     layer_dict=layer_dict)
-    print(text)
+    # print(text)
     # if download_vhd == True:
     #     # pegando dados do dicionário
     #     bits = layer_dict['Neuron_arch']['Bit_WIDTH']()

@@ -6,8 +6,8 @@ USE work.parameters.ALL;
   ENTITY  top IS
   GENERIC (
     BITS : NATURAL := BITS;
-    NUM_INPUTS : NATURAL := 10;
-    TOTAL_BITS : NATURAL := 80
+    NUM_INPUTS : NATURAL := 5;
+    TOTAL_BITS : NATURAL := 40
   );
   PORT (
       clk, rst, update_weights: IN STD_LOGIC;
@@ -44,7 +44,7 @@ c3_IO_in <= c2_n0_IO_out & c2_n1_IO_out & c2_n2_IO_out;
     END IF;
   END PROCESS;
 
-camada0_inst_0: ENTITY work.camada0_ReLU_6neuron_8bits_10n_signed
+camada0_inst_0: ENTITY work.camada0_ReLU_6neuron_8bits_5n_signed
    PORT MAP (
             ---------- Entradas ----------
             -- ['IN']['STD_LOGIC'] 

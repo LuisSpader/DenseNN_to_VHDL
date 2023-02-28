@@ -1,169 +1,73 @@
-import os
-from utils.general.dict_utils import find_True_dict_split
-from utils.general.components import entity_to_component
-# layer_dict = {}
-from utils.SETTINGS import PARAMS
+from utils.components.Block_Arith import *
+# from standard_dicts import layer_dict_hidden
+
+# from Block_Arith import *
 
 
-def adder_multiplier_number(layer_dict: dict = {}, type: str = 'Adder') -> int:
-    arch_number = find_True_dict_split(
-        split_str='-', dict=layer_dict['Neuron_arch'][type], position=0)
+def add0(name, Bit_WIDTH, bit_width_multiplication):
+    entity = (f'''
+ENTITY {name} IS
+    GENERIC (
+        BITS : NATURAL := {Bit_WIDTH}
+    );
+    PORT (
+        X : IN signed(({bit_width_multiplication}* BITS) - 1 DOWNTO 0);
+        W : IN signed(({bit_width_multiplication}* BITS) - 1 DOWNTO 0);
+        Y : OUT signed(({bit_width_multiplication}* BITS) - 1 DOWNTO 0)
+    );
+END ENTITY;''')
+    signals = ''
+    logic_text = "    Y <= X + W;"
+    return {
+        'entity': entity,
+        'signals': signals,
+        'logic_text': logic_text
+    }
 
-    arch_number = int(arch_number)
-    return arch_number
 
+class Adder(Block_Arith):
+    # adders_obj_list = []
 
-class Block:
+    def __init__(self, layer_dict, create) -> None:
+        super().__init__(layer_dict)
+        self.Update_with_dict(layer_dict, create)  # updt da arch
 
-    def __init__(self) -> None:
-        self.name = ''
-        self.entity = ''
-        self.signals_txt = ''
-        self.logic_text = ''
-        self.txt = ''
-        self.component_txt = ''
-
-    def Update_with_dict(self, layer_dict):
-
-        self.Set_name()
-        self.Set_entity(layer_dict)
-        self.Set_component()
-        self.VHD_gen(path=PARAMS.path,
-                     create_path_folder=True)
+    def Update_with_dict(self, layer_dict, create=False):
+        self.layer_dict = layer_dict
+        self.arch_id = adder_multiplier_number(
+            layer_dict=self.layer_dict, type='Adder')
+        if self.layer_dict['Neuron_arch']['Barriers']:
+            self.bit_width_multiplication = 2
+        # self.Set_arch(layer_dict)
+        super().Update_with_dict(create)
 
     def Set_name(self):
-        self.name = (f"add{self.adder_number}_v{self.adder_version}")
+        self.name = (f"add{self.arch_id}_v{self.arch_version}")
 
-    def Set_entity(self, layer_dict):
-        self.entity = (f'''
-    ENTITY {self.name} IS
-        GENERIC (
-            BITS : NATURAL := {layer_dict['Neuron_arch']['Bit_WIDTH']}
-        );
-        PORT (
-            X : IN signed(({self.ADDER_expansion}* BITS) - 1 DOWNTO 0);
-            W : IN signed(({self.ADDER_expansion}* BITS) - 1 DOWNTO 0);
-            Y : OUT signed(({self.ADDER_expansion}* BITS) - 1 DOWNTO 0)
-        );
-    END ENTITY;''')
+    def Set_arch(self):
+        if self.arch_id == 0:
+            result_dict = add0(
+                self.name, self.layer_dict['Neuron_arch']['Bit_WIDTH'], self.bit_width_multiplication)
+        else:
+            result_dict = {
+                'entity': '',
+                'signals': '',
+                'logic_text': ''}
+            print(f"Arquitetura {self.arch_id} não cadastrada")
 
-    def Set_component(self):
-        self.component_txt = entity_to_component(self.entity)
-
-    def Set_block_text(self):
-        self.txt = (f'''
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL;
-USE work.parameters.ALL;
-{self.entity}
-
-ARCHITECTURE rtl OF {self.name} IS
-{self.signals}
-BEGIN
-{self.logic_text}
-END ARCHITECTURE;
-    ''')
-
-    def VHD_gen(self, path: str = "./",
-                create_path_folder: bool = False
-                ):
-
-        if self.adder_number == 0:
-            self.Set_block_text()
-
-            if create_path_folder:
-                # creating folder if not exists
-                os.makedirs(f"{path}/", exist_ok=True)
-                print(f"create_folder_{self.name}() -> Created: {path}")
-
-            with open(f"{path}/{self.name}.vhd", "w") as writer:
-                # creating '.vhd' file
-                writer.write(self.txt)  # download MAC
-            print(
-                f"VHD_gen() -> criando arquivo: {path}/{self.name}.vhd")
-
-
-class Adder:
-
-    def __init__(self) -> None:
-        self.name = ''  # ----
-        self.entity = ''  # ----
-        self.txt = ''  # ----
-        self.component_txt = ''  # ----
-        self.adder_number = 0  # ----
-        self.adder_version = 0  # ----
-        self.ADDER_expansion = 1  # ----
-
-    def Update_with_dict(self, layer_dict):
-        self.adder_number = adder_multiplier_number(layer_dict, type='Adder')
-        if layer_dict['Neuron_arch']['Barriers']:
-            self.ADDER_expansion = 2
-
-        self.Adder_name()
-        self.Adder_entity(layer_dict)
-        self.Adder_component()
-        self.Adder_VHD_gen(path=PARAMS.path,
-                           create_path_folder=True)
-
-    def Adder_name(self):
-        self.name = (f"add{self.adder_number}_v{self.adder_version}")
-
-    def Adder_entity(self, layer_dict):
-        self.entity = (f'''
-    ENTITY {self.name} IS
-        GENERIC (
-            BITS : NATURAL := {layer_dict['Neuron_arch']['Bit_WIDTH']}
-        );
-        PORT (
-            X : IN signed(({self.ADDER_expansion}* BITS) - 1 DOWNTO 0);
-            W : IN signed(({self.ADDER_expansion}* BITS) - 1 DOWNTO 0);
-            Y : OUT signed(({self.ADDER_expansion}* BITS) - 1 DOWNTO 0)
-        );
-    END ENTITY;''')
-
-    def Adder_component(self):
-        self.component_txt = entity_to_component(self.entity)
-
-    def Adder_0_Operator_txt_gen(self):
-        self.txt = (f'''
-    LIBRARY ieee;
-    USE ieee.std_logic_1164.ALL;
-    USE ieee.numeric_std.ALL;
-    USE work.parameters.ALL;
-    {self.entity}
-
-    ARCHITECTURE rtl OF {self.name} IS
-    BEGIN
-        Y <= X + W;
-    END ARCHITECTURE;
-    ''')
-
-    def Adder_VHD_gen(self,
-                      path: str = "./",
-                      create_path_folder: bool = False
-                      ):
-
-        if self.adder_number == 0:
-            self.Adder_0_Operator_txt_gen()
-
-            if create_path_folder:
-                os.makedirs(f"{path}/", exist_ok=True)  # softmax layer
-                print(f"create_folder_neuron() -> Created: {path}")
-
-            with open(f"{path}/{self.name}.vhd", "w") as writer:
-                writer.write(self.txt)  # download MAC
-            print(
-                f"Adder_0_Operator_txt_gen() -> criando arquivo: {path}/{self.name}.vhd")
+        self.entity = result_dict['entity']
+        self.signals = result_dict['signals']
+        self.logic_text = result_dict['logic_text']
 
 
 class Adders:
     def __init__(self) -> None:
         self.adders_obj_list = []
 
-    def New_adder(self, layer_dict):
-        obj = Adder()
-        obj.Update_with_dict(layer_dict)
-        self.adders_obj_list.append(obj)
+    def New_obj(self, layer_dict, create):
+        self.adders_obj_list.append(Adder(layer_dict, create))
+
 
 # ADDERS = Adders()
+# adder = Adder(layer_dict_hidden)
+# print(adder.txt)

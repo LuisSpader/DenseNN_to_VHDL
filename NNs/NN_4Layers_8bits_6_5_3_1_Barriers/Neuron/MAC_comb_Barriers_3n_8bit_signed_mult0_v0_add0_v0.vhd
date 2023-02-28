@@ -42,16 +42,16 @@ ARCHITECTURE arch OF  MAC_comb_Barriers_3n_8bit_signed_mult0_v0_add0_v0  IS
     );
   END COMPONENT;
 
-    COMPONENT add0_v0 IS
-        GENERIC (
-            BITS : NATURAL := 8
-        );
-        PORT (
-            X : IN signed((2* BITS) - 1 DOWNTO 0);
-            W : IN signed((2* BITS) - 1 DOWNTO 0);
-            Y : OUT signed((2* BITS) - 1 DOWNTO 0)
-        );
-    END COMPONENT;
+COMPONENT add0_v0 IS
+    GENERIC (
+        BITS : NATURAL := 8
+    );
+    PORT (
+        X : IN signed((2* BITS) - 1 DOWNTO 0);
+        W : IN signed((2* BITS) - 1 DOWNTO 0);
+        Y : OUT signed((2* BITS) - 1 DOWNTO 0)
+    );
+END COMPONENT;
 
 BEGIN
   s_Xi <= IO_in;
