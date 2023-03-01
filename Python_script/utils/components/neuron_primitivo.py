@@ -3,7 +3,7 @@ import numpy as np
 from pickle import TRUE
 
 from utils.GLOBALS import GLOBAL
-from utils.MAC import *
+from utils.components.MAC import *
 # from utils.components.Multipliers import multiplier_txt_gen
 
 from utils.standard_dicts import layer_dict_hidden, layer_dict_softmax
