@@ -82,15 +82,22 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # ==================================== TOPO ====================================
     # https://youtube.com/watch?v=5mUUCl_4rGw&feature=shares
     # ----- port map -----
+    Top_gen(OUTPUT_BASE_DIR_PATH, DEBUG,
+            neurons_PM_matrix_local, layers_dict_list)
+
+
+def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: list, layers_dict_list: list):
     lista_camada_inputs, lista_camada_outputs, txt_top_port_map = top_layers_port_map_0(
         layers_dict_list)
-    # if DEBUG:
+
+    # generating top.vhd entity with its signal and port map declarations
     print(" ==================================== TOP ==================================== ")
-    # print(txt_top_port_map)
-    # print(" ---------------------- IN  ---------------------- ")
-    # print(lista_camada_inputs)
-    # print(" ---------------------- OUT ---------------------- ")
-    # print(lista_camada_outputs)
+    if DEBUG:
+        print(txt_top_port_map)
+        print(" ---------------------- IN  ---------------------- ")
+        print(lista_camada_inputs)
+        print(" ---------------------- OUT ---------------------- ")
+        print(lista_camada_outputs)
 
     # ---------------- PORT MAP NEURONS MATRIX
     txt_top_port_map_split = txt_top_port_map.split("\n")
@@ -99,7 +106,6 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # lista de sinais para declarar dps: SIGNAL .... (... -1 downto 0);
     optimize_signal_declaration(
         neurons_PM_matrix_local, layers_dict_list, assign_list)
-
     # assign_list = [
     #     'c0_n0_W_out => c0_n0_W_out,',
     #     'c0_n1_W_out => c0_n1_W_out,',
@@ -111,104 +117,35 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     #     'c3_n1_W_in => c2_n1_W_out,',
     #     'c3_n0_W_in => c2_n0_W_out,'
     # ]
-    # txt_top_port_map
 
     # substituindo atribuição antiga (errada) por atribuição certa entre camadas
-    txt_top_port_map = generate_top_port_map(DEBUG, layers_dict_list, lista_camada_inputs,
-                                             lista_camada_outputs, txt_top_port_map_split, assign_list)
+    txt_top_port_map = generate_top_port_map(
+        DEBUG, layers_dict_list, lista_camada_inputs, lista_camada_outputs, txt_top_port_map_split, assign_list)
 
-
-# ----------------
-# https://youtu.be/oHSrqVhee_8
+    # https://youtu.be/oHSrqVhee_8
     nomes, nomes_all, remove_list = extract_IO_names(layers_dict_list)
-# -----------------------------------------------------------------------------------------
     remove_items_from_nomes(nomes, nomes_all, remove_list)
 
     import itertools
-    # list2d = [[1,2,3], [4,5,6], [7], [8,9]]
     signals_assign_txt = generate_signal_assignments(
         layers_dict_list, nomes, nomes_all, itertools)
-    # --------------------------
 
     # https://youtu.be/aWCWZpIZYjY
     # https://www.youtube.com/watch?v=hdPC2G8NPHI&list=PL35tBJQqzeIuV6qlkvqiZy9ivc9IROLWh&index=29&t=1597s
-    top_entity = topDict_to_entityTxt(top_dict=top_dict,
-                                      IO_dict_compare=layers_dict_list[0],
-                                      remove_dict_items=[],
-                                      generic=True)
+    top_entity = topDict_to_entityTxt(
+        top_dict=top_dict, IO_dict_compare=layers_dict_list[0], remove_dict_items=[], generic=True)
+
     txt_top_port_map = txt_top_port_map.replace(
         'update_weights=> update_weights,', 'update_weights=> en_registers,')
-
     top_text = Top_txt(DEBUG, txt_top_port_map, signals_assign_txt, top_entity)
+
     download_vhd = True
     # salvando VHDL
     if download_vhd:
         top_dir = f"{OUTPUT_BASE_DIR_PATH}/{top_dict['Top_name']}.vhd"
         with open(top_dir, "w") as writer:
             writer.write(top_text)
-        # print(f"3 - layers_dict_list[{i}]: {layers_dict_list[i]['IO']['OUT']}")
-        # if DEBUG:
         print(f"top_gen() -> Criando Top: {top_dir}")
-
-
-# def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inputs: list, lista_camada_outputs: list, txt_top_port_map_split: list, assign_list: list):
-#     # substituindo atribuição antiga (errada) por atribuição certa entre camadas
-#     for j, itemj in enumerate(txt_top_port_map_split):
-#         for item in assign_list:
-#             buff_original = itemj.split('=>')[0].strip()
-#             buff_subs = item.split('=>')[0].strip()
-#             if buff_subs in buff_original:
-#                 txt_top_port_map_split[j] = item
-
-#     txt_top_port_map = '\n'.join(map(str, txt_top_port_map_split))
-
-#     # ------- entity ---------
-#     camada_inputs = extrai_lista_IO(list_IO=lista_camada_inputs)
-#     camada_outputs = extrai_lista_IO(list_IO=lista_camada_outputs)
-
-#     if DEBUG:
-#         # if True:
-#         print(
-#             f"layer_neurons_port_map_ALL() -> camada_inputs: {camada_inputs}")
-#         print(" \n")
-#         print(
-#             f"layer_neurons_port_map_ALL() -> camada_outputs: {camada_outputs}")
-#         print("-/-/-///-//-------/-/-//-//-/-/")
-
-#     l_inputs = list_concat_half(camada_inputs)
-#     l_outputs = list_concat_half(camada_outputs)
-
-#     # ['manual']
-#     l_inputs.append(camada_inputs[6])
-#     l_outputs.append(camada_outputs[6])
-
-#     # if True:
-#     if DEBUG:
-#         print(f"layer_neurons_port_map_ALL() -> l_inputs: {l_inputs}")
-#         print(f"layer_neurons_port_map_ALL() -> l_outputs: {l_outputs}")
-#         print("-/-/-///-//-------/-/-//-//-/-/")
-
-#     # substituindo '[]' por 'None'
-#     l_inputs = swap_empty_for_None(l_inputs)
-#     l_outputs = swap_empty_for_None(l_outputs)
-#     top_dict['Inputs_number'] = layers_dict_list[0]['Inputs_number']
-#     top_dict['bits'] = layers_dict_list[0]['bits']
-#     top_dict['IO']['IN']['STD_LOGIC'] = l_inputs[0]
-#     top_dict['IO']['IN']['STD_LOGIC_VECTOR'] = l_inputs[1]
-
-#     # https://stackoverflow.com/questions/46367233/efficient-way-to-union-two-list-with-list-or-none-value
-#     top_dict['IO']['IN']['SIGNED'] = l_inputs[2]
-
-#     # OK TODO: adicionar função para transformar top_dict['IO']['IN']['manual']
-#     top_dict['IO']['IN']['manual'] = l_inputs[3]
-
-#     top_dict['IO']['OUT']['STD_LOGIC'] = l_outputs[0]
-#     top_dict['IO']['OUT']['STD_LOGIC_VECTOR'] = l_outputs[1]
-
-#     top_dict['IO']['OUT']['SIGNED'] = l_outputs[2]
-#     # TODO: adicionar função para transformar top_dict['IO']['OUT']['manual']
-#     top_dict['IO']['OUT']['manual'] = l_outputs[3]
-#     return txt_top_port_map
 
 
 def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inputs: list, lista_camada_outputs: list, txt_top_port_map_split: list, assign_list: list) -> str:
