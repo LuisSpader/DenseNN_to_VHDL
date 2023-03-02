@@ -87,6 +87,18 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
 
 def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: list, layers_dict_list: list):
+    """
+    Generate top level VHDL entity with its signal and port map declarations.
+
+    Args:
+    - OUTPUT_BASE_DIR_PATH (str): path to the output directory.
+    - DEBUG (bool): if True, prints debug information.
+    - neurons_PM_matrix_local (list): list of neuron's weight matrices for each layer.
+    - layers_dict_list (list): list of dictionaries containing information for each layer.
+
+    Returns:
+    - None
+    """
     lista_camada_inputs, lista_camada_outputs, txt_top_port_map = top_layers_port_map_0(
         layers_dict_list)
 
