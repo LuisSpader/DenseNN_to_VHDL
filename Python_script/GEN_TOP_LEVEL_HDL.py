@@ -175,69 +175,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 # https://youtu.be/oHSrqVhee_8
     nomes, nomes_all, remove_list = extract_IO_names(layers_dict_list)
 # -----------------------------------------------------------------------------------------
-    remove_list = copy.deepcopy(remove_list)
-    for i, item in enumerate(remove_list):
-        for j, item2 in enumerate(item):
-            if ':' in item2:
-                remove_list[i][j] = item2.split(':')[0].replace(' ', '')
-
-    remove_list = [item for sublist in remove_list for item in sublist]
-
-    global remove_signals_list
-    remove_signals_list = list(dict.fromkeys(remove_list))
-    # for r, itemr in enumerate(remove_signals_list):
-    for j in range(len(layers_dict_list)):
-        remove_signals_list = [
-            x for x in remove_signals_list if f"c{j}" not in x]
-
-    # loop para remover itens que não são os sinais descritos (usa a lista remove_signals_list)
-    for l, layer in enumerate(nomes):  # layer
-        for item_s in remove_signals_list:  # lista de itens para excluir
-
-            length = len(nomes[l])
-            f = 0
-            while f < length:  # loop para lista que diminui seu tamanho
-
-                buff = f"nomes[{l}][{f}]: {nomes[l][f]}"
-                buff = nomes[l][f]
-
-                if isinstance(nomes[l][f][0], str):
-                    nomes[l] = [x for x in nomes[l] if item_s not in x[0]]
-                    f -= 1
-                    length -= 1
-                elif isinstance(nomes[l][f][0], list):
-                    if item_s in nomes[l][f][0]:
-                        nomes[l][f][0].remove(item_s)
-                        f -= 1
-                        length -= 1
-                f += 1
-
-    for l, layer in enumerate(nomes_all):  # layer
-        for item_s in remove_signals_list:  # lista de itens para excluir
-
-            length = len(nomes_all[l])
-            f = 0
-            while f < length:  # loop para lista que diminui seu tamanho
-
-                buff = f"nomes_all[{l}][{f}]: {nomes_all[l][f]}"
-                buff = nomes_all[l][f]
-
-                if isinstance(nomes_all[l][f][0], str):
-                    nomes_all[l] = [x for x in nomes_all[l]
-                                    if item_s not in x[0]]
-                    f -= 1
-                    length -= 1
-                elif isinstance(nomes_all[l][f][0], list):
-                    for x, itemx in enumerate(nomes_all[l][f][0][0]):
-                        if item_s == itemx:
-                            del nomes_all[l][f][0][0][x]
-                            # del itemx
-                            # nomes_all[l][f][0][0].remove(item_s)
-                            if nomes_all[l][f][0][0] == []:
-                                del nomes_all[l][f]
-                                f -= 1
-                                length -= 1
-                f += 1
+    remove_items_from_nomes(nomes, nomes_all, remove_list)
 
     import itertools
     # list2d = [[1,2,3], [4,5,6], [7], [8,9]]
@@ -269,8 +207,6 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         signals.signals_dec.append(
             f"SIGNAL {names}: {type_s}(BITS -1 DOWNTO 0);")
     # --------------------------
-
-    # print("  ")
     signals.signals_to_text()
 
     # ASSIGN: l1 <= l0; l2 <= l1; ...
@@ -308,6 +244,183 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         # print(f"3 - layers_dict_list[{i}]: {layers_dict_list[i]['IO']['OUT']}")
         # if DEBUG:
         print(f"top_gen() -> Criando Top: {top_dir}")
+
+
+# def remove_items_from_nomes(layers_dict_list, nomes, nomes_all, remove_list):
+#     remove_list = copy.deepcopy(remove_list)
+#     for i, item in enumerate(remove_list):
+#         for j, item2 in enumerate(item):
+#             if ':' in item2:
+#                 remove_list[i][j] = item2.split(':')[0].replace(' ', '')
+
+#     remove_list = [item for sublist in remove_list for item in sublist]
+
+#     global remove_signals_list
+#     remove_signals_list = list(dict.fromkeys(remove_list))
+#     # for r, itemr in enumerate(remove_signals_list):
+#     for j in range(len(layers_dict_list)):
+#         remove_signals_list = [
+#             x for x in remove_signals_list if f"c{j}" not in x]
+
+#     # loop para remover itens que não são os sinais descritos (usa a lista remove_signals_list)
+#     for l, layer in enumerate(nomes):  # layer
+#         for item_s in remove_signals_list:  # lista de itens para excluir
+#             length = len(nomes[l])
+#             f = 0
+#             while f < length:  # loop para lista que diminui seu tamanho
+#                 buff = f"nomes[{l}][{f}]: {nomes[l][f]}"
+#                 buff = nomes[l][f]
+
+#                 if isinstance(nomes[l][f][0], str):
+#                     nomes[l] = [x for x in nomes[l] if item_s not in x[0]]
+#                     f -= 1
+#                     length -= 1
+#                 elif isinstance(nomes[l][f][0], list):
+#                     if item_s in nomes[l][f][0]:
+#                         nomes[l][f][0].remove(item_s)
+#                         f -= 1
+#                         length -= 1
+#                 f += 1
+
+#     for l, layer in enumerate(nomes_all):  # layer
+#         for item_s in remove_signals_list:  # lista de itens para excluir
+#             length = len(nomes_all[l])
+#             f = 0
+#             while f < length:  # loop para lista que diminui seu tamanho
+#                 buff = f"nomes_all[{l}][{f}]: {nomes_all[l][f]}"
+#                 buff = nomes_all[l][f]
+
+#                 if isinstance(nomes_all[l][f][0], str):
+#                     nomes_all[l] = [x for x in nomes_all[l]
+#                                     if item_s not in x[0]]
+#                     f -= 1
+#                     length -= 1
+#                 elif isinstance(nomes_all[l][f][0], list):
+#                     for x, itemx in enumerate(nomes_all[l][f][0][0]):
+#                         if item_s == itemx:
+#                             del nomes_all[l][f][0][0][x]
+#                             # del itemx
+#                             # nomes_all[l][f][0][0].remove(item_s)
+#                             if nomes_all[l][f][0][0] == []:
+#                                 del nomes_all[l][f]
+#                                 f -= 1
+#                                 length -= 1
+#                 f += 1
+
+
+def remove_items_from_nomes(nomes, nomes_all, remove_list):
+    """
+    Removes items from a list of names.
+
+    Args:
+    - nomes: a list of lists, where each list contains tuples with names.
+    - nomes_all: a list of lists, where each list contains a list with tuples with names.
+    - remove_list: a list of items to be removed.
+
+    Returns:
+    - Nothing, but the input lists are modified.
+    """
+    remove_list = copy.deepcopy(remove_list)
+    for i, item in enumerate(remove_list):
+        for j, item2 in enumerate(item):
+            if ':' in item2:
+                remove_list[i][j] = item2.split(':')[0].replace(' ', '')
+
+    remove_list = [item for sublist in remove_list for item in sublist]
+
+    global remove_signals_list
+    remove_signals_list = list(dict.fromkeys(remove_list))
+
+    for j in range(len(nomes)):
+        remove_signals_list = [
+            x for x in remove_signals_list if f"c{j}" not in x]
+
+    # loop para remover itens que não são os sinais descritos (usa a lista remove_signals_list)
+    new_func(nomes, nomes_all)
+
+
+def new_func(nomes, nomes_all):
+    for l, layer in enumerate(nomes):  # layer
+        for item_s in remove_signals_list:  # lista de itens para excluir
+            length = len(layer)
+            f = 0
+            while f < length:  # loop para lista que diminui seu tamanho
+                if isinstance(layer[f][0], str):
+                    nomes[l] = [x for x in nomes[l] if item_s not in x[0]]
+                    f -= 1
+                    length -= 1
+                elif isinstance(layer[f][0], list):
+                    if item_s in layer[f][0]:
+                        layer[f][0].remove(item_s)
+                        f -= 1
+                        length -= 1
+                f += 1
+
+    for l, layer in enumerate(nomes_all):
+        for item_s in remove_signals_list:  # lista de itens para excluir
+            length = len(layer)
+            f = 0
+            while f < length:  # loop para lista que diminui seu tamanho
+                if isinstance(layer[f][0], str):
+                    nomes_all[l] = [x for x in nomes_all[l]
+                                    if item_s not in x[0]]
+                    f -= 1
+                    length -= 1
+                elif isinstance(layer[f][0], list):
+                    for x, itemx in enumerate(layer[f][0][0]):
+                        if item_s == itemx:
+                            del layer[f][0][0][x]
+                            if layer[f][0][0] == []:
+                                del layer[f]
+                                f -= 1
+                                length -= 1
+                f += 1
+
+
+def remove_items(nomes, nomes_all, remove_list):
+    """
+    This function removes specific items from the input list of lists 'nomes' and 'nomes_all' based on a provided list
+    'remove_list'. The function modifies the input lists directly and does not return anything.
+
+    Args:
+    - nomes (list of lists): A list of lists containing strings or other lists.
+    - nomes_all (list of lists): A list of lists containing strings or other lists.
+    - remove_list (list of str): A list of strings to be removed from the input lists.
+
+    Example:
+    >>> nomes = [['A', ['B', 'C']], ['D', 'E']]
+    >>> nomes_all = [['F'], ['G', ['H', 'I']]]
+    >>> remove_list = ['A', 'B', 'H']
+    >>> remove_items(nomes, nomes_all, remove_list)
+    >>> print(nomes)
+    [['D', 'E']]
+    >>> print(nomes_all)
+    [['F'], ['G', ['I']]]
+    """
+    remove_list = [item.split(':')[0].strip(
+    ) if ':' in item else item for sublist in remove_list for item in sublist]
+    remove_signals_list = list(dict.fromkeys(remove_list))
+    for layer in [nomes, nomes_all]:
+        for l, sub_list in enumerate(layer):
+            length = len(sub_list)
+            f = 0
+            while f < length:
+                if isinstance(sub_list[f][0], str):
+                    layer[l] = [x for x in layer[l] if sub_list[f]
+                                [0] not in remove_signals_list]
+                    f -= 1
+                    length -= 1
+                elif isinstance(sub_list[f][0], list):
+                    if any(signal in sub_list[f][0] for signal in remove_signals_list):
+                        sub_list[f][0] = [signal for signal in sub_list[f]
+                                          [0] if signal not in remove_signals_list]
+                        f -= 1
+                        length -= 1
+                    if sub_list[f][0] == []:
+                        del sub_list[f]
+                        f -= 1
+                        length -= 1
+                f += 1
 
 
 def optimize_signal_declaration(neurons_PM_matrix_local, layers_dict_list, assign_list):

@@ -40,7 +40,7 @@ BASE_DICT_SOFTMAX['Neuron_arch']['Include_MAC_type'] = INCLUDE_MAC_TYPE
 
 # TODO: colocar opção inteiramente combinacional -> Reg só dps FX ACTIVATION
 # TODO: gerar top level e controles(update_NN)
-BARRIERS = False
+BARRIERS = True
 BASE_DICT_HIDDEN['Neuron_arch']['Barriers'] = BARRIERS
 BASE_DICT_SOFTMAX['Neuron_arch']['Barriers'] = BARRIERS
 

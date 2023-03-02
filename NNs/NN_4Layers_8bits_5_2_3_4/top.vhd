@@ -19,12 +19,18 @@ USE work.parameters.ALL;
 ARCHITECTURE arch OF  top  IS
 -- SIGNALS
   SIGNAL c0_n0_W_out, c0_n1_W_out, c0_n2_W_out, c0_n3_W_out, c1_n0_W_out, c1_n1_W_out, c2_n2_W_out, c2_n0_W_out, c2_n1_W_out: signed(BITS - 1 DOWNTO 0);
-  SIGNAL c1_IO_in:  signed((BITS*5) - 1 DOWNTO 0);
-  SIGNAL c2_IO_in:  signed((BITS*2) - 1 DOWNTO 0);
-  SIGNAL c3_IO_in:  signed((BITS*3) - 1 DOWNTO 0);
-  SIGNAL c0_n0_IO_out, c0_n1_IO_out, c0_n2_IO_out, c0_n3_IO_out, c0_n4_IO_out: SIGNED(BITS -1 DOWNTO 0);
-  SIGNAL c1_n0_IO_out, c1_n1_IO_out: SIGNED(BITS -1 DOWNTO 0);
-  SIGNAL c2_n0_IO_out, c2_n1_IO_out, c2_n2_IO_out: SIGNED(BITS -1 DOWNTO 0);
+  SIGNAL I, O, _, i, n:  signed((BITS*5) - 1 DOWNTO 0);
+  SIGNAL IO_in, c1_IO_in:  signed((BITS*5) - 1 DOWNTO 0);
+  SIGNAL IO_in, c2_IO_in:  signed((BITS*2) - 1 DOWNTO 0);
+  SIGNAL IO_in, c3_IO_in:  signed((BITS*3) - 1 DOWNTO 0);
+  SIGNAL clk, rst, update_weights: STD_LOGIC(BITS -1 DOWNTO 0);
+  SIGNAL IO_out, c0_n0_IO_out, c0_n1_IO_out, c0_n2_IO_out, c0_n3_IO_out, c0_n4_IO_out: SIGNED(BITS -1 DOWNTO 0);
+  SIGNAL clk, rst, update_weights: STD_LOGIC(BITS -1 DOWNTO 0);
+  SIGNAL IO_out, c1_n0_IO_out, c1_n1_IO_out: SIGNED(BITS -1 DOWNTO 0);
+  SIGNAL clk, rst, update_weights: STD_LOGIC(BITS -1 DOWNTO 0);
+  SIGNAL IO_out, c2_n0_IO_out, c2_n1_IO_out, c2_n2_IO_out: SIGNED(BITS -1 DOWNTO 0);
+  SIGNAL clk, rst, update_weights: STD_LOGIC(BITS -1 DOWNTO 0);
+  SIGNAL IO_out: SIGNED(BITS -1 DOWNTO 0);
     SIGNAL reg_IO_in: signed(TOTAL_BITS - 1 DOWNTO 0);
     SIGNAL en_registers: STD_LOGIC;
 BEGIN
