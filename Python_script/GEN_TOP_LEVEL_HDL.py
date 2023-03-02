@@ -114,61 +114,8 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # txt_top_port_map
 
     # substituindo atribuição antiga (errada) por atribuição certa entre camadas
-    for j, itemj in enumerate(txt_top_port_map_split):
-        for item in assign_list:
-            buff_original = itemj.split('=>')[0].strip()
-            buff_subs = item.split('=>')[0].strip()
-            if buff_subs in buff_original:
-                txt_top_port_map_split[j] = item
-
-    txt_top_port_map = '\n'.join(map(str, txt_top_port_map_split))
-
-    # ------- entity ---------
-    camada_inputs = extrai_lista_IO(list_IO=lista_camada_inputs)
-    camada_outputs = extrai_lista_IO(list_IO=lista_camada_outputs)
-
-    if DEBUG:
-        # if True:
-        print(
-            f"layer_neurons_port_map_ALL() -> camada_inputs: {camada_inputs}")
-        print(" \n")
-        print(
-            f"layer_neurons_port_map_ALL() -> camada_outputs: {camada_outputs}")
-        print("-/-/-///-//-------/-/-//-//-/-/")
-
-    l_inputs = list_concat_half(camada_inputs)
-    l_outputs = list_concat_half(camada_outputs)
-
-    # ['manual']
-    l_inputs.append(camada_inputs[6])
-    l_outputs.append(camada_outputs[6])
-
-    # if True:
-    if DEBUG:
-        print(f"layer_neurons_port_map_ALL() -> l_inputs: {l_inputs}")
-        print(f"layer_neurons_port_map_ALL() -> l_outputs: {l_outputs}")
-        print("-/-/-///-//-------/-/-//-//-/-/")
-
-    # substituindo '[]' por 'None'
-    l_inputs = swap_empty_for_None(l_inputs)
-    l_outputs = swap_empty_for_None(l_outputs)
-    top_dict['Inputs_number'] = layers_dict_list[0]['Inputs_number']
-    top_dict['bits'] = layers_dict_list[0]['bits']
-    top_dict['IO']['IN']['STD_LOGIC'] = l_inputs[0]
-    top_dict['IO']['IN']['STD_LOGIC_VECTOR'] = l_inputs[1]
-
-    # https://stackoverflow.com/questions/46367233/efficient-way-to-union-two-list-with-list-or-none-value
-    top_dict['IO']['IN']['SIGNED'] = l_inputs[2]
-
-    # OK TODO: adicionar função para transformar top_dict['IO']['IN']['manual']
-    top_dict['IO']['IN']['manual'] = l_inputs[3]
-
-    top_dict['IO']['OUT']['STD_LOGIC'] = l_outputs[0]
-    top_dict['IO']['OUT']['STD_LOGIC_VECTOR'] = l_outputs[1]
-
-    top_dict['IO']['OUT']['SIGNED'] = l_outputs[2]
-    # TODO: adicionar função para transformar top_dict['IO']['OUT']['manual']
-    top_dict['IO']['OUT']['manual'] = l_outputs[3]
+    txt_top_port_map = generate_top_port_map(DEBUG, layers_dict_list, lista_camada_inputs,
+                                             lista_camada_outputs, txt_top_port_map_split, assign_list)
 
 
 # ----------------
@@ -204,9 +151,141 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         print(f"top_gen() -> Criando Top: {top_dir}")
 
 
-def generate_signal_assignments(layers_dict_list, nomes, nomes_all, itertools):
+# def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inputs: list, lista_camada_outputs: list, txt_top_port_map_split: list, assign_list: list):
+#     # substituindo atribuição antiga (errada) por atribuição certa entre camadas
+#     for j, itemj in enumerate(txt_top_port_map_split):
+#         for item in assign_list:
+#             buff_original = itemj.split('=>')[0].strip()
+#             buff_subs = item.split('=>')[0].strip()
+#             if buff_subs in buff_original:
+#                 txt_top_port_map_split[j] = item
+
+#     txt_top_port_map = '\n'.join(map(str, txt_top_port_map_split))
+
+#     # ------- entity ---------
+#     camada_inputs = extrai_lista_IO(list_IO=lista_camada_inputs)
+#     camada_outputs = extrai_lista_IO(list_IO=lista_camada_outputs)
+
+#     if DEBUG:
+#         # if True:
+#         print(
+#             f"layer_neurons_port_map_ALL() -> camada_inputs: {camada_inputs}")
+#         print(" \n")
+#         print(
+#             f"layer_neurons_port_map_ALL() -> camada_outputs: {camada_outputs}")
+#         print("-/-/-///-//-------/-/-//-//-/-/")
+
+#     l_inputs = list_concat_half(camada_inputs)
+#     l_outputs = list_concat_half(camada_outputs)
+
+#     # ['manual']
+#     l_inputs.append(camada_inputs[6])
+#     l_outputs.append(camada_outputs[6])
+
+#     # if True:
+#     if DEBUG:
+#         print(f"layer_neurons_port_map_ALL() -> l_inputs: {l_inputs}")
+#         print(f"layer_neurons_port_map_ALL() -> l_outputs: {l_outputs}")
+#         print("-/-/-///-//-------/-/-//-//-/-/")
+
+#     # substituindo '[]' por 'None'
+#     l_inputs = swap_empty_for_None(l_inputs)
+#     l_outputs = swap_empty_for_None(l_outputs)
+#     top_dict['Inputs_number'] = layers_dict_list[0]['Inputs_number']
+#     top_dict['bits'] = layers_dict_list[0]['bits']
+#     top_dict['IO']['IN']['STD_LOGIC'] = l_inputs[0]
+#     top_dict['IO']['IN']['STD_LOGIC_VECTOR'] = l_inputs[1]
+
+#     # https://stackoverflow.com/questions/46367233/efficient-way-to-union-two-list-with-list-or-none-value
+#     top_dict['IO']['IN']['SIGNED'] = l_inputs[2]
+
+#     # OK TODO: adicionar função para transformar top_dict['IO']['IN']['manual']
+#     top_dict['IO']['IN']['manual'] = l_inputs[3]
+
+#     top_dict['IO']['OUT']['STD_LOGIC'] = l_outputs[0]
+#     top_dict['IO']['OUT']['STD_LOGIC_VECTOR'] = l_outputs[1]
+
+#     top_dict['IO']['OUT']['SIGNED'] = l_outputs[2]
+#     # TODO: adicionar função para transformar top_dict['IO']['OUT']['manual']
+#     top_dict['IO']['OUT']['manual'] = l_outputs[3]
+#     return txt_top_port_map
+
+
+def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inputs: list, lista_camada_outputs: list, txt_top_port_map_split: list, assign_list: list) -> str:
+    """
+    Generates the top-level port map string for a VHDL entity based on the inputs, outputs, and layers information.
+
+    Args:
+        layers_dict_list (list): A list of dictionaries containing information about each layer in the neural network.
+        entity_inputs (list): A list of input signals for the VHDL entity.
+        entity_outputs (list): A list of output signals for the VHDL entity.
+
+    Returns:
+        str: A string containing the top-level port map for the VHDL entity.
+
+    Example:
+        generate_top_port_map(layers_dict_list, entity_inputs, entity_outputs)
+    """
+    # Replace wrong assignments between layers with correct ones
+    for j, itemj in enumerate(txt_top_port_map_split):
+        for item in assign_list:
+            buff_original = itemj.split('=>')[0].strip()
+            buff_subs = item.split('=>')[0].strip()
+            if buff_subs in buff_original:
+                txt_top_port_map_split[j] = item
+
+    txt_top_port_map = '\n'.join(txt_top_port_map_split)
+
+    # Extract input and output lists from IO dictionaries
+    camada_inputs = extrai_lista_IO(list_IO=lista_camada_inputs)
+    camada_outputs = extrai_lista_IO(list_IO=lista_camada_outputs)
+
+    if DEBUG:
+        print(
+            f"layer_neurons_port_map_ALL() -> camada_inputs: {camada_inputs}")
+        print("\n")
+        print(
+            f"layer_neurons_port_map_ALL() -> camada_outputs: {camada_outputs}")
+        print("-/-/-///-//-------/-/-//-//-/-/")
+
+    l_inputs = list_concat_half(camada_inputs)
+    l_outputs = list_concat_half(camada_outputs)
+
+    # Append 'manual' inputs and outputs
+    l_inputs.append(camada_inputs[6])
+    l_outputs.append(camada_outputs[6])
+
+    if DEBUG:
+        print(f"layer_neurons_port_map_ALL() -> l_inputs: {l_inputs}")
+        print(f"layer_neurons_port_map_ALL() -> l_outputs: {l_outputs}")
+        print("-/-/-///-//-------/-/-//-//-/-/")
+
+    # Replace empty lists with None
+    l_inputs = swap_empty_for_None(l_inputs)
+    l_outputs = swap_empty_for_None(l_outputs)
+
+    # Update top_dict with input and output information
+    top_dict['Inputs_number'] = layers_dict_list[0]['Inputs_number']
+    top_dict['bits'] = layers_dict_list[0]['bits']
+    top_dict['IO']['IN']['STD_LOGIC'] = l_inputs[0]
+    top_dict['IO']['IN']['STD_LOGIC_VECTOR'] = l_inputs[1]
+    top_dict['IO']['IN']['SIGNED'] = l_inputs[2]
+    top_dict['IO']['IN']['manual'] = l_inputs[3]
+
+    top_dict['IO']['OUT']['STD_LOGIC'] = l_outputs[0]
+    top_dict['IO']['OUT']['STD_LOGIC_VECTOR'] = l_outputs[1]
+    top_dict['IO']['OUT']['SIGNED'] = l_outputs[2]
+    top_dict['IO']['OUT']['manual'] = l_outputs[3]
+
+    return txt_top_port_map
+
+
+def generate_signal_assignments(layers_dict_list: list, nomes: list, nomes_all: list, itertools):
     """
     Generates signal assignments for signals that are passed between layers.
+    The function creates VHDL signals and VHDL assignments for a given layers_dict_list, nomes and nomes_all, and itertools.
+    The function generates the VHDL signals based on the names and types of the given layers_dict_list and nomes_all. Then it generates the VHDL assignments for the output signals of the input layers (IO_in) by concatenating the input signals (IO_out) of the previous layer with "&" and assigning it to the corresponding signal. The generated VHDL code is returned.
+
 
     Args:
         layers_dict_list (list): A list of dictionaries containing layers.
@@ -260,7 +339,7 @@ def generate_signal_assignments(layers_dict_list, nomes, nomes_all, itertools):
     return signals_assign_txt
 
 
-def remove_items_from_nomes(nomes, nomes_all, remove_list):
+def remove_items_from_nomes(nomes: list, nomes_all: list, remove_list: list):
     """
     Removes items from a list of names.
 
@@ -292,7 +371,7 @@ def remove_items_from_nomes(nomes, nomes_all, remove_list):
     # remove_items_from_layers(nomes, nomes_all)
 
 
-def remove_items_from_layer(nomes, nomes_all):
+def remove_items_from_layer(nomes: list, nomes_all: list):
     """
     Removes specific items from a layer.
     The following function takes in two lists, "nomes" and "nomes_all", and removes specific items from them based on a list called "remove_signals_list". The function loops through each layer of the input lists, then removes the items that match the items in the "remove_signals_list" from the layers.
@@ -341,7 +420,7 @@ def remove_items_from_layer(nomes, nomes_all):
                 f += 1
 
 
-def remove_items(nomes, nomes_all, remove_list):
+def remove_items(nomes: list, nomes_all: list, remove_list: list):
     """
     This function removes specific items from the input list of lists 'nomes' and 'nomes_all' based on a provided list
     'remove_list'. The function modifies the input lists directly and does not return anything.
@@ -387,7 +466,7 @@ def remove_items(nomes, nomes_all, remove_list):
                 f += 1
 
 
-def optimize_signal_declaration(neurons_PM_matrix_local, layers_dict_list, assign_list):
+def optimize_signal_declaration(neurons_PM_matrix_local: list, layers_dict_list: list, assign_list: list):
     """
     Optimize signal declaration by assigning 'out' signal of neuron[i] to 'in' signal of neuron[i-1].
     This function optimizes signal declaration by assigning the 'out' signal of neuron[i] to the 'in' signal of neuron[i-1]. It takes a list of lists containing the signal names of each neuron, a list of layer dictionaries, where each layer dictionary contains layer details, and a list of signal assignments. It returns nothing.
