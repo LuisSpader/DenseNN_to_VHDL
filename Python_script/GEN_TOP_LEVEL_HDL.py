@@ -179,50 +179,8 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
     import itertools
     # list2d = [[1,2,3], [4,5,6], [7], [8,9]]
-    nomes_all = list(itertools.chain.from_iterable(nomes_all))
-    # --------------------------
-
-    # SIGNALS manual
-    for i, item in enumerate(nomes):
-        for j, itemj in enumerate(item):
-            # for i2, item2 in enumerate(item):
-            if 'IN' in nomes[i][j][1]:
-                nomes[i][j][1] = nomes[i][j][1].replace('IN', '')
-            if 'OUT' in nomes[i][j][1]:
-                nomes[i][j][1] = nomes[i][j][1].replace('OUT', '')
-
-        if nomes[i] != []:
-            names = f"{', '.join(map(str, (nomes[i][0][0])))}"
-            if 'W_out' not in names:
-                type_s = nomes[i][0][1]
-                # print(f"nomes[c{i}]--> {names}:{type_s};")
-                signals.signals_dec.append(f"SIGNAL {names}:{type_s}")
-
-    # SIGNALS normal (all other IOs)
-    for i, item in enumerate(nomes_all):
-
-        names = f"{', '.join(map(str, (nomes_all[i][0][0])))}"
-        type_s = nomes_all[i][0][1]
-        # print(f"nomes_all[c{i}]--> {names}: {type_s}(BITS -1 DOWNTO 0);")
-        signals.signals_dec.append(
-            f"SIGNAL {names}: {type_s}(BITS -1 DOWNTO 0);")
-    # --------------------------
-    signals.signals_to_text()
-
-    # ASSIGN: l1 <= l0; l2 <= l1; ...
-    buff = [[] for _ in range(len(layers_dict_list))]
-
-    for item in signals.signals_stack:
-        if 'IO_out' in item[0]:
-            buff[item[1]+1].append(item[0])  # colocando na proxima camada
-
-    for item in signals.signals_stack:
-        if 'IO_in' in item[0]:
-            buff[item[1]
-                 ] = f"{item[0]} <= {' & '.join(map(str, (buff[item[1]])))};"
-
-    signals_assign_stack = [x for x in buff if x != []]
-    signals_assign_txt = '\n'.join(map(str, (signals_assign_stack)))
+    signals_assign_txt = generate_signal_assignments(
+        layers_dict_list, nomes, nomes_all, itertools)
     # --------------------------
 
     # https://youtu.be/aWCWZpIZYjY
@@ -246,66 +204,60 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         print(f"top_gen() -> Criando Top: {top_dir}")
 
 
-# def remove_items_from_nomes(layers_dict_list, nomes, nomes_all, remove_list):
-#     remove_list = copy.deepcopy(remove_list)
-#     for i, item in enumerate(remove_list):
-#         for j, item2 in enumerate(item):
-#             if ':' in item2:
-#                 remove_list[i][j] = item2.split(':')[0].replace(' ', '')
+def generate_signal_assignments(layers_dict_list, nomes, nomes_all, itertools):
+    """
+    Generates signal assignments for signals that are passed between layers.
 
-#     remove_list = [item for sublist in remove_list for item in sublist]
+    Args:
+        layers_dict_list (list): A list of dictionaries containing layers.
+        nomes (list): A list of signals passed as arguments to the layers.
+        nomes_all (list): A list of all other signals.
+        itertools (module): A module that provides a set of tools for working
+            with iterables.
 
-#     global remove_signals_list
-#     remove_signals_list = list(dict.fromkeys(remove_list))
-#     # for r, itemr in enumerate(remove_signals_list):
-#     for j in range(len(layers_dict_list)):
-#         remove_signals_list = [
-#             x for x in remove_signals_list if f"c{j}" not in x]
+    Returns:
+        str: A string containing the signal assignments.
+    """
+    nomes_all = list(itertools.chain.from_iterable(nomes_all))
 
-#     # loop para remover itens que não são os sinais descritos (usa a lista remove_signals_list)
-#     for l, layer in enumerate(nomes):  # layer
-#         for item_s in remove_signals_list:  # lista de itens para excluir
-#             length = len(nomes[l])
-#             f = 0
-#             while f < length:  # loop para lista que diminui seu tamanho
-#                 buff = f"nomes[{l}][{f}]: {nomes[l][f]}"
-#                 buff = nomes[l][f]
+    # Create signals manually
+    for i, item in enumerate(nomes):
+        for j, itemj in enumerate(item):
+            if 'IN' in nomes[i][j][1]:
+                nomes[i][j][1] = nomes[i][j][1].replace('IN', '')
+            if 'OUT' in nomes[i][j][1]:
+                nomes[i][j][1] = nomes[i][j][1].replace('OUT', '')
 
-#                 if isinstance(nomes[l][f][0], str):
-#                     nomes[l] = [x for x in nomes[l] if item_s not in x[0]]
-#                     f -= 1
-#                     length -= 1
-#                 elif isinstance(nomes[l][f][0], list):
-#                     if item_s in nomes[l][f][0]:
-#                         nomes[l][f][0].remove(item_s)
-#                         f -= 1
-#                         length -= 1
-#                 f += 1
+        if nomes[i] != []:
+            names = f"{', '.join(map(str, (nomes[i][0][0])))}"
+            if 'W_out' not in names:
+                type_s = nomes[i][0][1]
+                signals.signals_dec.append(f"SIGNAL {names}:{type_s}")
 
-#     for l, layer in enumerate(nomes_all):  # layer
-#         for item_s in remove_signals_list:  # lista de itens para excluir
-#             length = len(nomes_all[l])
-#             f = 0
-#             while f < length:  # loop para lista que diminui seu tamanho
-#                 buff = f"nomes_all[{l}][{f}]: {nomes_all[l][f]}"
-#                 buff = nomes_all[l][f]
+    # Create signals normally (for all other IOs)
+    for i, item in enumerate(nomes_all):
+        names = f"{', '.join(map(str, (nomes_all[i][0][0])))}"
+        type_s = nomes_all[i][0][1]
+        signals.signals_dec.append(
+            f"SIGNAL {names}: {type_s}(BITS -1 DOWNTO 0);")
 
-#                 if isinstance(nomes_all[l][f][0], str):
-#                     nomes_all[l] = [x for x in nomes_all[l]
-#                                     if item_s not in x[0]]
-#                     f -= 1
-#                     length -= 1
-#                 elif isinstance(nomes_all[l][f][0], list):
-#                     for x, itemx in enumerate(nomes_all[l][f][0][0]):
-#                         if item_s == itemx:
-#                             del nomes_all[l][f][0][0][x]
-#                             # del itemx
-#                             # nomes_all[l][f][0][0].remove(item_s)
-#                             if nomes_all[l][f][0][0] == []:
-#                                 del nomes_all[l][f]
-#                                 f -= 1
-#                                 length -= 1
-#                 f += 1
+    signals.signals_to_text()
+
+    # Create signal assignments for all signals that are passed between layers
+    buff = [[] for _ in range(len(layers_dict_list))]
+
+    for item in signals.signals_stack:
+        if 'IO_out' in item[0]:
+            buff[item[1]+1].append(item[0])
+
+    for item in signals.signals_stack:
+        if 'IO_in' in item[0]:
+            buff[item[1]
+                 ] = f"{item[0]} <= {' & '.join(map(str, (buff[item[1]])))};"
+
+    signals_assign_stack = [x for x in buff if x != []]
+    signals_assign_txt = '\n'.join(map(str, (signals_assign_stack)))
+    return signals_assign_txt
 
 
 def remove_items_from_nomes(nomes, nomes_all, remove_list):
@@ -336,10 +288,22 @@ def remove_items_from_nomes(nomes, nomes_all, remove_list):
             x for x in remove_signals_list if f"c{j}" not in x]
 
     # loop para remover itens que não são os sinais descritos (usa a lista remove_signals_list)
-    new_func(nomes, nomes_all)
+    remove_items_from_layer(nomes, nomes_all)
+    # remove_items_from_layers(nomes, nomes_all)
 
 
-def new_func(nomes, nomes_all):
+def remove_items_from_layer(nomes, nomes_all):
+    """
+    Removes specific items from a layer.
+    The following function takes in two lists, "nomes" and "nomes_all", and removes specific items from them based on a list called "remove_signals_list". The function loops through each layer of the input lists, then removes the items that match the items in the "remove_signals_list" from the layers.
+
+    Args:
+        layer (list): List of items to remove from.
+        item_list (list): List of items to remove.
+
+    Returns:
+        list: The layer with the specified items removed.
+    """
     for l, layer in enumerate(nomes):  # layer
         for item_s in remove_signals_list:  # lista de itens para excluir
             length = len(layer)
