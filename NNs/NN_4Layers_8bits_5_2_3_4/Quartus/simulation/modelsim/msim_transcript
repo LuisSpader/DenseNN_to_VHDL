@@ -1,0 +1,308 @@
+# Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+# do NN_4Layers_8bits_5_2_3_4_run_msim_rtl_vhdl.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying C:\altera\13.0sp1\modelsim_ase\win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied C:\altera\13.0sp1\modelsim_ase\win32aloem/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/ROM_fx_8bitaddr_8width.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity ROM_fx_8bitaddr_8width
+# -- Compiling architecture arch of ROM_fx_8bitaddr_8width
+# ** Warning: C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/ROM_fx_8bitaddr_8width.vhd(289): (vcom-1074) Non-locally static OTHERS choice is allowed only if it is the only choice of the only association.
+# 
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/parameters.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package NUMERIC_STD
+# -- Compiling package parameters
+# -- Compiling package body parameters
+# -- Loading package parameters
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/mult0_v0.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity mult0_v0
+# -- Compiling architecture rtl of mult0_v0
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/shift_reg_5n.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity shift_reg_5n
+# -- Compiling architecture rtl of shift_reg_5n
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/shift_reg_3n.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity shift_reg_3n
+# -- Compiling architecture rtl of shift_reg_3n
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/shift_reg_2n.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity shift_reg_2n
+# -- Compiling architecture rtl of shift_reg_2n
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/Reg.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity Reg
+# -- Compiling architecture rtl of Reg
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_Sigmoid_3n_8bit_signed_mult0_v0_add0_v0.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package NUMERIC_STD
+# -- Loading package MATH_REAL
+# -- Loading package parameters
+# -- Compiling entity neuron_comb_Sigmoid_3n_8bit_signed_mult0_v0_add0_v0
+# -- Compiling architecture behavior of neuron_comb_Sigmoid_3n_8bit_signed_mult0_v0_add0_v0
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0_out.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package NUMERIC_STD
+# -- Loading package MATH_REAL
+# -- Loading package parameters
+# -- Compiling entity neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0_out
+# -- Compiling architecture behavior of neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0_out
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package NUMERIC_STD
+# -- Loading package MATH_REAL
+# -- Loading package parameters
+# -- Compiling entity neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0
+# -- Compiling architecture behavior of neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_ReLU_2n_8bit_signed_mult0_v0_add0_v0_out.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package NUMERIC_STD
+# -- Loading package MATH_REAL
+# -- Loading package parameters
+# -- Compiling entity neuron_comb_ReLU_2n_8bit_signed_mult0_v0_add0_v0_out
+# -- Compiling architecture behavior of neuron_comb_ReLU_2n_8bit_signed_mult0_v0_add0_v0_out
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_5n_8bit_signed_mult0_v0_add0_v0.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package MATH_REAL
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity MAC_comb_5n_8bit_signed_mult0_v0_add0_v0
+# -- Compiling architecture arch of MAC_comb_5n_8bit_signed_mult0_v0_add0_v0
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_3n_8bit_signed_mult0_v0_add0_v0.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package MATH_REAL
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity MAC_comb_3n_8bit_signed_mult0_v0_add0_v0
+# -- Compiling architecture arch of MAC_comb_3n_8bit_signed_mult0_v0_add0_v0
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_2n_8bit_signed_mult0_v0_add0_v0.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package MATH_REAL
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity MAC_comb_2n_8bit_signed_mult0_v0_add0_v0
+# -- Compiling architecture arch of MAC_comb_2n_8bit_signed_mult0_v0_add0_v0
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada3_Sigmoid_4neuron_8bits_3n_signed.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity camada3_Sigmoid_4neuron_8bits_3n_signed
+# -- Compiling architecture arch of camada3_Sigmoid_4neuron_8bits_3n_signed
+# -- Loading package MATH_REAL
+# -- Loading entity neuron_comb_Sigmoid_3n_8bit_signed_mult0_v0_add0_v0
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada2_ReLU_3neuron_8bits_2n_signed.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity camada2_ReLU_3neuron_8bits_2n_signed
+# -- Compiling architecture arch of camada2_ReLU_3neuron_8bits_2n_signed
+# -- Loading package MATH_REAL
+# -- Loading entity neuron_comb_ReLU_2n_8bit_signed_mult0_v0_add0_v0_out
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada1_ReLU_2neuron_8bits_5n_signed.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity camada1_ReLU_2neuron_8bits_5n_signed
+# -- Compiling architecture arch of camada1_ReLU_2neuron_8bits_5n_signed
+# -- Loading package MATH_REAL
+# -- Loading entity neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0_out
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada0_ReLU_5neuron_8bits_5n_signed.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity camada0_ReLU_5neuron_8bits_5n_signed
+# -- Compiling architecture arch of camada0_ReLU_5neuron_8bits_5n_signed
+# -- Loading package MATH_REAL
+# -- Loading entity neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0_out
+# -- Loading entity neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/top.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity top
+# -- Compiling architecture arch of top
+# -- Loading entity camada0_ReLU_5neuron_8bits_5n_signed
+# -- Loading entity camada1_ReLU_2neuron_8bits_5n_signed
+# -- Loading entity camada2_ReLU_3neuron_8bits_2n_signed
+# -- Loading entity camada3_Sigmoid_4neuron_8bits_3n_signed
+# 
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../tb_top.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_textio
+# -- Loading package std_logic_arith
+# -- Loading package STD_LOGIC_UNSIGNED
+# -- Loading package parameters
+# -- Compiling entity tb_top
+# -- Compiling architecture tb of tb_top
+# -- Loading entity top
+# 
+# vsim -t 1ps -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cyclonev -L rtl_work -L work -voptargs="+acc"  tb_top
+# vsim -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cyclonev -L rtl_work -L work -voptargs=\"+acc\" -t 1ps tb_top 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.std_logic_textio(body)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading work.parameters(body)
+# Loading work.tb_top(tb)
+# Loading work.top(arch)
+# Loading ieee.math_real(body)
+# Loading work.camada0_relu_5neuron_8bits_5n_signed(arch)
+# Loading work.neuron_comb_relu_5n_8bit_signed_mult0_v0_add0_v0_out(behavior)
+# Loading work.mac_comb_5n_8bit_signed_mult0_v0_add0_v0(arch)
+# Loading work.mult0_v0(rtl)
+# Loading work.shift_reg_5n(rtl)
+# Loading work.reg(rtl)
+# Loading work.neuron_comb_relu_5n_8bit_signed_mult0_v0_add0_v0(behavior)
+# Loading work.camada1_relu_2neuron_8bits_5n_signed(arch)
+# Loading work.camada2_relu_3neuron_8bits_2n_signed(arch)
+# Loading work.neuron_comb_relu_2n_8bit_signed_mult0_v0_add0_v0_out(behavior)
+# Loading work.mac_comb_2n_8bit_signed_mult0_v0_add0_v0(arch)
+# Loading work.shift_reg_2n(rtl)
+# Loading work.camada3_sigmoid_4neuron_8bits_3n_signed(arch)
+# Loading work.neuron_comb_sigmoid_3n_8bit_signed_mult0_v0_add0_v0(behavior)
+# Loading work.mac_comb_3n_8bit_signed_mult0_v0_add0_v0(arch)
+# Loading work.shift_reg_3n(rtl)
+# Loading work.rom_fx_8bitaddr_8width(arch)
+# 
+# add wave *
+# view structure
+# .main_pane.structure.interior.cs.body.struct
+# view signals
+# .main_pane.objects.interior.cs.body.tree
+# run 10 us
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_3/U_ROM
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_2/U_ROM
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_1/U_ROM
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_0/U_ROM
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 5 ns  Iteration: 2  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_3/U_ROM
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 5 ns  Iteration: 2  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_2/U_ROM
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 5 ns  Iteration: 2  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_1/U_ROM
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 5 ns  Iteration: 2  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_0/U_ROM

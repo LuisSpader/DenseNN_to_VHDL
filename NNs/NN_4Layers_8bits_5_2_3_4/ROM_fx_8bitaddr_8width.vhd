@@ -10,12 +10,12 @@ USE ieee.numeric_std.ALL;
 ENTITY ROM_fx_8bitaddr_8width IS
 	GENERIC (
 		addr_width : INTEGER := 256; -- store 256 elements 
-		addr_bits : INTEGER := 8; -- required bits to store 256 elements
-		data_width : INTEGER := 8 -- each element has 8-bits
+		addr_bits  : INTEGER := 8;   -- required bits to store 256 elements
+		data_width : INTEGER := 8    -- each element has 8-bits
 	);
 
 	PORT (
-		address : IN STD_LOGIC_VECTOR(addr_bits - 1 DOWNTO 0);
+		address  : IN STD_LOGIC_VECTOR(addr_bits - 1 DOWNTO 0) := (OTHERS => '0');
 		data_out : OUT STD_LOGIC_VECTOR(data_width - 1 DOWNTO 0)
 	);
 END ENTITY;
@@ -291,5 +291,7 @@ ARCHITECTURE arch OF ROM_fx_8bitaddr_8width IS
 
 BEGIN
 	---------------
-	data_out <= myROM(to_integer(unsigned(address)));
+	data_out <= myROM(to_integer(unsigned(address))); -- numeric_std
+	-- data_out <= myROM(conv_integer(unsigned(address))); -- Std_Logic_Arith
+
 END ARCHITECTURE;
