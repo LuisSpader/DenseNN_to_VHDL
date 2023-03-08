@@ -29,7 +29,4 @@ vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/N
 
 vsim -t 1ps -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cyclonev -L rtl_work -L work -voptargs="+acc"  tb_top
 
-add wave *
-view structure
-view signals
-run 10 us
+do C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/do_wave.txt

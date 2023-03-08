@@ -18,11 +18,12 @@ ARCHITECTURE tb OF tb_top IS
     -- SIGNAL IO_in                                                      : signed(TOTAL_BITS * NUM_INPUTS - 1 DOWNTO 0);
     -- SIGNAL buff_in                                                    : STD_LOGIC_VECTOR(TOTAL_BITS * NUM_INPUTS - 1 DOWNTO 0);
     SIGNAL IO_in                                                      : signed(TOTAL_BITS - 1 DOWNTO 0)             := (OTHERS => '0');
+    SIGNAL buff_in                                                    : STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0)   := (OTHERS => '0');
     -- ======== Pesos & Bias ========
     SIGNAL c0_n0_W_in, c0_n1_W_in, c0_n2_W_in, c0_n3_W_in, c0_n4_W_in : signed(BITS - 1 DOWNTO 0)                   := (OTHERS => '0');
     -- Saidas ultima camada
     SIGNAL c3_n0_IO_out, c3_n1_IO_out, c3_n2_IO_out, c3_n3_IO_out     : signed(BITS - 1 DOWNTO 0)                   := (OTHERS => '0');
-    SIGNAL buff_out                                                   : STD_LOGIC_VECTOR(((4) * BITS) - 1 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL buff_out                                                   : STD_LOGIC_VECTOR(((2) * BITS) - 1 DOWNTO 0) := (OTHERS => '0');
     -- SIGNAL buff_out_signed : STD_LOGIC_VECTOR(((2) * BITS) - 1 DOWNTO 0);
 
     CONSTANT sigmoid_read_time                                        : TIME                                        := 16 * clk_period;
@@ -59,29 +60,26 @@ BEGIN
     file_io : PROCESS
 
         --SIGNALS AND VARIABLES
-        VARIABLE read_col_from_input_buf                                         : line; -- buffers de entrada e saiÃƒâ€šÃ‚Â­da
-        FILE input_buf                                                           : text; --text is keyword ->??
+        VARIABLE read_col_from_input_buf                                              : line; -- buffers de entrada e saiÃƒâ€šÃ‚Â­da
+        FILE input_buf                                                                : text; --text is keyword ->??
 
-        VARIABLE read_col_from_sigmoid_buf                                       : line;
-        FILE NN_weights_buff                                                     : text; --text is keyword -->??
+        VARIABLE read_col_from_sigmoid_buf                                            : line;
+        FILE NN_weights_buff                                                          : text; --text is keyword -->??
 
-        VARIABLE write_col_to_output_buf                                         : line;
-        FILE output_buf                                                          : text; --text is keyword -->??
+        VARIABLE write_col_to_output_buf                                              : line;
+        FILE output_buf                                                               : text; --text is keyword -->??
 
-        VARIABLE val_address                                                     : STD_LOGIC_VECTOR(bits - 1 DOWNTO 0)       := (OTHERS => '0');
-        VARIABLE val_n0_W_in, val_n1_W_in, val_n2_W_in, val_n3_W_in, val_n4_W_in : STD_LOGIC_VECTOR(8 - 1 DOWNTO 0)          := (OTHERS => '0'); --signal 
-        -- VARIABLE val_n0_IO_in, val_n1_IO_in, val_n2_IO_in, val_n3_IO_in, val_n4_IO_in : STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); --signal 
-        VARIABLE val_IO_in                                                       : STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); --signal 
+        VARIABLE val_address                                                          : STD_LOGIC_VECTOR(bits - 1 DOWNTO 0)       := (OTHERS => '0');
+        VARIABLE val_n0_W_in, val_n1_W_in, val_n2_W_in, val_n3_W_in, val_n4_W_in      : STD_LOGIC_VECTOR(8 - 1 DOWNTO 0)          := (OTHERS => '0'); --signal 
+        VARIABLE val_n0_IO_in, val_n1_IO_in, val_n2_IO_in, val_n3_IO_in, val_n4_IO_in : STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); --signal 
 
-        VARIABLE val_SPACE                                                       : CHARACTER;                                                    -- espacos da leitura de cada linha de entrada
+        VARIABLE val_SPACE                                                            : CHARACTER;                                                    -- espacos da leitura de cada linha de entrada
 
     BEGIN
 
         -------------------- ATUALIZACAO DOS PESOS DA NN --------------------
         file_open(NN_weights_buff, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\tb_Files/weights_bin.txt", read_mode);
         -- file_open(NN_weights_buff, "../Testbench/Files/weights_bin.txt", read_mode);
-
-        rst <= '1', '0' AFTER clk_period;
 
         WAIT UNTIL rst = '0';                   -- espera rst desligar
 
@@ -126,34 +124,30 @@ BEGIN
         file_open(output_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\tb_Files/tb_outputs.txt", write_mode);
         -- file_open(output_buf, "./Files/tb_outputs.txt", write_mode);
 
+        buff_in  <= val_n0_IO_in & val_n1_IO_in & val_n2_IO_in & val_n3_IO_in & val_n4_IO_in;
+        buff_out <= STD_LOGIC_VECTOR(c3_n0_IO_out & c3_n1_IO_out & c3_n2_IO_out & c3_n3_IO_out);
+
         WHILE NOT endfile(input_buf) LOOP             --enquanto arquivo nao terminar de ler
             readline(input_buf, read_col_from_input_buf); --le_linha buffer primeira linha -> escreve na variavel
-            -- read(read_col_from_input_buf, val_n0_IO_in);
-            -- read(read_col_from_input_buf, val_SPACE);
-
-            -- read(read_col_from_input_buf, val_n1_IO_in);
-            -- read(read_col_from_input_buf, val_SPACE);
-
-            -- read(read_col_from_input_buf, val_n2_IO_in);
-            -- read(read_col_from_input_buf, val_SPACE);
-
-            -- read(read_col_from_input_buf, val_n3_IO_in);
-            -- read(read_col_from_input_buf, val_SPACE);
-
-            -- read(read_col_from_input_buf, val_n4_IO_in);
-            -- read(read_col_from_input_bu1f, val_SPACE);
-
-            -- buff_in  <= val_n0_IO_in & val_n1_IO_in & val_n2_IO_in & val_n3_IO_in & val_n4_IO_in;
-            -- -- Pass the read values to signals
-            -- IO_in    <= signed(buff_in);
-
-            read(read_col_from_input_buf, val_IO_in);
+            read(read_col_from_input_buf, val_n0_IO_in);
             read(read_col_from_input_buf, val_SPACE);
-            IO_in    <= signed(val_IO_in);
 
-            buff_out <= STD_LOGIC_VECTOR(c3_n0_IO_out & c3_n1_IO_out & c3_n2_IO_out & c3_n3_IO_out);
+            read(read_col_from_input_buf, val_n1_IO_in);
+            read(read_col_from_input_buf, val_SPACE);
 
-            WAIT FOR (5 * clk_period);
+            read(read_col_from_input_buf, val_n2_IO_in);
+            read(read_col_from_input_buf, val_SPACE);
+
+            read(read_col_from_input_buf, val_n3_IO_in);
+            read(read_col_from_input_buf, val_SPACE);
+
+            read(read_col_from_input_buf, val_n4_IO_in);
+            read(read_col_from_input_buf, val_SPACE);
+
+            -- Pass the read values to signals
+            IO_in <= signed(buff_in);
+
+            WAIT FOR (50 * clk_period);
 
             -- buff_out <= STD_LOGIC_VECTOR(c3_n0_IO_out & c3_n0_IO_out);
 
