@@ -1,28 +1,22 @@
 
-
 --https://stackoverflow.com/questions/17579716/implementing-rom-in-xilinx-vhdl
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
-
 ----------------
-
-ENTITY ROM_fixedpoint_8bit IS
+ENTITY ROM_Sigmoid_8bit IS
 	GENERIC (
 		addr_width : INTEGER := 256; -- store 256 elements
 		addr_bits  : INTEGER := 8;   -- required bits to store 256 elements
 		data_width : INTEGER := 8    -- each element has 8-bits
 	);
-
 	PORT (
 		address  : IN STD_LOGIC_VECTOR(addr_bits - 1 DOWNTO 0);
 		data_out : OUT STD_LOGIC_VECTOR(data_width - 1 DOWNTO 0)
 	);
 END ENTITY;
-
 ------------------
-ARCHITECTURE arch OF ROM_fixedpoint_8bit IS
-
+ARCHITECTURE arch OF ROM_Sigmoid_8bit IS
 	TYPE memory IS ARRAY (0 TO addr_width - 1) OF STD_LOGIC_VECTOR(data_width - 1 DOWNTO 0);
 	CONSTANT myrom : memory := (
 		--"int_f_x",--(address)  =integer_MAC|| f(x)               = int_f_x 
@@ -284,10 +278,9 @@ ARCHITECTURE arch OF ROM_fixedpoint_8bit IS
 		"01111101", -- (11111111) = -1.0      || 125.20044652911506 = 125.0
 
 		--	2 => "11111111" , --255
-		--	3 => "11010101" ,  
+		--	3 => "11010101" ,
 		OTHERS => "00000000000"
 	);
-
 BEGIN
 	---------------
 	data_out <= myrom(to_integer(unsigned(address)));
