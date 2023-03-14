@@ -125,7 +125,7 @@
 # #                 'Memory': {
 # #                     'bits_mem': 8,
 # #                     # 'n' binary digits are the fractional part of `x`; = MANTISSA
-# #                     'mantissa': lambda: layer_dict_hidden['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
+# #                     'input_mem_bits': lambda: layer_dict_hidden['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
 # #                 }
 # #             }
 # #         }

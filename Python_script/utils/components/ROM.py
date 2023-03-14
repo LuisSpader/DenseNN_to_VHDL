@@ -197,12 +197,12 @@ def ROM_txt_gen(text_rom_to_asic, ROM_clk, ROM_name, memory_width, memory_depth)
             f'''--https://stackoverflow.com/questions/17579716/implementing-rom-in-xilinx-vhdl
 LIBRARY ieee ;
 USE ieee.std_logic_1164.all ;
-use ieee.numeric_std.all;
+USE ieee.numeric_std.all;
 ----------------
-entity {ROM_name} is
-generic(addr_width : integer := {str(memory_depth)}; -- store {str(memory_depth)} elements
-        addr_bits  : integer := {str(int(math.log2(memory_depth)))}; -- required bits to store {str(memory_depth)} elements
-        data_width : integer := {str(memory_width)}  -- each element has {str(memory_width)}-bits
+ENTITY {ROM_name} is
+generic(addr_heigth : integer := {str(memory_depth)}; -- store {str(memory_depth)} elements
+				addr_bits  : integer := {str(int(math.log2(memory_depth)))}; -- required bits to store {str(memory_depth)} elements
+				data_width : integer := {str(memory_width)}  -- each element has {str(memory_width)}-bits
 				);
 port ( clk : in std_logic ;
 		address : in std_logic_vector(addr_bits-1 downto 0);
@@ -212,7 +212,7 @@ end entity ;
 ------------------
 architecture arch of {ROM_name} is
 	signal reg_address: std_logic_vector(addr_bits-1 downto 0);
-	type memory is array ( 0 to addr_width-1 ) of std_logic_vector(data_width-1 downto 0 ) ;
+	type memory is array ( 0 to addr_heigth-1 ) of std_logic_vector(data_width-1 downto 0 ) ;
 	constant myrom : memory := (
 {text_rom_to_asic}
 --	2 => "11111111" , --255
@@ -236,10 +236,10 @@ end architecture ;
 --https://stackoverflow.com/questions/17579716/implementing-rom-in-xilinx-vhdl
 LIBRARY ieee ;
 USE ieee.std_logic_1164.all ;
-use ieee.numeric_std.all;
+USE ieee.numeric_std.all;
 ----------------
 ENTITY {ROM_name} is
-generic(addr_width : integer := {str(memory_depth)}; -- store {str(memory_depth)} elements
+generic(addr_heigth : integer := {str(memory_depth)}; -- store {str(memory_depth)} elements
 				addr_bits  : integer := {str(int(math.log2(memory_depth)))}; -- required bits to store {str(memory_depth)} elements
 				data_width : integer := {str(memory_width)}  -- each element has {str(memory_width)}-bits
 				);
@@ -250,7 +250,7 @@ generic(addr_width : integer := {str(memory_depth)}; -- store {str(memory_depth)
 END ENTITY;
 ------------------
 architecture arch of {ROM_name} is
-	type memory is array ( 0 to addr_width-1 ) of std_logic_vector(data_width-1 downto 0 ) ;
+	type memory is array ( 0 to addr_heigth-1 ) of std_logic_vector(data_width-1 downto 0 ) ;
 	constant myrom : memory := (
 {text_rom_to_asic}
 --	2 => "11111111" , --255
@@ -289,26 +289,27 @@ def ROM_Sigmoid_gen(
         text_rom_to_asic, ROM_clk, ROM_name, memory_width, memory_depth)
 
     if DOWNLOAD:
-        text_file = open(f"{path}{ROM_name}.vhd", "w")
+        final_path = f"{path}/{ROM_name}.vhd"
+        text_file = open(final_path, "w")
         text_file.write(rom_text_asic)
         text_file.close()
-        print(f"arquivo gerado: {path}{ROM_name}.vhd")
+        print(f"arquivo gerado: {final_path}.vhd")
 
 
 # ------------------------------------
-# defining bias and input values
-BIT_WIDTH = int(8)
-is_signed = True
-is_sigmoid_signed = False
-n_integer = 1                           # 'm' binary digits are the integer part
-DOWNLOAD = True  # 1= para baixar || 0= não baixar
-path = "./Python_script/utils/others/"
+# # defining bias and input values
+# BIT_WIDTH = int(8)
+# is_signed = True
+# is_sigmoid_signed = False
+# n_integer = 1                           # 'm' binary digits are the integer part
+# DOWNLOAD = True  # 1= para baixar || 0= não baixar
+# path = "./Python_script/utils/components/"
 
-ROM_Sigmoid_gen(
-    DOWNLOAD,
-    f"ROM_Sigmoid_{BIT_WIDTH}bit",
-    BIT_WIDTH,
-    is_signed,
-    is_sigmoid_signed,
-    n_integer,
-    path)
+# ROM_Sigmoid_gen(
+#     DOWNLOAD,
+#     f"ROM_Sigmoid_{BIT_WIDTH}bit",
+#     BIT_WIDTH,
+#     is_signed,
+#     is_sigmoid_signed,
+#     n_integer,
+#     path)

@@ -16,6 +16,7 @@ from utils.general.components import mac_component
 from utils.general.utils import input_sequences, all_inputs_signals, seq_input_output
 from utils.general.name import vhd_name
 from utils.general.components import entity_to_component
+from utils.components.ROM import ROM_Sigmoid_gen
 # from Adders import adder_txt_gen
 # from Adders import Adder, ADDER_obj
 
@@ -168,7 +169,7 @@ def clk_receive_gen(num_inputs: int,
 
 
 def Neuron_Gen_from_dict(
-        download_vhd: bool = True,
+        DOWNLOAD_VHD: bool = True,
         layer_dict: dict = layer_dict_hidden,
         OUTPUT_BASE_DIR_PATH: str = "./NN/Neuron",
         DEBUG: bool = False):
@@ -176,14 +177,14 @@ def Neuron_Gen_from_dict(
 
     Args:
         neuron_type (str, optional): Tipo de neurônio. Nesta função só temos 3 tipos:  'relu', 'leaky' e 'softmax'. Defaults to 'relu'.
-        bits (int, optional): Largura de bits de representação para entradas, pesos e saída do neurônio. Defaults to 8.
+        BIT_WIDTH (int, optional): Largura de BIT_WIDTH de representação para entradas, pesos e saída do neurônio. Defaults to 8.
         num_inputs (int, optional): Número de entradas do neurônio. Defaults to 3.
         IO_type (bool, optional): Tipo dos sinais de entrada, pesos e saída. True = signed, False = unsigned. Defaults to True.
         Barriers (bool, optional): Se possui barreira de registradores entre cada camada da árvore combinacional MAC (soma e multiplica). Defaults to True.
         Include_MAC_type (bool, optional): Se é para incluir o tipo do MAC no nome ('seq' ou 'comb'). Como esta função possui só a implementação da versão combinacional, este parâmetro nem faz sentido por enquanto. Defaults to True.
         leaky_attenuation (int, optional): Parâmetro usado apenas na versão 'leaky'. É o número de vezes que a função será dividida através de um 'shift right'. A incremento de 1 neste valor, a função é dividida por 2 (para valores de x menores que zero, conforme função Leaky ReLU). Defaults to 2.
-        bits_mem (int, optional): Número de bits de representação da memória ROM/RAM. Normalmente o mesmo número dos bits de entrada/saída (parâmetro 'bits'). Defaults to 8.
-        download_vhd (bool, optional): Se deseja fazer o download do arquivo '.vhd' do neurônio. True = download. Defaults to True.
+        bits_mem (int, optional): Número de BIT_WIDTH de representação da memória ROM/RAM. Normalmente o mesmo número dos BIT_WIDTH de entrada/saída (parâmetro 'BIT_WIDTH'). Defaults to 8.
+        DOWNLOAD_VHD (bool, optional): Se deseja fazer o download do arquivo '.vhd' do neurônio. True = download. Defaults to True.
         DEBUG (bool, optional): Parâmetro para imprimir algumas etapas da função. True = imprime. Defaults to False.
     """
     if DEBUG:
@@ -194,7 +195,7 @@ def Neuron_Gen_from_dict(
     #! problema: MAC está pegando nome_MAC do dicionário (por padrão está sendo do 'layer_dict_hidden'), mas esta função está gernado o 'MAC_name' de outra forma, não pega do dict
     # global neurons_PM_matrix
     # ---------------- PEGA PARÂMETROS DO DICIONÁRIO -----------------------
-    num_inputs, bits, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
+    num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
         layer_dict=layer_dict)
 
     reg_txt, shift_reg_txt, reg_name, shift_reg_name = shift_reg_gen(
@@ -229,12 +230,12 @@ def Neuron_Gen_from_dict(
         'Sigmoid': f'{prefix_neuron}Sigmoid'
     }
     neuron_ReLU_name = vhd_name(
-        fx_activation_dict['ReLU'], bits, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
+        fx_activation_dict['ReLU'], BIT_WIDTH, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
 
     neuron_Leaky_name = vhd_name(
-        fx_activation_dict['Leaky ReLU'], bits, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
+        fx_activation_dict['Leaky ReLU'], BIT_WIDTH, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
     neuron_Sigmoid_name = vhd_name(
-        fx_activation_dict['Sigmoid'], bits, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
+        fx_activation_dict['Sigmoid'], BIT_WIDTH, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
 
     if DEBUG:
         print(neuron_ReLU_name)
@@ -253,7 +254,7 @@ def Neuron_Gen_from_dict(
     # Exemplo: MAC_name = 'MAC_5n'
     MAC_name = vhd_name(
         vhd_name='MAC',
-        bits=bits,
+        BIT_WIDTH=BIT_WIDTH,
         IO_type=IO_type,
         num_inputs=num_inputs,
         Barriers=Barriers,
@@ -277,7 +278,7 @@ def Neuron_Gen_from_dict(
 
     mac_entity_txt = entity(
         name=MAC_name,
-        bits=layer_dict['Neuron_arch']['Bit_WIDTH'],
+        BIT_WIDTH=layer_dict['Neuron_arch']['Bit_WIDTH'],
         num_inputs=layer_dict['Neuron_arch']['Inputs_number'],
         IO_dict_list=[
             layer_dict['Neuron_arch']['IO']['shared_IO'],
@@ -366,13 +367,13 @@ USE ieee.numeric_std.ALL;
 USE ieee.math_real.ALL;
 USE work.parameters.ALL;
 
-{entity(neuron_Leaky_name, bits, num_inputs,[layer_dict['Neuron_arch']['IO']['shared_IO'], layer_dict['Neuron_arch']['IO']['unique_IO'] ], generic = True)}
+{entity(neuron_Leaky_name, BIT_WIDTH, num_inputs,[layer_dict['Neuron_arch']['IO']['shared_IO'], layer_dict['Neuron_arch']['IO']['unique_IO'] ], generic = True)}
 
 
 ARCHITECTURE behavior of {neuron_Leaky_name} is
 {MAC_component}
 {component_shift_reg}
-    SIGNAL out_reg_MAC : {IO_type}(({str(bits - 1)}) DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_reg_MAC : {IO_type}(({str(BIT_WIDTH - 1)}) DOWNTO 0);	--reg da saida do MAC
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
     
 BEGIN
@@ -390,7 +391,7 @@ USE ieee.numeric_std.ALL;
 USE ieee.math_real.ALL;
 USE work.parameters.ALL;
 
-{entity(neuron_ReLU_name, bits, num_inputs,[layer_dict['Neuron_arch']['IO']['shared_IO'], layer_dict['Neuron_arch']['IO']['unique_IO']], remove_dict_items = [], generic = True )}
+{entity(neuron_ReLU_name, BIT_WIDTH, num_inputs,[layer_dict['Neuron_arch']['IO']['shared_IO'], layer_dict['Neuron_arch']['IO']['unique_IO']], remove_dict_items = [], generic = True )}
 
 ARCHITECTURE behavior of {neuron_ReLU_name} is
 {MAC_component}
@@ -406,7 +407,7 @@ BEGIN
 END behavior;'''
                                )
     # ------------------------------------------------
-    ROM_name = f"ROM_fx_{bits}bitaddr_{bits}width"
+    ROM_name = f"ROM_fx_{BIT_WIDTH}bitaddr_{BIT_WIDTH}width"
     ROM_component = rom_component(ROM_name, input_mem_bits, output_mem_bits)
     PORT_MAP_ROM = port_map_ROM(ROM_name, input_mem_bits, output_mem_bits)
     # ------
@@ -419,7 +420,7 @@ USE ieee.numeric_std.ALL;
 USE ieee.math_real.ALL;
 USE work.parameters.ALL;
 
-{entity(neuron_Sigmoid_name, bits, num_inputs,[layer_dict['Neuron_arch']['IO']['shared_IO'], layer_dict['Neuron_arch']['IO']['unique_IO'] ],generic = True)}
+{entity(neuron_Sigmoid_name, BIT_WIDTH, num_inputs,[layer_dict['Neuron_arch']['IO']['shared_IO'], layer_dict['Neuron_arch']['IO']['unique_IO'] ],generic = True)}
 
 
 ARCHITECTURE behavior of {neuron_Sigmoid_name} is
@@ -427,8 +428,8 @@ ARCHITECTURE behavior of {neuron_Sigmoid_name} is
 {component_shift_reg}
 {ROM_component}
 
-    SIGNAL out_reg_MAC : {IO_type} (( {str(bits - 1)} ) DOWNTO 0);	--reg da saida do MAC
-    SIGNAL out_ROM_act : STD_LOGIC_VECTOR( {str(bits - 1)} DOWNTO 0); --saida da ROM
+    SIGNAL out_reg_MAC : {IO_type} (( {str(BIT_WIDTH - 1)} ) DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_ROM_act : STD_LOGIC_VECTOR( {str(BIT_WIDTH - 1)} DOWNTO 0); --saida da ROM
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 BEGIN
@@ -458,7 +459,7 @@ END behavior;'''
         gen_hidden = True
         gen_softmax = False
         path_hidden, path_soft = create_folder_neuron(
-            bits,
+            BIT_WIDTH,
             num_inputs,
             Neurons_hidden,
             Neurons_softmax,
@@ -473,7 +474,7 @@ END behavior;'''
         gen_hidden = True
         gen_softmax = False
         path_hidden, path_soft = create_folder_neuron(
-            bits,
+            BIT_WIDTH,
             num_inputs,
             Neurons_hidden,
             Neurons_softmax,
@@ -487,7 +488,7 @@ END behavior;'''
         gen_hidden = False
         gen_softmax = True
         path_hidden, path_soft = create_folder_neuron(
-            bits,
+            BIT_WIDTH,
             num_inputs,
             Neurons_hidden,
             Neurons_softmax,
@@ -505,7 +506,7 @@ END behavior;'''
     # adder_txt_gen(layer_dict, path_others, create_path_folder=False)
     # multiplier_txt_gen(layer_dict, path_others, create_path_folder=False)
 
-    if download_vhd == True:
+    if DOWNLOAD_VHD == True:
 
         path_soft = path_soft[0]
         path_ReLU = path_hidden[0]
@@ -564,7 +565,7 @@ END behavior;'''
 
 
 def Neuron_Gen_from_dict2(
-        download_vhd: bool = True,
+        DOWNLOAD_VHD: bool = True,
         layers_dict_list: dict = [{}, {}],
         i: int = 0,
         OUTPUT_BASE_DIR_PATH: str = "./NN/Neuron",
@@ -573,14 +574,14 @@ def Neuron_Gen_from_dict2(
 
     Args:
         neuron_type (str, optional): Tipo de neurônio. Nesta função só temos 3 tipos:  'relu', 'leaky' e 'softmax'. Defaults to 'relu'.
-        bits (int, optional): Largura de bits de representação para entradas, pesos e saída do neurônio. Defaults to 8.
+        BIT_WIDTH (int, optional): Largura de BIT_WIDTH de representação para entradas, pesos e saída do neurônio. Defaults to 8.
         num_inputs (int, optional): Número de entradas do neurônio. Defaults to 3.
         IO_type (bool, optional): Tipo dos sinais de entrada, pesos e saída. True = signed, False = unsigned. Defaults to True.
         Barriers (bool, optional): Se possui barreira de registradores entre cada camada da árvore combinacional MAC (soma e multiplica). Defaults to True.
         Include_MAC_type (bool, optional): Se é para incluir o tipo do MAC no nome ('seq' ou 'comb'). Como esta função possui só a implementação da versão combinacional, este parâmetro nem faz sentido por enquanto. Defaults to True.
         leaky_attenuation (int, optional): Parâmetro usado apenas na versão 'leaky'. É o número de vezes que a função será dividida através de um 'shift right'. A incremento de 1 neste valor, a função é dividida por 2 (para valores de x menores que zero, conforme função Leaky ReLU). Defaults to 2.
-        bits_mem (int, optional): Número de bits de representação da memória ROM/RAM. Normalmente o mesmo número dos bits de entrada/saída (parâmetro 'bits'). Defaults to 8.
-        download_vhd (bool, optional): Se deseja fazer o download do arquivo '.vhd' do neurônio. True = download. Defaults to True.
+        bits_mem (int, optional): Número de BIT_WIDTH de representação da memória ROM/RAM. Normalmente o mesmo número dos BIT_WIDTH de entrada/saída (parâmetro 'BIT_WIDTH'). Defaults to 8.
+        DOWNLOAD_VHD (bool, optional): Se deseja fazer o download do arquivo '.vhd' do neurônio. True = download. Defaults to True.
         DEBUG (bool, optional): Parâmetro para imprimir algumas etapas da função. True = imprime. Defaults to False.
     """
 
@@ -594,7 +595,7 @@ def Neuron_Gen_from_dict2(
     #! problema: MAC está pegando nome_MAC do dicionário (por padrão está sendo do 'layer_dict_hidden'), mas esta função está gernado o 'MAC_name' de outra forma, não pega do dict
     # global neurons_PM_matrix
     # ---------------- PEGA PARÂMETROS DO DICIONÁRIO -----------------------
-    num_inputs, bits, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
+    num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
         layer_dict=layers_dict_list[i])
 
     reg_txt, shift_reg_txt, reg_name, shift_reg_name = shift_reg_gen(
@@ -629,12 +630,12 @@ def Neuron_Gen_from_dict2(
         'Sigmoid': f'{prefix_neuron}Sigmoid'
     }
     neuron_ReLU_name = vhd_name(
-        fx_activation_dict['ReLU'], bits, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
+        fx_activation_dict['ReLU'], BIT_WIDTH, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
 
     neuron_Leaky_name = vhd_name(
-        fx_activation_dict['Leaky ReLU'], bits, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
+        fx_activation_dict['Leaky ReLU'], BIT_WIDTH, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
     neuron_Sigmoid_name = vhd_name(
-        fx_activation_dict['Sigmoid'], bits, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
+        fx_activation_dict['Sigmoid'], BIT_WIDTH, IO_type, num_inputs, Barriers, MAC_type, Include_MAC_type)
 
     if DEBUG:
         print(neuron_ReLU_name)
@@ -653,7 +654,7 @@ def Neuron_Gen_from_dict2(
     # Exemplo: MAC_name = 'MAC_5n'
     MAC_name = vhd_name(
         vhd_name='MAC',
-        bits=bits,
+        BIT_WIDTH=BIT_WIDTH,
         IO_type=IO_type,
         num_inputs=num_inputs,
         Barriers=Barriers,
@@ -677,7 +678,7 @@ def Neuron_Gen_from_dict2(
 
     mac_entity_txt = entity(
         name=MAC_name,
-        bits=layers_dict_list[i]['Neuron_arch']['Bit_WIDTH'],
+        BIT_WIDTH=layers_dict_list[i]['Neuron_arch']['Bit_WIDTH'],
         num_inputs=layers_dict_list[i]['Neuron_arch']['Inputs_number'],
         IO_dict_list=[
             layers_dict_list[i]['Neuron_arch']['IO']['shared_IO'],
@@ -759,7 +760,7 @@ def Neuron_Gen_from_dict2(
         port_map_shift_reg = ''
         port_map_shift_reg_No_Wout = ''
 # -------------------------------------------------
-    entity_leaky_out = entity(f"{neuron_Leaky_name}_out", bits, num_inputs,
+    entity_leaky_out = entity(f"{neuron_Leaky_name}_out", BIT_WIDTH, num_inputs,
                               [layers_dict_list[i]['Neuron_arch']['IO']['shared_IO'],
                                layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']],
                               #   remove_dict_items=['W_out : OUT signed(BITS - 1 DOWNTO 0);'],
@@ -777,7 +778,7 @@ USE work.parameters.ALL;
 ARCHITECTURE behavior of {neuron_Leaky_name}_out is
 {MAC_component}
 {component_shift_reg}
-    SIGNAL out_reg_MAC : {IO_type}(({str(bits - 1)}) DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_reg_MAC : {IO_type}(({str(BIT_WIDTH - 1)}) DOWNTO 0);	--reg da saida do MAC
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
     
 BEGIN
@@ -788,7 +789,7 @@ BEGIN
 END behavior;'''
                                 )
 
-    entity_leaky = entity(neuron_Leaky_name, bits, num_inputs,
+    entity_leaky = entity(neuron_Leaky_name, BIT_WIDTH, num_inputs,
                           [layers_dict_list[i]['Neuron_arch']['IO']['shared_IO'],
                               layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']],
                           remove_dict_items=[
@@ -807,7 +808,7 @@ USE work.parameters.ALL;
 ARCHITECTURE behavior of {neuron_Leaky_name} is
 {MAC_component}
 {component_shift_reg}
-    SIGNAL out_reg_MAC : {IO_type}(({str(bits - 1)}) DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_reg_MAC : {IO_type}(({str(BIT_WIDTH - 1)}) DOWNTO 0);	--reg da saida do MAC
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
     
 BEGIN
@@ -819,7 +820,7 @@ END behavior;'''
                             )
 
 # -------------------------------------------
-    entity_ReLU_out = entity(f"{neuron_ReLU_name}_out", bits, num_inputs,
+    entity_ReLU_out = entity(f"{neuron_ReLU_name}_out", BIT_WIDTH, num_inputs,
                              [layers_dict_list[i]['Neuron_arch']['IO']['shared_IO'],
                               layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']],
                              #   remove_dict_items=['W_out : OUT signed(BITS - 1 DOWNTO 0);'],
@@ -847,7 +848,7 @@ BEGIN
 {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= out_reg_MAC;"}
 END behavior;'''
                                )
-    entity_ReLU = entity(neuron_ReLU_name, bits, num_inputs,
+    entity_ReLU = entity(neuron_ReLU_name, BIT_WIDTH, num_inputs,
                          [layers_dict_list[i]['Neuron_arch']['IO']['shared_IO'],
                           layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']],
                          remove_dict_items=[
@@ -878,9 +879,18 @@ END behavior;'''
                            )
 
     # ------------------------------------------------
-    ROM_name = f"ROM_fx_{bits}bitaddr_{bits}width"
+    ROM_name = f"ROM_fx_{BIT_WIDTH}bitaddr_{BIT_WIDTH}width"
     ROM_component = rom_component(ROM_name, input_mem_bits, output_mem_bits)
     PORT_MAP_ROM = port_map_ROM(ROM_name, input_mem_bits, output_mem_bits)
+    ROM_Sigmoid_gen(
+        DOWNLOAD_VHD,
+        # f"ROM_Sigmoid_{BIT_WIDTH}bit",
+        ROM_name,
+        BIT_WIDTH,
+        IO_type,
+        is_sigmoid_signed=False,
+        n_integer=1,
+        path=OUTPUT_BASE_DIR_PATH)
     # ------
 
     # ------------------------------------------------
@@ -891,7 +901,7 @@ USE ieee.numeric_std.ALL;
 USE ieee.math_real.ALL;
 USE work.parameters.ALL;
 
-{entity(neuron_Sigmoid_name, bits, num_inputs,[layers_dict_list[i]['Neuron_arch']['IO']['shared_IO'], layers_dict_list[i]['Neuron_arch']['IO']['unique_IO'] ],generic = True)}
+{entity(neuron_Sigmoid_name, BIT_WIDTH, num_inputs,[layers_dict_list[i]['Neuron_arch']['IO']['shared_IO'], layers_dict_list[i]['Neuron_arch']['IO']['unique_IO'] ],generic = True)}
 
 
 ARCHITECTURE behavior of {neuron_Sigmoid_name} is
@@ -899,8 +909,8 @@ ARCHITECTURE behavior of {neuron_Sigmoid_name} is
 {component_shift_reg}
 {ROM_component}
 
-    SIGNAL out_reg_MAC : {IO_type} (( {str(bits - 1)} ) DOWNTO 0);	--reg da saida do MAC
-    SIGNAL out_ROM_act : STD_LOGIC_VECTOR( {str(bits - 1)} DOWNTO 0); --saida da ROM
+    SIGNAL out_reg_MAC : {IO_type} (( {str(BIT_WIDTH - 1)} ) DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_ROM_act : STD_LOGIC_VECTOR( {str(BIT_WIDTH - 1)} DOWNTO 0); --saida da ROM
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 BEGIN
@@ -933,7 +943,7 @@ END behavior;'''
             gen_hidden = True
             gen_softmax = False
             path_hidden, path_soft = create_folder_neuron(
-                bits,
+                BIT_WIDTH,
                 num_inputs,
                 Neurons_hidden,
                 Neurons_softmax,
@@ -948,7 +958,7 @@ END behavior;'''
             gen_hidden = True
             gen_softmax = False
             path_hidden, path_soft = create_folder_neuron(
-                bits,
+                BIT_WIDTH,
                 num_inputs,
                 Neurons_hidden,
                 Neurons_softmax,
@@ -962,7 +972,7 @@ END behavior;'''
             gen_hidden = False
             gen_softmax = True
             path_hidden, path_soft = create_folder_neuron(
-                bits,
+                BIT_WIDTH,
                 num_inputs,
                 Neurons_hidden,
                 Neurons_softmax,
@@ -993,7 +1003,7 @@ END behavior;'''
     # # multiplier_txt_gen(layers_dict_list[i],
     # #                    path_others, create_path_folder=False)
 
-    if download_vhd == True:
+    if DOWNLOAD_VHD == True:
 
         with open(f"{path_others}/{reg_name}.vhd", "w") as writer:
             writer.write(reg_txt)  # download Reg

@@ -49,14 +49,14 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     print(" ================================== FAZENDO CAMADAS ==================================")
     layers_dict_list = all_dense_layers_gen(
         Inputs_number=INPUTS_NUMBER,
-        bits=BIT_WIDTH,
+        BIT_WIDTH=BIT_WIDTH,
         IO_type_str=IO_TYPE_STR,  # 'signed' or 'unsigned'
         number_of_layers=NUMBER_OF_LAYERS,
         Layer_Neurons_number_list=LAYER_NEURONS_NUMBER_LIST,
         base_dict_hidden_layers=BASE_DICT_HIDDEN,
         base_dict_softmax_layer=BASE_DICT_SOFTMAX,
         OUTPUT_BASE_DIR_PATH=f"{OUTPUT_BASE_DIR_PATH}",
-        download_vhd=DOWNLOAD_VHD,
+        DOWNLOAD_VHD=DOWNLOAD_VHD,
         gen_dead_neurons=DEAD_NEURONS,  # gera neurônios mortos
         DEBUG=DEBUG
     )
@@ -66,13 +66,14 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
 
     for i, item in enumerate(layers_dict_list):
         PARAMS.layer_iteration = i
-        Neuron_Gen_from_dict2(download_vhd=DOWNLOAD_VHD,
+        Neuron_Gen_from_dict2(DOWNLOAD_VHD=DOWNLOAD_VHD,
                               i=i,
                               layers_dict_list=layers_dict_list,
                               OUTPUT_BASE_DIR_PATH=f"{OUTPUT_BASE_DIR_PATH}/Neuron",
                               DEBUG=DEBUG)
 
     parameters_vhd_gen(
+        # layer_dict = layers_dict_list[i]
         BIT_WIDTH,
         parameters_vhd_name='parameters',
         OUTPUT_BASE_DIR_PATH=OUTPUT_BASE_DIR_PATH,
@@ -151,9 +152,9 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
         'update_weights=> update_weights,', 'update_weights=> en_registers,')
     top_text = Top_txt(DEBUG, txt_top_port_map, signals_assign_txt, top_entity)
 
-    download_vhd = True
+    DOWNLOAD_VHD = True
     # salvando VHDL
-    if download_vhd:
+    if DOWNLOAD_VHD:
         top_dir = f"{OUTPUT_BASE_DIR_PATH}/{top_dict['Top_name']}.vhd"
         with open(top_dir, "w") as writer:
             writer.write(top_text)

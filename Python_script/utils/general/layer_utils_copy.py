@@ -412,7 +412,7 @@ def layer_name(layer_dict_arg: dict,
                     'Using': True,        # True = usar versão Sigmoid (Look Up Table)
                     'Memory': {
                     'bits_mem': 8,
-                    'mantissa': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
+                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
                     }
                     }
                 }
@@ -516,7 +516,7 @@ def layer_dict_gen_base(base_dict: dict,
                     'Using': True,        # True = usar versão Sigmoid (Look Up Table)
                     'Memory': {
                     'bits_mem': 8,
-                    'mantissa': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
+                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
                     }
                     }
                 }

@@ -412,7 +412,7 @@ def sequence_string_to_input(input_name: list, num_inputs: int):
 def seq_input_output(x_seq: list,
                      type: str,
                      IO_type: str,
-                     bits: int,
+                     BIT_WIDTH: int,
                      list_or_string: str,
                      port_position: str = 'init'
                      ):
@@ -420,7 +420,7 @@ def seq_input_output(x_seq: list,
     seq_input_output( x_seq = ['x1,x2,x3','w1,w2'],
                       type = "IN",
                       IO_type = 'signed',
-                      bits = 8,
+                      BIT_WIDTH = 8,
                       list_or_string = 'string',
                       port_position = 'begin')
       Output: #retornou tudo em uma string só
@@ -431,7 +431,7 @@ def seq_input_output(x_seq: list,
     seq_input_output( x_seq = ['x1,x2,x3','w1,w2'],
                       type = "IN",
                       IO_type = 'signed',
-                      bits = 8,
+                      BIT_WIDTH = 8,
                       list_or_string = 'list',
                       port_position = 'begin')
       Output: #retornou uma lista
@@ -444,7 +444,7 @@ def seq_input_output(x_seq: list,
 
         IO_type (str): aqui colocamos o tipo da porta: 'signed' ou 'unsigned' ou 'STD_LOGIC_VECTOR'
 
-        bits (int): número de bits da porta
+        BIT_WIDTH (int): número de BIT_WIDTH da porta
 
         list_or_string (str): se queremos que a função retorne uma string só com todas as portas ou uma lista de declaração de portas
 
@@ -467,18 +467,18 @@ def seq_input_output(x_seq: list,
 
     else:  # caso queira o retorno em vetor
         return x
-# seq_input_output(x_seq,"IN",IO_type,bits,'vector','begin')
+# seq_input_output(x_seq,"IN",IO_type,BIT_WIDTH,'vector','begin')
 
 
 def seq_signal(x_seq: list,
                type: str = 'SIGNAL',
                IO_type: str = 'signed',
-               bits: int = '0'):
+               BIT_WIDTH: int = '0'):
     """função para gerar string dos sinais. Exemplo:
     seq_signal(x_seq = ['x1,x2,x3','w1,w2'],
                     type = "SIGNAL",
                     IO_type = 'signed',
-                    bits = 8)
+                    BIT_WIDTH = 8)
       Output:
         ['SIGNAL x1,x2,x3: signed(7 DOWNTO 0);' ,
                                   'SIGNAL w1,w2: signed(7 DOWNTO 0);']
@@ -490,7 +490,7 @@ def seq_signal(x_seq: list,
 
         IO_type (str): aqui colocamos o tipo da porta: 'signed' ou 'unsigned' ou 'STD_LOGIC_VECTOR'
 
-        bits (int): número de bits do sinal
+        BIT_WIDTH (int): número de BIT_WIDTH do sinal
 
     Returns:
         _type_: _description_
@@ -499,8 +499,8 @@ def seq_signal(x_seq: list,
     for i in x_seq:
         sx.append(f"{type} {i}: {IO_type}(BITS -1 DOWNTO 0); ")
     return sx
-# seq_signal(x_seq,"SIGNAL",IO_type,bits)
-# seq_signal(valx_seq,"SIGNAL","STD_LOGIC_VECTOR",bits)
+# seq_signal(x_seq,"SIGNAL",IO_type,BIT_WIDTH)
+# seq_signal(valx_seq,"SIGNAL","STD_LOGIC_VECTOR",BIT_WIDTH)
 
 
 def IO_STDL(IO_dict: dict,
@@ -562,14 +562,14 @@ def IO_STDL(IO_dict: dict,
 
 
 def IO_STDL_V(IO_dict: dict = {},
-              bits: int = 8,
+              BIT_WIDTH: int = 8,
               onerow: bool = True,
               IO: str = 'IN') -> str:
     """Função análoga à 'IO_STDL()' porém agora para entradas e saídas do tipo 'STD_LOGIC_VECTOR'
 
     Args:
         IO_dict (dict, optional): _description_. Defaults to {}.
-        bits (int, optional): _description_. Defaults to 8.
+        BIT_WIDTH (int, optional): _description_. Defaults to 8.
         onerow (bool, optional): _description_. Defaults to True.
         IO (str, optional): _description_. Defaults to 'IN'.
 
@@ -601,15 +601,15 @@ def IO_STDL_V(IO_dict: dict = {},
         return text
 # EXEMPLO
 # if (print_cells_result == 1):
-#   print(IO_STDL_V(MAC_IO_dict,bits,1,'IN'))
+#   print(IO_STDL_V(MAC_IO_dict,BIT_WIDTH,1,'IN'))
 
 
-def IO_signed(IO_dict: dict, bits: int, onerow: bool, IO: str) -> str:
+def IO_signed(IO_dict: dict, BIT_WIDTH: int, onerow: bool, IO: str) -> str:
     """Função análoga à 'IO_STDL()' porém agora para entradas e saídas do tipo 'SIGNED'
 
     Args:
         IO_dict (dict): _description_
-        bits (int): _description_
+        BIT_WIDTH (int): _description_
         onerow (bool): _description_
         IO (str): _description_
 
@@ -637,7 +637,7 @@ def IO_signed(IO_dict: dict, bits: int, onerow: bool, IO: str) -> str:
         return text
 # Exemplo
 # if (print_cells_result == 1):
-#   print(IO_signed(MAC_IO_dict,bits,1,'IN'))
+#   print(IO_signed(MAC_IO_dict,BIT_WIDTH,1,'IN'))
 
 
 def IO_STD_num_inputs(IO_dict: dict, num_inputs: int, onerow: bool = True, IO: str = 'IN') -> str:
@@ -692,7 +692,7 @@ def IO_STD_num_inputs(IO_dict: dict, num_inputs: int, onerow: bool = True, IO: s
 
 
 def IO_STDL_V_num_inputs(IO_dict: dict,
-                         bits: int,
+                         BIT_WIDTH: int,
                          num_inputs: int,
                          onerow: bool = True,
                          IO: str = 'IN'):
@@ -700,7 +700,7 @@ def IO_STDL_V_num_inputs(IO_dict: dict,
 
     Args:
         IO_dict (dict): _description_
-        bits (int): _description_
+        BIT_WIDTH (int): _description_
         num_inputs (int): _description_
         onerow (bool, optional): _description_. Defaults to True.
         IO (str, optional): _description_. Defaults to 'IN'.
@@ -734,11 +734,11 @@ def IO_STDL_V_num_inputs(IO_dict: dict,
     return text
 # EXEMPLO
 # if (print_cells_result == 1):
-#   print(IO_STDL_V_num_inputs(MAC_IO_dict,bits,num_inputs,0,'IN'))
+#   print(IO_STDL_V_num_inputs(MAC_IO_dict,BIT_WIDTH,num_inputs,0,'IN'))
 
 
 def IO_signed_num_inputs(IO_dict: dict,
-                         bits: int,
+                         BIT_WIDTH: int,
                          num_inputs: int,
                          onerow: bool = True,
                          IO: str = 'IN'):
@@ -746,7 +746,7 @@ def IO_signed_num_inputs(IO_dict: dict,
 
     Args:
         IO_dict (dict): _description_
-        bits (int): _description_
+        BIT_WIDTH (int): _description_
         num_inputs (int): _description_
         onerow (bool, optional): _description_. Defaults to True.
         IO (str, optional): _description_. Defaults to 'IN'.
@@ -779,7 +779,7 @@ def IO_signed_num_inputs(IO_dict: dict,
     return text
 # EXEMPLO
 # if (print_cells_result == 1):
-#   print(IO_signed_num_inputs(MAC_IO_dict,bits,num_inputs,0,'IN'))
+#   print(IO_signed_num_inputs(MAC_IO_dict,BIT_WIDTH,num_inputs,0,'IN'))
 
 # IO_manual
 
@@ -802,7 +802,7 @@ def IO_manual(IO_dict: dict, IO_list: list, IO_type: str = 'IN', DEBUG: bool = F
                         'IO': {  # INPUT & OUTPUT
                             'shared_IO': { 
                                 'GENERIC': {
-                                    'BITS': lambda: layer_dict_hidden['bits'],
+                                    'BITS': lambda: layer_dict_hidden['BIT_WIDTH'],
                                     'NUM_INPUTS': lambda: layer_dict_hidden['Inputs_number'],
                                     'TOTAL_BITS': None
                                 },
@@ -1111,7 +1111,7 @@ def IO_manual_Top(
 
 
 def IO_manager(IO_dict_list: list = [{}, {}],
-               bits: int = 0,
+               BIT_WIDTH: int = 0,
                num_inputs: int = 3,
                onerow: bool = True,
                tab_space: int = 2,
@@ -1143,7 +1143,7 @@ def IO_manager(IO_dict_list: list = [{}, {}],
         }
     -----------------------------------------------------
     Exemplo utilizando a função:
-      IO, traço = IO_manager([MAC_IO_dict], bits = 8,
+      IO, traço = IO_manager([MAC_IO_dict], BIT_WIDTH = 8,
                              num_inputs = 3, onerow = 1,tab_space = 2)
 
       Output: (veja que está 2 'tabs' a direita --> tab_space = 2)
@@ -1158,7 +1158,7 @@ def IO_manager(IO_dict_list: list = [{}, {}],
     Args:
         IO_dict_list (list, optional): lista de dicionários de INPUTS & OUTPUTS. Defaults to [{},{}].
 
-        bits (int, optional): número de bits de representação (WIDTH). Defaults to 0.
+        BIT_WIDTH (int, optional): número de BIT_WIDTH de representação (WIDTH). Defaults to 0.
 
         num_inputs (int, optional): número de entradas do neurônio (entradas que expandem por exemplo um 'x' para 'x1,x2,x3' caso num_inputs = 3). Defaults to 3.
 
@@ -1190,14 +1190,14 @@ def IO_manager(IO_dict_list: list = [{}, {}],
         IN_stdl.append(
             IO_STDL(IO_dict_list[i], onerow, 'IN', remove_dict_items=remove_dict_items))
         IN_stdl_v.append(IO_STDL_V(
-            IO_dict_list[i], bits, onerow, 'IN'))
+            IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
         IN_stdl_num_inputs.append(IO_STD_num_inputs(
             IO_dict_list[i], num_inputs, onerow, 'IN'))
         IN_stdl_v_num_inputs.append(IO_STDL_V_num_inputs(
-            IO_dict_list[i], bits, num_inputs, 0, 'IN'))
-        IN_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'IN'))
+            IO_dict_list[i], BIT_WIDTH, num_inputs, 0, 'IN'))
+        IN_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
         IN_signed_num_inputs.append(IO_signed_num_inputs(
-            IO_dict_list[i], bits, num_inputs, 0, 'IN'))
+            IO_dict_list[i], BIT_WIDTH, num_inputs, 0, 'IN'))
         # print(f"IO_dict_list[i]['IN']: {IO_dict_list[i]['IN']}")
         IN_manual.append(dict_list_exceptNone(
             dict_slice=IO_dict_list[i]['IN']['manual']))
@@ -1206,14 +1206,14 @@ def IO_manager(IO_dict_list: list = [{}, {}],
 
         # OUTPUTS
         OUT_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'OUT'))
-        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'OUT'))
+        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
         OUT_stdl_num_inputs.append(IO_STD_num_inputs(
             IO_dict_list[i], num_inputs, onerow, 'OUT'))
         OUT_stdl_v_num_inputs.append(IO_STDL_V_num_inputs(
-            IO_dict_list[i], bits, num_inputs, 0, 'OUT'))
-        OUT_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'OUT'))
+            IO_dict_list[i], BIT_WIDTH, num_inputs, 0, 'OUT'))
+        OUT_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
         OUT_signed_num_inputs.append(IO_signed_num_inputs(
-            IO_dict_list[i], bits, num_inputs, 0, 'OUT'))
+            IO_dict_list[i], BIT_WIDTH, num_inputs, 0, 'OUT'))
         OUT_manual.append(dict_list_exceptNone(
             dict_slice=IO_dict_list[i]['OUT']['manual']))
         OUT_manual = remove_all_lista_ocurrences2(
@@ -1250,7 +1250,7 @@ def IO_manager(IO_dict_list: list = [{}, {}],
 
 
 def IO_manager_layer(IO_dict: dict = {},
-                     bits: int = 0,
+                     BIT_WIDTH: int = 0,
                      onerow: bool = True,
                      tab_space: int = 2) -> str:
     """Função para gerar toda a declaração das portas (inputs & outputs) da parte 'entity' do módulo.vhd com base em um dicionário em formato padrão pré-estabelecido. Retorna um texto disso tudo.
@@ -1280,7 +1280,7 @@ def IO_manager_layer(IO_dict: dict = {},
         }
     -----------------------------------------------------
     Exemplo utilizando a função:
-      IO, traço = IO_manager([MAC_IO_dict], bits = 8,
+      IO, traço = IO_manager([MAC_IO_dict], BIT_WIDTH = 8,
                              num_inputs = 3, onerow = 1,tab_space = 2)
 
       Output: (veja que está 2 'tabs' a direita --> tab_space = 2)
@@ -1295,7 +1295,7 @@ def IO_manager_layer(IO_dict: dict = {},
     Args:
         IO_dict_list (list, optional): lista de dicionários de INPUTS & OUTPUTS. Defaults to [{},{}].
 
-        bits (int, optional): número de bits de representação (WIDTH). Defaults to 0.
+        BIT_WIDTH (int, optional): número de BIT_WIDTH de representação (WIDTH). Defaults to 0.
 
         num_inputs (int, optional): número de entradas do neurônio (entradas que expandem por exemplo um 'x' para 'x1,x2,x3' caso num_inputs = 3). Defaults to 3.
 
@@ -1320,8 +1320,8 @@ def IO_manager_layer(IO_dict: dict = {},
         #     f" ------------------> IO_dict_list[{i}]['IN']: {IO_dict_list[i]['IN']}")
         # INPUTS
         IN_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'IN'))
-        IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'IN'))
-        IN_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'IN'))
+        IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
+        IN_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
         # IN_manual.append(dict_list_exceptNone(
         #     dict_slice=IO_dict_list[i]['IN']['manual']))
         IN_manual.append(
@@ -1329,8 +1329,8 @@ def IO_manager_layer(IO_dict: dict = {},
 
         # OUTPUTS
         OUT_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'OUT'))
-        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'OUT'))
-        OUT_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'OUT'))
+        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
+        OUT_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
         OUT_manual.append(
             IO_manual(IO_dict=IO_dict, IO_list=IO_dict_list[i], IO_type='OUT'))
         # OUT_manual.append(dict_list_exceptNone(
@@ -1372,7 +1372,7 @@ def IO_manager_layer(IO_dict: dict = {},
     return (IO_text, traço)
 # EXEMPLO
 # print(entity(name = layer_dict['Neuron_arch']['Neuron_name'],
-#              bits = 8,
+#              BIT_WIDTH = 8,
 #              num_inputs = 3,
 #              IO_dict_list = [layer_dict['Neuron_arch']['shared_IO']['IO'], layer_dict['Neuron_arch']['unique_IO']['IO']]
 #              ))
@@ -1380,7 +1380,7 @@ def IO_manager_layer(IO_dict: dict = {},
 
 def IO_manager_Top(top_dict: dict,
                    IO_dict_compare: dict = {},
-                   bits: int = 0,
+                   BIT_WIDTH: int = 0,
                    onerow: bool = True,
                    tab_space: int = 2,
                    remove_dict_items=[]
@@ -1390,7 +1390,7 @@ def IO_manager_Top(top_dict: dict,
     Exemplo de dicionário:
       'IO': {  # INPUT & OUTPUT
         'GENERIC': {
-            'BITS': lambda: top_dict['bits'],
+            'BITS': lambda: top_dict['BIT_WIDTH'],
             'NUM_INPUTS': lambda: top_dict['Inputs_number'],
             'TOTAL_BITS': None
         },
@@ -1409,7 +1409,7 @@ def IO_manager_Top(top_dict: dict,
     }
     -----------------------------------------------------
     Exemplo utilizando a função:
-      IO, traço = IO_manager([MAC_IO_dict], bits = 8,
+      IO, traço = IO_manager([MAC_IO_dict], BIT_WIDTH = 8,
                              num_inputs = 3, onerow = 1,tab_space = 2)
 
       Output: (veja que está 2 'tabs' a direita --> tab_space = 2)
@@ -1424,7 +1424,7 @@ def IO_manager_Top(top_dict: dict,
     Args:
         IO_dict_list (list, optional): lista de dicionários de INPUTS & OUTPUTS. Defaults to [{},{}].
 
-        bits (int, optional): número de bits de representação (WIDTH). Defaults to 0.
+        BIT_WIDTH (int, optional): número de BIT_WIDTH de representação (WIDTH). Defaults to 0.
 
         num_inputs (int, optional): número de entradas do neurônio (entradas que expandem por exemplo um 'x' para 'x1,x2,x3' caso num_inputs = 3). Defaults to 3.
 
@@ -1456,8 +1456,8 @@ def IO_manager_Top(top_dict: dict,
         # INPUTS
         IN_stdl.append(
             IO_STDL(IO_dict_list[i], onerow, 'IN', remove_dict_items=remove_dict_items))
-        IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'IN'))
-        IN_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'IN'))
+        IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
+        IN_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
         IN_manual.append(
             IO_manual_Top(IO_dict_compare=IO_dict_compare, top_dict=IO_dict_list[i], IO_type='IN'))
         # IN_manual.append(dict_list_exceptNone(
@@ -1465,8 +1465,8 @@ def IO_manager_Top(top_dict: dict,
 
         # OUTPUTS
         OUT_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'OUT'))
-        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], bits, onerow, 'OUT'))
-        OUT_signed.append(IO_signed(IO_dict_list[i], bits, onerow, 'OUT'))
+        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
+        OUT_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
         OUT_manual.append(
             IO_manual_Top(IO_dict_compare=IO_dict_compare, top_dict=IO_dict_list[i], IO_type='OUT'))
         # OUT_manual.append(dict_list_exceptNone(
@@ -1506,7 +1506,7 @@ def IO_manager_Top(top_dict: dict,
     return (text, traço)
 
 
-def inputs_vector(bits: int,
+def inputs_vector(BIT_WIDTH: int,
                   IO_type: str,
                   x_seq: list,
                   sx_seq: list,
@@ -1515,7 +1515,7 @@ def inputs_vector(bits: int,
     """Função para retornar as strings das entradas, sinais, sinais de testbench, tanto de 'x' quanto para 'w' (mas poderia ser usado pra muito mais tipos de entradas). Ela retorna tudo em múltiplas variáveis que irão ser salvas em variáveis globais, para serem usadas posteriormente na geração de texto dos arquivos '.vhd'. Exemplo:
 
     # EXEMPLO 1
-    inputs_vector(bits = 8,
+    inputs_vector(BIT_WIDTH = 8,
                 IO_type = 'signed',
                 x_seq= ['x1, x2, x3','w1, w2, w3'],
                 sx_seq = ['sx1, sx2, sx3','sw1, sw2, sw3'],
@@ -1534,7 +1534,7 @@ def inputs_vector(bits: int,
           'VARIABLE val_w1, val_w2, val_w3: STD_LOGIC_VECTOR(7 DOWNTO 0); '])
 
     # EXEMPLO 2
-    inputs_vector(bits = 8,
+    inputs_vector(BIT_WIDTH = 8,
                 IO_type = 'signed',
                 x_seq= ['x1, x2, x3','w1, w2, w3'],
                 sx_seq = ['sx1, sx2, sx3','sw1, sw2, sw3'],
@@ -1554,7 +1554,7 @@ def inputs_vector(bits: int,
         'VARIABLE val_w1, val_w2, val_w3: STD_LOGIC_VECTOR(7 DOWNTO 0); ')
   -----------------------------------------------
     Args:
-        bits (int): número de bits das portas
+        BIT_WIDTH (int): número de BIT_WIDTH das portas
 
         IO_type (str): aqui colocamos o tipo da porta: 'signed' ou 'unsigned' ou 'STD_LOGIC_VECTOR'
 
@@ -1576,11 +1576,11 @@ def inputs_vector(bits: int,
     val_x = []
     val_x_tb = []
     # input definitions
-    x = seq_input_output(x_seq, "IN", IO_type, bits, 'vector', 'begin')
-    sx_tb = seq_signal(x_seq, "SIGNAL", IO_type, bits)
-    sx = seq_signal(sx_seq, "SIGNAL", IO_type, bits)
-    val_x = seq_signal(valx_seq, "SIGNAL", "STD_LOGIC_VECTOR", bits)
-    val_x_tb = seq_signal(valx_seq, "VARIABLE", "STD_LOGIC_VECTOR", bits)
+    x = seq_input_output(x_seq, "IN", IO_type, BIT_WIDTH, 'vector', 'begin')
+    sx_tb = seq_signal(x_seq, "SIGNAL", IO_type, BIT_WIDTH)
+    sx = seq_signal(sx_seq, "SIGNAL", IO_type, BIT_WIDTH)
+    val_x = seq_signal(valx_seq, "SIGNAL", "STD_LOGIC_VECTOR", BIT_WIDTH)
+    val_x_tb = seq_signal(valx_seq, "VARIABLE", "STD_LOGIC_VECTOR", BIT_WIDTH)
 
     if (is_list == False):  # caso queiramos converter as saídas em lista para diferentes variáveis (um para 'x' e outra para 'w' para cada tipo de sinal)
         w = x[1]
@@ -1600,7 +1600,7 @@ def inputs_vector(bits: int,
 
 def all_inputs_signals(inputs_list: list,
                        num_inputs: int,
-                       bits: int,
+                       BIT_WIDTH: int,
                        IO_type: str,
                        is_list: bool):
     """Função final que irá gerar todas as portas necessárias aos arquivos '.vhd' assim como seus sinais necessários respectivos (retorna em múltiplas variáveis, para serem salvas em variáveis globais para posterior uso). Um exemplo:
@@ -1610,7 +1610,7 @@ def all_inputs_signals(inputs_list: list,
     all_inputs_signals(
       inputs_list= ['x','w'],
       num_inputs = 3,
-      bits = 8,
+      BIT_WIDTH = 8,
       IO_type = 'signed',
       is_list = 0
       )
@@ -1632,7 +1632,7 @@ def all_inputs_signals(inputs_list: list,
 
         num_inputs (int): número de entradas. se num_inputs = 2, logo irá gerar entradas x1, x2, w1, w2 (assim como os sinais respectivos ....)
 
-        bits (int): número de bits das portas
+        BIT_WIDTH (int): número de BIT_WIDTH das portas
 
         IO_type (str): aqui colocamos o tipo da porta: 'signed' ou 'unsigned' ou 'STD_LOGIC_VECTOR'
 
@@ -1640,7 +1640,7 @@ def all_inputs_signals(inputs_list: list,
     """
     # ------- Parâmetros do início do script --------
     # num_inputs: número de entradas
-    # bits: número de bits
+    # BIT_WIDTH: número de BIT_WIDTH
     # IO_type: se é 'signed' ou 'unsigned'
     # -------------- Outros Parâmetros --------------
     # is_list: 1 = representar retornos em vetores x = [..] | 0 = representar em variáveis diferentes -> x, w, ....
@@ -1650,7 +1650,7 @@ def all_inputs_signals(inputs_list: list,
 
     if (is_list == 0):
         x, w, sx, sw, sx_tb, sw_tb, val_x, val_w, val_x_tb, val_w_tb = (inputs_vector(
-            bits,
+            BIT_WIDTH,
             IO_type,
             x_sequence_string,
             sx_sequence_string,
@@ -1659,7 +1659,7 @@ def all_inputs_signals(inputs_list: list,
         return (x, w, sx, sw, sx_tb, sw_tb, val_x, val_w, val_x_tb, val_w_tb)
 
     else:  # quando é em vetor
-        x, sx, sx_tb, val_x, val_x_tb = (inputs_vector(bits, IO_type,
+        x, sx, sx_tb, val_x, val_x_tb = (inputs_vector(BIT_WIDTH, IO_type,
                                                        x_sequence_string,
                                                        sx_sequence_string,
                                                        valx_sequence_string, is_list))

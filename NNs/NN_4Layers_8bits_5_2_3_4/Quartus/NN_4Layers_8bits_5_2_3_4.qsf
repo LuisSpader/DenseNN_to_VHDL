@@ -51,8 +51,18 @@ set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulati
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH tb_top -section_id eda_simulation
+set_global_assignment -name EDA_TEST_BENCH_NAME tb_top -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_top
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "10 us" -section_id tb_top
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_top -section_id tb_top
+set_global_assignment -name EDA_TEST_BENCH_FILE ../tb_top.vhd -section_id tb_top
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT do_wave.txt -section_id eda_simulation
+set_global_assignment -name VHDL_FILE ../Neuron/ROM_fx_8bitaddr_8width.vhd
 set_global_assignment -name VHDL_FILE ../top.vhd
-set_global_assignment -name VHDL_FILE ../ROM_fx_8bitaddr_8width.vhd
 set_global_assignment -name VHDL_FILE ../parameters.vhd
 set_global_assignment -name VHDL_FILE ../mult0_v0.vhd
 set_global_assignment -name VHDL_FILE ../add0_v0.vhd
@@ -72,15 +82,5 @@ set_global_assignment -name VHDL_FILE ../Neuron/neuron_comb_ReLU_2n_8bit_signed_
 set_global_assignment -name VHDL_FILE ../Neuron/MAC_comb_5n_8bit_signed_mult0_v0_add0_v0.vhd
 set_global_assignment -name VHDL_FILE ../Neuron/MAC_comb_3n_8bit_signed_mult0_v0_add0_v0.vhd
 set_global_assignment -name VHDL_FILE ../Neuron/MAC_comb_2n_8bit_signed_mult0_v0_add0_v0.vhd
-set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
-set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH tb_top -section_id eda_simulation
-set_global_assignment -name EDA_TEST_BENCH_NAME tb_top -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_top
-set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "10 us" -section_id tb_top
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_top -section_id tb_top
-set_global_assignment -name EDA_TEST_BENCH_FILE ../tb_top.vhd -section_id tb_top
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name TEXT_FILE do_wave.txt
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT do_wave.txt -section_id eda_simulation
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -58,8 +58,8 @@ ARCHITECTURE behavior of neuron_comb_Sigmoid_3n_8bit_signed_mult0_v0_add0_v0 is
       ------------------------------------------
       data_out : OUT STD_LOGIC_VECTOR (7  DOWNTO 0)
     );
-  -- input: address (8 bits)
-  -- output: data_out (8 bits)
+  -- input: address (8 BIT_WIDTH)
+  -- output: data_out (8 BIT_WIDTH)
   END COMPONENT;
   
 

@@ -18,13 +18,13 @@ dict_list = dict_to_list(target_dict=fx_activation_dict, key_or_value=True)
 top_dict = {
     # ========================== Parâmetros da camada ===========================
     'Inputs_number': 3,  # número de entradas da camada
-    'bits': 8,
+    'BIT_WIDTH': 8,
     'Top_name': 'top',  # nome do '.vhd' da camada
     # --------------------------
     # DEVE SE ALTERAR AUTOMATICAMENTE COM BASE NA CONFIG DO NEURÔNIO
     'IO': {  # INPUT & OUTPUT
         'GENERIC': {
-            'BITS': lambda: top_dict['bits'],
+            'BITS': lambda: top_dict['BIT_WIDTH'],
             'NUM_INPUTS': lambda: top_dict['Inputs_number'],
             'TOTAL_BITS': None
         },
@@ -46,7 +46,7 @@ top_dict = {
 layer_dict_hidden = {
     # ========================== Parâmetros da camada ===========================
     'Inputs_number': 3,  # número de entradas da camada
-    'bits': 8,
+    'BIT_WIDTH': 8,
     'IO_type': 'signed',     # 'signed' | 'unsigned' | 'std_logic_vector'
     'Neurons_number': 4,  # número de neurônios da camada
     'Layer_name': '',  # nome do '.vhd' da camada
@@ -55,7 +55,7 @@ layer_dict_hidden = {
     # DEVE SE ALTERAR AUTOMATICAMENTE COM BASE NA CONFIG DO NEURÔNIO
     'IO': {  # INPUT & OUTPUT
         'GENERIC': {
-            'BITS': lambda: layer_dict_hidden['bits'],
+            'BITS': lambda: layer_dict_hidden['BIT_WIDTH'],
             'NUM_INPUTS': lambda: layer_dict_hidden['Inputs_number'],
             'TOTAL_BITS': None
         },
@@ -79,8 +79,8 @@ layer_dict_hidden = {
     'Neuron_arch': {
         # número de entradas e pesos do perceptron
         'Inputs_number': lambda: layer_dict_hidden['Inputs_number'],
-        # define o número de bits para as entradas e pesos
-        'Bit_WIDTH': lambda: layer_dict_hidden['bits'],
+        # define o número de BIT_WIDTH para as entradas e pesos
+        'Bit_WIDTH': lambda: layer_dict_hidden['BIT_WIDTH'],
         # True= signed || 0= unsigned
         'IO_type': lambda: layer_dict_hidden['IO_type'],
 
@@ -98,7 +98,7 @@ layer_dict_hidden = {
         # -------------------------
         'IO': {  # INPUT & OUTPUT
             'GENERIC': {
-                'BITS': lambda: layer_dict_hidden['bits'],
+                'BITS': lambda: layer_dict_hidden['BIT_WIDTH'],
                 'NUM_INPUTS': lambda: layer_dict_hidden['Inputs_number'],
                 'TOTAL_BITS': None
             },
@@ -184,7 +184,7 @@ layer_dict_hidden = {
                     'bits_mem': 8,  # por enquanto input_bits = output_bits
                     # 'n' binary digits are the fractional part of `x`; = MANTISSA
                     # deste modo não temos parte 'inteiro', apenas mantissa
-                    'mantissa': lambda: layer_dict_hidden['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem']
+                    'input_mem_bits': lambda: layer_dict_hidden['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem']
                 }
             }
         }
@@ -203,8 +203,8 @@ def update_neuron_name_from_LayerDict(layer_dict):
         # modelo de função de ativação
         vhd_name=f"neuron_{fx_activation}",
         # Obs: dict_list 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
-        # Quantidade de bits para representação
-        bits=layer_dict['bits'],
+        # Quantidade de BIT_WIDTH para representação
+        BIT_WIDTH=layer_dict['BIT_WIDTH'],
         # 1= signed || 0= unsigned
         IO_type=layer_dict['IO_type'],
         # Quantidade de entradas
@@ -243,7 +243,7 @@ def update_dict_fx_activation(layer_dict: dict):
                 'Memory': {
                 'bits_mem': 8,
                 # 'n' binary digits are the fractional part of `x`; = MANTISSA
-                'mantissa': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
+                'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
                 }
                 }
             }
@@ -271,7 +271,7 @@ def get_dict_fx_activation(layer_dict: dict):
                 'Memory': {
                 'bits_mem': 8,
                 # 'n' binary digits are the fractional part of `x`; = MANTISSA
-                'mantissa': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
+                'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
                 }
                 }
             }
@@ -288,11 +288,11 @@ def get_dict_fx_activation(layer_dict: dict):
 
 def update_dict_neuron(layer_dict):
     # upload dos parâmetros do neurônio com base nos parâmetros da camada da NN
-    layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['mantissa'] = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem']
+    layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['input_mem_bits'] = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem']
 
     layer_dict['Neuron_arch']['Inputs_number'] = layer_dict['Inputs_number']
-    # define o número de bits para as entradas e pesos
-    layer_dict['Neuron_arch']['Bit_WIDTH'] = layer_dict['bits']
+    # define o número de BIT_WIDTH para as entradas e pesos
+    layer_dict['Neuron_arch']['Bit_WIDTH'] = layer_dict['BIT_WIDTH']
     # True= signed || 0= unsigned
     layer_dict['Neuron_arch']['IO_type'] = layer_dict['IO_type']
 
@@ -315,18 +315,18 @@ def get_neuron_data_from_LayerDict(layer_dict: dict, DEBUG: bool = False):
 
     try:
         num_inputs = layer_dict['Neuron_arch']['Inputs_number']()
-        bits = layer_dict['Neuron_arch']['Bit_WIDTH']()
+        BIT_WIDTH = layer_dict['Neuron_arch']['Bit_WIDTH']()
         IO_type = layer_dict['Neuron_arch']['IO_type']()
         Include_MAC_type = layer_dict['Neuron_arch']['Include_MAC_type']()
 
-        n_bin = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['mantissa'](
+        input_mem_bits = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['input_mem_bits'](
         )
         if DEBUG:
             print(
                 f"get_neuron_data_from_LayerDict() -> layer_dict['Neuron_arch']['IO_type'](): {layer_dict['Neuron_arch']['IO_type']()}")
     except:
-        bits = layer_dict['Neuron_arch']['Bit_WIDTH']
-        n_bin = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['mantissa']
+        BIT_WIDTH = layer_dict['Neuron_arch']['Bit_WIDTH']
+        input_mem_bits = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['input_mem_bits']
         num_inputs = layer_dict['Neuron_arch']['Inputs_number']
         IO_type = layer_dict['Neuron_arch']['IO_type']
         Include_MAC_type = layer_dict['Neuron_arch']['Include_MAC_type']
@@ -347,24 +347,23 @@ def get_neuron_data_from_LayerDict(layer_dict: dict, DEBUG: bool = False):
     MAC_type = layer_dict['Neuron_arch']['MAC_type']
     fx_activation = get_dict_fx_activation(layer_dict=layer_dict)
 
-    input_mem_bits = n_bin  # por enquanto só temos mantissa, sem inteiros
     output_mem_bits = input_mem_bits  # por enquanto entrada = saída
 
-    return num_inputs, bits, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits
+    return num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, input_mem_bits, input_mem_bits, output_mem_bits
 
 
 # print(f"-------- get_neuron_data_from_LayerDict(layer_dict: dict) ----------- ")
-# num_inputs, bits, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
+# num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, input_mem_bits, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
 #     layer_dict=layer_dict_hidden)
 # print(f"num_inputs: {num_inputs}")
-# print(f"bits: {bits}")
+# print(f"BIT_WIDTH: {BIT_WIDTH}")
 # print(f"IO_type: {IO_type}")
 # print(f"Neuron_name: {Neuron_name}")
 # print(f"Include_MAC_type: {Include_MAC_type}")
 # print(f"MAC_type: {MAC_type}")
 # print(f"Barriers: {Barriers}")
 # print(f"fx_activation: {fx_activation}")
-# print(f"n_bin: {n_bin}")
+# print(f"input_mem_bits: {input_mem_bits}")
 # print(f"input_mem_bits: {input_mem_bits}")
 # print(f"output_mem_bits: {output_mem_bits}")
 
@@ -377,7 +376,7 @@ dict_list = dict_to_list(target_dict=fx_activation_dict, key_or_value=True)
 layer_dict_softmax = {
     # ========================== Parâmetros da camada ===========================
     'Inputs_number': 3,  # número de entradas da camada
-    'bits': 8,
+    'BIT_WIDTH': 8,
     'IO_type': 'signed',     # 'signed' | 'unsigned' | 'std_logic_vector'
     'Neurons_number': 2,  # número de neurônios da camada
     'Layer_name': '',  # nome do '.vhd' da camada
@@ -386,7 +385,7 @@ layer_dict_softmax = {
     # DEVE SE ALTERAR AUTOMATICAMENTE COM BASE NA CONFIG DO NEURÔNIO
     'IO': {  # INPUT & OUTPUT
         'GENERIC': {
-            'BITS': lambda: layer_dict_hidden['bits'],
+            'BITS': lambda: layer_dict_hidden['BIT_WIDTH'],
             'NUM_INPUTS': lambda: layer_dict_hidden['Inputs_number'],
             'TOTAL_BITS': None
         },
@@ -410,8 +409,8 @@ layer_dict_softmax = {
     'Neuron_arch': {
         # número de entradas e pesos do perceptron
         'Inputs_number': lambda: layer_dict_softmax['Inputs_number'],
-        # define o número de bits para as entradas e pesos
-        'Bit_WIDTH': lambda: layer_dict_softmax['bits'],
+        # define o número de BIT_WIDTH para as entradas e pesos
+        'Bit_WIDTH': lambda: layer_dict_softmax['BIT_WIDTH'],
         # True= signed || 0= unsigned
         'IO_type': lambda: layer_dict_softmax['IO_type'],
 
@@ -429,7 +428,7 @@ layer_dict_softmax = {
         # -------------------------
         'IO': {  # INPUT & OUTPUT
             'GENERIC': {
-                'BITS': lambda: layer_dict_softmax['bits'],
+                'BITS': lambda: layer_dict_softmax['BIT_WIDTH'],
                 'NUM_INPUTS': lambda: layer_dict_softmax['Inputs_number'],
                 'TOTAL_BITS': None
             },
@@ -468,6 +467,8 @@ layer_dict_softmax = {
                     'STD_LOGIC': None,
                     'STD_LOGIC_VECTOR': None,
                     'SIGNED': ['IO_out'],
+                    # 'STD_LOGIC_VECTOR': ['IO_out'],
+                    # 'SIGNED': None,
                     'STD_LOGIC_VECTOR_num_inputs': None,
                     'STD_LOGIC_num_inputs': None,
                     'SIGNED_num_inputs': None,
@@ -514,7 +515,7 @@ layer_dict_softmax = {
                 'Memory': {
                     'bits_mem': 8,
                     # 'n' binary digits are the fractional part of `x`; = MANTISSA
-                    'mantissa': lambda: layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
+                    'input_mem_bits': lambda: layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
                 }
             }
         }
@@ -527,8 +528,8 @@ layer_dict_softmax['Neuron_arch']['Neuron_name'] = vhd_name(
     # modelo de função de ativação
     vhd_name=f"neuron_{dict_list[0]}",
     # Obs: dict_list 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
-    # Quantidade de bits para representação
-    bits=layer_dict_softmax['bits'],
+    # Quantidade de BIT_WIDTH para representação
+    BIT_WIDTH=layer_dict_softmax['BIT_WIDTH'],
     # 1= signed || 0= unsigned
     IO_type=layer_dict_softmax['IO_type'],
     # Quantidade de entradas

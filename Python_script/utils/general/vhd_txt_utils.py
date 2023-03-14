@@ -29,7 +29,7 @@ import numpy as np
 
 
 def entity(name: str,
-           bits: int,
+           BIT_WIDTH: int,
            num_inputs: int,
            IO_dict_list: list,
            remove_dict_items=[],
@@ -93,7 +93,7 @@ def entity(name: str,
     layer_dict['Neuron_arch']['Neuron_name'] = neuron_comb_ReLU_3n_8bit_unsigned_mul1a_v0_add0_v0
 
       entity(name = layer_dict['Neuron_arch']['Neuron_name'],
-               bits = 8,
+               BIT_WIDTH = 8,
                num_inputs = 3,
                IO_dict_list = dict_list_IO)
 
@@ -113,7 +113,7 @@ def entity(name: str,
     Args:
         name (str): string com nome do módulo '.vhd'. Exemplo: name = 'adder'
 
-        bits (int): define o número de bits para as entradas e pesos
+        BIT_WIDTH (int): define o número de BIT_WIDTH para as entradas e pesos
 
         num_inputs (int): número de entradas e pesos do perceptron
 
@@ -124,9 +124,9 @@ def entity(name: str,
     Returns:
         str: string com toda a escrita da 'entity', conforme 'Output' do exemplo acima.
     """
-    if not isinstance(bits, int):
+    if not isinstance(BIT_WIDTH, int):
         try:
-            bits = bits()
+            BIT_WIDTH = BIT_WIDTH()
         except:
             print("Error entity(): Formato de dicionário inválido para bit_WIDTH")
 
@@ -143,7 +143,7 @@ def entity(name: str,
         # print("tentativa dic 1")
         if (4 != len(IO_dict_list[0]['IN'].keys())):
             IO, traço = IO_manager(
-                IO_dict_list, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
+                IO_dict_list, BIT_WIDTH, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
 
         else:  # quando temos 3 IO é dicionário no formato de uma camada, aí usamos 'IO_manager_layer'
             # print(
@@ -152,16 +152,16 @@ def entity(name: str,
             #     f"é layer --> IO_dict_list[0]['IN'].keys():{IO_dict_list[0]['IN'].keys()})")
 
             IO, traço = IO_manager_layer(
-                IO_dict_list, bits, onerow=1, tab_space=2)
+                IO_dict_list, BIT_WIDTH, onerow=1, tab_space=2)
     except:
         # print("tentativa dic 2 exceção")
         if (4 != len(IO_dict_list[0]['shared_IO']['IN'].keys())):
             IO, traço = IO_manager(
-                IO_dict_list, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
+                IO_dict_list, BIT_WIDTH, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
 
         else:  # quando temos 3 IO é dicionário no formato de uma camada, aí usamos 'IO_manager_layer'
             IO, traço = IO_manager_layer(
-                IO_dict_list, bits, onerow=1, tab_space=2)
+                IO_dict_list, BIT_WIDTH, onerow=1, tab_space=2)
     # except:
     #     print("Error entity(): Formato de dicionário inválido")
     #     return
@@ -170,7 +170,7 @@ def entity(name: str,
   GENERIC (
       BITS : NATURAL := BITS;
       NUM_INPUTS : NATURAL := {num_inputs};
-      TOTAL_BITS : NATURAL := {num_inputs*bits}
+      TOTAL_BITS : NATURAL := {num_inputs*BIT_WIDTH}
   );
     ''')
     else:
@@ -198,13 +198,13 @@ def layerDict_to_entityTxt(
         DEBUG: bool = False) -> str:
 
     name = layer_dict['Layer_name']
-    bits = layer_dict['bits']
+    BIT_WIDTH = layer_dict['BIT_WIDTH']
     num_inputs = layer_dict['Inputs_number']
     IO_dict_list = [layer_dict['IO']]
 
-    if not isinstance(bits, int):
+    if not isinstance(BIT_WIDTH, int):
         try:
-            bits = bits()
+            BIT_WIDTH = BIT_WIDTH()
         except:
             print("Error entity(): Formato de dicionário inválido para bit_WIDTH")
 
@@ -221,21 +221,21 @@ def layerDict_to_entityTxt(
         # # print("tentativa dic 1")
         # if (7 == len(IO_dict_list[0]['IN'].keys())):
         #     IO, traço = IO_manager(
-        #         IO_dict_list, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
+        #         IO_dict_list, BIT_WIDTH, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
 
         # else:  # quando temos 3 IO é dicionário no formato de uma camada, aí usamos 'IO_manager_layer'
 
     IO, traço = IO_manager_layer(
-        layer_dict, bits, onerow=1, tab_space=2)
+        layer_dict, BIT_WIDTH, onerow=1, tab_space=2)
     # except:
     #     # # print("tentativa dic 2 exceção")
     #     # if (7 == len(IO_dict_list[0]['shared_IO']['IN'].keys())):
     #     #     IO, traço = IO_manager(
-    #     #         IO_dict_list, bits, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
+    #     #         IO_dict_list, BIT_WIDTH, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items)
 
     #     # else:  # quando temos 3 IO é dicionário no formato de uma camada, aí usamos 'IO_manager_layer'
     #     IO, traço = IO_manager_layer(
-    #         IO_dict_list, bits, onerow=1, tab_space=2)
+    #         IO_dict_list, BIT_WIDTH, onerow=1, tab_space=2)
 
     # PEGANDO GENERIC DO DICIONÁRIO DA CAMADA
     # pegando nome das variáveis
@@ -259,7 +259,7 @@ def layerDict_to_entityTxt(
 GENERIC (
 {('  '*tab_space)}BITS : NATURAL := BITS;
 {('  '*tab_space)}NUM_INPUTS : NATURAL := {num_inputs};
-{('  '*tab_space)}TOTAL_BITS : NATURAL := {num_inputs*bits}
+{('  '*tab_space)}TOTAL_BITS : NATURAL := {num_inputs*BIT_WIDTH}
 );
   ''')
     else:
@@ -278,9 +278,9 @@ end ENTITY;
     txt = txt_add_space_begin(txt, space=tab_space)
     return txt
 
-# print(entity(sum_name, bits, num_inputs, [MAC_IO_dict]))
+# print(entity(sum_name, BIT_WIDTH, num_inputs, [MAC_IO_dict]))
 # print(entity(name=layer_dict_hidden['Neuron_arch']['Neuron_name'],
-#              bits=8,
+#              BIT_WIDTH=8,
 #              num_inputs=3,
 #              IO_dict_list=[layer_dict_hidden['Neuron_arch']['IO']['shared_IO'],
 #                            layer_dict_hidden['Neuron_arch']['IO']['unique_IO']]
@@ -338,8 +338,8 @@ def rom_component(ROM_name: str,
     --------------------------------------
     Args:
         ROM_name (str): nome do componente
-        input_mem_bits (int): número de bits de entrada da ROM (bits para endereçamento na ROM)
-        output_mem_bits (int): número de bits da saída da ROM (bits de dados que a ROM entrega)
+        input_mem_bits (int): número de BIT_WIDTH de entrada da ROM (BIT_WIDTH para endereçamento na ROM)
+        output_mem_bits (int): número de BIT_WIDTH da saída da ROM (BIT_WIDTH de dados que a ROM entrega)
     """
 
     ROM_component = (f'''
@@ -350,8 +350,8 @@ def rom_component(ROM_name: str,
       ------------------------------------------
       data_out : OUT STD_LOGIC_VECTOR ({str(output_mem_bits - 1)}  DOWNTO 0)
     );
-  -- input: address ({str(input_mem_bits)} bits)
-  -- output: data_out ({str(output_mem_bits)} bits)
+  -- input: address ({str(input_mem_bits)} BIT_WIDTH)
+  -- output: data_out ({str(output_mem_bits)} BIT_WIDTH)
   END COMPONENT;
   ''')
 

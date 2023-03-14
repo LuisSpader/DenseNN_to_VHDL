@@ -1,5 +1,3 @@
-
-
 --https://stackoverflow.com/questions/17579716/implementing-rom-in-xilinx-vhdl
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;

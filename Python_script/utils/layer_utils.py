@@ -528,7 +528,7 @@ def layer_name(layer_dict_arg: dict,
                     'Using': True,        # True = usar versão Sigmoid (Look Up Table)
                     'Memory': {
                     'bits_mem': 8,
-                    'mantissa': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
+                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
                     }
                     }
                 }
@@ -644,14 +644,14 @@ def layer_dict_gen_base(base_dict: dict,
 
 def all_dense_layers_gen(
     Inputs_number: int,
-    bits: int,
+    BIT_WIDTH: int,
     IO_type_str: str,
     number_of_layers: int,
     Layer_Neurons_number_list: list,
     base_dict_hidden_layers: dict,
     base_dict_softmax_layer: dict,
     OUTPUT_BASE_DIR_PATH: str,
-    download_vhd: bool = True,
+    DOWNLOAD_VHD: bool = True,
     gen_dead_neurons: bool = False,
     DEBUG: bool = False
 ) -> list:
@@ -714,7 +714,7 @@ def all_dense_layers_gen(
 
     layers_dict_list[0] = layer_dict_gen_base(base_dict=layers_dict_list[0],
                                               Inputs_number=Inputs_number,
-                                              bits=bits,
+                                              bits=BIT_WIDTH,
                                               IO_type=IO_type_str,  # 1= signed || 0= unsigned
                                               Neurons_number=neurons_number,
                                               Layer_num=0
@@ -734,7 +734,7 @@ def all_dense_layers_gen(
         layers_dict_list[i] = layer_dict_gen_base(base_dict=layers_dict_list[i],
                                                   Inputs_number=layers_dict_list[i -
                                                                                  1]['Neurons_number'],
-                                                  bits=bits,
+                                                  bits=BIT_WIDTH,
                                                   IO_type=IO_type_str,  # 1= signed || 0= unsigned
                                                   Neurons_number=neurons_number,
                                                   Layer_num=i
@@ -772,7 +772,7 @@ def all_dense_layers_gen(
                 n_max=0)
 
         # salvando VHDL
-        if (download_vhd == True):
+        if (DOWNLOAD_VHD == True):
             path_layer = f"{OUTPUT_BASE_DIR_PATH_layers}/{layers_dict_list[i]['Layer_name']}.vhd"
             with open(path_layer, "w") as writer:
                 writer.write(layer_text)

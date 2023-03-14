@@ -7,7 +7,7 @@ from utils.general.utils import insert_string_inside
 
 def vhd_name(
     vhd_name: str,
-    bits: int,
+    BIT_WIDTH: int,
     IO_type: bool,
     num_inputs: int,
     Barriers: bool,
@@ -64,11 +64,11 @@ def vhd_name(
     if Include_MAC_type == True:
 
         if (IO_type == 'signed'):  # _____________COM SINAL (SIGNED)______________#
-            name = f"{vhd_name}_{num_inputs}n_{bits}bit_signed"
+            name = f"{vhd_name}_{num_inputs}n_{BIT_WIDTH}bit_signed"
 
         # ___________SEM SINAL (UNSIGNED)__________#
         else:
-            name = f"{vhd_name}_{num_inputs}n_{bits}bit_unsigned"
+            name = f"{vhd_name}_{num_inputs}n_{BIT_WIDTH}bit_unsigned"
 
     # ___________ Combinacional OU sequencial , Barriers OU '' ___________
         if MAC_type == False:  # árvore (combinacional)

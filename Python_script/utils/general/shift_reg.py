@@ -105,11 +105,14 @@ def shift_reg_gen(num_inputs: int, reg_name: str = 'Reg', shift_reg_name: str = 
 
 def parameters_vhd_gen(
     bits: int,
+    # layer_dict: dict = {},
     parameters_vhd_name: str = 'parameters',
     OUTPUT_BASE_DIR_PATH: str = "./",
     create_path_folder: bool = False
 ):
-    parameters_vhd_txt = (f''' 
+    # bits = layer_dict['BIT_WIDTH']
+
+    parameters_vhd_txt = (f'''
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_UNSIGNED.ALL;
@@ -117,6 +120,7 @@ USE IEEE.NUMERIC_STD.ALL;
 PACKAGE {parameters_vhd_name} IS
     CONSTANT BITS : INTEGER := {bits}; --You need to change this depending on each desired input/output BITS
     CONSTANT ones : STD_LOGIC_VECTOR (BITS - 1 DOWNTO 0) := (OTHERS => '1'); --"0000..."
+
 END {parameters_vhd_name};
 PACKAGE BODY {parameters_vhd_name} IS
 END {parameters_vhd_name};''')

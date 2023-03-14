@@ -109,18 +109,18 @@ def MAC_Txt_Gen2(IO_type: str = 'signed',
 #                    DEBUG=False))
 
 
-def multiplication_mantissa(bits: int = 8, n_bin: int = 8, last_sum_name: str = 'sum_all', output_name: str = 'y', IO_type: str = 'signed', tab_space: int = 1) -> str:
+def multiplication_mantissa(BIT_WIDTH: int = 8, n_bin: int = 8, last_sum_name: str = 'sum_all', output_name: str = 'y', IO_type: str = 'signed', tab_space: int = 1) -> str:
     tab_space = ['  ']*tab_space
     tab_space = ''.join(map(str, tab_space))
 
     clk_receive = []
     clk_receive.append(
-        f"{tab_space}{output_name} <= {IO_type}({last_sum_name}({str(bits+n_bin - 1)} DOWNTO {str(n_bin)}));")
+        f"{tab_space}{output_name} <= {IO_type}({last_sum_name}({str(BIT_WIDTH+n_bin - 1)} DOWNTO {str(n_bin)}));")
 
     clk_receive_string = ''.join(map(str, (clk_receive)))
     clk_receive_string = erase_empty_lines(clk_receive_string)
     return clk_receive_string
-# print(multiplication_mantissa(bits=8, n_bin=8, MAC_name='sum_all',
+# print(multiplication_mantissa(BIT_WIDTH=8, n_bin=8, MAC_name='sum_all',
 #                               IO_type='signed', tab_space=1*4))
 
 
@@ -162,7 +162,7 @@ def MAC_Tree_TxtGen_Barriers_Logic(ReceiveStr_list: list):
     Args:
         ReceiveStr_list (list, optional): Textos de sinal ou multiplicação gerados através da função 'arvore_de_soma_strings()':
             s_sum,s_mult,signal_receive_string_MAC,rst_receive_string_MAC,clk_receive_string_MAC = arvore_de_soma_strings(
-                num_inputs,bits,n_bin,IO_type,rst_space,clk_space)
+                num_inputs,BIT_WIDTH,n_bin,IO_type,rst_space,clk_space)
             Defaults to [signal_receive_string_MAC, signal_receive_string_MAC, clk_receive_string_MAC].
     """
 
@@ -203,7 +203,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict(MAC_name='MAC',
     """
     mult_version = 0
     # pegando dados do dicionário
-    num_inputs, bits, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
+    num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
         layer_dict=layer_dict)
 
     output_name = dict_list_exceptNone(
@@ -220,7 +220,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict(MAC_name='MAC',
     # Adiciona parâmetros no nome, caso (Include_MAC_type == True)
     # if (Include_MAC_type):
     MAC_name = vhd_name(vhd_name=MAC_name,
-                        bits=bits, IO_type=IO_type, num_inputs=num_inputs,
+                        BIT_WIDTH=BIT_WIDTH, IO_type=IO_type, num_inputs=num_inputs,
                         Barriers=Barriers, MAC_type=MAC_type, Include_MAC_type=Include_MAC_type,
                         mult_number=find_True_dict_split(
                             split_str='-', dict=layer_dict['Neuron_arch']['Multiplier'], position=0),
@@ -231,18 +231,18 @@ def MAC_Tree_Barriers_TxtGen_from_dict(MAC_name='MAC',
                         adder_version=0)
 
     s_sum, s_mult, signal_receive_string_MAC, rst_receive_string_MAC, clk_receive_string_MAC = arvore_de_soma_strings(
-        num_inputs, bits, n_bin, IO_type, rst_space, clk_space, output=output_name)
+        num_inputs, BIT_WIDTH, n_bin, IO_type, rst_space, clk_space, output=output_name)
 
     x, w, sx, sw, sx_tb, sw_tb, val_x, val_w, val_x_tb, val_w_tb = all_inputs_signals(
-        inputs_list=['x', 'w'], num_inputs=num_inputs, bits=bits, IO_type=IO_type, is_list=0)
+        inputs_list=['x', 'w'], num_inputs=num_inputs, BIT_WIDTH=BIT_WIDTH, IO_type=IO_type, is_list=0)
     # adicionando output: y<= ...
     signal_receive_string_MAC = signal_receive_string_MAC + "\n" + \
         multiplication_mantissa(
-            bits=bits, n_bin=n_bin, output_name='sum_all', IO_type=IO_type, tab_space=1)
+            BIT_WIDTH=BIT_WIDTH, n_bin=n_bin, output_name='sum_all', IO_type=IO_type, tab_space=1)
     #  ---------- SINAIS ----------
     MAC_signals = (f'''
     SIGNAL sbias : {IO_type}(BITS -1 DOWNTO 0);
-	SIGNAL sum_all : signed( {str((2*bits) -1)} DOWNTO 0);
+	SIGNAL sum_all : signed( {str((2*BIT_WIDTH) -1)} DOWNTO 0);
 	{sx}
 	{sw}
 	{s_sum}
@@ -260,7 +260,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict(MAC_name='MAC',
 
     # ---------- TEXTO VHDL ----------
     mac_entity = entity(name=MAC_name,
-                        bits=layer_dict['Neuron_arch']['Bit_WIDTH'],
+                        BIT_WIDTH=layer_dict['Neuron_arch']['Bit_WIDTH'],
                         num_inputs=layer_dict['Neuron_arch']['Inputs_number'],
                         IO_dict_list=[layer_dict['Neuron_arch']['IO']['shared_IO'],
                                       layer_dict['Neuron_arch']['IO']['unique_IO']],
@@ -314,7 +314,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict2(MAC_name='MAC',
     mult_version = 0
 
     # pegando dados do dicionário
-    num_inputs, bits, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
+    num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
         layer_dict=layer_dict)
     layer_dict
 
@@ -324,7 +324,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict2(MAC_name='MAC',
 
     # Adiciona parâmetros no nome, caso (Include_MAC_type == True)
     # if (Include_MAC_type):
-    MAC_name = vhd_name(MAC_name, bits, IO_type, num_inputs,
+    MAC_name = vhd_name(MAC_name, BIT_WIDTH, IO_type, num_inputs,
                         Barriers=Barriers, MAC_type=MAC_type, Include_MAC_type=Include_MAC_type,
                         mult_number=find_True_dict_split(
                             split_str='-', dict=layer_dict['Neuron_arch']['Multiplier'], position=0),
@@ -335,7 +335,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict2(MAC_name='MAC',
                         adder_version=0)
 
     x, w, sx, sw, sx_tb, sw_tb, val_x, val_w, val_x_tb, val_w_tb = all_inputs_signals(
-        inputs_list=['x', 'w'], num_inputs=num_inputs, bits=bits, IO_type=IO_type, is_list=0)
+        inputs_list=['x', 'w'], num_inputs=num_inputs, BIT_WIDTH=BIT_WIDTH, IO_type=IO_type, is_list=0)
     # signal_receive_string = signal_receive_input(num_inputs, 1)
     mult_number = find_True_dict_split(
         split_str='-', dict=layer_dict['Neuron_arch']['Multiplier'], position=0)
@@ -394,7 +394,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict2(MAC_name='MAC',
         map(str, [Multiplier_component, GLOBAL.ADDERS.adders_obj_list[PARAMS.layer_iteration].component_txt]))
     # ---------- TEXTO VHDL ----------
     mac_entity = entity(name=MAC_name,
-                        bits=layer_dict['Neuron_arch']['Bit_WIDTH'],
+                        BIT_WIDTH=layer_dict['Neuron_arch']['Bit_WIDTH'],
                         num_inputs=layer_dict['Neuron_arch']['Inputs_number'],
                         IO_dict_list=[layer_dict['Neuron_arch']['IO']['shared_IO'],
                                       layer_dict['Neuron_arch']['IO']['unique_IO']],
@@ -744,7 +744,7 @@ def MAC_Tree_TxtGen_NoBarriers_Logic(ReceiveStr_list: list):
     Args:
         ReceiveStr_list (list, optional): Textos de sinal ou multiplicação gerados através da função 'arvore_de_soma_strings()':
             s_sum,s_mult,signal_receive_string_MAC,rst_receive_string_MAC,clk_receive_string_MAC = arvore_de_soma_strings(
-                num_inputs,bits,n_bin,IO_type,rst_space,clk_space)
+                num_inputs,BIT_WIDTH,n_bin,IO_type,rst_space,clk_space)
             Defaults to [signal_receive_string_MAC, signal_receive_string_MAC, clk_receive_string_MAC].
     """
 
@@ -770,7 +770,7 @@ def MAC_Tree_TxtGen_NoBarriers_Logic(ReceiveStr_list: list):
 
 
 # s_sum, s_mult, signal_receive_string_MAC, rst_receive_string_MAC, clk_receive_string_MAC = arvore_de_soma_strings(
-#     num_inputs=3, bits=8, n_bin=8, IO_type='signed', rst_space=3*4, clk_space=4*4)
+#     num_inputs=3, BIT_WIDTH=8, n_bin=8, IO_type='signed', rst_space=3*4, clk_space=4*4)
 
 # sum_all_string = MAC_Txt_Gen(IO_type='signed', num_inputs=3,
 #                              receive_sum_all='sum_all', DEBUG=False)
@@ -797,7 +797,7 @@ def MAC_Tree_NoBarriers_TxtGen_from_dict(MAC_name='MAC',
     mult_version = 0
 
     # pegando dados do dicionário
-    num_inputs, bits, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
+    num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
         layer_dict=layer_dict)
 
     output_name = dict_list_exceptNone(
@@ -806,7 +806,7 @@ def MAC_Tree_NoBarriers_TxtGen_from_dict(MAC_name='MAC',
 
     # Adiciona parâmetros no nome, caso (Include_MAC_type == True)
     # if (Include_MAC_type):
-    MAC_name = vhd_name(MAC_name, bits, IO_type, num_inputs,
+    MAC_name = vhd_name(MAC_name, BIT_WIDTH, IO_type, num_inputs,
                         Barriers=Barriers, MAC_type=MAC_type, Include_MAC_type=Include_MAC_type,
                         mult_number=find_True_dict_split(
                             split_str='-', dict=layer_dict['Neuron_arch']['Multiplier'], position=0),
@@ -817,7 +817,7 @@ def MAC_Tree_NoBarriers_TxtGen_from_dict(MAC_name='MAC',
                         adder_version=0)
 
     x, w, sx, sw, sx_tb, sw_tb, val_x, val_w, val_x_tb, val_w_tb = all_inputs_signals(
-        inputs_list=['x', 'w'], num_inputs=num_inputs, bits=bits, IO_type=IO_type, is_list=0)
+        inputs_list=['x', 'w'], num_inputs=num_inputs, BIT_WIDTH=BIT_WIDTH, IO_type=IO_type, is_list=0)
     # signal_receive_string = signal_receive_input(num_inputs, 1)
     mult_number = find_True_dict_split(
         split_str='-', dict=layer_dict['Neuron_arch']['Multiplier'], position=0)
@@ -852,7 +852,7 @@ def MAC_Tree_NoBarriers_TxtGen_from_dict(MAC_name='MAC',
     # ---------- TEXTO VHDL ----------
 
     mac_entity = entity(name=MAC_name,
-                        bits=layer_dict['Neuron_arch']['Bit_WIDTH'],
+                        BIT_WIDTH=layer_dict['Neuron_arch']['Bit_WIDTH'],
                         num_inputs=layer_dict['Neuron_arch']['Inputs_number'],
                         IO_dict_list=[layer_dict['Neuron_arch']['IO']['shared_IO'],
                                       layer_dict['Neuron_arch']['IO']['unique_IO']],
@@ -880,11 +880,11 @@ BEGIN
   s_Xi <= IO_in;
   s_Win <= W_in;
 {MAC_Tree_TxtGen_NoBarriers_Logic(ReceiveStr_list=[sum_all_string,f"{rst_space}{output_name} <= (OTHERS => '0');", multiplication_mantissa(
-    bits=bits, n_bin=n_bin, last_sum_name='sum_all',output_name = output_name, IO_type=IO_type, tab_space=clk_space)])}
+    BIT_WIDTH=BIT_WIDTH, n_bin=n_bin, last_sum_name='sum_all',output_name = output_name, IO_type=IO_type, tab_space=clk_space)])}
 END arch;
 ''')
 # {MAC_Tree_TxtGen_NoBarriers_Logic(ReceiveStr_list=[signal_receive_string, f"{rst_space}{output_name} <= (OTHERS => '0');", multiplication_mantissa(
-#     bits=bits, n_bin=n_bin, last_sum_name='sum_all',output_name = output_name, IO_type=IO_type, tab_space=clk_space)])}
+#     BIT_WIDTH=BIT_WIDTH, n_bin=n_bin, last_sum_name='sum_all',output_name = output_name, IO_type=IO_type, tab_space=clk_space)])}
     return vhd_txt
 # print(MAC_Tree_NoBarriers_TxtGen_from_dict(MAC_name='MAC',
 #                                  Include_MAC_type=False,
@@ -918,8 +918,8 @@ def MAC_TxtGen(MAC_name='MAC',
     # print(text)
     # if download_vhd == True:
     #     # pegando dados do dicionário
-    #     bits = layer_dict['Neuron_arch']['Bit_WIDTH']()
-    #     n_bin = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['mantissa'](
+    #     BIT_WIDTH = layer_dict['Neuron_arch']['Bit_WIDTH']()
+    #     n_bin = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['input_mem_bits'](
     #     )
     #     num_inputs = layer_dict['Neuron_arch']['Inputs_number']()
 
@@ -929,7 +929,7 @@ def MAC_TxtGen(MAC_name='MAC',
     #     output_name = output_name[0][0]
 
     #     path, path_soft = create_folder_neuron(
-    #         bits,
+    #         BIT_WIDTH,
     #         num_inputs,
     #         Neurons_hidden,
     #         Neurons_softmax,
