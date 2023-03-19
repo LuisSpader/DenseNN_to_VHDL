@@ -59,4 +59,4 @@ GEN_TOP_LEVEL_HDL(INPUTS_NUMBER=INPUTS_NUMBER,
                   DEAD_NEURONS=DEAD_NEURONS,
                   DEBUG=False
                   )
-print("====================== FIM =========================")
+# print("====================== FIM =========================")

@@ -239,7 +239,7 @@
 # -- Loading entity camada2_ReLU_3neuron_8bits_2n_signed
 # -- Loading entity camada3_Sigmoid_4neuron_8bits_3n_signed
 # 
-# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../tb_top.vhd}
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd}
 # Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
 # -- Loading package STANDARD
 # -- Loading package TEXTIO
@@ -249,12 +249,12 @@
 # -- Loading package std_logic_arith
 # -- Loading package STD_LOGIC_UNSIGNED
 # -- Loading package parameters
-# -- Compiling entity tb_top
-# -- Compiling architecture tb of tb_top
+# -- Compiling entity top_tb
+# -- Compiling architecture tb of top_tb
 # -- Loading entity top
 # 
-# vsim -t 1ps -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cyclonev -L rtl_work -L work -voptargs="+acc"  tb_top
-# vsim -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cyclonev -L rtl_work -L work -voptargs=\"+acc\" -t 1ps tb_top 
+# vsim -t 1ps -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cyclonev -L rtl_work -L work -voptargs="+acc"  top_tb
+# vsim -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cyclonev -L rtl_work -L work -voptargs=\"+acc\" -t 1ps top_tb 
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
@@ -263,7 +263,7 @@
 # Loading ieee.std_logic_arith(body)
 # Loading ieee.std_logic_unsigned(body)
 # Loading work.parameters(body)
-# Loading work.tb_top(tb)
+# Loading work.top_tb(tb)
 # Loading work.top(arch)
 # Loading ieee.math_real(body)
 # Loading work.camada0_relu_5neuron_8bits_5n_signed(arch)
@@ -289,19 +289,47 @@
 # onerror {resume}
 # quietly WaveActivateNextPane {} 0
 # add wave -noupdate /tb_top/clk
+# ** Error: (vish-4014) No objects found matching '/tb_top/clk'.
+# Executing ONERROR command at macro ./wave_colors.do line 3
 # add wave -noupdate -color White /tb_top/rst
+# ** Error: (vish-4014) No objects found matching '/tb_top/rst'.
+# Executing ONERROR command at macro ./wave_colors.do line 4
 # add wave -noupdate -color {Medium Spring Green} -radix binary /tb_top/IO_in
+# ** Error: (vish-4014) No objects found matching '/tb_top/IO_in'.
+# Executing ONERROR command at macro ./wave_colors.do line 5
 # add wave -noupdate -color Magenta -radix decimal /tb_top/update_weights
+# ** Error: (vish-4014) No objects found matching '/tb_top/update_weights'.
+# Executing ONERROR command at macro ./wave_colors.do line 6
 # add wave -noupdate -color Magenta -radix decimal /tb_top/c0_n0_W_in
+# ** Error: (vish-4014) No objects found matching '/tb_top/c0_n0_W_in'.
+# Executing ONERROR command at macro ./wave_colors.do line 7
 # add wave -noupdate -color Magenta -radix decimal /tb_top/c0_n1_W_in
+# ** Error: (vish-4014) No objects found matching '/tb_top/c0_n1_W_in'.
+# Executing ONERROR command at macro ./wave_colors.do line 8
 # add wave -noupdate -color Magenta -radix decimal /tb_top/c0_n2_W_in
+# ** Error: (vish-4014) No objects found matching '/tb_top/c0_n2_W_in'.
+# Executing ONERROR command at macro ./wave_colors.do line 9
 # add wave -noupdate -color Magenta -radix decimal /tb_top/c0_n3_W_in
+# ** Error: (vish-4014) No objects found matching '/tb_top/c0_n3_W_in'.
+# Executing ONERROR command at macro ./wave_colors.do line 10
 # add wave -noupdate -color Magenta -radix decimal /tb_top/c0_n4_W_in
+# ** Error: (vish-4014) No objects found matching '/tb_top/c0_n4_W_in'.
+# Executing ONERROR command at macro ./wave_colors.do line 11
 # add wave -noupdate -color Green -radix decimal /tb_top/c3_n0_IO_out
+# ** Error: (vish-4014) No objects found matching '/tb_top/c3_n0_IO_out'.
+# Executing ONERROR command at macro ./wave_colors.do line 12
 # add wave -noupdate -color Green -radix decimal /tb_top/c3_n1_IO_out
+# ** Error: (vish-4014) No objects found matching '/tb_top/c3_n1_IO_out'.
+# Executing ONERROR command at macro ./wave_colors.do line 13
 # add wave -noupdate -color Green -radix decimal /tb_top/c3_n2_IO_out
+# ** Error: (vish-4014) No objects found matching '/tb_top/c3_n2_IO_out'.
+# Executing ONERROR command at macro ./wave_colors.do line 14
 # add wave -noupdate -color Green -radix decimal /tb_top/c3_n3_IO_out
+# ** Error: (vish-4014) No objects found matching '/tb_top/c3_n3_IO_out'.
+# Executing ONERROR command at macro ./wave_colors.do line 15
 # add wave -noupdate -color Green /tb_top/buff_out
+# ** Error: (vish-4014) No objects found matching '/tb_top/buff_out'.
+# Executing ONERROR command at macro ./wave_colors.do line 16
 # TreeUpdate [SetDefaultTree]
 # WaveRestoreCursors {{Cursor 1} {0 ps} 0}
 # quietly wave cursor active 0
@@ -321,24 +349,24 @@
 # update
 # WaveRestoreZoom {0 ps} {52500 ns}
 # run 50 us
-# ** Error: (vsim-7) Failed to open VHDL file "./tb_Files/weights_bin.txt" in rb mode.
+# ** Error: (vsim-7) Failed to open VHDL file "./NNs/NN_4Layers_8bits_5_2_3_4/tb_Files/weights_bin.txt" in rb mode.
 # 
 # No such file or directory. (errno = ENOENT)
-#    Time: 0 ps  Iteration: 0  Instance: /tb_top
+#    Time: 0 ps  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_3/U_ROM
+#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_3/U_ROM
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_2/U_ROM
+#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/U_ROM
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_1/U_ROM
+#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/U_ROM
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /tb_top/UUT/camada3_inst_3/neuron_inst_0/U_ROM
-# ** Fatal: (vsim-7) Failed to open VHDL file "./tb_Files/weights_bin.txt" in rb mode.
+#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/U_ROM
+# ** Fatal: (vsim-7) Failed to open VHDL file "./NNs/NN_4Layers_8bits_5_2_3_4/tb_Files/weights_bin.txt" in rb mode.
 # 
 # No such file or directory. (errno = ENOENT)
-#    Time: 10 ns  Iteration: 0  Process: /tb_top/file_io File: C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../tb_top.vhd
-# Fatal error in Process file_io at C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../tb_top.vhd line 91
+#    Time: 10 ns  Iteration: 0  Process: /top_tb/file_io File: C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd
+# Fatal error in Process file_io at C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd line 77
 # 
 # HDL call sequence:
-# Stopped at C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../tb_top.vhd 91 Process file_io
+# Stopped at C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd 77 Process file_io
 # 

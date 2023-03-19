@@ -132,33 +132,41 @@ GENERIC (
     # signal_outputs = "SIGNAL c3_n0_IO_out, c3_n1_IO_out, c3_n2_IO_out, c3_n3_IO_out     : signed(BITS - 1 DOWNTO 0)                   := (OTHERS => '0');"
     id_IO_in = 'IO_in'
     id_W_in = 'W_in'
+    id_IO_out = 'IO_out'
 
     for i, item in enumerate(GLOBAL.TESTBENCH.IOs):
         if isinstance(item[0], str):
-            if id_IO_in in item[0]:
+            if id_IO_in in item[0]:  # variáveis das entradas (IO_in)
                 inputs = item[0]
                 inputs_val = f"val_{item[0]}"
                 text_val_inputs = f"VARIABLE {inputs_val}: STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); "
         else:  # is not str --> is sublist
-            if id_W_in in item[0][0]:
-                buff = []
+            if id_W_in in item[0][0]:  # variáveis dos pesos
+                buff_weights = []
                 for jitem in item[0]:
-                    buff.append(f"val_{jitem}")
-                text_val_weights = f"VARIABLE {', '.join(map(str, (buff)))}: STD_LOGIC_VECTOR(BITS - 1 DOWNTO 0) := (OTHERS => '0');"
+                    buff_weights.append(f"val_{jitem}")
+                text_val_weights = f"VARIABLE {', '.join(map(str, (buff_weights)))}: STD_LOGIC_VECTOR(BITS - 1 DOWNTO 0) := (OTHERS => '0');"
+
+            if id_IO_out in item[0][0]:  # variáveis das saídas (IO_out)
+                # buff_IO_out = []
+                # for jitem in item[0]:
+                #     buff_IO_out.append(f"val_{jitem}")
+                outputs_concatenation = f"{' & '.join(map(str, (item[0])))}"
+
     # inputs_val = "val_IO_in"
     # inputs = "IO_in"
     # text_val_inputs = "VARIABLE val_IO_in                                                       : STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); "
     # text_val_weights = "VARIABLE val_n0_W_in, val_n1_W_in, val_n2_W_in, val_n3_W_in, val_n4_W_in : STD_LOGIC_VECTOR(BITS - 1 DOWNTO 0)          := (OTHERS => '0');"
 
     real_val_weights_from_line = []
-    for item in buff:
+    for item in buff_weights:
         real_val_weights_from_line.extend(
             ['', f'''            read(read_col_from_input_buf, {item});''', f'''            read(read_col_from_input_buf, val_SPACE);'''])
 
     real_val_weights_from_line.extend(['',
                                        "            -- Pass the read values to signals"])
 
-    for item in buff:
+    for item in buff_weights:
         real_val_weights_from_line.append(
             f'''            {item[4:]} <= signed({item});''')
     real_val_weights_from_line = '\n'.join(
@@ -187,10 +195,10 @@ GENERIC (
     #         c0_n4_W_in <= signed(val_n4_W_in);
     #         '''
 
-    outputs_concatenation = "c3_n0_IO_out & c3_n1_IO_out & c3_n2_IO_out & c3_n3_IO_out"
-    weights_file_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4/tb_Files/weights_bin.txt"
-    inputs_file_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4/tb_Files/inputs_string.txt"
-    outputs_file_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4/tb_Files/tb_outputs.txt"
+    # outputs_concatenation = "c3_n0_IO_out & c3_n1_IO_out & c3_n2_IO_out & c3_n3_IO_out"
+    weights_file_path = f"{OUTPUT_BASE_DIR_PATH}/tb_Files/weights_bin.txt"
+    inputs_file_path = f"{OUTPUT_BASE_DIR_PATH}/tb_Files/inputs_string.txt"
+    outputs_file_path = f"{OUTPUT_BASE_DIR_PATH}/tb_Files/tb_outputs.txt"
     # -----------------------------------------------------------------------------------------------------
     tb_txt = (f'''
     -- GERADO PELO SCRIPT --
