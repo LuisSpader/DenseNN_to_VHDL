@@ -5,8 +5,8 @@ from utils.components.top import topDict_to_entityTxt
 from utils.components.neuron_primitivo import *
 from utils.layer_utils import *
 from utils.standard_dicts import top_dict
-from utils.general.shift_reg import parameters_vhd_gen
-
+from utils.components.shift_reg import parameters_vhd_gen
+# from utils.testbench import tb_text
 from itertools import chain, zip_longest
 import sys
 sys.path.append('./utils')
@@ -86,6 +86,219 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     Top_gen(OUTPUT_BASE_DIR_PATH, DEBUG,
             neurons_PM_matrix_local, layers_dict_list)
 
+    # ==================================== TESTBENCH ====================================
+    # pegando nome das variáveis
+    tb_generic_names = None
+    tb_generic_names = dict_list_exceptNone(
+        dict_slice=top_dict['IO']['GENERIC'], return_value_or_key='key', is_list=False)
+
+    # pegando o valor das variáveis
+    tb_generic_values = dict_list_exceptNone_Callable(
+        dict_slice=top_dict['IO']['GENERIC'], return_value_or_key='value', is_list=False)
+
+    tb_assign = ''
+    tab_space = 2
+    for i, item in enumerate(tb_generic_names):
+        tb_assign += f"{('  '*tab_space)}{tb_generic_names[i]}: NATURAL := {tb_generic_values[i]}; \n"
+
+    tb_assign = tb_assign[:-3]  # removendo último ';'
+
+    # gerando texto de atribuições
+    if tb_generic_names != None:
+        tb_generic_txt = (f'''
+GENERIC (
+{tb_assign}
+);
+  ''')
+    # -----------------------------------------------------------------------------------------------------
+    top_name = top_dict['Top_name']
+    port_map_top_tb = []
+    for item in GLOBAL.TESTBENCH.IO_assign_list:
+        port_map_top_tb.append(f"            {item} => {item},")
+
+    port_map_top_tb[-1] = port_map_top_tb[-1][:-1]
+    # text_list can be an splitted text or a list of texts
+    port_map_top_tb = '\n'.join(map(str, (port_map_top_tb)))
+
+    top_component = f'''    -- port map do componente '{top_name}.vhd'
+        UUT : ENTITY work.{top_name} PORT MAP(
+{port_map_top_tb}
+            );'''
+    signals_tb = '\n'.join(map(str, (GLOBAL.TESTBENCH.signals)))
+
+    # signal_inputs = "SIGNAL IO_in: signed(TOTAL_BITS - 1 DOWNTO 0):= (OTHERS => '0');"
+
+    # signal_input_weights = "SIGNAL c0_n0_W_in, c0_n1_W_in, c0_n2_W_in, c0_n3_W_in, c0_n4_W_in : signed(BITS - 1 DOWNTO 0):= (OTHERS => '0')"
+    # signal_outputs = "SIGNAL c3_n0_IO_out, c3_n1_IO_out, c3_n2_IO_out, c3_n3_IO_out     : signed(BITS - 1 DOWNTO 0)                   := (OTHERS => '0');"
+    id_IO_in = 'IO_in'
+    id_W_in = 'W_in'
+
+    for i, item in enumerate(GLOBAL.TESTBENCH.IOs):
+        if isinstance(item[0], str):
+            if id_IO_in in item[0]:
+                inputs = item[0]
+                inputs_val = f"val_{item[0]}"
+                text_val_inputs = f"VARIABLE {inputs_val}: STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); "
+        else:  # is not str --> is sublist
+            if id_W_in in item[0][0]:
+                buff = []
+                for jitem in item[0]:
+                    buff.append(f"val_{jitem}")
+                text_val_weights = f"VARIABLE {', '.join(map(str, (buff)))}: STD_LOGIC_VECTOR(BITS - 1 DOWNTO 0) := (OTHERS => '0');"
+    # inputs_val = "val_IO_in"
+    # inputs = "IO_in"
+    # text_val_inputs = "VARIABLE val_IO_in                                                       : STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); "
+    # text_val_weights = "VARIABLE val_n0_W_in, val_n1_W_in, val_n2_W_in, val_n3_W_in, val_n4_W_in : STD_LOGIC_VECTOR(BITS - 1 DOWNTO 0)          := (OTHERS => '0');"
+
+    real_val_weights_from_line = []
+    for item in buff:
+        real_val_weights_from_line.extend(
+            ['', f'''            read(read_col_from_input_buf, {item});''', f'''            read(read_col_from_input_buf, val_SPACE);'''])
+
+    real_val_weights_from_line.extend(['',
+                                       "            -- Pass the read values to signals"])
+
+    for item in buff:
+        real_val_weights_from_line.append(
+            f'''            {item[4:]} <= signed({item});''')
+    real_val_weights_from_line = '\n'.join(
+        map(str, (real_val_weights_from_line)))  # lista -> texto
+
+    # real_val_weights_from_line = '''
+    #         read(read_col_from_input_buf, val_n0_W_in);
+    #         read(read_col_from_input_buf, val_SPACE);
+
+    #         read(read_col_from_input_buf, val_n1_W_in);
+    #         read(read_col_from_input_buf, val_SPACE);
+
+    #         read(read_col_from_input_buf, val_n2_W_in);
+    #         read(read_col_from_input_buf, val_SPACE);
+
+    #         read(read_col_from_input_buf, val_n3_W_in);
+    #         read(read_col_from_input_buf, val_SPACE);
+
+    #         read(read_col_from_input_buf, val_n4_W_in);
+    #         read(read_col_from_input_buf, val_SPACE);
+    #         -- Pass the read values to signals
+    #         c0_n0_W_in <= signed(val_n0_W_in);
+    #         c0_n1_W_in <= signed(val_n1_W_in);
+    #         c0_n2_W_in <= signed(val_n2_W_in);
+    #         c0_n3_W_in <= signed(val_n3_W_in);
+    #         c0_n4_W_in <= signed(val_n4_W_in);
+    #         '''
+
+    outputs_concatenation = "c3_n0_IO_out & c3_n1_IO_out & c3_n2_IO_out & c3_n3_IO_out"
+    weights_file_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4/tb_Files/weights_bin.txt"
+    inputs_file_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4/tb_Files/inputs_string.txt"
+    outputs_file_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4/tb_Files/tb_outputs.txt"
+    # -----------------------------------------------------------------------------------------------------
+    tb_txt = (f'''
+    -- GERADO PELO SCRIPT --
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+USE std.textio.ALL;
+USE ieee.std_logic_textio.ALL; -- para tratamento de arquivos e texto-> file_open...  
+USE work.parameters.ALL;
+ENTITY {top_name}_tb IS
+{tb_generic_txt}
+END {top_name}_tb;
+ARCHITECTURE tb OF {top_name}_tb IS
+    CONSTANT clk_hz                                                   : INTEGER                                     := 100e6;
+    CONSTANT clk_period                                               : TIME                                        := 1 sec / clk_hz;
+    SIGNAL buff_out                                                   : STD_LOGIC_VECTOR(((4) * BITS) - 1 DOWNTO 0) := (OTHERS => '0');
+    CONSTANT sigmoid_read_time                                        : TIME                                        := 16 * clk_period;
+    
+    -- SIGNAL clk, rst, update_weights                                   : STD_LOGIC                                   := '0';
+    -- SIGNAL IO_in                                                      : signed(TOTAL_BITS * NUM_INPUTS - 1 DOWNTO 0);
+    -- SIGNAL buff_in                                                    : STD_LOGIC_VECTOR(TOTAL_BITS * NUM_INPUTS - 1 DOWNTO 0);
+{signals_tb}
+
+BEGIN
+{top_component}
+    -- processo gerador de clock
+    clk_gen : PROCESS
+        --constant period: time := 20 ns;
+    BEGIN
+        clk <= '0';
+        WAIT FOR clk_period/2;
+        clk <= '1';
+        WAIT FOR clk_period/2;
+    END PROCESS;
+    -- processo para leitura das entradas e escrita das saidas
+    file_io : PROCESS
+        --SIGNALS AND VARIABLES
+        VARIABLE read_col_from_input_buf                                         : line; -- buffers de entrada e saida
+        FILE input_buf                                                           : text; --text is keyword ->??
+        VARIABLE read_col_from_sigmoid_buf                                       : line;
+        FILE NN_weights_buff                                                     : text; --text is keyword -->??
+        VARIABLE write_col_to_output_buf                                         : line;
+        FILE output_buf                                                          : text; --text is keyword -->??
+        VARIABLE val_address                                                     : STD_LOGIC_VECTOR(bits - 1 DOWNTO 0)       := (OTHERS => '0');
+        {text_val_weights} --signal 
+        -- VARIABLE val_n0_IO_in, val_n1_IO_in, val_n2_IO_in, val_n3_IO_in, val_n4_IO_in : STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); --signal 
+        {text_val_inputs}--signal 
+        VARIABLE val_SPACE                                                       : CHARACTER;                                                    -- espacos da leitura de cada linha de entrada
+    BEGIN
+        -------------------- ATUALIZACAO DOS PESOS DA NN --------------------
+        file_open(NN_weights_buff, "{weights_file_path}", read_mode);
+        rst <= '1', '0' AFTER clk_period;
+        WAIT UNTIL rst = '0';                   -- espera rst desligar
+        WHILE NOT endfile(NN_weights_buff) LOOP --enquanto arquivo nao terminar de ler
+            update_weights <= '1';
+            readline(NN_weights_buff, read_col_from_input_buf); --le_linha buffer primeira linha -> escreve na variavel
+{real_val_weights_from_line}
+            -- WAIT FOR (2 * clk_period);
+            WAIT FOR (1 * clk_period);
+        END LOOP;                    --END: ATUALIZACAO DOS PESOS DA NN
+        file_close(NN_weights_buff); --fecha leitura arquivo dos pesos da NN
+        update_weights <= '0';
+        -------------------- LEITURA ENTRADA E ESCRITA NO ARQUIVO DE SAIDA -------------------- 
+        WAIT FOR (sigmoid_read_time);
+        -- arquivo de entrada do tb:
+        file_open(input_buf, "{inputs_file_path}", read_mode);
+        -- arquivo de saida do tb:
+        file_open(output_buf, "{outputs_file_path}", write_mode);
+        WHILE NOT endfile(input_buf) LOOP             --enquanto arquivo nao terminar de ler
+            readline(input_buf, read_col_from_input_buf); --le_linha buffer primeira linha -> escreve na variavel
+            read(read_col_from_input_buf, {inputs_val});
+            read(read_col_from_input_buf, val_SPACE);
+            {inputs}    <= signed({inputs_val});
+            buff_out <= STD_LOGIC_VECTOR({outputs_concatenation});
+            WAIT FOR (5 * clk_period);
+            write(write_col_to_output_buf, buff_out);         --Pega valor da saida e associa ao sinal
+            writeline(output_buf, write_col_to_output_buf);   --Escreve valor da saida (do sinal) no arquivo de texto
+        END LOOP;                                         --END: LEITURA ENTRADA E ESCRITA NO ARQUIVO DE SAIDA----
+        write(write_col_to_output_buf, STRING'(" END!")); --para confirmar que saiu do loop e estah tudo ok
+        writeline(output_buf, write_col_to_output_buf);
+        file_close(input_buf);  --fecha leitura arquivo INPUTS
+        file_close(output_buf); --fecha arquivo OUTPUTS
+        WAIT;                   --sem ele nd funciona; -->Pq??
+    END PROCESS;
+END tb;
+''')
+
+# tb_txt = tb_text(
+#     tb_generic=tb_generic_txt,
+#     signal_inputs=signal_inputs,
+#     signal_input_weights=signal_input_weights,
+#     signal_outputs=signal_outputs,
+#     top_component=top_component,
+#     text_val_inputs=text_val_inputs,
+#     text_val_weights=text_val_weights,
+#     weights_file_path=weights_file_path,
+#     inputs_file_path=inputs_file_path,
+#     outputs_file_path=outputs_file_path,
+#     real_val_weights_from_line=real_val_weights_from_line,
+#     inputs_val=inputs_val,
+#     inputs=inputs,
+#     outputs_concatenation=outputs_concatenation
+# )
+    with open(f"{OUTPUT_BASE_DIR_PATH}/{top_name}_tb.vhd", "w") as writer:
+        writer.write(tb_txt)  # download Reg
+
+    print(' #################### FINAL #################### ')
+
 
 def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: list, layers_dict_list: list):
     """
@@ -116,9 +329,16 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
     txt_top_port_map_split = txt_top_port_map.split("\n")
     assign_list = []
 
+    # neurons_PM_matrix_local = [
+    #     ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out'],
+    #     ['c0_n1_W_out', 'c1_n1_W_out', 'c2_n1_W_out', 'c3_n1_W_out'],
+    #     ['c0_n2_W_out', 'c2_n2_W_out', 'c3_n2_W_out'],
+    #     ['c0_n3_W_out', 'c3_n3_W_out'],
+    #     ['c0_n4_W_out']]
     # lista de sinais para declarar dps: SIGNAL .... (... -1 downto 0);
     optimize_signal_declaration(
         neurons_PM_matrix_local, layers_dict_list, assign_list)
+    # neurons_PM_matrix_local = [['c3_n0_W_out'], ['c3_n1_W_out']]
     # assign_list = [
     #     'c0_n0_W_out => c0_n0_W_out,',
     #     'c0_n1_W_out => c0_n1_W_out,',
@@ -217,6 +437,8 @@ def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inpu
     # Update top_dict with input and output information
     top_dict['Inputs_number'] = layers_dict_list[0]['Inputs_number']
     top_dict['bits'] = layers_dict_list[0]['bits']
+    top_dict['IO']['GENERIC']['TOTAL_BITS'] = layers_dict_list[0]['Inputs_number'] * \
+        layers_dict_list[0]['bits']
     top_dict['IO']['IN']['STD_LOGIC'] = l_inputs[0]
     top_dict['IO']['IN']['STD_LOGIC_VECTOR'] = l_inputs[1]
     top_dict['IO']['IN']['SIGNED'] = l_inputs[2]
@@ -831,8 +1053,8 @@ USE work.parameters.ALL;
 ARCHITECTURE arch OF  {top_dict['Top_name']}  IS
 -- SIGNALS
 {signals.signals_txt}
-    SIGNAL reg_IO_in: signed(TOTAL_BITS - 1 DOWNTO 0);
-    SIGNAL en_registers: STD_LOGIC;
+  SIGNAL reg_IO_in: signed(TOTAL_BITS - 1 DOWNTO 0);
+  SIGNAL en_registers: STD_LOGIC;
 BEGIN
   en_registers <= update_weights AND clk;
   {signals_assign_txt}

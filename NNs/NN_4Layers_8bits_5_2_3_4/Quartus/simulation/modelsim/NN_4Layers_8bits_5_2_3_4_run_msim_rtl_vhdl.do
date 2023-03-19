@@ -5,7 +5,7 @@ if {[file exists rtl_work]} {
 vlib rtl_work
 vmap work rtl_work
 
-vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/ROM_fx_8bitaddr_8width.vhd}
+vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/ROM_fx_8bitaddr_8width.vhd}
 vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/parameters.vhd}
 vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/mult0_v0.vhd}
 vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/shift_reg_5n.vhd}

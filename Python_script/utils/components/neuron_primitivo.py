@@ -8,7 +8,7 @@ from utils.components.MAC import *
 
 from utils.standard_dicts import layer_dict_hidden, layer_dict_softmax
 
-from utils.general.shift_reg import shift_reg_gen
+from utils.components.shift_reg import shift_reg_gen
 from utils.general.Create_Folders import create_folder_neuron
 from utils.general.vhd_txt_utils import entity, rom_component, port_map_ROM
 from utils.general.dict_utils import dict_list_exceptNone

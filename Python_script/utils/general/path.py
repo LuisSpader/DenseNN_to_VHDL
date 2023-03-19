@@ -32,10 +32,10 @@ def download_TxtFile_As(Text: str = "Text to download!",
         writer.write(Text)
 
 
-download_TxtFile_As(Text="Text to download",
-                    folder_create="",
-                    filename_with_type=".txt",
-                    path_level=False)
+# download_TxtFile_As(Text="Text to download",
+#                     folder_create="",
+#                     filename_with_type=".txt",
+#                     path_level=False)
 
 
 def zipdir(path, ziph):

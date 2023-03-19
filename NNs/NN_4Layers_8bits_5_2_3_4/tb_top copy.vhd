@@ -1,19 +1,10 @@
--- nome do topo
--- IOs do topo
--- 	gerar sinais das IO
--- 		VARIABLE val_W_in
--- 		VARIABLE val_IO_in
-
--- path: weights_bin.txt
--- path: inputs_string.txt
--- path: tb_outputs.txt
-
 LIBRARY ieee;
+LIBRARY osvvm;
+USE osvvm.osvvm_textio.ALL;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE std.textio.ALL;
 USE ieee.std_logic_textio.ALL; -- para tratamento de arquivos e textoÂ ->Â file_open...  
-
 USE work.parameters.ALL;
 
 ENTITY tb_top IS
@@ -25,6 +16,7 @@ ENTITY tb_top IS
 END tb_top;
 
 ARCHITECTURE tb OF tb_top IS
+
     CONSTANT clk_hz                                                   : INTEGER                                     := 100e6;
     CONSTANT clk_period                                               : TIME                                        := 1 sec / clk_hz;
     SIGNAL clk, rst, update_weights                                   : STD_LOGIC                                   := '0';
@@ -39,11 +31,12 @@ ARCHITECTURE tb OF tb_top IS
     -- SIGNAL buff_out_signed : STD_LOGIC_VECTOR(((2) * BITS) - 1 DOWNTO 0);
 
     CONSTANT sigmoid_read_time                                        : TIME                                        := 16 * clk_period;
-
+    FILE file_handle                                                  : text OPEN read_mode IS "";
+    VARIABLE line                                                     : line;
 BEGIN
     -- port map do componente 'top.vhd'
-    UUT : ENTITY work.top PORT MAP(
-        clk            => clk,
+    UUT : ENTITY work.top PORT MAP
+        (clk           => clk,
         rst            => rst,
         update_weights => update_weights,
         IO_in          => IO_in,
@@ -68,11 +61,22 @@ BEGIN
         WAIT FOR clk_period/2;
     END PROCESS;
 
+    -- file_io_osvvm_PROC : PROCESS (sensitivity_list)
+    --     FILE file_handle : text OPEN read_mode IS "";-- := OSVVM_textio.FOpen("relative/path/TO/FILE.txt", OSVVM_textio.read_mode);
+    --     VARIABLE line    : line;
+
+    -- BEGIN
+    --     file_handle <= OSVVM_textio.FOpen("relative/path/to/file.txt", OSVVM_textio.read_mode);
+    --     OSVVM_textio.GetLine(file_handle, line);
+    --     OSVVM_textio.FClose(file_handle);
+
+    -- END PROCESS;
+
     -- processo para leitura das entradas e escrita das saidas
     file_io : PROCESS
 
         --SIGNALS AND VARIABLES
-        VARIABLE read_col_from_input_buf                                         : line; -- buffers de entrada e saida
+        VARIABLE read_col_from_input_buf                                         : line; -- buffers de entrada e saiÃƒâ€šÃ‚Â­da
         FILE input_buf                                                           : text; --text is keyword ->??
 
         VARIABLE read_col_from_sigmoid_buf                                       : line;
@@ -84,15 +88,21 @@ BEGIN
         VARIABLE val_address                                                     : STD_LOGIC_VECTOR(bits - 1 DOWNTO 0)       := (OTHERS => '0');
         VARIABLE val_n0_W_in, val_n1_W_in, val_n2_W_in, val_n3_W_in, val_n4_W_in : STD_LOGIC_VECTOR(8 - 1 DOWNTO 0)          := (OTHERS => '0'); --signal 
         -- VARIABLE val_n0_IO_in, val_n1_IO_in, val_n2_IO_in, val_n3_IO_in, val_n4_IO_in : STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); --signal 
-        VARIABLE val_IO_in                                                       : STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); --signal 
+        VARIABLE val_IO_in1                                                      : STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); --signal 
 
         VARIABLE val_SPACE                                                       : CHARACTER;                                                    -- espacos da leitura de cada linha de entrada
 
+        FILE file_handle                                                         : text OPEN read_mode IS "";-- := OSVVM_textio.FOpen("relative/path/TO/FILE.txt", OSVVM_textio.read_mode);
+        VARIABLE line                                                            : line;
+
     BEGIN
-        -- report "path: " & path 
+
         -------------------- ATUALIZACAO DOS PESOS DA NN --------------------
         file_open(NN_weights_buff, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\tb_Files/weights_bin.txt", read_mode);
-        -- file_open(NN_weights_buff, "./tb_Files/weights_bin.txt", read_mode);
+        -- file_open(NN_weights_buff, "../Testbench/Files/weights_bin.txt", read_mode);
+        file_handle <= OSVVM_textio.FOpen("relative/path/to/file.txt", OSVVM_textio.read_mode);
+        OSVVM_textio.GetLine(file_handle, line);
+        OSVVM_textio.FClose(file_handle);
 
         rst <= '1', '0' AFTER clk_period;
 

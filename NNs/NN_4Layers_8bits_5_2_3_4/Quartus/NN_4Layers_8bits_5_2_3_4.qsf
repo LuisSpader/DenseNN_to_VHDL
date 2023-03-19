@@ -61,6 +61,7 @@ set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "10 us" -section_id tb_to
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_top -section_id tb_top
 set_global_assignment -name EDA_TEST_BENCH_FILE ../tb_top.vhd -section_id tb_top
 set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT do_wave.txt -section_id eda_simulation
+set_global_assignment -name VHDL_FILE ../tb_top.vhd
 set_global_assignment -name VHDL_FILE ../Neuron/ROM_fx_8bitaddr_8width.vhd
 set_global_assignment -name VHDL_FILE ../top.vhd
 set_global_assignment -name VHDL_FILE ../parameters.vhd

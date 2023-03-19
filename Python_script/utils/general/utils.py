@@ -1,5 +1,6 @@
 # from standard_dicts import layer_dict_hidden
 from utils.SETTINGS import signals
+from utils.GLOBALS import GLOBAL
 from utils.general.txt_utils import replace_chars
 from utils.general.dict_utils import dict_list_exceptNone
 from utils.general.txt_utils import erase_empty_lines, tab_lines
@@ -971,7 +972,7 @@ def IO_manual_Top(
         top_dict: dict,  # top_dict
         IO_dict_compare: list,  # dict_to_compare
         IO_type: str = 'IN',
-        SIGNALS: bool = False,
+        # SIGNALS: bool = False,
         DEBUG: bool = False
 ) -> str:
     # layer_dict_compare: dict,
@@ -1105,8 +1106,12 @@ def IO_manual_Top(
     # text_list can be an splitted text or a list of texts
     final_string = '\n'.join(map(str, (text_list)))
     # print(f"utils.py :: IO_manual() -> final_string: {final_string}")
-    if SIGNALS:
-        signals.append_signals(nomes2, tipos2)
+    # if SIGNALS:
+    # signals.append_signals(nomes2, tipos2)
+    # GLOBAL.TOP.
+    # if nomes2 != ['']:
+    #     GLOBAL.TOP.nomes.append(nomes2)
+    #     GLOBAL.TOP.tipos.append(tipos2)
     return final_string
 
 
@@ -1494,12 +1499,23 @@ def IO_manager_Top(top_dict: dict,
             OUT_stdl, OUT_stdl_v, OUT_stdl_num_inputs, OUT_signed, OUT_signed_num_inputs, OUT_stdl_v_num_inputs, OUT_manual
             ]
 
+    for i, item in enumerate(text):
+        buff = item.copy()
+        if item != [''] and item != []:
+            for x in ['IN', 'OUT']:
+                if x in buff[0]:
+                    buff[0] = buff[0].replace(x, '')
+                    GLOBAL.TESTBENCH.items.append(buff)
+            # GLOBAL.TOP.tipos.append(tipos2)
+    GLOBAL.TESTBENCH.call_all_fix()
+
     text = [j for i in text for j in i]
+    # text = [var for var in text if var]
     text = '\n'.join(map(str, (text)))
     # text = ['\n'.join(l) for l in text]
 
-    traço = ' --'+'\n --'.join(map(str, (IO_dict_list[i].items())))
-
+    # traço = ' --'+'\n --'.join(map(str, (IO_dict_list[i].items())))
+    traço = ''
     text = tab_lines(text, tab_space)
     text = erase_empty_lines(text)[:-1]
     # text = text[:-1] #tira ';' e uma linha em branco

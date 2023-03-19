@@ -120,7 +120,8 @@ USE IEEE.NUMERIC_STD.ALL;
 PACKAGE {parameters_vhd_name} IS
     CONSTANT BITS : INTEGER := {bits}; --You need to change this depending on each desired input/output BITS
     CONSTANT ones : STD_LOGIC_VECTOR (BITS - 1 DOWNTO 0) := (OTHERS => '1'); --"0000..."
-
+    CONSTANT clk_hz     : INTEGER                              := 100e6;
+    CONSTANT clk_period : TIME                                 := 1 sec / clk_hz;
 END {parameters_vhd_name};
 PACKAGE BODY {parameters_vhd_name} IS
 END {parameters_vhd_name};''')

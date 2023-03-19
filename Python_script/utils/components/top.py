@@ -25,13 +25,13 @@ INPUTS_NUMBER = 5
 # print(" ================== TOP ================== ")
 # print(txt)
 
-# # # todo: fazer layer_port_map_ALL()
+# # #  fazer layer_port_map_ALL()
 # # port_map_txt, output_dict = layer_neurons_port_map_ALL(
 # #     layer_dict_arg=output_dict,
 # #     ID_camada='top',
 # #     n_max=0)
 
-# # # TODO FAZER NOVA entity2_layer_dict()
+# # # FAZER NOVA entity2_layer_dict()
 # # top_text = (f'''LIBRARY ieee;
 # # USE ieee.std_logic_1164.ALL;
 # # USE ieee.numeric_std.ALL;
