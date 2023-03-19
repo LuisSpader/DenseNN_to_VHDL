@@ -196,9 +196,10 @@ GENERIC (
     #         '''
 
     # outputs_concatenation = "c3_n0_IO_out & c3_n1_IO_out & c3_n2_IO_out & c3_n3_IO_out"
-    weights_file_path = f"{OUTPUT_BASE_DIR_PATH}/tb_Files/weights_bin.txt"
-    inputs_file_path = f"{OUTPUT_BASE_DIR_PATH}/tb_Files/inputs_string.txt"
-    outputs_file_path = f"{OUTPUT_BASE_DIR_PATH}/tb_Files/tb_outputs.txt"
+    whole_dir = os.path.abspath(".")
+    weights_file_path = f"{whole_dir}{OUTPUT_BASE_DIR_PATH[1:]}/tb_Files/weights_bin.txt"
+    inputs_file_path = f"{whole_dir}/{OUTPUT_BASE_DIR_PATH[1:]}/tb_Files/inputs_string.txt"
+    outputs_file_path = f"{whole_dir}/{OUTPUT_BASE_DIR_PATH[1:]}/tb_Files/tb_outputs.txt"
     # -----------------------------------------------------------------------------------------------------
     tb_txt = (f'''
     -- GERADO PELO SCRIPT --

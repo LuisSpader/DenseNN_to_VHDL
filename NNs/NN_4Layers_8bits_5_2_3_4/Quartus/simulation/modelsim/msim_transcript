@@ -349,10 +349,6 @@
 # update
 # WaveRestoreZoom {0 ps} {52500 ns}
 # run 50 us
-# ** Error: (vsim-7) Failed to open VHDL file "./NNs/NN_4Layers_8bits_5_2_3_4/tb_Files/weights_bin.txt" in rb mode.
-# 
-# No such file or directory. (errno = ENOENT)
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 #    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_3/U_ROM
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
@@ -361,12 +357,175 @@
 #    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/U_ROM
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 #    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/U_ROM
-# ** Fatal: (vsim-7) Failed to open VHDL file "./NNs/NN_4Layers_8bits_5_2_3_4/tb_Files/weights_bin.txt" in rb mode.
-# 
-# No such file or directory. (errno = ENOENT)
-#    Time: 10 ns  Iteration: 0  Process: /top_tb/file_io File: C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd
-# Fatal error in Process file_io at C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd line 77
-# 
-# HDL call sequence:
-# Stopped at C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd 77 Process file_io
-# 
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 10 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 20 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 30 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 40 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 50 ns  Iteration: 0  Instance: /top_tb
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 55 ns  Iteration: 2  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_3/U_ROM
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 55 ns  Iteration: 2  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/U_ROM
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 55 ns  Iteration: 2  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/U_ROM
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 55 ns  Iteration: 2  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/U_ROM
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 60 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 70 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 80 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 90 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 100 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 110 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 120 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 130 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 140 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 150 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 160 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 170 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 340 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 390 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 440 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 490 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 540 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 590 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 640 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 690 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 740 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 790 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 840 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 890 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 940 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 990 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1040 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1090 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1140 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1190 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1240 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1290 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1340 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1390 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1440 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1490 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1540 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1590 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1640 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1690 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1740 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1790 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1840 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1890 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1940 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 1990 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2040 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2090 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2140 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2190 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2240 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2290 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2340 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2390 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2440 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2490 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2540 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2590 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2640 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2690 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2740 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2790 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2840 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2890 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2940 ns  Iteration: 0  Instance: /top_tb
+# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
+#    Time: 2990 ns  Iteration: 0  Instance: /top_tb
+add wave -position insertpoint  \
+sim:/top_tb/BITS \
+sim:/top_tb/NUM_INPUTS \
+sim:/top_tb/TOTAL_BITS \
+sim:/top_tb/buff_out \
+sim:/top_tb/clk \
+sim:/top_tb/rst \
+sim:/top_tb/update_weights \
+sim:/top_tb/IO_in \
+sim:/top_tb/c0_n0_W_in \
+sim:/top_tb/c0_n1_W_in \
+sim:/top_tb/c0_n2_W_in \
+sim:/top_tb/c0_n3_W_in \
+sim:/top_tb/c0_n4_W_in \
+sim:/top_tb/c3_n0_IO_out \
+sim:/top_tb/c3_n1_IO_out \
+sim:/top_tb/c3_n2_IO_out \
+sim:/top_tb/c3_n3_IO_out \
+sim:/top_tb/clk_hz \
+sim:/top_tb/clk_period \
+sim:/top_tb/sigmoid_read_time
+run
