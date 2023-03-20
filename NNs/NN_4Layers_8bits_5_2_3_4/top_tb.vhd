@@ -1,5 +1,4 @@
 
-    -- GERADO PELO SCRIPT --
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -20,7 +19,6 @@ ARCHITECTURE tb OF top_tb IS
     CONSTANT clk_period                                               : TIME                                        := 1 sec / clk_hz;
     SIGNAL buff_out                                                   : STD_LOGIC_VECTOR(((4) * BITS) - 1 DOWNTO 0) := (OTHERS => '0');
     CONSTANT sigmoid_read_time                                        : TIME                                        := 16 * clk_period;
-    
     -- SIGNAL clk, rst, update_weights                                   : STD_LOGIC                                   := '0';
     -- SIGNAL IO_in                                                      : signed(TOTAL_BITS * NUM_INPUTS - 1 DOWNTO 0);
     -- SIGNAL buff_in                                                    : STD_LOGIC_VECTOR(TOTAL_BITS * NUM_INPUTS - 1 DOWNTO 0);
@@ -28,7 +26,6 @@ ARCHITECTURE tb OF top_tb IS
    SIGNAL IO_in:  signed(TOTAL_BITS - 1 DOWNTO 0);
    SIGNAL c0_n0_W_in, c0_n1_W_in, c0_n2_W_in, c0_n3_W_in, c0_n4_W_in:  signed(BITS - 1 DOWNTO 0);
    SIGNAL c3_n0_IO_out, c3_n1_IO_out, c3_n2_IO_out, c3_n3_IO_out:  signed(BITS -1 DOWNTO 0);
-
 BEGIN
     -- port map do componente 'top.vhd'
         UUT : ENTITY work.top PORT MAP(

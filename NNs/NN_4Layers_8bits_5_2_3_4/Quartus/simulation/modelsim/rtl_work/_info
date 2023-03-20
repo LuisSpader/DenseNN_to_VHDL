@@ -4,7 +4,7 @@ K3
 cModel Technology
 Z0 dC:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\Quartus\simulation\modelsim
 Ecamada0_relu_5neuron_8bits_5n_signed
-Z1 w1679261507
+Z1 w1679351220
 Z2 DPx4 ieee 15 std_logic_arith 0 22 4`Y?g_lkdn;7UL9IiJck01
 Z3 DPx4 ieee 18 std_logic_unsigned 0 22 RYmj;=TK`k=k>D@Cz`zoB3
 Z4 DPx4 work 10 parameters 0 22 LBW^01d`20GI>6oA21`^F0
@@ -19,7 +19,7 @@ L6
 VUBAnA36K3MF^QVl3Hm;400
 Z11 OV;C;10.1d;51
 31
-Z12 !s108 1679261541.768000
+Z12 !s108 1679351444.704000
 Z13 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada0_ReLU_5neuron_8bits_5n_signed.vhd|
 Z14 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada0_ReLU_5neuron_8bits_5n_signed.vhd|
 Z15 o-93 -work work -O0
@@ -65,7 +65,7 @@ L6
 V915n6kL>B9ciIFG9<9K^M1
 R11
 31
-Z23 !s108 1679261541.649000
+Z23 !s108 1679351444.579000
 Z24 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada1_ReLU_2neuron_8bits_5n_signed.vhd|
 Z25 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada1_ReLU_2neuron_8bits_5n_signed.vhd|
 R15
@@ -110,7 +110,7 @@ L6
 V_59W9coRz19W[5HGi:5J:1
 R11
 31
-Z29 !s108 1679261541.511000
+Z29 !s108 1679351444.440000
 Z30 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada2_ReLU_3neuron_8bits_2n_signed.vhd|
 Z31 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada2_ReLU_3neuron_8bits_2n_signed.vhd|
 R15
@@ -155,7 +155,7 @@ L6
 VgYfnbdTkzBoQeiiS4MHR=2
 R11
 31
-Z36 !s108 1679261541.386000
+Z36 !s108 1679351444.182000
 Z37 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada3_Sigmoid_4neuron_8bits_3n_signed.vhd|
 Z38 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Layers/camada3_Sigmoid_4neuron_8bits_3n_signed.vhd|
 R15
@@ -185,7 +185,7 @@ R16
 !s100 8S>oDDIV[IUY`T91>;aSH3
 !i10b 1
 Emac_comb_2n_8bit_signed_mult0_v0_add0_v0
-Z41 w1679261509
+Z41 w1679351221
 R2
 R3
 R4
@@ -201,7 +201,7 @@ L7
 VDh5j>[J9>VRKA:PeU]hmM3
 R11
 31
-Z44 !s108 1679261541.251000
+Z44 !s108 1679351444.056000
 Z45 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_2n_8bit_signed_mult0_v0_add0_v0.vhd|
 Z46 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_2n_8bit_signed_mult0_v0_add0_v0.vhd|
 R15
@@ -230,7 +230,7 @@ R16
 !s100 jXm0D@In=n0BTl>HFZco=3
 !i10b 1
 Emac_comb_3n_8bit_signed_mult0_v0_add0_v0
-R41
+Z47 w1679351222
 R2
 R3
 R4
@@ -239,16 +239,16 @@ R5
 R6
 R7
 R8
-Z47 8C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_3n_8bit_signed_mult0_v0_add0_v0.vhd
-Z48 FC:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_3n_8bit_signed_mult0_v0_add0_v0.vhd
+Z48 8C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_3n_8bit_signed_mult0_v0_add0_v0.vhd
+Z49 FC:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_3n_8bit_signed_mult0_v0_add0_v0.vhd
 l0
 L7
 VBAf4d]YXg3_7=jFH[6MSa1
 R11
 31
-Z49 !s108 1679261541.134000
-Z50 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_3n_8bit_signed_mult0_v0_add0_v0.vhd|
-Z51 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_3n_8bit_signed_mult0_v0_add0_v0.vhd|
+Z50 !s108 1679351443.932000
+Z51 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_3n_8bit_signed_mult0_v0_add0_v0.vhd|
+Z52 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_3n_8bit_signed_mult0_v0_add0_v0.vhd|
 R15
 R16
 !s100 =NzHzLjX1EZPJk4o1ZdNf0
@@ -267,15 +267,15 @@ L22
 VifCfGO>K>[IGIcBa;^:G`3
 R11
 31
-R49
 R50
 R51
+R52
 R15
 R16
 !s100 T_JC;FXeQ5HebUO;b1bP<2
 !i10b 1
 Emac_comb_5n_8bit_signed_mult0_v0_add0_v0
-Z52 w1679261508
+R41
 R2
 R3
 R4
@@ -291,7 +291,7 @@ L7
 Vn;]aH]DX1gn^]l4N15B?c2
 R11
 31
-Z55 !s108 1679261541.007000
+Z55 !s108 1679351443.801000
 Z56 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_5n_8bit_signed_mult0_v0_add0_v0.vhd|
 Z57 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/MAC_comb_5n_8bit_signed_mult0_v0_add0_v0.vhd|
 R15
@@ -335,7 +335,7 @@ L7
 V1DX`R`?X[nH?eIkFCPiLg3
 R11
 31
-Z60 !s108 1679261539.537000
+Z60 !s108 1679351442.464000
 Z61 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/mult0_v0.vhd|
 Z62 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/mult0_v0.vhd|
 R15
@@ -379,7 +379,7 @@ L8
 V?P;Gf>FJ><jBnlhKYiB<m2
 R11
 31
-Z65 !s108 1679261540.851000
+Z65 !s108 1679351443.684000
 Z66 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_ReLU_2n_8bit_signed_mult0_v0_add0_v0_out.vhd|
 Z67 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_ReLU_2n_8bit_signed_mult0_v0_add0_v0_out.vhd|
 R15
@@ -408,7 +408,7 @@ R16
 !s100 AWD4nX_T:F:3keFQZHGKN1
 !i10b 1
 Eneuron_comb_relu_5n_8bit_signed_mult0_v0_add0_v0
-R52
+R41
 R4
 R18
 R5
@@ -424,7 +424,7 @@ L8
 VmZj3NePz3abhRba2BOcDK3
 R11
 31
-Z70 !s108 1679261540.685000
+Z70 !s108 1679351443.564000
 Z71 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0.vhd|
 Z72 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0.vhd|
 R15
@@ -453,7 +453,7 @@ R16
 !s100 NNQXe8AYjl>VPeLPXY4@P1
 !i10b 1
 Eneuron_comb_relu_5n_8bit_signed_mult0_v0_add0_v0_out
-R52
+R41
 R4
 R18
 R5
@@ -469,7 +469,7 @@ L8
 V=][?4hD;0F_PR@>VZT9aJ3
 R11
 31
-Z75 !s108 1679261540.532000
+Z75 !s108 1679351443.441000
 Z76 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0_out.vhd|
 Z77 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_ReLU_5n_8bit_signed_mult0_v0_add0_v0_out.vhd|
 R15
@@ -498,7 +498,7 @@ R16
 !s100 Ek?IVa<?ZzYdM?fHnh^Vj2
 !i10b 1
 Eneuron_comb_sigmoid_3n_8bit_signed_mult0_v0_add0_v0
-R41
+R47
 R4
 R18
 R5
@@ -514,7 +514,7 @@ L8
 VMKG<:4[hkHJ79TTk;h[o?3
 R11
 31
-Z80 !s108 1679261540.383000
+Z80 !s108 1679351443.301000
 Z81 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_Sigmoid_3n_8bit_signed_mult0_v0_add0_v0.vhd|
 Z82 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/neuron_comb_Sigmoid_3n_8bit_signed_mult0_v0_add0_v0.vhd|
 R15
@@ -548,7 +548,7 @@ R2
 R3
 R6
 R7
-R41
+R47
 R8
 Z83 8C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/parameters.vhd
 Z84 FC:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/parameters.vhd
@@ -557,7 +557,7 @@ L6
 VLBW^01d`20GI>6oA21`^F0
 R11
 31
-Z85 !s108 1679261539.411000
+Z85 !s108 1679351442.343000
 Z86 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/parameters.vhd|
 Z87 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/parameters.vhd|
 R15
@@ -585,7 +585,7 @@ nbody
 !s100 i[^JL0NSOEP6Me@XPZb6a0
 !i10b 1
 Ereg
-R41
+R47
 R2
 R3
 R4
@@ -600,7 +600,7 @@ L7
 V2dKf0anijaE=oc7W6MYDm3
 R11
 31
-Z90 !s108 1679261540.223000
+Z90 !s108 1679351443.144000
 Z91 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/Reg.vhd|
 Z92 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/Reg.vhd|
 R15
@@ -628,7 +628,7 @@ R16
 !s100 A=NXQEW`jQgC;^YMhYoe11
 !i10b 1
 Erom_fx_8bitaddr_8width
-R41
+R47
 R5
 R6
 R7
@@ -640,7 +640,7 @@ L7
 VADeDbgRAmPE6zM79Ld^^J2
 R11
 31
-Z95 !s108 1679261539.295000
+Z95 !s108 1679351442.220000
 Z96 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/ROM_fx_8bitaddr_8width.vhd|
 Z97 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/ROM_fx_8bitaddr_8width.vhd|
 R15
@@ -680,7 +680,7 @@ L7
 VM]N`SYG@lfEKhUd:`zT8^2
 R11
 31
-Z100 !s108 1679261540.005000
+Z100 !s108 1679351442.989000
 Z101 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/shift_reg_2n.vhd|
 Z102 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/shift_reg_2n.vhd|
 R15
@@ -708,7 +708,7 @@ R16
 !s100 fj6LlS=M7J:@?[`M1TEmL0
 !i10b 1
 Eshift_reg_3n
-R41
+R47
 R2
 R3
 R4
@@ -723,7 +723,7 @@ L7
 VO4X56OY89kYjmnFb2zo;`1
 R11
 31
-Z105 !s108 1679261539.851000
+Z105 !s108 1679351442.733000
 Z106 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/shift_reg_3n.vhd|
 Z107 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/shift_reg_3n.vhd|
 R15
@@ -751,7 +751,7 @@ R16
 !s100 1GZ]@CV8c8USFSM8Fi4Kc3
 !i10b 1
 Eshift_reg_5n
-R52
+R41
 R2
 R3
 R4
@@ -766,7 +766,7 @@ L7
 VGG]F5DH4PVQ:l8>ZI:J1Q1
 R11
 31
-Z110 !s108 1679261539.693000
+Z110 !s108 1679351442.610000
 Z111 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/shift_reg_5n.vhd|
 Z112 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Neuron/shift_reg_5n.vhd|
 R15
@@ -794,7 +794,7 @@ R16
 !s100 PhPk[^NNZif3khPQfW4KF3
 !i10b 1
 Etop
-R41
+R47
 R2
 R3
 R4
@@ -809,7 +809,7 @@ L5
 V2DRNB1kRYV0NIl@S?XK:]3
 R11
 31
-Z115 !s108 1679261542.133000
+Z115 !s108 1679351444.848000
 Z116 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/top.vhd|
 Z117 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/top.vhd|
 R15
@@ -841,7 +841,7 @@ R16
 !s100 CI=AMi<CXT@<Oi`2S=zhG1
 !i10b 1
 Etop_tb
-R41
+R47
 R2
 R3
 R4
@@ -853,13 +853,13 @@ R8
 Z120 8C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd
 Z121 FC:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd
 l0
-L9
+L8
 V6kIE]ZAUMnJzb=aUhnCPW1
-!s100 3<Dbi2iHCCUl;hAz?33Li2
+!s100 ]WGf<nadeYC01S:W4_;UK2
 R11
 31
 !i10b 1
-Z122 !s108 1679261542.268000
+Z122 !s108 1679351445.025000
 Z123 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd|
 Z124 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/Quartus/../top_tb.vhd|
 R15
@@ -874,10 +874,10 @@ R5
 R6
 R7
 DEx4 work 6 top_tb 0 22 6kIE]ZAUMnJzb=aUhnCPW1
-l32
-L18
+l29
+L17
 V>@D?<8;FnG>_O8N[Y:ijN1
-!s100 5z4f7]j=gSf<0z]NW^mmj2
+!s100 ^iJT`MH;DHUYj5[OAiXmn3
 R11
 31
 !i10b 1

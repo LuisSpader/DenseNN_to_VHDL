@@ -289,41 +289,41 @@ end ENTITY;
 # print(layer_dict_hidden['Neuron_arch']['IO']['unique_IO'])
 
 
-def PROCCESS_IF_ELSE(rst_event: bool,
-                     clk_event: bool,
-                     IF: str,
-                     ELSE: str) -> str:
-    variables = []
-    if (rst_event == 1):
-        variables.append('rst')
+# def PROCCESS_IF_ELSE(rst_event: bool,
+#                      clk_event: bool,
+#                      IF: str,
+#                      ELSE: str) -> str:
+#     variables = []
+#     if (rst_event == 1):
+#         variables.append('rst')
 
-    if (clk_event == 1):
-        variables.append('clk')
+#     if (clk_event == 1):
+#         variables.append('clk')
 
-    text = (f'''
-PROCCESS({','.join(variables)})
-BEGIN
-END PROCCESS;''')
+#     text = (f'''
+# PROCCESS({','.join(variables)})
+# BEGIN
+# END PROCCESS;''')
 
-    #  RESET ------------------
-    if (rst_event == 1):
-        text = text[:-13] + (f'''
-  IF (rst = '1') THEN
-{rst_receive_string_MAC}
+#     #  RESET ------------------
+#     if (rst_event == 1):
+#         text = text[:-13] + (f'''
+#   IF (rst = '1') THEN
+# {rst_receive_string_MAC}
 
-  ELSE
-  END IF;
-  ''') + text[-13:]
+#   ELSE
+#   END IF;
+#   ''') + text[-13:]
 
-    # CLK --------------------
-    if (clk_event == 1):
-        text = text[:-25] + (f'''
-  IF (clk'event AND clk = '1') THEN
-{clk_receive_string_MAC}
-  END IF;
-''') + text[-25:]
-    # ---------------------------------
-    return text
+#     # CLK --------------------
+#     if (clk_event == 1):
+#         text = text[:-25] + (f'''
+#   IF (clk'event AND clk = '1') THEN
+# {clk_receive_string_MAC}
+#   END IF;
+# ''') + text[-25:]
+#     # ---------------------------------
+#     return text
 
 
 def rom_component(ROM_name: str,
@@ -424,3 +424,30 @@ def port_map_ROM(ROM_name: str,
 	''')
     # print(PORT_MAP_ROM)
     return (PORT_MAP_ROM)
+
+
+def generic_gen(top_dict: dict):
+    generic_names = None
+    generic_names = dict_list_exceptNone(
+        dict_slice=top_dict['IO']['GENERIC'], return_value_or_key='key', is_list=False)
+
+    # pegando o valor das variáveis
+    tb_generic_values = dict_list_exceptNone_Callable(
+        dict_slice=top_dict['IO']['GENERIC'], return_value_or_key='value', is_list=False)
+
+    tab_space = 2
+    tb_assign = ''.join(
+        f"{'  ' * tab_space}{generic_names[i]}: NATURAL := {tb_generic_values[i]}; \n"
+        for i, item in enumerate(generic_names)
+    )
+    tb_assign = tb_assign[:-3]  # removendo último ';'
+
+    # gerando texto de atribuições
+    if generic_names != None:
+        generic_txt = (f'''
+GENERIC (
+{tb_assign}
+);
+  ''')
+
+    return generic_txt
