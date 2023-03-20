@@ -253,18 +253,21 @@ def read_variables(buff_weights: list):
     read_val_weights_from_line = []
     for item in buff_weights:
         read_val_weights_from_line.extend(
-            ['', f'''            read(read_col_from_input_buf, {item});''', f'''            read(read_col_from_input_buf, val_SPACE);'''])
+            [
+                '',
+                f'''            read(read_col_from_input_buf, {item});''',
+                '''            read(read_col_from_input_buf, val_SPACE);''',
+            ]
+        )
 
     read_val_weights_from_line.extend(['',
                                        "            -- Pass the read values to signals"])
 
-    for item in buff_weights:
-        read_val_weights_from_line.append(
-            f'''            {item[4:]} <= signed({item});''')
-    read_val_weights_from_line = '\n'.join(
-        map(str, (read_val_weights_from_line)))
-
-    return read_val_weights_from_line
+    read_val_weights_from_line.extend(
+        f'''            {item[4:]} <= signed({item});'''
+        for item in buff_weights
+    )
+    return '\n'.join(map(str, (read_val_weights_from_line)))
 
 
 def tb_txt_gen(OUTPUT_BASE_DIR_PATH: str,
