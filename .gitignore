@@ -153,3 +153,8 @@ PLLJ_PLLSPE_INFO.txt
 *.bak11
 *.bak8
 *.bak9
+*.dat
+*.dat
+*.pyc
+*.dbs
+*.wlf
