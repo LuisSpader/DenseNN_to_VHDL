@@ -315,8 +315,7 @@ def tb_txt_gen(OUTPUT_BASE_DIR_PATH: str,
     inputs_file_path = f"{whole_dir}/{OUTPUT_BASE_DIR_PATH[1:]}/tb_Files/inputs_string.txt"
     outputs_file_path = f"{whole_dir}/{OUTPUT_BASE_DIR_PATH[1:]}/tb_Files/tb_outputs.txt"
     # -----------------------------------------------------------------------------------------------------
-    tb_txt = (f'''
-LIBRARY ieee;
+    tb_txt = (f'''LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE std.textio.ALL;
