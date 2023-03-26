@@ -40,16 +40,27 @@ def tf_to_dict(model):
             "non_trainable_weights": [
                 weight.shape for weight in layer.non_trainable_weights
             ],
+            # "trainable": layer.trainable,
+            # # "weights": [weight.shape for weight in layer.weights],
+            # # "inputs": [input.name for input in layer.inputs],
+            # # "outputs": [output.name for output in layer.outputs],
+            # # "inbound_nodes": layer.inbound_nodes,
+            # # "outbound_nodes": layer.outbound_nodes,
+            # "inbound_nodes": [node.name for node in layer.inbound_nodes],
+            # "outbound_nodes": [node.name for node in layer.outbound_nodes],
+            # "input_mask": layer.compute_mask(layer.input, None),
             "trainable": layer.trainable,
             "weights": [weight.shape for weight in layer.weights],
-            # "inputs": [input.name for input in layer.inputs],
-            # "outputs": [output.name for output in layer.outputs],
-            # "inbound_nodes": layer.inbound_nodes,
-            # "outbound_nodes": layer.outbound_nodes,
-            "inbound_nodes": [node.name for node in layer.inbound_nodes],
-            "outbound_nodes": [node.name for node in layer.outbound_nodes],
+            "inbound_nodes": [node[0].split(':')[0] for node in layer._inbound_nodes],
+            "outbound_nodes": [node[0].split(':')[0] for node in layer._outbound_nodes],
             "input_mask": layer.compute_mask(layer.input, None),
+            # "output_mask": layer.compute_mask(layer.output, None),
+            # "losses": [loss.name for loss in layer.losses],
+            # "updates": [update.name for update in layer.updates],
         }
+        # # Include the layer weights as a list of numpy arrays
+        # weights = layer.get_weights()
+        # layer_dict["weights"] = [w.tolist() for w in weights]
         layer_dict["output_mask"] = layer.compute_mask(layer.output, None)
         layer_dict["losses"] = [loss.name for loss in layer.losses]
         layer_dict["updates"] = [update.name for update in layer.updates]
