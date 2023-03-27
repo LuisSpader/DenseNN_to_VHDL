@@ -1,7 +1,7 @@
 # DenseNN to VHDL
- This repository is a web framework to generate a Hardware Description Language (HDL) in VHDL language, from 2 input formats possibilities: 
+ This repository is a framework to generate a Hardware Description Language (HDL) in VHDL language for Artificial Neural Network Accelerators, from 3 input formats possibilities: 
  - 1) ONNX input format (not finished).
- - 2) Adjustable parameter configurations like:
+ - 2) Adjustable parameter configurations (Website or Python dictionary):
    - Number of layers
    - Number of neurons in each layer
    - Bit width
