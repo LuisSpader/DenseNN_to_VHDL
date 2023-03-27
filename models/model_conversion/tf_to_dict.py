@@ -9,7 +9,8 @@ _add_supported_quantized_objects(co)
 
 # Load the Tensorflow model
 # model = tf.keras.models.load_model("model.h5")
-model_path = f"{whole_dir}\models\QAE_model\KERAS_check_model_wo_classifier.h5"
+# model_path = f"{whole_dir}\models\QAE_model\KERAS_check_model_wo_classifier.h5"
+model_path = f"{whole_dir}\models\QAE_model\KERAS_check_best_model.model"
 print(model_path)
 model = tf.keras.models.load_model(model_path, custom_objects=co)
 
@@ -29,41 +30,27 @@ def tf_to_dict(model):
     model_dict = {}
 
     # Iterate over the model's layers
+    # for layer in model.layers:
+
+    tf_dict = {}
     for layer in model.layers:
-        layer_dict = {
-            "name": layer.name,
-            "input_shape": layer.input_shape,
-            "output_shape": layer.output_shape,
-            "trainable_weights": [
-                weight.shape for weight in layer.trainable_weights
-            ],
-            "non_trainable_weights": [
-                weight.shape for weight in layer.non_trainable_weights
-            ],
-            # "trainable": layer.trainable,
-            # # "weights": [weight.shape for weight in layer.weights],
-            # # "inputs": [input.name for input in layer.inputs],
-            # # "outputs": [output.name for output in layer.outputs],
-            # # "inbound_nodes": layer.inbound_nodes,
-            # # "outbound_nodes": layer.outbound_nodes,
-            # "inbound_nodes": [node.name for node in layer.inbound_nodes],
-            # "outbound_nodes": [node.name for node in layer.outbound_nodes],
-            # "input_mask": layer.compute_mask(layer.input, None),
-            "trainable": layer.trainable,
-            "weights": [weight.shape for weight in layer.weights],
-            "inbound_nodes": [node[0].split(':')[0] for node in layer._inbound_nodes],
-            "outbound_nodes": [node[0].split(':')[0] for node in layer._outbound_nodes],
-            "input_mask": layer.compute_mask(layer.input, None),
-            # "output_mask": layer.compute_mask(layer.output, None),
-            # "losses": [loss.name for loss in layer.losses],
-            # "updates": [update.name for update in layer.updates],
-        }
+        layer_dict = {}
+        layer_dict["class_name"] = layer.__class__.__name__
+        layer_dict["config"] = layer.get_config()
+        # layer_dict["inbound_nodes"] = [node.input_tensors[0].name.split(
+        #     ':')[0] for node in layer._inbound_nodes]
+        tf_dict[layer.name] = layer_dict
         # # Include the layer weights as a list of numpy arrays
         # weights = layer.get_weights()
         # layer_dict["weights"] = [w.tolist() for w in weights]
-        layer_dict["output_mask"] = layer.compute_mask(layer.output, None)
-        layer_dict["losses"] = [loss.name for loss in layer.losses]
-        layer_dict["updates"] = [update.name for update in layer.updates]
+        weights = layer.get_weights()
+        if weights:
+            print(layer.name)
+            for w in weights:
+                print(w.shape)
+                print(w)
+
+        layer_dict["weights"] = weights
 
         # Add the layer to the model's dictionary
         model_dict[layer.name] = layer_dict
@@ -72,3 +59,12 @@ def tf_to_dict(model):
 
 tf_dict = tf_to_dict(model)
 print(json.dumps(tf_dict, indent=4))
+
+
+# for layer in model.layers:
+#     weights = layer.get_weights()
+#     if weights:
+#         print(layer.name)
+#         for w in weights:
+#             print(w.shape)
+#             print(w)
