@@ -1,0 +1,1 @@
+{"class_name": "InputLayer", "config": {"batch_input_shape": [null, 64], "dtype": "float32", "sparse": false, "ragged": false, "name": "encoder_input"}}
