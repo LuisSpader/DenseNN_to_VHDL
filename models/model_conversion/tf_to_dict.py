@@ -57,6 +57,7 @@ def tf_to_dict(model):
 
         # Include the layer weights_and_biases
         weights_and_biases = layer.get_weights()
+
         if weights_and_biases:
             print(layer.name)
             for w in weights_and_biases:
@@ -66,14 +67,26 @@ def tf_to_dict(model):
         # for weight_bias in weights_and_biases:
         weights = []
         if weights_and_biases != []:
-            for item in weights_and_biases[0]:  # appendin weights
-                weights.append(item.tolist())
 
-            bias = []
-            for item in weights_and_biases[1]:  # appendin bias
-                bias.append(item)
+            # assume weights_and_biases[0] is the numpy array of weights for the first Dense layer
+            weights2 = weights_and_biases[0]
 
-            weights_bias_list = [weights, bias]
+            # split the weights array into num_neurons subarrays
+            neurons_weights = np.split(weights2, weights2.shape[1], axis=1)
+            # neurons_weights is a list of num_neurons numpy arrays, each with shape (input_dim, 1)
+            # i.e., each subarray contains the weights for a single neuron
+            neurons_bias = weights_and_biases[1]
+
+            # for item in weights_and_biases[0]:  # appendin weights
+            #     weights.append(item.tolist())
+
+            # neurons_bias = []
+            # for item in weights_and_biases[1]:  # appendin bias
+            #     neurons_bias.append(item)
+
+            # weights_bias_list = [weights, neurons_bias]
+            weights_bias_list = [neurons_weights, neurons_bias]
+
             layer_dict["weights_and_biases"] = weights_bias_list
             # layer_dict["weights_and_biases"] = weights_and_biases
             # layer_dict['weights_and_biases'][0] = layer_dict['weights_and_biases'][0].to_list()

@@ -1,1 +1,1 @@
-{"class_name": "QActivation", "config": {"name": "relu1", "dtype": "float32"}}
+{"class_name": "QActivation", "config": {"name": "relu2", "dtype": "float32"}}
