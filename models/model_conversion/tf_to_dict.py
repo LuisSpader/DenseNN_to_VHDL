@@ -1,33 +1,26 @@
 import tensorflow as tf
 import json
-import os
 from qkeras.utils import _add_supported_quantized_objects
 import json
 import numpy as np
-whole_dir = os.path.abspath(".")
+
 co = {}
 _add_supported_quantized_objects(co)
 
 # Load the Tensorflow model
 # model = tf.keras.models.load_model("model.h5")
-# model_path = f"{whole_dir}\models\QAE_model\KERAS_check_model_wo_classifier.h5"
-# model_path = f"{whole_dir}\models\QAE_model\KERAS_check_best_model.model"
 model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bits\KERAS_check_best_model.model"
-# print(model_path)
 model = tf.keras.models.load_model(model_path, custom_objects=co)
-save_path = "models/model_conversion/"
 
 
 class NumpyFloatValuesEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.float32):
             return float(obj)
-        # return JSONEncoder.default(self, obj)
         return json.JSONEncoder.default(self, obj)
-# json.dumps(d, cls=NumpyFloatValuesEncoder)
 
 
-def tf_to_dict(model):
+def tf_to_dict(model, save_path: str = "models/model_conversion") -> None:
     """
     Converts an Tensorflow format Artificial Neural Network model to a Python dictionary
 
@@ -43,6 +36,7 @@ def tf_to_dict(model):
     tf_dict = {}
 
     # Iterate over the model's layers
+    # n = 0
     for l, layer in enumerate(model.layers):
         layer_dict = {}
         layer_dict["class_name"] = layer.__class__.__name__
@@ -68,73 +62,52 @@ def tf_to_dict(model):
         weights = []
         if weights_and_biases != []:
 
-            # assume weights_and_biases[0] is the numpy array of weights for the first Dense layer
-            weights2 = weights_and_biases[0]
-
             # split the weights array into num_neurons subarrays
-            neurons_weights = np.split(weights2, weights2.shape[1], axis=1)
             # neurons_weights is a list of num_neurons numpy arrays, each with shape (input_dim, 1)
             # i.e., each subarray contains the weights for a single neuron
+            neurons_weights = np.split(
+                weights_and_biases[0], weights_and_biases[0].shape[1], axis=1)
             neurons_bias = weights_and_biases[1]
 
-            # for item in weights_and_biases[0]:  # appendin weights
-            #     weights.append(item.tolist())
+            # -------------------------------------------------------------------------
+            # saving numpy arrays on '.npy' file format
+            path_name = f"{save_path}/arrays/layer_{l:03}_{layer_dict['class_name']}_weights_array"
+            np.save(path_name, neurons_weights,
+                    allow_pickle=True, fix_imports=True)
+            print(f"tf_to_dict() -> Creating : {path_name}.txt")
 
-            # neurons_bias = []
-            # for item in weights_and_biases[1]:  # appendin bias
-            #     neurons_bias.append(item)
+            path_name = f"{save_path}/arrays/layer_{l:03}_{layer_dict['class_name']}_bias_array"
+            np.save(path_name, neurons_bias,
+                    allow_pickle=True, fix_imports=True)
+            print(f"tf_to_dict() -> Creating : {path_name}.txt")
 
-            # weights_bias_list = [weights, neurons_bias]
-            weights_bias_list = [neurons_weights, neurons_bias]
+            '''
+            https://numpy.org/doc/stable/reference/generated/numpy.save.html
+            numpy.save(file, arr, allow_pickle=True, fix_imports=True)
 
-            layer_dict["weights_and_biases"] = weights_bias_list
-            # layer_dict["weights_and_biases"] = weights_and_biases
-            # layer_dict['weights_and_biases'][0] = layer_dict['weights_and_biases'][0].to_list()
-            # layer_dict['weights_and_biases'][1] = layer_dict['weights_and_biases'][1].to_list()
-            # layer_dict['weights_and_biases'][0] = layer_dict['weights_and_biases'][0].tolist()
-            # print(
-            #     f"layer_dict['weights_and_biases'][0]: {layer_dict['weights_and_biases'][0].tolist()}")
-            # print(
-            #     f"layer_dict['weights_and_biases'][0][0:64]: {layer_dict['weights_and_biases'][0][0:64]}")
+            Parameters:
+            file: file, str, or pathlib.Path
+                File or filename to which the data is saved. If file is a file-object, then the filename is unchanged. If file is a string or Path, a .npy extension will be appended to the filename if it does not already have one.
 
-            with open(f'{save_path}weights_layer_{l}.txt', "w") as writer:
-                writer.write(str(weights_bias_list))
-            print(
-                f"tf_to_dict() -> Creating : {save_path}weights_layer_{l}.txt")
+            arr: array_like
+                Array data to be saved.
 
-        # Save dict to a file
-        if layer_dict['class_name'] == 'QDense' or layer_dict['class_name'] == 'Dense':
-            # is QDense or Dense
-            with open(f"{save_path}{layer_dict['class_name']}.json", "w") as f:
-                json.dump(layer_dict, f, cls=NumpyFloatValuesEncoder)
-        else:
-            # is not QDense
-            with open(f"{save_path}{layer_dict['class_name']}.json", "w") as f:
-                json.dump(layer_dict, f)
-        print(
-            f"tf_to_dict() -> Creating : {save_path}{layer_dict['class_name']}.json")
+            allow_pickle: bool, optional
+                Allow saving object arrays using Python pickles. Reasons for disallowing pickles include security (loading pickled data can execute arbitrary code) and portability (pickled objects may not be loadable on different Python installations, for example if the stored objects require libraries that are not available, and not all pickled data is compatible between Python 2 and Python 3). Default: True
+
+            fix_imports: bool, optional
+                Only useful in forcing objects in object arrays on Python 3 to be pickled in a Python 2 compatible way. If fix_imports is True, pickle will try to map the new Python 3 names to the old module names used in Python 2, so that the pickle data stream is readable with Python 2.
+            '''
+            # -------------------------------------------------------------------------
 
         # Add the layer to the model's dictionary
         model_dict[layer.name] = layer_dict
 
     # Save model dicts to a file
-    with open(f"{save_path}model.json", "w") as f:
+    with open(f"{save_path}/dicts/model.json", "w") as f:
         # json.dump(model_dict, f)
         json.dump(model_dict, f, cls=NumpyFloatValuesEncoder)
-    print(f"tf_to_dict() -> Creating : {save_path}model.json")
-
-    return model_dict
+    print(f"tf_to_dict() -> Creating : {save_path}/dicts/model.json")
 
 
-tf_dict = tf_to_dict(model)
-# print(json.dumps(tf_dict, indent=4))
-print(json.dump(tf_dict, cls=NumpyFloatValuesEncoder))
-
-
-# for layer in model.layers:
-#     weights_and_biases = layer.get_weights()
-#     if weights_and_biases:
-#         print(layer.name)
-#         for w in weights_and_biases:
-#             print(w.shape)
-#             print(w)
+tf_to_dict(model)
