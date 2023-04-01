@@ -1,11 +1,25 @@
-﻿layer_0
-	bias: 		[0:15]		[ a, b, c, ...]
-	weights: 	[0:15]		[ [0:63], [0:63], [0:63], ...] 
+﻿------------------------ arrays_list ------------------------
+
+layer_0
+	bias: 		[0:15]		[ neuron_0_b,			neuron_1_b, 			neuron_2_b, 		...]
+	weights: 	[0:15]		[ neuron_0_w[0:63][1], 	neuron_1_w[0:63][1], 	neuron_2_w[0:63][1],...]
 
 layer_1:
-	bias: 		[0:15]		[ a, b, c, ...]
-	weights: 	[0:15]		[ [0:63], [0:63], [0:63], ...] 
+	bias: 		[0:15]		[ neuron_0_b, 		neuron_1_b,			neuron_2_b, 		...]
+	weights: 	[0:15]		[ neuron_0_w[0:63][1],	neuron_1_w[0:63][1], 	neuron_2_w[0:63][1],...]
 ...
-----------------------------------------
-bias: 		[0:15]		[ a, b, c, ...]
-weights: 	[0:15]		[ [0:63], [0:63], [0:63], ...] 
+------------------------ flatten_list ------------------------
+bias_l0: 		[0:15]		[ l0_neuron_0_b,		l1_neuron_1_b, 		l2_neuron_2_b, 		...]
+weights_l0: 		[0:15]		[ l0_neuron_0_w[0:63], 	l0_neuron_1_w[0:63], 	l0_neuron_2_w[0:63], 	...]
+
+bias_l1: 		[0:15]		[ l1_neuron_0_b,		l1_neuron_1_b, 		l1_neuron_2_b, 		...]
+weights_l1: 		[0:15]		[ l1_neuron_0_w[0:63], 	l1_neuron_1_w[0:63], 	l1_neuron_2_w[0:63], 	...]
+
+
+================================
+
+neurons_0				 ..., l1_neuron_0_b, l1_neuron_0_w[0:63], l0_neuron_0_b, l0_neuron_0_w[0:63]
+
+neurons_1
+
+neurons_2

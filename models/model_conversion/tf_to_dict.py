@@ -9,7 +9,8 @@ _add_supported_quantized_objects(co)
 
 # Load the Tensorflow model
 # model = tf.keras.models.load_model("model.h5")
-model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bits\KERAS_check_best_model.model"
+# model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bits\KERAS_check_best_model.model"
+model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bitsmini\KERAS_check_best_model.model"
 model = tf.keras.models.load_model(model_path, custom_objects=co)
 
 
@@ -110,4 +111,4 @@ def tf_to_dict(model, save_path: str = "models/model_conversion") -> None:
     print(f"tf_to_dict() -> Creating : {save_path}/dicts/model.json")
 
 
-tf_to_dict(model)
+tf_to_dict(model, save_path="models/model_conversion/mini")

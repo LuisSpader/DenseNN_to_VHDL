@@ -1,40 +1,99 @@
+# sourcery skip: avoid-builtin-shadow
+import math
 import os
 import numpy as np
 whole_dir = os.path.abspath(".")
 
-# arrays_list = np.array()
-arrays_list = []
+# layers_array = np.array()
+layers_array = []
 
-path: str = f"models/model_conversion/arrays/"
+path = "models/model_conversion/mini/arrays/"
 listdir = sorted(os.listdir(path))
 
+# array of layer_arrays
 for i in range(0, len(listdir), 2):
     print(f"{listdir[i]}, {listdir[i+1]}")
-    arrays_list.append(
+    layers_array.append(
         [np.load(f"{path}{listdir[i]}"), np.load(f"{path}{listdir[i+1]}")])  # [bias, weights]
 
 print('----------------------')
-print(arrays_list[0])
+print(layers_array[0])
 
+# layers_array[0][1][0] = layers_array[0][1][0].tolist()
+# layers_array[0][1][1] = layers_array[0][1][1].tolist()
+for l, layer in enumerate(layers_array):
+    layers_array[l][1] = layers_array[l][1].tolist()
+
+
+#  removing list of 1 item to be just the item (made on weights_array)
+for l, layer in enumerate(layers_array):
+    for n, neuron in enumerate(layer[1]):
+        flat_list = []
+        for weight in neuron:
+            flat_list.append(weight[0])
+        layers_array[l][1][n] = flat_list
+        # layers_array[l][1][n].tolist()
+
+
+max = 0
+# getting max
+for l, layer in enumerate(layers_array):
+    if len(layer[0]) > max:
+        max = len(layer[0])
+
+
+#
+N = max - len(layers_array[0][0])
+
+layers_array[0][0] = np.pad(
+    layers_array[0][0],
+    (math.floor(N/2), math.ceil(N/2)),
+    'constant',
+    constant_values=(0, 0))
+
+N = max - len(layers_array[0][1])
+# layers_array[0][1] = np.pad(layers_array[0][1], (0, N), 'constant')
+
+zeroed_array = np.zeros_like(layers_array[0][1][0])
+layers_array[0][1] = np.pad(layers_array[0][1], (0, N), 'constant')
+
+# layers_array[0][1] = np.pad(
+#     layers_array[0][1],
+#     (math.floor(N/2), math.ceil(N/2)),
+#     'constant',
+#     constant_values=(0, 0))
+
+for l, layer in enumerate(layers_array):
+    zeroed_array_bias = np.zeros_like(layer[0])
+    zeroed_array_weights = np.zeros_like(layer[1])
+
+
+# ----------------------------------------------------------------
 
 flatten_list = []
-len = len(arrays_list)
+len = len(layers_array)
 # for l in range(len, 0, -1):
-#     for b_w in arrays_list[l-1]:
+#     for b_w in layers_array[l-1]:
 #         flatten_list.append(b_w.tolist())
 for l in range(0, len-1):
-    for b_w in arrays_list[l]:
+    for b_w in layers_array[l]:
         flatten_list.append(b_w.tolist())
-    # flatten_list.extend(b_w.tolist for b_w in arrays_list[l-1])
+    # flatten_list.extend(b_w.tolist for b_w in layers_array[l-1])
 
 
 for i, item in enumerate(flatten_list):
+    # item      = [[bias], [weights]]
+    # [bias]    = [0:14]
+    # [weights] = [0:14][0:63][1]
+
     if isinstance(item[0], list):
         for w_l, weight_list in enumerate(item):
+            # weight_list = [0:63][1]
             flat_list = []
             for sublist in weight_list:
-                for item in sublist:
-                    flat_list.append(item)
+                # len(sublist) = 1
+                for item2 in sublist:
+                    flat_list.append(item2)
             flatten_list[i][w_l] = flat_list
 a = 0
 
