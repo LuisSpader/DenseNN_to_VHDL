@@ -17,6 +17,7 @@ from utils.general.utils import input_sequences, all_inputs_signals, seq_input_o
 from utils.general.name import vhd_name
 from utils.general.components import entity_to_component
 from utils.components.ROM import ROM_Sigmoid_gen
+from utils.components.activation_fx import activation_fx_gen
 # from Adders import adder_txt_gen
 # from Adders import Adder, ADDER_obj
 
@@ -241,6 +242,9 @@ def Neuron_Gen_from_dict(
         print(neuron_ReLU_name)
         print(neuron_Leaky_name)
         print(neuron_Sigmoid_name)
+    # =================================================
+    activation_fx_component = activation_fx_gen()
+    # =================================================
 
     # ---------------------------- LEAKY RELU -----------------------------------
     ones_leaky = str(np.ones(leaky_attenuation))
@@ -371,15 +375,23 @@ USE work.parameters.ALL;
 
 
 ARCHITECTURE behavior of {neuron_Leaky_name} is
+------------- COMPONENTS -------------
 {MAC_component}
 {component_shift_reg}
-    SIGNAL out_reg_MAC : {IO_type}(({str(BIT_WIDTH - 1)}) DOWNTO 0);	--reg da saida do MAC
+{activation_fx_component}
+--------------- SIGNALS --------------
+    SIGNAL out_reg_MAC : {IO_type} ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
     
 BEGIN
 {PORT_MAP_MAC}
 {port_map_shift_reg}
 {f"{layer_dict['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= out_reg_MAC;"}
+    fx_activation_inst : activation_fx PORT MAP(
+    clk, rst,
+    out_reg_MAC,
+    IO_out
+    );
 
 END behavior;'''
                                 )
@@ -394,10 +406,13 @@ USE work.parameters.ALL;
 {entity(neuron_ReLU_name, BIT_WIDTH, num_inputs,[layer_dict['Neuron_arch']['IO']['shared_IO'], layer_dict['Neuron_arch']['IO']['unique_IO']], remove_dict_items = [], generic = True )}
 
 ARCHITECTURE behavior of {neuron_ReLU_name} is
+------------- COMPONENTS -------------
 {MAC_component}
 {component_shift_reg}
+{activation_fx_component}
+--------------- SIGNALS --------------
     -- # ROM_component
-    SIGNAL out_reg_MAC : {IO_type} (BITS-1 DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_reg_MAC : {IO_type} ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 BEGIN
@@ -424,11 +439,14 @@ USE work.parameters.ALL;
 
 
 ARCHITECTURE behavior of {neuron_Sigmoid_name} is
+------------- COMPONENTS -------------
 {MAC_component}
 {component_shift_reg}
+{activation_fx_component}
+--------------- SIGNALS --------------
 {ROM_component}
 
-    SIGNAL out_reg_MAC : {IO_type} (( {str(BIT_WIDTH - 1)} ) DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_reg_MAC : {IO_type} ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL out_ROM_act : STD_LOGIC_VECTOR( {str(BIT_WIDTH - 1)} DOWNTO 0); --saida da ROM
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
@@ -641,7 +659,10 @@ def Neuron_Gen_from_dict2(
         print(neuron_ReLU_name)
         print(neuron_Leaky_name)
         print(neuron_Sigmoid_name)
+    # =================================================
+    activation_fx_component = activation_fx_gen()
 
+    # =================================================
     # ---------------------------- LEAKY RELU -----------------------------------
     ones_leaky = str(np.ones(leaky_attenuation))
     ones_leaky = ones_leaky.replace(".", "")
@@ -780,9 +801,12 @@ USE work.parameters.ALL;
 
 
 ARCHITECTURE behavior of {neuron_Leaky_name}_out is
+------------- COMPONENTS -------------
 {MAC_component}
 {component_shift_reg}
-    SIGNAL out_reg_MAC : {IO_type}(({str(BIT_WIDTH - 1)}) DOWNTO 0);	--reg da saida do MAC
+{activation_fx_component}
+--------------- SIGNALS --------------
+    SIGNAL out_reg_MAC : {IO_type} ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
     
 BEGIN
@@ -810,9 +834,13 @@ USE work.parameters.ALL;
 
 
 ARCHITECTURE behavior of {neuron_Leaky_name} is
+------------- COMPONENTS -------------
 {MAC_component}
 {component_shift_reg}
-    SIGNAL out_reg_MAC : {IO_type}(({str(BIT_WIDTH - 1)}) DOWNTO 0);	--reg da saida do MAC
+{activation_fx_component}
+--------------- SIGNALS --------------
+
+    SIGNAL out_reg_MAC : {IO_type} ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
     
 BEGIN
@@ -840,18 +868,27 @@ USE work.parameters.ALL;
 {entity_ReLU_out}
 
 ARCHITECTURE behavior of {neuron_ReLU_name}_out is
+------------- COMPONENTS -------------
 {MAC_component}
 {component_shift_reg}
+{activation_fx_component}
+--------------- SIGNALS --------------
     -- # ROM_component
-    SIGNAL out_reg_MAC : {IO_type} (BITS-1 DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_reg_MAC : {IO_type} ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 BEGIN
 {PORT_MAP_MAC}
 {port_map_shift_reg}
-{f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= out_reg_MAC;"}
+    fx_activation_inst : activation_fx PORT MAP(
+    clk, rst,
+    out_reg_MAC,
+    IO_out
+    );
 END behavior;'''
                                )
+# {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= out_reg_MAC;"}
+
     entity_ReLU = entity(neuron_ReLU_name, BIT_WIDTH, num_inputs,
                          [layers_dict_list[i]['Neuron_arch']['IO']['shared_IO'],
                           layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']],
@@ -869,18 +906,26 @@ USE work.parameters.ALL;
 {entity_ReLU}
 
 ARCHITECTURE behavior of {neuron_ReLU_name} is
+------------- COMPONENTS -------------
 {MAC_component}
 {component_shift_reg}
+{activation_fx_component}
+--------------- SIGNALS --------------
     -- # ROM_component
-    SIGNAL out_reg_MAC : {IO_type} (BITS-1 DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_reg_MAC : {IO_type} ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 BEGIN
 {PORT_MAP_MAC}
 {port_map_shift_reg_No_Wout}
-{f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= out_reg_MAC;"}
+    fx_activation_inst : activation_fx PORT MAP(
+    clk, rst,
+    out_reg_MAC,
+    IO_out
+    );
 END behavior;'''
                            )
+# {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= out_reg_MAC;"}
 
     # ------------------------------------------------
     top_neuron_soft_txt = (f'''LIBRARY ieee;
@@ -894,11 +939,14 @@ USE work.parameters.ALL;
 
 
 ARCHITECTURE behavior of {neuron_Sigmoid_name} is
+------------- COMPONENTS -------------
 {MAC_component}
 {component_shift_reg}
+{activation_fx_component}
+--------------- SIGNALS --------------
 {ROM_component}
 
-    SIGNAL out_reg_MAC : {IO_type} (( {str(BIT_WIDTH - 1)} ) DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_reg_MAC : {IO_type} ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL out_ROM_act : STD_LOGIC_VECTOR( {str(BIT_WIDTH - 1)} DOWNTO 0); --saida da ROM
     SIGNAL s_Wout : {IO_type}((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
@@ -907,11 +955,15 @@ BEGIN
 {port_map_shift_reg_No_Wout}
 {PORT_MAP_ROM}
 
-    {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= signed(out_ROM_act);"}
-
+    fx_activation_inst : activation_fx PORT MAP(
+    clk, rst,
+    out_reg_MAC,
+    IO_out
+    );
 
 END behavior;'''
                            )
+    # {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= signed(out_ROM_act);"}
     # ------------------------------------------------
     TXT_MAC = MAC_TxtGen(MAC_name='MAC',
                          Include_MAC_type=Include_MAC_type,

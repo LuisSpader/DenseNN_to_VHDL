@@ -33,7 +33,7 @@ ARCHITECTURE behavior of neuron_comb_ReLU_2n_8bit_signed_mult0_v0_add0_v0_out is
       IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
       W_in  : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
       ----------------------------------------------
-      IO_out: OUT signed(BITS -1 DOWNTO 0)
+      IO_out: OUT signed((2*BITS) -1 DOWNTO 0)
     );
   end COMPONENT;
 
@@ -49,9 +49,24 @@ ARCHITECTURE behavior of neuron_comb_ReLU_2n_8bit_signed_mult0_v0_add0_v0_out is
             W_out : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0)
         );
     END COMPONENT;
+	 
+	 COMPONENT activation_fx IS
+	 GENERIC (
+		BITS_FX_IN        : NATURAL := BITS_FX_IN;
+		BITS_FX_OUT       : NATURAL := BITS_FX_OUT;
+		ACTIVATION_TYPE   : NATURAL := 0; -- 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
+		Leaky_attenuation : NATURAL := Leaky_attenuation;
+		Leaky_ReLU_ones   : signed  := Leaky_ReLU_ones
+	 );
+	 PORT (
+		clk, rst : IN STD_LOGIC;
+		fx_in    : IN signed(BITS_FX_IN - 1 DOWNTO 0);
+		fx_out   : OUT signed(BITS_FX_OUT - 1 DOWNTO 0)
+	 );
+	  END COMPONENT;
         
     -- # ROM_component
-    SIGNAL out_reg_MAC : signed (BITS-1 DOWNTO 0);	--reg da saida do MAC
+    SIGNAL out_reg_MAC : signed ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL s_Wout : signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 BEGIN
@@ -66,5 +81,11 @@ BEGIN
         inst_shift_reg : shift_reg_2n PORT MAP(update_weights, rst, W_in , s_Wout ); 
         W_out <= s_Wout((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO (BITS * (NUM_INPUTS + 0)));
 
-IO_out <= out_reg_MAC;
+--IO_out <= out_reg_MAC;
+
+  fx_activation_inst : activation_fx PORT MAP(
+    clk, rst,
+    out_reg_MAC,
+    IO_out
+  );
 END behavior;

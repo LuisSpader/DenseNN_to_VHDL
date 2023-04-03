@@ -15,7 +15,7 @@ ENTITY MAC_comb_2n_8bit_signed_mult0_v0_add0_v0 IS
     IO_in    : IN signed(TOTAL_BITS - 1 DOWNTO 0);
     W_in     : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
     ----------------------------------------------
-    IO_out   : OUT signed(BITS - 1 DOWNTO 0)
+    IO_out   : OUT signed(2*BITS - 1 DOWNTO 0)
   );
 END ENTITY;
 
@@ -27,16 +27,17 @@ ARCHITECTURE arch OF MAC_comb_2n_8bit_signed_mult0_v0_add0_v0 IS
   SIGNAL s_Win   : signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
   SIGNAL s_mult  : signed(((2 * BITS) * (NUM_INPUTS)) - 1 DOWNTO 0);
 
-  COMPONENT mult0_v0 IS
-    GENERIC (
-      BITS : NATURAL := BITS
-    );
-    PORT (
-      X : IN signed((BITS) - 1 DOWNTO 0);
-      W : IN signed((BITS) - 1 DOWNTO 0);
-      Y : OUT signed((2 * BITS) - 1 DOWNTO 0)
-    );
-  END COMPONENT;
+	  COMPONENT mult0_v0 IS
+	 GENERIC (
+		BITS : NATURAL := BITS
+	 );
+	 PORT (
+		X : IN signed((BITS) - 1 DOWNTO 0);
+		W : IN signed((BITS) - 1 DOWNTO 0);
+		Y : OUT signed((2 * BITS) - 1 DOWNTO 0)
+	 );
+	  END COMPONENT;
+ 
 
 BEGIN
   s_Xi    <= IO_in;
@@ -53,14 +54,18 @@ BEGIN
       Y => s_mult(((2 * BITS) * (i + 1)) - 1 DOWNTO ((2 * BITS) * (i)))
     );
   END GENERATE;
-  PROCESS (rst, clk)
-  BEGIN
-    IF (rst = '1') THEN
-      IO_out <= (OTHERS => '0');
-    ELSE
-      IF (clk'event AND clk = '1') THEN --se tem evento de clock
-        IO_out <= signed(sum_all(15 DOWNTO 8));
-      END IF;
-    END IF;
-  END PROCESS;
+  
+  IO_out <= signed(sum_all);
+  
+--  PROCESS (rst, clk)
+--  BEGIN
+--    IF (rst = '1') THEN
+--      IO_out <= (OTHERS => '0');
+--    ELSE
+--      IF (clk'event AND clk = '1') THEN --se tem evento de clock
+--        IO_out <= signed(sum_all(15 DOWNTO 8));
+--      END IF;
+--    END IF;
+--  END PROCESS;
+
 END arch;
