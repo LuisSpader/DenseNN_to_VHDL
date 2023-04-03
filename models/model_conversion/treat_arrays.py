@@ -7,6 +7,7 @@ whole_dir = os.path.abspath(".")
 # layers_array = np.array()
 layers_array = []
 
+# path = "models/model_conversion/arrays/"
 path = "models/model_conversion/mini/arrays/"
 listdir = sorted(os.listdir(path))
 
@@ -19,11 +20,10 @@ for i in range(0, len(listdir), 2):
 print('----------------------')
 print(layers_array[0])
 
-# layers_array[0][1][0] = layers_array[0][1][0].tolist()
-# layers_array[0][1][1] = layers_array[0][1][1].tolist()
+# ---------------- treating weights_list ----------------
+# weights_list is made of 1_item_arrays -> so this method pass it to be a list of 1 item
 for l, layer in enumerate(layers_array):
     layers_array[l][1] = layers_array[l][1].tolist()
-
 
 #  removing list of 1 item to be just the item (made on weights_array)
 for l, layer in enumerate(layers_array):
@@ -45,17 +45,21 @@ for l, layer in enumerate(layers_array):
 #
 N = max - len(layers_array[0][0])
 
-layers_array[0][0] = np.pad(
+layers_array[1][0] = np.pad(
     layers_array[0][0],
-    (math.floor(N/2), math.ceil(N/2)),
+    # where: how much to add on (beginning of array, end of array)
+    # (math.floor(N/2), math.ceil(N/2)),
+    # (0, math.ceil(N/2)),
+    (0, math.ceil(N)),
     'constant',
-    constant_values=(0, 0))
+    constant_values=(0, 0))  # what: values to add on 'where'
 
 N = max - len(layers_array[0][1])
 # layers_array[0][1] = np.pad(layers_array[0][1], (0, N), 'constant')
 
-zeroed_array = np.zeros_like(layers_array[0][1][0])
-layers_array[0][1] = np.pad(layers_array[0][1], (0, N), 'constant')
+layer_n = 1
+zeroed_array = np.zeros_like(layers_array[layer_n][1][0])
+layers_array[0][1] = np.pad(layers_array[layer_n][1], (0, N), 'constant')
 
 # layers_array[0][1] = np.pad(
 #     layers_array[0][1],

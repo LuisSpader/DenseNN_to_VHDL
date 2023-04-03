@@ -4,15 +4,6 @@ from qkeras.utils import _add_supported_quantized_objects
 import json
 import numpy as np
 
-co = {}
-_add_supported_quantized_objects(co)
-
-# Load the Tensorflow model
-# model = tf.keras.models.load_model("model.h5")
-# model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bits\KERAS_check_best_model.model"
-model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bitsmini\KERAS_check_best_model.model"
-model = tf.keras.models.load_model(model_path, custom_objects=co)
-
 
 class NumpyFloatValuesEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -111,4 +102,18 @@ def tf_to_dict(model, save_path: str = "models/model_conversion") -> None:
     print(f"tf_to_dict() -> Creating : {save_path}/dicts/model.json")
 
 
-tf_to_dict(model, save_path="models/model_conversion/mini")
+co = {}
+_add_supported_quantized_objects(co)
+
+# Load the Tensorflow model
+# model = tf.keras.models.load_model("model.h5")
+
+
+model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bits\KERAS_check_best_model.model"
+model = tf.keras.models.load_model(model_path, custom_objects=co)
+tf_to_dict(model, save_path="models/model_conversion")
+
+
+# model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bitsmini\KERAS_check_best_model.model"
+# model = tf.keras.models.load_model(model_path, custom_objects=co)
+# tf_to_dict(model, save_path="models/model_conversion/mini")

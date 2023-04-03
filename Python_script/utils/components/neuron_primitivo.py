@@ -705,7 +705,11 @@ def Neuron_Gen_from_dict2(
     #       W_out : OUT signed(BITS - 1 DOWNTO 0)
     #     );
     #   end ENTITY;
-
+    # ------------------------------
+    ROM_name = f"ROM_fx_{BIT_WIDTH}bitaddr_{BIT_WIDTH}width"
+    ROM_component = rom_component(ROM_name, input_mem_bits, output_mem_bits)
+    PORT_MAP_ROM = port_map_ROM(ROM_name, input_mem_bits, output_mem_bits)
+    # ------------------------------
     W_in = layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['IN']['manual'][0]
     # W_in = 'W_in : IN signed(BITS - 1 DOWNTO 0);'
 
@@ -879,21 +883,6 @@ END behavior;'''
                            )
 
     # ------------------------------------------------
-    ROM_name = f"ROM_fx_{BIT_WIDTH}bitaddr_{BIT_WIDTH}width"
-    ROM_component = rom_component(ROM_name, input_mem_bits, output_mem_bits)
-    PORT_MAP_ROM = port_map_ROM(ROM_name, input_mem_bits, output_mem_bits)
-    ROM_Sigmoid_gen(
-        DOWNLOAD_VHD,
-        # f"ROM_Sigmoid_{BIT_WIDTH}bit",
-        ROM_name,
-        BIT_WIDTH,
-        IO_type,
-        is_sigmoid_signed=False,
-        n_integer=1,
-        path=OUTPUT_BASE_DIR_PATH)
-    # ------
-
-    # ------------------------------------------------
     top_neuron_soft_txt = (f'''LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.std_logic_unsigned.ALL;
@@ -1002,7 +991,18 @@ END behavior;'''
     # # adder_txt_gen(layers_dict_list[i], path_others, create_path_folder=False)
     # # multiplier_txt_gen(layers_dict_list[i],
     # #                    path_others, create_path_folder=False)
+    # ------------------------------------------------
 
+    ROM_Sigmoid_gen(
+        DOWNLOAD_VHD,
+        # f"ROM_Sigmoid_{BIT_WIDTH}bit",
+        ROM_name,
+        BIT_WIDTH,
+        IO_type,
+        is_sigmoid_signed=False,
+        n_integer=1,
+        path=OUTPUT_BASE_DIR_PATH)
+    # ------
     if DOWNLOAD_VHD == True:
 
         with open(f"{path_others}/{reg_name}.vhd", "w") as writer:
