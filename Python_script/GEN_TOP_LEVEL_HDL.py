@@ -126,16 +126,24 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
     txt_top_port_map_split = txt_top_port_map.split("\n")
     assign_list = []
 
-    # neurons_PM_matrix_local = [
+   # neurons_PM_matrix_local = [
     #     ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out'],
     #     ['c0_n1_W_out', 'c1_n1_W_out', 'c2_n1_W_out', 'c3_n1_W_out'],
     #     ['c0_n2_W_out', 'c2_n2_W_out', 'c3_n2_W_out'],
     #     ['c0_n3_W_out', 'c3_n3_W_out'],
     #     ['c0_n4_W_out']]
     # lista de sinais para declarar dps: SIGNAL .... (... -1 downto 0);
+
+    # creating list of W_in necessary inputs
+    necessary_W_in = [item[0] for item in neurons_PM_matrix_local]
+    for i, item in enumerate(necessary_W_in):
+        necessary_W_in[i] = necessary_W_in[i].replace('out', 'in')
+    # --------------
     optimize_signal_declaration(
         neurons_PM_matrix_local, layers_dict_list, assign_list)
+
     # neurons_PM_matrix_local = [['c3_n0_W_out'], ['c3_n1_W_out']]
+
     # assign_list = [
     #     'c0_n0_W_out => c0_n0_W_out,',
     #     'c0_n1_W_out => c0_n1_W_out,',
@@ -149,8 +157,25 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
     # ]
 
     # substituindo atribuição antiga (errada) por atribuição certa entre camadas
+    # todo: Falta alterar aqui para que comporte todas as necessary_W_in
     txt_top_port_map = generate_top_port_map(
         DEBUG, layers_dict_list, lista_camada_inputs, lista_camada_outputs, txt_top_port_map_split, assign_list)
+
+    # finding correct_IO_type to add some necessary_W_in inputs
+    for IO_type in top_dict['IO']['IN']:
+        if top_dict['IO']['IN'][IO_type] != None:
+            for item in top_dict['IO']['IN'][IO_type]:
+                if necessary_W_in[0][:4] in item:
+                    correct_IO_type = IO_type
+                    break
+
+    # removing W_in that already exists on top_dict
+    for item in top_dict['IO']['IN'][str(correct_IO_type)]:
+        if item in necessary_W_in:
+            necessary_W_in.remove(item)
+
+    # adding W_in which top_dict didn't had already
+    top_dict['IO']['IN'][str(correct_IO_type)].extend(necessary_W_in)
 
     # https://youtu.be/oHSrqVhee_8
     nomes, nomes_all, remove_list = extract_IO_names(layers_dict_list)
@@ -537,12 +562,42 @@ def PortMap_matrix(LAYER_NEURONS_NUMBER_LIST):
         for j in range(item):
             GLOBAL.PM_MATRIX.neurons_PM_matrix[i].append(f"c{i}_n{j}_W_out")
 
+    ''' example for an NN [4, 3, 2, 3, 4, 7]:
+    GLOBAL.PM_MATRIX.neurons_PM_matrix = [
+        ['c0_n0_W_out', 'c0_n1_W_out', 'c0_n2_W_out', 'c0_n3_W_out'], 
+        ['c1_n0_W_out', 'c1_n1_W_out', 'c1_n2_W_out'], 
+        ['c2_n0_W_out', 'c2_n1_W_out'], 
+        ['c3_n0_W_out', 'c3_n1_W_out', 'c3_n2_W_out'], 
+        ['c4_n0_W_out', 'c4_n1_W_out', 'c4_n2_W_out', 'c4_n3_W_out'], 
+        ['c5_n0_W_out', 'c5_n1_W_out', 'c5_n2_W_out', 'c5_n3_W_out', 'c5_n4_W_out', 'c5_n5_W_out', 'c5_n6_W_out']]'''
+
     GLOBAL.PM_MATRIX.neurons_PM_matrix = list(
         map(list, zip_longest(*GLOBAL.PM_MATRIX.neurons_PM_matrix, fillvalue=None)))
+
+    '''GLOBAL.PM_MATRIX.neurons_PM_matrix = [
+        ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out', 'c4_n0_W_out', 'c5_n0_W_out'], 
+        ['c0_n1_W_out', 'c1_n1_W_out', 'c2_n1_W_out', 'c3_n1_W_out', 'c4_n1_W_out', 'c5_n1_W_out'], 
+        ['c0_n2_W_out', 'c1_n2_W_out',      None,     'c3_n2_W_out', 'c4_n2_W_out', 'c5_n2_W_out'], 
+        ['c0_n3_W_out',     None,           None,          None,     'c4_n3_W_out', 'c5_n3_W_out'], 
+        [   None,           None,           None,          None,        None,       'c5_n4_W_out'], 
+        [   None,           None,           None,          None,        None,       'c5_n5_W_out'], 
+        [   None,           None,           None,          None,        None,       'c5_n6_W_out']
+        ]'''
+
     neurons_PM_matrix_local = copy.deepcopy(GLOBAL.PM_MATRIX.neurons_PM_matrix)
 
     for i, item in enumerate(GLOBAL.PM_MATRIX.neurons_PM_matrix):
         neurons_PM_matrix_local[i] = [x for x in item if x is not None]
+
+    '''neurons_PM_matrix_local = [
+        ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out', 'c4_n0_W_out', 'c5_n0_W_out'], 
+        ['c0_n1_W_out', 'c1_n1_W_out', 'c2_n1_W_out', 'c3_n1_W_out', 'c4_n1_W_out', 'c5_n1_W_out'], 
+        ['c0_n2_W_out', 'c1_n2_W_out', 'c3_n2_W_out', 'c4_n2_W_out', 'c5_n2_W_out'], 
+        ['c0_n3_W_out', 'c4_n3_W_out', 'c5_n3_W_out'], 
+        ['c5_n4_W_out'], 
+        ['c5_n5_W_out'], 
+        ['c5_n6_W_out']
+        ]'''
 
     return neurons_PM_matrix_local
 
