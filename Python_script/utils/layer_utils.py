@@ -10,6 +10,7 @@ from utils.general.name import *
 from utils.GLOBALS import GLOBAL
 from utils.SETTINGS import PARAMS
 import copy
+from utils.components.activation_fx import find_fx_activation
 # from dict_utils import *
 # from txt_utils import *
 
@@ -514,30 +515,10 @@ def layer_name(layer_dict_arg: dict,
     IO_type = layer_dict_arg['IO_type']
     # fx_activation = find_True_dict(dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
 
-    fx_activation = find_True_dict_Output_print(
-        dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
-    if fx_activation == 'Using':  # caso seja uma fx com dicionário interno de parâmetros, devemos pegar o nome dela e não o 'using'
-        """Exemplo: 
-           'Activation_fx':{
-                'ReLU': False,
-                'Leaky_ReLU': {
-                    'Using': False,        # True = usar versão Leaky_ReLU
-                    'Leaky_attenuation': 2 #número de vezes que divide por 2 a ReLU (shift right)
-                },
-                'Sigmoid': {
-                    'Using': True,        # True = usar versão Sigmoid (Look Up Table)
-                    'Memory': {
-                    'bits_mem': 8,
-                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
-                    }
-                    }
-                }
-            O que confirma se é a Sigmoid é o {'Using': True }, porém queremos pegar o nome 'Sigmoid', que está um nível de hierarquia acima """
-        fx_activation = find_True_dict_Output_print_above_level(
-            dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
-    #### Nome do arquivo .vhd ####
-    file_name = f"camada{str(layer_dict_arg['Layer_num'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['bits'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
-    return file_name
+    fx_activation = find_fx_activation(layer_dict_arg)
+    return f"camada{str(layer_dict_arg['Layer_num'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['bits'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
+
+
 # EXEMPLO
 # file_name  = layer_name(layer_num =1,
 #                neuron_num = layer_dict_arg['Neurons_number'],

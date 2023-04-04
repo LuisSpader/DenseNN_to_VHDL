@@ -15,7 +15,7 @@ USE work.parameters.ALL;
       IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
       W_in : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
       ----------------------------------------------
-      IO_out: OUT signed(BITS -1 DOWNTO 0)
+      IO_out: OUT signed((MAC_OUT_BITS_rescale*BITS) -1 DOWNTO 0)
     );
   end ENTITY;
 

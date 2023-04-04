@@ -243,7 +243,7 @@ def Neuron_Gen_from_dict(
         print(neuron_Leaky_name)
         print(neuron_Sigmoid_name)
     # =================================================
-    activation_fx_component = activation_fx_gen()
+    activation_fx_component = activation_fx_gen(layer_dict_arg=layer_dict)
     # =================================================
 
     # ---------------------------- LEAKY RELU -----------------------------------
@@ -444,7 +444,6 @@ ARCHITECTURE behavior of {neuron_Sigmoid_name} is
 {component_shift_reg}
 {activation_fx_component}
 --------------- SIGNALS --------------
-{ROM_component}
 
     SIGNAL out_reg_MAC : {IO_type} ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL out_ROM_act : STD_LOGIC_VECTOR( {str(BIT_WIDTH - 1)} DOWNTO 0); --saida da ROM
@@ -453,13 +452,14 @@ ARCHITECTURE behavior of {neuron_Sigmoid_name} is
 BEGIN
 {PORT_MAP_MAC}
 {port_map_shift_reg_No_Wout}
-{PORT_MAP_ROM}
 
     {f"{layer_dict['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= signed(out_ROM_act);"}
 
 
 END behavior;'''
                            )
+# {ROM_component}
+# {PORT_MAP_ROM}
     # ------------------------------------------------
     TXT_MAC = MAC_TxtGen(MAC_name='MAC',
                          Include_MAC_type=Include_MAC_type,
@@ -660,7 +660,8 @@ def Neuron_Gen_from_dict2(
         print(neuron_Leaky_name)
         print(neuron_Sigmoid_name)
     # =================================================
-    activation_fx_component = activation_fx_gen()
+    activation_fx_component = activation_fx_gen(
+        layer_dict_arg=layers_dict_list[i])
 
     # =================================================
     # ---------------------------- LEAKY RELU -----------------------------------
@@ -952,7 +953,6 @@ ARCHITECTURE behavior of {neuron_Sigmoid_name} is
 {component_shift_reg}
 {activation_fx_component}
 --------------- SIGNALS --------------
-{ROM_component}
 
     SIGNAL out_reg_MAC : {IO_type} ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL out_ROM_act : STD_LOGIC_VECTOR( {str(BIT_WIDTH - 1)} DOWNTO 0); --saida da ROM
@@ -961,7 +961,7 @@ ARCHITECTURE behavior of {neuron_Sigmoid_name} is
 BEGIN
 {PORT_MAP_MAC}
 {port_map_shift_reg_No_Wout}
-{PORT_MAP_ROM}
+
 
     fx_activation_inst : activation_fx PORT MAP(
     clk, rst,
@@ -971,6 +971,8 @@ BEGIN
 
 END behavior;'''
                            )
+# {ROM_component}
+# {PORT_MAP_ROM}
     # {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= signed(out_ROM_act);"}
 
     # ------------------------------------------------
@@ -1062,13 +1064,13 @@ END behavior;'''
             writer.write(reg_txt)  # download Reg
 
         if neuron_type == 'ReLU':   # ReLU
-            if DEBUG:
-                print(
-                    f"neuron_primitivo() -> criando arquivo: {path_ReLU}/{Neuron_name}_out.vhd")
-                print(
-                    f"neuron_primitivo() -> criando arquivo: {path_ReLU}/{Neuron_name}.vhd")
-                print(
-                    f"neuron_primitivo() -> criando arquivo: {path_ReLU}/{MAC_name}.vhd")
+            # if DEBUG:
+            print(
+                f"neuron_primitivo() -> criando arquivo: {path_ReLU}/{Neuron_name}_out.vhd")
+            print(
+                f"neuron_primitivo() -> criando arquivo: {path_ReLU}/{Neuron_name}.vhd")
+            print(
+                f"neuron_primitivo() -> criando arquivo: {path_ReLU}/{MAC_name}.vhd")
 
             # Salvando arquivo '.vhd' do neurônio ReLU
             with open(f"{path_ReLU}/{neuron_ReLU_name}_out.vhd", "w") as writer:
@@ -1087,13 +1089,13 @@ END behavior;'''
                 print("tentando gerar adder e multiplicador")
 
         if neuron_type == 'Leaky_ReLU':  # Leaky ReLU
-            if DEBUG:
-                print(
-                    f"neuron_primitivo() -> criando arquivo: {path_ReLU}/{Neuron_name}_out.vhd")
-                print(
-                    f"neuron_primitivo() -> criando arquivo: {path_ReLU}/{Neuron_name}.vhd")
-                print(
-                    f"neuron_primitivo() -> criando arquivo: {path_ReLU}/{MAC_name}.vhd")
+            # if DEBUG:
+            print(
+                f"neuron_primitivo() -> criando arquivo: {path_LeakyReLU}/{Neuron_name}_out.vhd")
+            print(
+                f"neuron_primitivo() -> criando arquivo: {path_LeakyReLU}/{Neuron_name}.vhd")
+            print(
+                f"neuron_primitivo() -> criando arquivo: {path_LeakyReLU}/{MAC_name}.vhd")
 
             with open(f"{path_LeakyReLU}/{Neuron_name}_out.vhd", "w") as writer:
                 # download neurônio com saída de pesos
@@ -1109,11 +1111,11 @@ END behavior;'''
                 writer.write(shift_reg_txt)  # download
 
         if neuron_type == 'Sigmoid':  # SOFTMAX
-            if DEBUG:
-                print(
-                    f"neuron_primitivo() -> criando arquivo: {path_soft}/{Neuron_name}.vhd")
-                print(
-                    f"neuron_primitivo() -> criando arquivo: {path_soft}/{MAC_name}.vhd")
+            # if DEBUG:
+            print(
+                f"neuron_primitivo() -> criando arquivo: {path_soft}/{Neuron_name}.vhd")
+            print(
+                f"neuron_primitivo() -> criando arquivo: {path_soft}/{MAC_name}.vhd")
             with open(f"{path_soft}/{Neuron_name}.vhd", "w") as writer:
                 writer.write(top_neuron_soft_txt)  # download neurônio
             with open(f"{path_soft}/{MAC_name}.vhd", "w") as writer:

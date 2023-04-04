@@ -1385,8 +1385,8 @@ def IO_manager_layer(IO_dict: dict = {},
         #     f" ------------------> IO_dict_list[{i}]['IN']: {IO_dict_list[i]['IN']}")
         # INPUTS
         IN_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'IN'))
-        IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
-        IN_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
+        IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], '', onerow, 'IN'))
+        IN_signed.append(IO_signed(IO_dict_list[i], '', onerow, 'IN'))
         # IN_manual.append(dict_list_exceptNone(
         #     dict_slice=IO_dict_list[i]['IN']['manual']))
         IN_manual.append(
@@ -1394,8 +1394,8 @@ def IO_manager_layer(IO_dict: dict = {},
 
         # OUTPUTS
         OUT_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'OUT'))
-        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
-        OUT_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
+        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], '', onerow, 'OUT'))
+        OUT_signed.append(IO_signed(IO_dict_list[i], '', onerow, 'OUT'))
         OUT_manual.append(
             IO_manual(IO_dict=IO_dict, IO_list=IO_dict_list[i], IO_type='OUT'))
         # OUT_manual.append(dict_list_exceptNone(
@@ -1521,8 +1521,8 @@ def IO_manager_Top(top_dict: dict,
         # INPUTS
         IN_stdl.append(
             IO_STDL(IO_dict_list[i], onerow, 'IN', remove_dict_items=remove_dict_items))
-        IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
-        IN_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
+        IN_stdl_v.append(IO_STDL_V(IO_dict_list[i], '', onerow, 'IN'))
+        IN_signed.append(IO_signed(IO_dict_list[i], '', onerow, 'IN'))
         IN_manual.append(
             IO_manual_Top(IO_dict_compare=IO_dict_compare, top_dict=IO_dict_list[i], IO_type='IN'))
         # IN_manual.append(dict_list_exceptNone(
@@ -1530,8 +1530,8 @@ def IO_manager_Top(top_dict: dict,
 
         # OUTPUTS
         OUT_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'OUT'))
-        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
-        OUT_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
+        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], '', onerow, 'OUT'))
+        OUT_signed.append(IO_signed(IO_dict_list[i], '', onerow, 'OUT'))
         OUT_manual.append(
             IO_manual_Top(IO_dict_compare=IO_dict_compare, top_dict=IO_dict_list[i], IO_type='OUT'))
         # OUT_manual.append(dict_list_exceptNone(

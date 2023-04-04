@@ -118,7 +118,6 @@ def find_True_dict(dict_slice: dict):
     Returns:
         str: será a 'key' de quando o 'value' é 'True'. Retorna a string da 'key'
     """
-    retorno = ''
     for k, v in dict_slice.items():  # itera sobre as 'keys' e os 'values'
         # key_tmp = dict_slice[k]
         key_tmp = k

@@ -5,7 +5,7 @@ from utils.standard_dicts import *
 from utils.general.name import vhd_name
 from utils.general.tree_utils import *
 from utils.general.utils import all_inputs_signals
-from utils.general.vhd_txt_utils import entity
+from utils.general.vhd_txt_utils import entity, entity_MAC
 from utils.general.dict_utils import dict_list_exceptNone
 from utils.general.path import *
 from utils.general.components import entity_to_component
@@ -730,15 +730,15 @@ def MAC_Tree_NoBarriers_TxtGen_from_dict(MAC_name='MAC',
 {sum_all_string}
 {output_name} <= {IO_type}(sum_all);'''
 
-    mac_entity = entity(name=MAC_name,
-                        BIT_WIDTH=layer_dict['Neuron_arch']['Bit_WIDTH'],
-                        num_inputs=layer_dict['Neuron_arch']['Inputs_number'],
-                        IO_dict_list=[layer_dict['Neuron_arch']['IO']['shared_IO'],
-                                      layer_dict['Neuron_arch']['IO']['unique_IO']],
-                        remove_dict_items=[
-                            'Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);', 'W_out : OUT signed(BITS - 1 DOWNTO 0);', 'update_weights'],
-                        generic=True
-                        )
+    mac_entity = entity_MAC(name=MAC_name,
+                            BIT_WIDTH=layer_dict['Neuron_arch']['Bit_WIDTH'],
+                            num_inputs=layer_dict['Neuron_arch']['Inputs_number'],
+                            IO_dict_list=[layer_dict['Neuron_arch']['IO']['shared_IO'],
+                                          layer_dict['Neuron_arch']['IO']['unique_IO']],
+                            remove_dict_items=[
+                                'Wout : OUT signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);', 'W_out : OUT signed(BITS - 1 DOWNTO 0);', 'update_weights'],
+                            generic=True
+                            )
     mac_entity = entity_to_component(
         entity_text=mac_entity,
         word=layer_dict['Neuron_arch']['IO']['unique_IO']['IN']['manual'][0],

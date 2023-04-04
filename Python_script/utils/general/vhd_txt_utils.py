@@ -300,7 +300,9 @@ def entity_MAC(name: str,
             print("Error entity(): Formato de dicionário inválido para num_inputs.")
 
     IO, traço = IO_manager(
-        IO_dict_list, BIT_WIDTH, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items, IN_BITS_rescale='MAC_IN_BITS_rescale',
+        IO_dict_list, BIT_WIDTH, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items,
+        # IN_BITS_rescale='MAC_IN_BITS_rescale',
+        IN_BITS_rescale='',
         OUT_BITS_rescale='MAC_OUT_BITS_rescale')
 
     if generic:

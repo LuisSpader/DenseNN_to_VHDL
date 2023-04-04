@@ -32,7 +32,7 @@ ARCHITECTURE behavior of neuron_comb_Sigmoid_4n_8bit_signed_mult0_v0_add0_v0 is
     PORT (
       clk, rst: IN STD_LOGIC;
       IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
-      W_in : IN signed((MAC_IN_BITS_rescale*BITS) - 1 DOWNTO 0);
+      W_in  : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
       ----------------------------------------------
       IO_out: OUT signed((MAC_OUT_BITS_rescale*BITS) -1 DOWNTO 0)
     );
@@ -68,18 +68,6 @@ COMPONENT activation_fx IS
 END COMPONENT;
 --------------- SIGNALS --------------
 
-  -- ROM
-  COMPONENT ROM_fx_8bitaddr_8width IS
-    PORT (
-      address : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
-      ------------------------------------------
-      data_out : OUT STD_LOGIC_VECTOR (7  DOWNTO 0)
-    );
-  -- input: address (8 BIT_WIDTH)
-  -- output: data_out (8 BIT_WIDTH)
-  END COMPONENT;
-  
-
     SIGNAL out_reg_MAC : signed ((2*BITS)-1 DOWNTO 0);	--reg da saida do MAC
     SIGNAL out_ROM_act : STD_LOGIC_VECTOR( 7 DOWNTO 0); --saida da ROM
     SIGNAL s_Wout : signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
@@ -94,12 +82,6 @@ BEGIN
         out_reg_MAC );
         inst_shift_reg : shift_reg_4n PORT MAP(update_weights, rst, W_in , s_Wout );
 
-	U_ROM : ROM_fx_8bitaddr_8width PORT MAP(
-		STD_LOGIC_VECTOR(out_reg_MAC), out_ROM_act
-		);
-	-- input: address (8)
-	-- output: data_out (8)
-	
 
     fx_activation_inst : activation_fx PORT MAP(
     clk, rst,
