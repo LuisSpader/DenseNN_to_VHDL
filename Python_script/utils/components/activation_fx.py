@@ -12,7 +12,7 @@ ENTITY ReLU IS
         fx_in : IN signed(BITS_FX_IN - 1 DOWNTO 0);
         fx_out : OUT signed (BITS_FX_OUT - 1 DOWNTO 0)
     );
-END ReLU;''')
+END ENTITY;''')
 
 ReLU_txt = (f'''
 LIBRARY ieee;
@@ -50,7 +50,7 @@ ENTITY Leaky_ReLU IS
         fx_in : IN signed(BITS_FX_IN - 1 DOWNTO 0);
         fx_out : OUT signed (BITS_FX_OUT - 1 DOWNTO 0)
     );
-END Leaky_ReLU;''')
+END ENTITY;''')
 
 Leaky_ReLU_txt = (f'''
 LIBRARY ieee;

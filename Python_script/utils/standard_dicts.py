@@ -148,7 +148,7 @@ layer_dict_hidden = {
 
         # -------------
         'MAC_type': False,  # False = combinational(árvore) | True = Sequential
-
+        'MAC_out_with_register': False,
         # -------------
         'Barriers': False,  # True = com barreiras de registradores
 
@@ -480,6 +480,7 @@ layer_dict_softmax = {
 
         # -------------
         'MAC_type': False,  # False = combinational(árvore) | True = Sequential
+        'MAC_out_with_register': False,
 
         # -------------
         'Barriers': True,  # True = com barreiras de registradores

@@ -190,6 +190,144 @@ end ENTITY;
     return txt
 
 
+def entity_MAC(name: str,
+               BIT_WIDTH: int,
+               num_inputs: int,
+               IO_dict_list: list,
+               remove_dict_items=[],
+               generic: bool = False,
+               tab_space: int = 1) -> str:
+    """Função para gerar a escrita de toda a 'entity' do módulo.vhd com base em um dicionário em formato padrão pré-estabelecido. Retorna um texto disso tudo.
+    -----------------------------------------------------
+    Exemplo de dicionário:
+      layer_dict = {
+        ... etc
+        # --------- Configurações da arquitetura do neurônio ---------
+        'Neuron_arch': {
+        # -------------------------
+          'shared_IO':{ # Entradas & saídas compartilhadas
+            'IO':{ # INPUT & OUTPUT
+              'IN': { # ENTRADAS
+                'STD_LOGIC': ['clk', 'rst'],
+                'STD_LOGIC_VECTOR': None,
+                'SIGNED': None,
+                'STD_LOGIC_num_inputs': None,
+                'STD_LOGIC_VECTOR_num_inputs': None,
+                'SIGNED_num_inputs': ['x']
+                },
+              'OUT': { #SAÍDAS
+                'STD_LOGIC': None,
+                'STD_LOGIC_VECTOR': None,
+                'SIGNED': None,
+                'STD_LOGIC_VECTOR_num_inputs': None,
+                'STD_LOGIC_num_inputs': None,
+                'SIGNED_num_inputs': None
+              }
+              }
+            },
+          'unique_IO':{ # Entradas únicas ao neurônio
+            'IO':{ # INPUT & OUTPUT
+              'IN': { # ENTRADAS
+                'STD_LOGIC': None,
+                'STD_LOGIC_VECTOR': None,
+                'SIGNED': ['bias'],
+                'STD_LOGIC_num_inputs': None,
+                'STD_LOGIC_VECTOR_num_inputs': None,
+                'SIGNED_num_inputs': ['w']
+                },
+            'OUT': { #SAÍDAS
+              'STD_LOGIC': None,
+              'STD_LOGIC_VECTOR': None,
+              'SIGNED': ['y'],
+              'STD_LOGIC_VECTOR_num_inputs': None,
+              'STD_LOGIC_num_inputs': None,
+              'SIGNED_num_inputs': None
+                  }
+                }
+              }
+          ... etc
+        }
+    -----------------------------------------------------
+    Exemplo utilizando a função:
+    dict_list_IO = [layer_dict['Neuron_arch']['shared_IO']['IO'], layer_dict['Neuron_arch']
+        ['unique_IO']['IO']] # estamos usando as IO 'shared_IO' e 'unique_IO'
+
+    layer_dict['Neuron_arch']['Neuron_name'] = neuron_comb_ReLU_3n_8bit_unsigned_mul1a_v0_add0_v0
+
+      entity(name = layer_dict['Neuron_arch']['Neuron_name'],
+               BIT_WIDTH = 8,
+               num_inputs = 3,
+               IO_dict_list = dict_list_IO)
+
+      Output:
+        ENTITY  neuron_comb_ReLU_3n_8bit_unsigned_mul1a_v0_add0_v0 IS
+          PORT (
+            clk, rst: IN STD_LOGIC;
+            bias: IN signed(7 DOWNTO 0);
+            x1, x2, x3: IN signed(7 DOWNTO 0);
+            w1, w2, w3: IN signed(7 DOWNTO 0);
+            ----------------------------------------------
+            y: OUT signed(7 DOWNTO 0)
+            );
+        end ENTITY;
+
+    -----------------------------------------------------
+    Args:
+        name (str): string com nome do módulo '.vhd'. Exemplo: name = 'adder'
+
+        BIT_WIDTH (int): define o número de BIT_WIDTH para as entradas e pesos
+
+        num_inputs (int): número de entradas e pesos do perceptron
+
+        IO_dict_list (list):  lista de dicionários de INPUTS & OUTPUTS.
+          Exemplo:  IO_dict_list = [layer_dict['Neuron_arch']['shared_IO']['IO'], layer_dict['Neuron_arch']['unique_IO']['IO']].
+        tab_space (int): Indexação do texto. É o número de 'tabs' de deslocamento à direita
+
+    Returns:
+        str: string com toda a escrita da 'entity', conforme 'Output' do exemplo acima.
+    """
+    if not isinstance(BIT_WIDTH, int):
+        try:
+            BIT_WIDTH = BIT_WIDTH()
+        except Exception:
+            print("Error entity(): Formato de dicionário inválido para bit_WIDTH")
+
+    if not isinstance(num_inputs, (int, np.integer)):
+
+        try:
+            num_inputs = num_inputs()
+        except Exception:
+            print("Error entity(): Formato de dicionário inválido para num_inputs.")
+
+    IO, traço = IO_manager(
+        IO_dict_list, BIT_WIDTH, num_inputs, onerow=1, tab_space=2, remove_dict_items=remove_dict_items, IN_BITS_rescale='MAC_IN_BITS_rescale',
+        OUT_BITS_rescale='MAC_OUT_BITS_rescale')
+
+    if generic:
+        generic_txt = (f'''
+  GENERIC (
+      BITS : NATURAL := BITS;
+      NUM_INPUTS : NATURAL := {num_inputs};
+      TOTAL_BITS : NATURAL := {num_inputs*BIT_WIDTH}
+  );
+    ''')
+    else:
+        generic_txt = ''
+
+    txt = (f'''
+
+ENTITY  {name} IS
+{generic_txt}
+  PORT (
+{IO}
+  );
+end ENTITY;
+''')
+    txt = erase_empty_lines(txt)
+    txt = txt_add_space_begin(txt, space=tab_space)
+    return txt
+
+
 def layerDict_to_entityTxt(
         layer_dict: dict = {},
         remove_dict_items=[],

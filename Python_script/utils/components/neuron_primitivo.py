@@ -10,7 +10,7 @@ from utils.standard_dicts import layer_dict_hidden, layer_dict_softmax
 
 from utils.components.shift_reg import shift_reg_gen
 from utils.general.Create_Folders import create_folder_neuron
-from utils.general.vhd_txt_utils import entity, rom_component, port_map_ROM
+from utils.general.vhd_txt_utils import entity, entity_MAC, rom_component, port_map_ROM
 from utils.general.dict_utils import dict_list_exceptNone
 from utils.general.components import mac_component
 from utils.general.utils import input_sequences, all_inputs_signals, seq_input_output
@@ -390,7 +390,7 @@ BEGIN
     fx_activation_inst : activation_fx PORT MAP(
     clk, rst,
     out_reg_MAC,
-    IO_out
+    {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]}"}
     );
 
 END behavior;'''
@@ -697,7 +697,7 @@ def Neuron_Gen_from_dict2(
     output_name = output_name[0][0]  # problema aqui que não está generalizado
     # output_name = 'IO_out'
 
-    mac_entity_txt = entity(
+    mac_entity_txt = entity_MAC(
         name=MAC_name,
         BIT_WIDTH=layers_dict_list[i]['Neuron_arch']['Bit_WIDTH'],
         num_inputs=layers_dict_list[i]['Neuron_arch']['Inputs_number'],
@@ -752,6 +752,14 @@ def Neuron_Gen_from_dict2(
         IO_in,
         s_Wout,
         out_reg_MAC );''')
+    # ------------------------------------------------
+    TXT_MAC = MAC_TxtGen(MAC_name='MAC',
+                         Include_MAC_type=Include_MAC_type,
+                         rst_space=3*4,
+                         clk_space=4*4,
+                         layer_dict=layers_dict_list[i],
+                         Barriers=Barriers
+                         )
     # ----------------------------------
     shift_reg = True
     shift_reg_name = 'shift_reg'
@@ -883,7 +891,7 @@ BEGIN
     fx_activation_inst : activation_fx PORT MAP(
     clk, rst,
     out_reg_MAC,
-    IO_out
+    {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]}"}
     );
 END behavior;'''
                                )
@@ -921,7 +929,7 @@ BEGIN
     fx_activation_inst : activation_fx PORT MAP(
     clk, rst,
     out_reg_MAC,
-    IO_out
+    {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]}"}
     );
 END behavior;'''
                            )
@@ -958,20 +966,13 @@ BEGIN
     fx_activation_inst : activation_fx PORT MAP(
     clk, rst,
     out_reg_MAC,
-    IO_out
+    {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]}"}
     );
 
 END behavior;'''
                            )
     # {f"{layers_dict_list[i]['Neuron_arch']['IO']['unique_IO']['OUT']['SIGNED'][0]} <= signed(out_ROM_act);"}
-    # ------------------------------------------------
-    TXT_MAC = MAC_TxtGen(MAC_name='MAC',
-                         Include_MAC_type=Include_MAC_type,
-                         rst_space=3*4,
-                         clk_space=4*4,
-                         layer_dict=layers_dict_list[i],
-                         Barriers=Barriers
-                         )
+
     # ------------------------------------------------
     Neurons_softmax = ['Sigmoid']
     Neurons_hidden = ['']

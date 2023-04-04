@@ -135,6 +135,9 @@ PACKAGE {parameters_vhd_name} IS
 
     CONSTANT signed_max_2xbit : signed ((2 * BITS) - 1 DOWNTO 0) := ((2 * BITS) - 1 => '0', OTHERS => '1'); --"0000..."
     CONSTANT signed_max : signed (BITS - 1 DOWNTO 0) := (BITS - 1 => '0', OTHERS => '1'); --"0000..."
+    CONSTANT MAC_IN_BITS_rescale: integer := 1;
+    CONSTANT MAC_OUT_BITS_rescale: integer := 2;
+
 
 END {parameters_vhd_name};
 PACKAGE BODY {parameters_vhd_name} IS

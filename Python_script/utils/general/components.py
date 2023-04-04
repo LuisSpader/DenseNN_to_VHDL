@@ -104,6 +104,4 @@ def port_map_MAC(sum_name, reg_x_sequence_string, reg_w_sequence_string):
 # name_adder
 
 def entity_to_component(entity_text: str, word: str = "ENTITY", word_subs: str = "COMPONENT"):
-    component_txt = replace_word(
-        text=entity_text, word=word, word_subs=word_subs)
-    return component_txt
+    return replace_word(text=entity_text, word=word, word_subs=word_subs)

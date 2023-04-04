@@ -61,7 +61,7 @@ def vhd_name(
     name = ""
     # defining vhd NAMES
     # print(f" vhd_name() -> IO_type == signed: {IO_type == 'signed'}")
-    if Include_MAC_type == True:
+    if Include_MAC_type:
 
         if (IO_type == 'signed'):  # _____________COM SINAL (SIGNED)______________#
             name = f"{vhd_name}_{num_inputs}n_{BIT_WIDTH}bit_signed"
@@ -71,15 +71,22 @@ def vhd_name(
             name = f"{vhd_name}_{num_inputs}n_{BIT_WIDTH}bit_unsigned"
 
     # ___________ Combinacional OU sequencial , Barriers OU '' ___________
-        if MAC_type == False:  # árvore (combinacional)
-            name = insert_string_inside(original_txt=name, split_character="_",
-                                        insert_txt="comb", position=1)
-
-        else:  # sequencial (multiciclo: seq)
-            name = insert_string_inside(original_txt=name, split_character="_",
-                                        insert_txt="seq", position=1)
-
-        if Barriers == True:  # se tem barreiras (pipeline)
+        name = (
+            insert_string_inside(
+                original_txt=name,
+                split_character="_",
+                insert_txt="seq",
+                position=1,
+            )
+            if MAC_type
+            else insert_string_inside(
+                original_txt=name,
+                split_character="_",
+                insert_txt="comb",
+                position=1,
+            )
+        )
+        if Barriers:  # se tem barreiras (pipeline)
             name = insert_string_inside(original_txt=name, split_character="_",
                                         insert_txt="Barriers", position=2)
 

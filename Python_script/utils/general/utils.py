@@ -5,6 +5,7 @@ from utils.general.txt_utils import replace_chars
 from utils.general.dict_utils import dict_list_exceptNone
 from utils.general.txt_utils import erase_empty_lines, tab_lines
 from utils.general.list_utils import remove_all_lista_ocurrences, remove_all_lista_ocurrences2
+from re import search
 
 # Insert_string
 #
@@ -563,7 +564,7 @@ def IO_STDL(IO_dict: dict,
 
 
 def IO_STDL_V(IO_dict: dict = {},
-              BIT_WIDTH: int = 8,
+              BITS_rescale: str = '',
               onerow: bool = True,
               IO: str = 'IN') -> str:
     """Função análoga à 'IO_STDL()' porém agora para entradas e saídas do tipo 'STD_LOGIC_VECTOR'
@@ -577,35 +578,43 @@ def IO_STDL_V(IO_dict: dict = {},
     Returns:
         str: _description_
     """
-    if (IO_dict[IO]['STD_LOGIC_VECTOR'] == None):
+    if IO_dict[IO]['STD_LOGIC_VECTOR'] is None:
         # pass
         return ''
 
+    text = []
+    if (onerow == 1):  # tudo em uma linha
+        text.extend(f"{i}" for i in IO_dict[IO]['STD_LOGIC_VECTOR'])
+        # text_list can be an splitted text or a list of
+        text = ', '.join(map(str, (text)))
+        return (
+            f"{text}: {IO} STD_LOGIC_VECTOR(({BITS_rescale}*BITS) -1 DOWNTO 0);"
+            if BITS_rescale != ''
+            else f"{text}: {IO} STD_LOGIC_VECTOR(BITS -1 DOWNTO 0);"
+        )
     else:
-        text = []
-        if (onerow == 1):  # tudo em uma linha
-            for i in IO_dict[IO]['STD_LOGIC_VECTOR']:
-                text.append(f"{i}")
-            # text_list can be an splitted text or a list of
-            text = ', '.join(map(str, (text)))
-            text = f"{text}: {IO} STD_LOGIC_VECTOR(BITS -1 DOWNTO 0);"
-
-        else:
-            for i in IO_dict[IO]['STD_LOGIC_VECTOR']:
+        for i in IO_dict[IO]['STD_LOGIC_VECTOR']:
+            if BITS_rescale:
+                text.append(
+                    f"{i}: {IO} STD_LOGIC_VECTOR(({BITS_rescale}*BITS) -1 DOWNTO 0);")
+            else:
                 text.append(
                     f"{i}: {IO} STD_LOGIC_VECTOR(BITS -1 DOWNTO 0);")
                 # print(f"{i}: IN STD_LOGIC;\n")
                 # print(i)
             # text_list can be an splitted text or a list of texts
-            text = '\n'.join(map(str, (text)))
-
-        return text
+        return '\n'.join(map(str, (text)))
 # EXEMPLO
 # if (print_cells_result == 1):
 #   print(IO_STDL_V(MAC_IO_dict,BIT_WIDTH,1,'IN'))
 
 
-def IO_signed(IO_dict: dict, BIT_WIDTH: int, onerow: bool, IO: str) -> str:
+def IO_signed(IO_dict: dict,
+              #   BIT_WIDTH: int,
+              BITS_rescale: str = '',
+              onerow: bool = True,
+              IO: str = 'IN'
+              ) -> str:
     """Função análoga à 'IO_STDL()' porém agora para entradas e saídas do tipo 'SIGNED'
 
     Args:
@@ -627,13 +636,23 @@ def IO_signed(IO_dict: dict, BIT_WIDTH: int, onerow: bool, IO: str) -> str:
                 text.append(f"{i}")
             # text_list can be an splitted text or a list of
             text = ', '.join(map(str, (text)))
-            text = f"{text}: {IO} signed(BITS -1 DOWNTO 0);"
+            if BITS_rescale != '':
+                text = f"{text}: {IO} signed(({BITS_rescale}*BITS) -1 DOWNTO 0);"
+            else:
+                text = f"{text}: {IO} signed(BITS -1 DOWNTO 0);"
 
         else:
-            for i in IO_dict[IO]['SIGNED']:
-                text.append(f"{i}: {IO} signed(BITS -1 DOWNTO 0);")
-            # text_list can be an splitted text or a list of texts
-            text = '\n'.join(map(str, (text)))
+            if BITS_rescale != '':
+                for i in IO_dict[IO]['SIGNED']:
+                    text.append(
+                        f"{i}: {IO} signed(({BITS_rescale}*BITS) -1 DOWNTO 0);")
+                # text_list can be an splitted text or a list of texts
+                text = '\n'.join(map(str, (text)))
+            else:
+                for i in IO_dict[IO]['SIGNED']:
+                    text.append(f"{i}: {IO} signed(BITS -1 DOWNTO 0);")
+                # text_list can be an splitted text or a list of texts
+                text = '\n'.join(map(str, (text)))
 
         return text
 # Exemplo
@@ -693,8 +712,9 @@ def IO_STD_num_inputs(IO_dict: dict, num_inputs: int, onerow: bool = True, IO: s
 
 
 def IO_STDL_V_num_inputs(IO_dict: dict,
-                         BIT_WIDTH: int,
-                         num_inputs: int,
+                         #  BIT_WIDTH: int,
+                         BITS_rescale: str = '',
+                         num_inputs: int = 8,
                          onerow: bool = True,
                          IO: str = 'IN'):
     """Função análoga à 'IO_STD_num_inputs()' porém agora para portas (input ou output) do tipo 'STD_LOGIC_VECTOR'
@@ -710,7 +730,7 @@ def IO_STDL_V_num_inputs(IO_dict: dict,
         _type_: _description_
     """
 
-    if (IO_dict[IO]['STD_LOGIC_VECTOR_num_inputs'] == None):  # quando o q é passado é 'None'
+    if IO_dict[IO]['STD_LOGIC_VECTOR_num_inputs'] is None:  # quando o q é passado é 'None'
         return ''  # retornamos nada
 
     else:
@@ -719,28 +739,33 @@ def IO_STDL_V_num_inputs(IO_dict: dict,
 
     text = []
     if (onerow == 1):  # tudo em uma linha
-        for i in x_sequence_string:
-            text.append(f"{i}")
+        text.extend(f"{i}" for i in x_sequence_string)
         # text_list can be an splitted text or a list of
         text = ', '.join(map(str, (text)))
-        text = f"{text}: {IO} STD_LOGIC_VECTOR(BITS -1 DOWNTO 0);"
-
+        return (
+            f"{text}: {IO} STD_LOGIC_VECTOR(({BITS_rescale}*BITS) -1 DOWNTO 0);"
+            if BITS_rescale != ''
+            else f"{text}: {IO} STD_LOGIC_VECTOR(BITS -1 DOWNTO 0);"
+        )
     else:
         for i in x_sequence_string:
-            text.append(
-                f"{i}: {IO} STD_LOGIC_VECTOR(BITS -1 DOWNTO 0);")
-        # text_list can be an splitted text or a list of texts
-        text = '\n'.join(map(str, (text)))
-
-    return text
+            if not BITS_rescale:
+                text.append(
+                    f"{i}: {IO} STD_LOGIC_VECTOR(BITS -1 DOWNTO 0);")
+            else:
+                text.append(
+                    f"{i}: {IO} STD_LOGIC_VECTOR(({BITS_rescale}*BITS) -1 DOWNTO 0);")
+            # text_list can be an splitted text or a list of texts
+        return '\n'.join(map(str, (text)))
 # EXEMPLO
 # if (print_cells_result == 1):
 #   print(IO_STDL_V_num_inputs(MAC_IO_dict,BIT_WIDTH,num_inputs,0,'IN'))
 
 
 def IO_signed_num_inputs(IO_dict: dict,
-                         BIT_WIDTH: int,
-                         num_inputs: int,
+                         #  BIT_WIDTH: int,
+                         BITS_rescale: str = '',
+                         num_inputs: int = 8,
                          onerow: bool = True,
                          IO: str = 'IN'):
     """Função análoga à 'IO_STD_num_inputs()' porém agora para portas (input ou output) do tipo 'signed'
@@ -768,14 +793,25 @@ def IO_signed_num_inputs(IO_dict: dict,
             text.append(f"{i}")
         # text_list can be an splitted text or a list of
         text = ', '.join(map(str, (text)))
-        text = f"{text}: {IO} signed(BITS -1 DOWNTO 0);"
+        if BITS_rescale != '':
+            text = f"{text}: {IO} signed(({BITS_rescale}*BITS) -1 DOWNTO 0);"
+        else:
+            text = f"{text}: {IO} signed(BITS -1 DOWNTO 0);"
 
     else:
-        for i in x_sequence_string:
-            text.append(f"{i}: {IO} signed(BITS -1 DOWNTO 0);")
-            # text.append(f"{i}: {IO} signed(BITS -1 DOWNTO 0);")
-        # text_list can be an splitted text or a list of texts
-        text = '\n'.join(map(str, (text)))
+        if BITS_rescale != '':
+            for i in x_sequence_string:
+                text.append(
+                    f"{i}: {IO} signed(({BITS_rescale}*BITS) -1 DOWNTO 0);")
+                # text.append(f"{i}: {IO} signed(BITS -1 DOWNTO 0);")
+            # text_list can be an splitted text or a list of texts
+            text = '\n'.join(map(str, (text)))
+        else:
+            for i in x_sequence_string:
+                text.append(f"{i}: {IO} signed(BITS -1 DOWNTO 0);")
+                # text.append(f"{i}: {IO} signed(BITS -1 DOWNTO 0);")
+            # text_list can be an splitted text or a list of texts
+            text = '\n'.join(map(str, (text)))
 
     return text
 # EXEMPLO
@@ -1120,7 +1156,9 @@ def IO_manager(IO_dict_list: list = [{}, {}],
                num_inputs: int = 3,
                onerow: bool = True,
                tab_space: int = 2,
-               remove_dict_items=[]) -> str:
+               remove_dict_items=[],
+               IN_BITS_rescale: str = '',
+               OUT_BITS_rescale: str = '') -> str:
     """Função para gerar toda a declaração das portas (inputs & outputs) da parte 'entity' do módulo.vhd com base em um dicionário em formato padrão pré-estabelecido. Retorna um texto disso tudo.
     -----------------------------------------------------
     Exemplo de dicionário:
@@ -1194,15 +1232,17 @@ def IO_manager(IO_dict_list: list = [{}, {}],
         # INPUTS
         IN_stdl.append(
             IO_STDL(IO_dict_list[i], onerow, 'IN', remove_dict_items=remove_dict_items))
-        IN_stdl_v.append(IO_STDL_V(
-            IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
+        IN_stdl_v.append(
+            IO_STDL_V(IO_dict_list[i], IN_BITS_rescale, onerow, 'IN'))
+
         IN_stdl_num_inputs.append(IO_STD_num_inputs(
             IO_dict_list[i], num_inputs, onerow, 'IN'))
         IN_stdl_v_num_inputs.append(IO_STDL_V_num_inputs(
-            IO_dict_list[i], BIT_WIDTH, num_inputs, 0, 'IN'))
-        IN_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'IN'))
+            IO_dict_list[i],  IN_BITS_rescale, num_inputs, False, 'IN'))
+        IN_signed.append(
+            IO_signed(IO_dict_list[i], IN_BITS_rescale, onerow, 'IN'))
         IN_signed_num_inputs.append(IO_signed_num_inputs(
-            IO_dict_list[i], BIT_WIDTH, num_inputs, 0, 'IN'))
+            IO_dict_list[i], IN_BITS_rescale, num_inputs, False, 'IN'))
         # print(f"IO_dict_list[i]['IN']: {IO_dict_list[i]['IN']}")
         IN_manual.append(dict_list_exceptNone(
             dict_slice=IO_dict_list[i]['IN']['manual']))
@@ -1211,18 +1251,38 @@ def IO_manager(IO_dict_list: list = [{}, {}],
 
         # OUTPUTS
         OUT_stdl.append(IO_STDL(IO_dict_list[i], onerow, 'OUT'))
-        OUT_stdl_v.append(IO_STDL_V(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
+        OUT_stdl_v.append(
+            IO_STDL_V(IO_dict_list[i], OUT_BITS_rescale, onerow, 'OUT'))
         OUT_stdl_num_inputs.append(IO_STD_num_inputs(
             IO_dict_list[i], num_inputs, onerow, 'OUT'))
         OUT_stdl_v_num_inputs.append(IO_STDL_V_num_inputs(
-            IO_dict_list[i], BIT_WIDTH, num_inputs, 0, 'OUT'))
-        OUT_signed.append(IO_signed(IO_dict_list[i], BIT_WIDTH, onerow, 'OUT'))
+            IO_dict_list[i],  OUT_BITS_rescale, num_inputs, False, 'OUT'))
+        OUT_signed.append(
+            IO_signed(IO_dict_list[i], OUT_BITS_rescale, onerow, 'OUT'))
         OUT_signed_num_inputs.append(IO_signed_num_inputs(
-            IO_dict_list[i], BIT_WIDTH, num_inputs, 0, 'OUT'))
+            IO_dict_list[i], OUT_BITS_rescale, num_inputs, False, 'OUT'))
         OUT_manual.append(dict_list_exceptNone(
             dict_slice=IO_dict_list[i]['OUT']['manual']))
         OUT_manual = remove_all_lista_ocurrences2(
             lista=OUT_manual, occurences_list=remove_dict_items)
+
+    if IN_BITS_rescale != '':
+        for i, item in enumerate(IN_manual):
+            for item_j in IN_manual:
+                if item_j != '':
+                    if '(BITS' in item_j[0]:
+                        # if search('BITS', item[0]):
+                        IN_manual[i][0] = IN_manual[i][0].replace(
+                            '(BITS', f'(({IN_BITS_rescale}*BITS)')
+
+    if OUT_BITS_rescale != '':
+        for i, item in enumerate(OUT_manual):
+            for item_j in OUT_manual:
+                if item_j != '':
+                    if '(BITS' in item_j[0]:
+                        # if search('BITS', item):
+                        OUT_manual[i][0] = OUT_manual[i][0].replace(
+                            '(BITS', f'(({OUT_BITS_rescale}*BITS)')
 
     # para ficarmos com uma lista de apenas 1 nível
     IN_manual = [''.join(l) for l in IN_manual]

@@ -42,7 +42,6 @@ BEGIN
   s_Xi <= IO_in;
   s_Win <= W_in;
 
-
   sum_all <= (s_mult(((2 * BITS) * (0 + 1)) - 1 DOWNTO ((2 * BITS) * (0))) + 
     s_mult(((2 * BITS) * (1 + 1)) - 1 DOWNTO ((2 * BITS) * (1))) + 
     s_mult(((2 * BITS) * (2 + 1)) - 1 DOWNTO ((2 * BITS) * (2))) + 
@@ -117,16 +116,5 @@ loop_Mult_port_map : FOR i IN 0 TO (NUM_INPUTS - 1) GENERATE
       Y => s_mult(((2 * BITS) * (i + 1)) - 1 DOWNTO ((2 * BITS) * (i)))
     );
   END GENERATE;
-	PROCESS (rst, clk)
-	BEGIN
-		IF (rst = '1') THEN
-                        IO_out <= (OTHERS => '0');
-		ELSE
-			IF (clk'event AND clk = '1') THEN --se tem evento de clock
-                                IO_out <= signed(sum_all(15 DOWNTO 8));
-			END IF;
-		END IF;
-	END PROCESS;
-
-
+IO_out <= signed(sum_all);
 END arch;

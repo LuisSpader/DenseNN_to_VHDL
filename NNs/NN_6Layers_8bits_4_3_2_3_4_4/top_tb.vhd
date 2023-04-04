@@ -24,7 +24,7 @@ ARCHITECTURE tb OF top_tb IS
    SIGNAL clk, rst, update_weights:  STD_LOGIC;
    SIGNAL IO_in:  signed(TOTAL_BITS - 1 DOWNTO 0);
    SIGNAL c0_n0_W_in, c0_n1_W_in, c0_n2_W_in, c0_n3_W_in:  signed(BITS - 1 DOWNTO 0);
-   SIGNAL c5_n0_IO_out, c5_n1_IO_out, c5_n2_IO_out, c5_n3_IO_out:  signed(BITS -1 DOWNTO 0);
+   SIGNAL c5_n0_IO_out, c5_n1_IO_out, c5_n2_IO_out, c5_n3_IO_out:  signed((8*BITS) -1 DOWNTO 0);
 BEGIN
     -- port map do componente 'top.vhd'
         UUT : ENTITY work.top PORT MAP(

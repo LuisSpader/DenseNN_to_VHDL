@@ -122,7 +122,7 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
         print(" ---------------------- OUT ---------------------- ")
         print(lista_camada_outputs)
 
-    # ---------------- PORT MAP NEURONS MATRIX
+    # ---------------- PORT MAP NEURONS MATRIX ----------------
     txt_top_port_map_split = txt_top_port_map.split("\n")
     assign_list = []
 
