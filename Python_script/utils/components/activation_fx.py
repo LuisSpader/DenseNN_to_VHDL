@@ -142,6 +142,7 @@ ARCHITECTURE arch OF activation_fx IS
     -------------------- COMPONENTS --------------------
 {entity_to_component(ReLU_entity)}
 {entity_to_component(Leaky_entity)}
+
     -- ROM
     COMPONENT ROM_fx_8bitaddr_8width IS
         PORT (
@@ -156,13 +157,17 @@ ARCHITECTURE arch OF activation_fx IS
     SIGNAL s_fx_out     : signed(BITS_FX_OUT - 1 DOWNTO 0);
     SIGNAL s_fx_out_std : STD_LOGIC_VECTOR(BITS_FX_OUT - 1 DOWNTO 0);
     SIGNAL fx_in_ROM    : signed(BITS - 1 DOWNTO 0);
+
 BEGIN
+
     ReLU_inst : IF ACTIVATION_TYPE = 0 GENERATE
         ReLU_inst : ReLU PORT MAP(fx_in, s_fx_out);
     END GENERATE;
+
     Leaky_ReLU_inst : IF ACTIVATION_TYPE = 1 GENERATE
         Leaky_ReLU_inst : Leaky_ReLU PORT MAP(fx_in, s_fx_out);
     END GENERATE;
+
     Sigmoid_ROM_inst : IF ACTIVATION_TYPE = 2 GENERATE -- it's even
         -- BEGIN
         -- fx_in_ROM <= to_signed(to_integer(fx_in), fx_in_ROM'length); -- Numeric_std
@@ -174,6 +179,7 @@ BEGIN
         -- END PROCESS fx_activation_inst;
         s_fx_out <= signed(s_fx_out_std);
     END GENERATE;
+
     PROCESS (clk, rst)
     BEGIN
         IF (rst = '1') THEN
@@ -184,6 +190,7 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
+    
 END ARCHITECTURE;''')
 
     return activation_fx_entity, activation_fx_txt
