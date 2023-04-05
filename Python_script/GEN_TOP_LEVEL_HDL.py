@@ -134,7 +134,7 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
     #     ['c0_n4_W_out']]
     # lista de sinais para declarar dps: SIGNAL .... (... -1 downto 0);
 
-    # creating list of W_in necessary inputs
+    # creating list of W_in necessary inputs -> When intermediate layer (or final layer) is bigger than 1st layer, we need to put some W_in directly on the top_entity
     necessary_W_in = [item[0] for item in neurons_PM_matrix_local]
     for i, item in enumerate(necessary_W_in):
         necessary_W_in[i] = necessary_W_in[i].replace('out', 'in')
@@ -158,8 +158,12 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
 
     # substituindo atribuição antiga (errada) por atribuição certa entre camadas
     # todo: Falta alterar aqui para que comporte todas as necessary_W_in
-    txt_top_port_map = generate_top_port_map(
-        DEBUG, layers_dict_list, lista_camada_inputs, lista_camada_outputs, txt_top_port_map_split, assign_list)
+    txt_top_port_map_split = fix_top_port_map_layers(
+        txt_top_port_map_split, assign_list)
+
+    # Extract input and output lists from IO dictionaries and update top_dict
+    update_top_dict_IO(DEBUG, layers_dict_list,
+                       lista_camada_inputs, lista_camada_outputs)
 
     # finding correct_IO_type to add some necessary_W_in inputs
     for IO_type in top_dict['IO']['IN']:
@@ -169,13 +173,32 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
                     correct_IO_type = IO_type
                     break
 
-    # removing W_in that already exists on top_dict
+    # removing W_in from 'necessary_W_in' list that already exists on top_dict
     for item in top_dict['IO']['IN'][str(correct_IO_type)]:
         if item in necessary_W_in:
             necessary_W_in.remove(item)
 
-    # adding W_in which top_dict didn't had already
+    # adding W_in which top_dict IOs didn't had already
     top_dict['IO']['IN'][str(correct_IO_type)].extend(necessary_W_in)
+
+    # Now we need to correct some port_map assignments. Remember: When intermediate layer (or final layer) is bigger than 1st layer, we need to put some W_in directly on the top_entity
+    # If necessary_W_in is: ['c5_n4_W_in', 'c5_n5_W_in', 'c5_n6_W_in']
+    # We need to have on the layer 5 (c5) at some point, this port map assignments:
+    # txt_top_port_map = [
+    # ...
+    # '            c5_n4_W_in=> c5_n4_W_in,'
+    # '            c5_n5_W_in=> c5_n5_W_in,'
+    # '            c5_n6_W_in=> c5_n6_W_in,'
+    # ...
+    # ]
+    necessary_W_in_assign = []
+    for item in necessary_W_in:
+        necessary_W_in_assign.append(f"            {item}=> {item},")
+
+    txt_top_port_map_split = fix_top_port_map_layers(
+        txt_top_port_map_split, necessary_W_in_assign)
+
+    txt_top_port_map = '\n'.join(txt_top_port_map_split)
 
     # https://youtu.be/oHSrqVhee_8
     nomes, nomes_all, remove_list = extract_IO_names(layers_dict_list)
@@ -203,7 +226,39 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
         print(f"top_gen() -> Criando Top: {top_dir}")
 
 
-def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inputs: list, lista_camada_outputs: list, txt_top_port_map_split: list, assign_list: list) -> str:
+def fix_top_port_map_layers(txt_top_port_map_split: list, assign_list: list) -> list:
+    """
+    Generates a top port map by replacing wrong assignments between layers with correct ones.
+
+    The function iterates through each item in txt_top_port_map_split and checks if there is a wrong assignment that needs to be replaced with a correct one. 
+    It does this by iterating through each item in assign_list and comparing the correct assignment with the original assignment. 
+        If the correct assignment is found within the original assignment, it replaces the original assignment with the correct one.
+    Finally, the function returns a string containing the updated top port map with correct assignments. The list of strings in txt_top_port_map_split is joined into a single string with line breaks using '\n'.join().
+
+    Args:
+        txt_top_port_map_split (list): A list of strings containing the original top port map split by lines.
+        assign_list (list): A list of strings containing the correct assignments between layers.
+
+    Returns:
+        list: A list containing the updated top port map with correct assignments.
+    """
+    # Replace wrong assignments between layers with correct ones
+    for j, itemj in enumerate(txt_top_port_map_split):
+        for item in assign_list:
+            # Extract the original assignment before '=>'
+            buff_original = itemj.split('=>')[0].strip()
+            # Extract the correct assignment before '=>'
+            buff_subs = item.split('=>')[0].strip()
+            if buff_subs in buff_original:
+                # Replace the original assignment with the correct one
+                txt_top_port_map_split[j] = item
+
+    # Join the list of strings into a single string with line breaks
+    # return '\n'.join(txt_top_port_map_split)
+    return txt_top_port_map_split
+
+
+def update_top_dict_IO(DEBUG: bool, layers_dict_list: list, entity_inputs: list, entity_outputs: list):
     """
     Generates the top-level port map string for a VHDL entity based on the inputs, outputs, and layers information.
 
@@ -216,21 +271,10 @@ def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inpu
         str: A string containing the top-level port map for the VHDL entity.
 
     Example:
-        generate_top_port_map(layers_dict_list, entity_inputs, entity_outputs)
+        fix_top_port_map_layers(layers_dict_list, entity_inputs, entity_outputs)
     """
-    # Replace wrong assignments between layers with correct ones
-    for j, itemj in enumerate(txt_top_port_map_split):
-        for item in assign_list:
-            buff_original = itemj.split('=>')[0].strip()
-            buff_subs = item.split('=>')[0].strip()
-            if buff_subs in buff_original:
-                txt_top_port_map_split[j] = item
-
-    txt_top_port_map = '\n'.join(txt_top_port_map_split)
-
-    # Extract input and output lists from IO dictionaries
-    camada_inputs = extrai_lista_IO(list_IO=lista_camada_inputs)
-    camada_outputs = extrai_lista_IO(list_IO=lista_camada_outputs)
+    camada_inputs = extrai_lista_IO(list_IO=entity_inputs)
+    camada_outputs = extrai_lista_IO(list_IO=entity_outputs)
 
     if DEBUG:
         print(
@@ -270,8 +314,6 @@ def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inpu
     top_dict['IO']['OUT']['STD_LOGIC_VECTOR'] = l_outputs[1]
     top_dict['IO']['OUT']['SIGNED'] = l_outputs[2]
     top_dict['IO']['OUT']['manual'] = l_outputs[3]
-
-    return txt_top_port_map
 
 
 def generate_signal_assignments(layers_dict_list: list, nomes: list, nomes_all: list, itertools):

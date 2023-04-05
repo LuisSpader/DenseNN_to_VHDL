@@ -178,9 +178,9 @@ camada5_inst_5: ENTITY work.camada5_Sigmoid_7neuron_8bits_4n_signed
             c5_n1_W_in=> c4_n1_W_out,
             c5_n2_W_in=> c4_n2_W_out,
             c5_n3_W_in=> c4_n3_W_out,
-            c5_n4_W_in=> c4_n4_W_out, 
-            c5_n5_W_in=> c4_n5_W_out, 
-            c5_n6_W_in=> c4_n6_W_out, 
+            c5_n4_W_in=> c5_n4_W_in,
+            c5_n5_W_in=> c5_n5_W_in,
+            c5_n6_W_in=> c5_n6_W_in,
             ---------- Saidas ----------
             -- ['OUT']['SIGNED'] 
             c5_n0_IO_out=> c5_n0_IO_out, 
