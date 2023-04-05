@@ -1,8 +1,10 @@
 # sourcery skip: avoid-builtin-shadow
+import copy
 import math
 import os
 import numpy as np
 whole_dir = os.path.abspath(".")
+
 
 # layers_array = np.array()
 layers_array = []
@@ -35,12 +37,51 @@ for l, layer in enumerate(layers_array):
         # layers_array[l][1][n].tolist()
 
 
+# for each item in layers_array, for each subitem in item, append it to a new list  (flatten_list)
+# create a deepcopy of layers_array to not change the original
+layers_array_copy = copy.deepcopy(layers_array)
+
+#  separating bias and weights by neurons
+neurons = []
+for l, layer in enumerate(layers_array_copy):
+    n = 0
+
+    neurons_layer = []
+    # check if a numpy array is empty
+    # https://stackoverflow.com/questions/53501376/how-to-check-if-a-numpy-array-is-empty
+    # while layer[0][1] != []:
+    while np.size(layer[0]):
+        neurons_layer.append([f'layer{l}_n{n}', layer[0][0], layer[1][0]])
+        n += 1
+
+        layers_array_copy[l][0] = np.delete(layers_array_copy[l][0], 0)
+        # np.delete(layers_array_copy[l][1], 0)
+        layers_array_copy[l][1] = layers_array_copy[l][1][1:]
+        # layer[0] = layer[0][1:]
+        # layer[1] = layer[1][1:]
+        # del layer[0][0]
+        # del layer[1][0]
+    # for b_w in layer:
+    #     neurons.append(b_w[0].tolist())
+    neurons.append(neurons_layer)
+
+# -------------------------------------------------
 max = 0
 # getting max
 for l, layer in enumerate(layers_array):
     if len(layer[0]) > max:
         max = len(layer[0])
 
+# joining together neurons with same index (ex: neuron_0 'n0')
+neurons_joined_PortMap_structure = []
+for n in range(0, max):
+    neurons_joined = []
+
+    for l, layer in enumerate(neurons):
+        if len(layer[n]):
+            neurons_joined.append(layer[n])
+
+    neurons_joined_PortMap_structure.append(neurons_joined)
 
 #
 N = max - len(layers_array[0][0])
