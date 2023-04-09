@@ -32,7 +32,7 @@ ARCHITECTURE behavior of neuron_comb_ReLU_4n_8bit_signed_mult0_v0_add0_v0_out is
     PORT (
       clk, rst: IN STD_LOGIC;
       IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
-      W_in : IN signed((MAC_IN_BITS_rescale*BITS) - 1 DOWNTO 0);
+      W_in  : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
       ----------------------------------------------
       IO_out: OUT signed((MAC_OUT_BITS_rescale*BITS) -1 DOWNTO 0)
     );
@@ -56,7 +56,7 @@ COMPONENT activation_fx IS
     GENERIC (
         BITS_FX_IN        : NATURAL := BITS_FX_IN;
         BITS_FX_OUT       : NATURAL := BITS_FX_OUT;
-        ACTIVATION_TYPE   : NATURAL := 2; -- 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
+        ACTIVATION_TYPE   : NATURAL := 0; -- 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
         Leaky_attenuation : NATURAL := Leaky_attenuation;
         Leaky_ReLU_ones   : signed  := Leaky_ReLU_ones
     );

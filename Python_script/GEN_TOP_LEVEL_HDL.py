@@ -88,7 +88,8 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
             neurons_PM_matrix_local, layers_dict_list)
 
     # ==================================== TESTBENCH ====================================
-    testbench_gen(OUTPUT_BASE_DIR_PATH=OUTPUT_BASE_DIR_PATH,
+    whole_dir = os.path.abspath(".")
+    testbench_gen(testbench_path=f"{whole_dir}{OUTPUT_BASE_DIR_PATH[1:]}/tb_Files",
                   top_dict=top_dict,
                   id_IO_in='IO_in',
                   id_W_in='W_in',
@@ -157,7 +158,7 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
     # ]
 
     # substituindo atribuição antiga (errada) por atribuição certa entre camadas
-    # todo: Falta alterar aqui para que comporte todas as necessary_W_in
+    # OK todo: Falta alterar aqui para que comporte todas as necessary_W_in
     txt_top_port_map_split = fix_top_port_map_layers(
         txt_top_port_map_split, assign_list)
 

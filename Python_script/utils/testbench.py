@@ -2,9 +2,11 @@ from utils.GLOBALS import GLOBAL
 from utils.general.dict_utils import dict_list_exceptNone, dict_list_exceptNone_Callable
 from utils.general.vhd_txt_utils import generic_gen
 import os
+# whole_dir = os.path.abspath(".")
+# testbench_path = f"{whole_dir}{testbench_path[1:]}/tb_Files"
 
 
-def testbench_gen(OUTPUT_BASE_DIR_PATH: str,
+def testbench_gen(testbench_path: str,
                   top_dict: dict,
                   id_IO_in: str = 'IO_in',
                   id_W_in: str = 'W_in',
@@ -12,10 +14,10 @@ def testbench_gen(OUTPUT_BASE_DIR_PATH: str,
     """
     Generates a testbench for the given top-level module.
 
-    In summary, the function testbench_gen generates a testbench for a given top_dict, saving it in the OUTPUT_BASE_DIR_PATH directory. Before calling tb_txt_gen, it generates the generic text, name and component of the testbench, the signals, inputs, inputs values, weights, outputs concatenation and text values of inputs and weights. It also converts the weights buffer to real values.
+    In summary, the function testbench_gen generates a testbench for a given top_dict, saving it in the testbench_path directory. Before calling tb_txt_gen, it generates the generic text, name and component of the testbench, the signals, inputs, inputs values, weights, outputs concatenation and text values of inputs and weights. It also converts the weights buffer to real values.
 
     Args:
-        OUTPUT_BASE_DIR_PATH (str): The path to the output directory.
+        testbench_path (str): The path to the output directory.
         top_dict (dict): A dictionary containing information about the top-level module.
         id_IO_in (str, optional): The ID of the input signal. Defaults to 'IO_in'.
         id_W_in (str, optional): The ID of the weight input signal. Defaults to 'W_in'.
@@ -80,7 +82,7 @@ def testbench_gen(OUTPUT_BASE_DIR_PATH: str,
     #         '''
 
     # Generating the testbench text file
-    tb_txt_gen(OUTPUT_BASE_DIR_PATH, tb_generic_txt, top_name, top_component, signals_tb, inputs, inputs_val,
+    tb_txt_gen(testbench_path, tb_generic_txt, top_name, top_component, signals_tb, inputs, inputs_val,
                text_val_inputs, text_val_weights, outputs_concatenation, read_val_weights_from_line)  # download Reg
 
 
@@ -270,7 +272,7 @@ def read_variables(buff_weights: list):
     return '\n'.join(map(str, (read_val_weights_from_line)))
 
 
-def tb_txt_gen(OUTPUT_BASE_DIR_PATH: str,
+def tb_txt_gen(testbench_path: str,
                tb_generic_txt: str,
                top_name: str,
                top_component: str,
@@ -286,7 +288,7 @@ def tb_txt_gen(OUTPUT_BASE_DIR_PATH: str,
 
     Parameters:
     -----------
-    OUTPUT_BASE_DIR_PATH : str
+    testbench_path : str
         Path to the output base directory.
     tb_generic_txt : str
         Text for the generic of the testbench.
@@ -313,10 +315,15 @@ def tb_txt_gen(OUTPUT_BASE_DIR_PATH: str,
     --------
     None
     """
-    whole_dir = os.path.abspath(".")
-    weights_file_path = f"{whole_dir}{OUTPUT_BASE_DIR_PATH[1:]}/tb_Files/weights_bin.txt"
-    inputs_file_path = f"{whole_dir}/{OUTPUT_BASE_DIR_PATH[1:]}/tb_Files/inputs_string.txt"
-    outputs_file_path = f"{whole_dir}/{OUTPUT_BASE_DIR_PATH[1:]}/tb_Files/tb_outputs.txt"
+    # whole_dir = os.path.abspath(".")
+    # testbench_path = f"{whole_dir}{testbench_path[1:]}"
+    # create the directory if it does not exist
+    if not os.path.exists(testbench_path):
+        os.makedirs(testbench_path)
+
+    weights_file_path = f"{testbench_path}/weights_bin.txt"
+    inputs_file_path = f"{testbench_path}/inputs_string.txt"
+    outputs_file_path = f"{testbench_path}/tb_outputs.txt"
     # -----------------------------------------------------------------------------------------------------
     tb_txt = (f'''LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
@@ -417,6 +424,6 @@ END tb;
     #     outputs_concatenation=outputs_concatenation
     # )
     print(
-        f"testbench_gen() -> tb_txt_gen() -> criando arquivo: {top_name}_tb.vhd")
-    with open(f"{OUTPUT_BASE_DIR_PATH}/{top_name}_tb.vhd", "w") as writer:
+        f"testbench_gen() -> tb_txt_gen() -> criando arquivo: {testbench_path}/{top_name}_tb.vhd")
+    with open(f"{testbench_path}/{top_name}_tb.vhd", "w") as writer:
         writer.write(tb_txt)
