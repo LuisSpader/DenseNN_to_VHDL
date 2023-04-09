@@ -96,7 +96,11 @@ def tf_to_dict(model, save_path: str = "models/model_conversion") -> None:
         model_dict[layer.name] = layer_dict
 
     # Save model dicts to a file
-    with open(f"{save_path}/dicts/model.json", "w") as f:
+    file_to_dict(save_path, model_dict)
+
+
+def file_to_dict(save_path, model_dict, file_name="model"):
+    with open(f"{save_path}/dicts/{file_name}.json", "w") as f:
         # json.dump(model_dict, f)
         json.dump(model_dict, f, cls=NumpyFloatValuesEncoder)
     print(f"tf_to_dict() -> Creating : {save_path}/dicts/model.json")

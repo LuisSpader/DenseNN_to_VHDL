@@ -7,7 +7,7 @@ import numpy as np
 whole_dir = os.path.abspath(".")
 
 REVERSE_WEIGHTS = False
-BIAS_FIRST = False
+BIAS_ENDING = True  # if True, bias is at the end of the shift_registers
 # ---------------- treating layers_array ----------------
 
 
@@ -26,50 +26,127 @@ for i in range(0, len(listdir), 2):
     layers_array.append(
         [np.load(f"{path}/{listdir[i]}"), np.load(f"{path}/{listdir[i+1]}")])  # [bias, weights]
 
-print('----------------------')
-# print(layers_array[0])
+# layers_array = [
+#     [bias_array, weights_array], # layer0
+#     [bias_array, weights_array], # layer1
+#     [bias_array, weights_array], # layer2
+#     ...
+# ]
+
 
 # ---------------- treating weights_list ----------------
-# weights_list is made of 1_item_arrays -> so this method pass it to be a list of 1 item
-for l, layer in enumerate(layers_array):
-    layers_array[l][1] = layers_array[l][1].tolist()
+def flatten_weights(layers_array):
+    """
+    Converts a list of nested arrays of weights to a flattened list of weights.
+    Each weight in the nested arrays is represented as a list with a single element.
 
-#  removing list of 1 item to be just the item (made on weights_array)
-for l, layer in enumerate(layers_array):
-    for n, neuron in enumerate(layer[1]):
-        flat_list = []
-        for weight in neuron:
-            flat_list.append(weight[0])
-        layers_array[l][1][n] = flat_list
-        # layers_array[l][1][n].tolist()
+    Args:
+    - weights_array: a list of nested arrays of weights
+
+    Returns:
+    - flattened_weights: a list of weights flattened from the nested arrays
+    """
+
+    # Convert 1-item arrays to lists of 1 item
+    for l, layer in enumerate(layers_array):
+        layers_array[l][1] = layers_array[l][1].tolist()
+
+    # Flatten list of weights by removing nested arrays
+    #  removing list of 1 item to be just the item (made on weights_array)
+    for l, layer in enumerate(layers_array):
+        for n, neuron in enumerate(layer[1]):
+            flat_list = []
+            for weight in neuron:
+                flat_list.append(weight[0])
+            layers_array[l][1][n] = flat_list
 
 
-# create a deepcopy of layers_array to not change the original
-layers_array_copy = copy.deepcopy(layers_array)
+def save_file(path_log, neurons, file_name="neurons.py"):
+    with open(f"{path_log}/{file_name}", "w") as writer:
+        writer.write(f"{file_name.split('.')[0]} = ")
+        writer.write(str(neurons))
 
-#  separating bias and weights by layers[neuron_0, neuron_1, ...]
-neurons = []
-for l, layer in enumerate(layers_array_copy):
-    n = 0
 
-    neurons_layer = []
+flatten_weights(layers_array)
+
+
+def new_func(layers_array, path_log, save_file):
+    # create a deepcopy of layers_array to not change the original
+    layers_array_copy = copy.deepcopy(layers_array)
+
+    #  separating bias and weights by layers[neuron_0, neuron_1, ...]
+    neurons = []
+    for l, layer in enumerate(layers_array_copy):
+        n = 0
+        neurons_layer = []
+
     # check if a numpy array is empty
     # https://stackoverflow.com/questions/53501376/how-to-check-if-a-numpy-array-is-empty
-    # while layer[0][1] != []:
-    while np.size(layer[0]):
-        neurons_layer.append([f'layer{l}_n{n}', layer[0][0], layer[1][0]])
-        n += 1
+        while np.size(layer[0]):
+            neurons_layer.append([f'layer{l}_n{n}', layer[0][0], layer[1][0]])
+            n += 1
+            layers_array_copy[l][0] = np.delete(layers_array_copy[l][0], 0)
+            layers_array_copy[l][1] = layers_array_copy[l][1][1:]
 
-        layers_array_copy[l][0] = np.delete(layers_array_copy[l][0], 0)
-        # np.delete(layers_array_copy[l][1], 0)
-        layers_array_copy[l][1] = layers_array_copy[l][1][1:]
-        # layer[0] = layer[0][1:]
-        # layer[1] = layer[1][1:]
-        # del layer[0][0]
-        # del layer[1][0]
-    # for b_w in layer:
-    #     neurons.append(b_w[0].tolist())
-    neurons.append(neurons_layer)
+        neurons.append(neurons_layer)
+
+    # save neurons to a python file
+    save_file(path_log, neurons)
+    return neurons
+
+
+neurons = new_func(layers_array, path_log, save_file)
+
+
+def neurons_list_gen_save(layers_array, path_log):
+    """
+    Separates the bias and weights of each neuron in the given layers array,
+    saves them to a python file, and returns a list of the neurons.
+
+    Args:
+    - layers_array: a list of tuples representing the bias and weights of each neuron in each layer
+    - path_log: a string representing the file path where the neurons will be saved
+    - save_file: a function that saves an object to a file
+
+    Returns:
+    - neurons: a list of lists, where each nested list contains a neuron's name, bias, and weights
+        neurons = [
+                    [
+                        ['layer0_n0', -0.12465311, [...]],  # 'layer0_n0', bias, [weights]
+                        ['layer0_n1', 0.17614965, [...]],
+                        ['layer0_n2', 0.8049891, [...]],
+                        ['layer0_n3', 0.38902378, [...]]
+                    ],
+                    [[...], [...], [...]],                  # 'layer1_n0', bias, [weights]
+                    [[...], [...]],                         # 'layer2_n0', bias, [weights]
+                    [[...], [...], [...]],
+                    [[...], [...], [...], [...]],
+                    [[...], [...], [...], [...], [...], [...], [...], [...], [...], ...]
+                ]
+    """
+
+    # Create a deep copy of layers_array to avoid changing the original
+    layers_array_copy = copy.deepcopy(layers_array)
+
+    # Separate bias and weights by layers[neuron_0, neuron_1, ...]
+    neurons = []
+    for l, layer in enumerate(layers_array_copy):
+        n = 0
+        neurons_layer = []
+
+        # Check if a numpy array is empty
+        while np.size(layer[0]):
+            neurons_layer.append([f'layer{l}_n{n}', layer[0][0], layer[1][0]])
+            n += 1
+            layers_array_copy[l][0] = np.delete(layers_array_copy[l][0], 0)
+            layers_array_copy[l][1] = layers_array_copy[l][1][1:]
+
+        neurons.append(neurons_layer)
+
+    # Save neurons to a python file
+    save_file(path_log, neurons, file_name="neurons.py")
+
+    return neurons
 
 # neurons = [
 #     [
@@ -84,47 +161,21 @@ for l, layer in enumerate(layers_array_copy):
 #     [[...], [...], [...], [...]],
 #     [[...], [...], [...], [...], [...], [...], [...], [...], [...], ...]
 # ]
+
+
 # -------------------------------------------------
-max = 0
-# getting max
+# getting max number of neurons in a layer from all NN layers
+neurons_number_max = 0
 for l, layer in enumerate(layers_array):
-    if len(layer[0]) > max:
-        max = len(layer[0])
-# Adding ghost neurons layers with less neurons
-neurons_with_ghosts = copy.deepcopy(neurons)
-for l, layer in enumerate(neurons_with_ghosts):
-    if len(layer) < max:
-        layer_length = len(layer)
-        N = max - layer_length
-        for n in range(N):
-            neurons_with_ghosts[l].append(
-                [f'layer{l}_n{layer_length + n}', 0, [0] * len(layer[0][2])])
-print("ghosts done")
+    if len(layer[0]) > neurons_number_max:
+        neurons_number_max = len(layer[0])
 
-# neurons_with_ghosts = [
-#     [
-#         ['layer0_n0', -0.12465311, [...]],  # 'layer0_n0', bias, [weights]
-#         ['layer0_n1', 0.17614965, [...]],
-#         ['layer0_n2', 0.8049891, [...]],
-#         ['layer0_n3', 0.38902378, [...]],
-#         ['layer0_n4', 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, ...]], # ghost
-#         ['layer0_n5', 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, ...]], # ghost
-#         ...
-#     ],
-#     [[...], [...], [...]],                  # 'layer1_n0', bias, [weights]
-#     [[...], [...]],                         # 'layer2_n0', bias, [weights]
-#     [[...], [...], [...]],
-#     [[...], [...], [...], [...]],
-#     [[...], [...], [...], [...], [...], [...], [...], [...], [...], ...]
-# ]
-
-# -------------------------------------------------
 # joining together neurons with same index (ex: neuron_0 'n0')
 neurons_joined_PortMap_structure = []
-for n in range(0, max):
+for n in range(0, neurons_number_max):
     neurons_joined = []
 
-    for l, layer in enumerate(neurons_with_ghosts):
+    for l, layer in enumerate(neurons):
         if len(layer) > n:
             neurons_joined.append(layer[n])
 
@@ -161,11 +212,65 @@ print("neurons_joined done")
 #     [[...], [...], [...], [...], [...], [...]],
 #     ...
 # ]
+# -------------------------------------------------
+# getting max number of neurons in a layer from all NN layers
+max_number_of_layers = 0
+for n, neuron_level in enumerate(neurons_joined_PortMap_structure):
+    if len(neuron_level) > max_number_of_layers:
+        max_number_of_layers = len(neuron_level)
+
+# creating 1 ghost neuron for each layer
+ghost_neuron_models = []
+layers_num_sequence = []
+for l, layer in enumerate(neurons):
+    ghost_neuron_models.append([f'layer{l}_model', 0, [0] * len(layer[0][2])])
+    layers_num_sequence.append(l)
+
+
+# Adding ghost neurons layers with less neurons
+neurons_with_ghosts = copy.deepcopy(neurons_joined_PortMap_structure)
+for level, neuron_level in enumerate(neurons_with_ghosts):
+    neuron_level_length = len(neuron_level)
+
+    if neuron_level_length < max_number_of_layers:
+        # discovering which layer has no neurons in neuron_level
+        remove_list = []
+        for n, neuron in enumerate(neuron_level):
+            # get the layer number from neuron name
+            layer_num = int(neuron[0].split('_')[0].replace('layer', ''))
+            remove_list.append(layer_num)
+
+        layers_without_neuron_list = list(
+            set(layers_num_sequence) - set(remove_list))
+
+        # adding ghost neurons to neuron_level
+        I = max_number_of_layers - neuron_level_length
+        for i in range(I):
+            neurons_with_ghosts[level].append(
+                ghost_neuron_models[layers_without_neuron_list[i]])
+print("ghosts done")
+
+# neurons_with_ghosts = [
+#     [
+#         ['layer0_n0', -0.12465311, [...]],  # 'layer0_n0', bias, [weights]
+#         ['layer0_n1', 0.17614965, [...]],
+#         ['layer0_n2', 0.8049891, [...]],
+#         ['layer0_n3', 0.38902378, [...]],
+#         ['layer0_n4', 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, ...]], # ghost
+#         ['layer0_n5', 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, ...]], # ghost
+#         ...
+#     ],
+#     [[...], [...], [...]],                  # 'layer1_n0', bias, [weights]
+#     [[...], [...]],                         # 'layer2_n0', bias, [weights]
+#     [[...], [...], [...]],
+#     [[...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...], [...], [...], [...], [...], ...]
+# ]
 
 # ----------------------------------------------------------------
 # transforming PM_matrix to a list of lists (without the layer name, only the weights and bias)
 PM_matrix_list = []
-for neuron_level in neurons_joined_PortMap_structure:
+for neuron_level in neurons_with_ghosts:
     PM_matrix_neuron = []
 
     # for neuron in neuron_level:
@@ -206,35 +311,41 @@ for neuron_level in PM_matrix_list:
         weights = neuron[2]
         if REVERSE_WEIGHTS:
             weights = neuron[2].reverse()  # reverse the weights list
-        if BIAS_FIRST:
-            weights_bias = weights
-            # add bias to the beginning of the weights list
-            weights_bias.insert(0, neuron[1])
-            PM_matrix_neuron.append([neuron[0], weights_bias])
+
+        # if BIAS_ENDING == True, bias is at the end of the shift_registers (passed first to the FPGA)
+        if BIAS_ENDING:
+            bias_weights = copy.deepcopy(weights)
+            # add bias to the beginning of the weights list = ending of 'shift registers'
+            bias_weights.insert(0, neuron[1])
+            PM_matrix_neuron.append([neuron[0], bias_weights])
             # ! attention: if you need to insert the bias in the beginning of the list, use the above code
         else:
             # ! attention: if you need to insert the bias in the end of the list, use the below code
-            bias_weights = weights  # weights
+            weights_bias = copy.deepcopy(weights)  # weights
             # add bias to the end of the weights list
-            bias_weights.insert(len(bias_weights), neuron[1])
-            PM_matrix_neuron.append([neuron[0], bias_weights])
+            weights_bias.insert(len(weights_bias), neuron[1])
+            PM_matrix_neuron.append([neuron[0], weights_bias])
 
     PM_matrix_list2.append(PM_matrix_neuron)
 
+# save PM_matrix_list2 to a python file
+with open(f"{path_log}/PM_matrix_list2.py", "w") as writer:
+    writer.write("PM_matrix_list2 = \n")
+    writer.write(str(PM_matrix_list2))
 
 print("PM_matrix_list2: done")
 
 # PM_matrix_list2 = [
-#     [
-#         ['layer5_n0', [...]],
+#     [ # neuron 0
+#         ['layer5_n0', [...]], # [bias, weights] float list
 #         ['layer4_n0', [...]],
 #         ['layer3_n0', [...]],
 #         ['layer2_n0', [...]],
 #         ['layer1_n0', [...]]
 #     ],
-#     [[...], [...], [...], [...], [...]],
-#     [[...], [...], [...], [...], [...]],
-#     [[...], [...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...]],  # neuron 1
+#     [[...], [...], [...], [...], [...]],  # neuron 2
+#     [[...], [...], [...], [...], [...]],  # neuron 3
 #     [[...], [...], [...], [...], [...]],
 #     [[...], [...], [...], [...], [...]],
 #     [[...], [...], [...], [...], [...]],
@@ -262,6 +373,7 @@ else:
 
 PM_matrix_bin = copy.deepcopy(PM_matrix_list2)
 
+
 with open(f"{path_log}/weights_bin_log.txt", "w") as writer:
 
     for neuron_level in PM_matrix_bin:
@@ -284,8 +396,59 @@ with open(f"{path_log}/weights_bin_log.txt", "w") as writer:
             neuron[1] = weights_bias_list
         writer.write('\n')
 
+
+# save PM_matrix_bin to a python file
+with open(f"{path_log}/PM_matrix_bin.py", "w") as writer:
+    writer.write("PM_matrix_bin = \n")
+    writer.write(str(PM_matrix_bin))
+
 print("PM_matrix_bin: done")
 
+# PM_matrix_bin = [
+#     [ # neuron 0
+#         ['layer5_n0', ['11101001', ...]], # [bias, weights] bin list
+#         ['layer4_n0', [...]],
+#         ['layer3_n0', [...]],
+#         ['layer2_n0', [...]],
+#         ['layer1_n0', [...]]
+#     ],
+#     [[...], [...], [...], [...], [...]],  # neuron 1
+#     [[...], [...], [...], [...], [...]],  # neuron 2
+#     [[...], [...], [...], [...], [...]],  # neuron 3
+#     [[...], [...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...]],
+#     [[...], [...], [...], [...], [...]],
+#     ...
+# ]
+# ----------------------------------------------------------------
+neurons_bin = copy.deepcopy(neurons)
+for layer in neurons_bin:
+
+    for neuron in layer:
+
+        weights_bias_list = []
+        neuron[1] = Fxp(neuron[1], signed=is_signed,
+                        n_word=BIT_WIDTH, n_frac=fractional).bin()
+        for item in neuron[2]:
+            weights_bias_list.append(
+                Fxp(item, signed=is_signed, n_word=BIT_WIDTH, n_frac=fractional).bin())
+            # print in a text file the code line below
+
+        neuron[2] = weights_bias_list
+# save neurons_bin to a python file
+with open(f"{path_log}/neurons_bin.py", "w") as writer:
+    writer.write("neurons_bin = ")
+    writer.write(str(neurons_bin))
+
+# ----------------------------------------------------------------
+# Creating a binary list of lists with the just the weights and bias of each neuron
 PM_matrix_to_testbench = []
 for neuron_level in PM_matrix_bin:
     level_list = []
@@ -297,18 +460,32 @@ for neuron_level in PM_matrix_bin:
 print("PM_matrix_to_testbench: done")
 
 # write PM_matrix_to_testbench to a text file
-with open(f"models/model_conversion/mini/testbench/weights_bin.txt", "w") as writer:
+save_path = "models/model_conversion/mini/testbench"
+
+with open(f"{save_path}/weights_bin.txt", "w") as writer:
     for i in range(len(PM_matrix_to_testbench[0])):  # width range
         for n, neuron_level in enumerate(PM_matrix_to_testbench):
             writer.write(f"{neuron_level[i]} ")
             #     writer.write(f"{neuron} ")
         writer.write("\n")
 
-with open(f"models/model_conversion/mini/testbench/weights_bin_log.txt", "w") as writer:
+
+with open(f"{save_path}/weights_bin_log.txt", "w") as writer:
     for i in range(len(PM_matrix_to_testbench[0])):  # width range
         for n, neuron_level in enumerate(PM_matrix_to_testbench):
             writer.write(str(f"it{i}_n{n}").ljust(
                 8, ' ') + f":{neuron_level[i]}  ")
+            #     writer.write(f"{neuron} ")
+        writer.write("\n")
+
+# ----------------------------------------------------------------
+# saving weights_bin.txt to the NNs folder
+whole_dir = os.getcwd()
+NN_save_path = f"{whole_dir}/NNs/NN_6Layers_8bits_4_3_2_3_4_64/tb_Files"
+with open(f"{NN_save_path}/weights_bin.txt", "w") as writer:
+    for i in range(len(PM_matrix_to_testbench[0])):  # width range
+        for n, neuron_level in enumerate(PM_matrix_to_testbench):
+            writer.write(f"{neuron_level[i]} ")
             #     writer.write(f"{neuron} ")
         writer.write("\n")
 

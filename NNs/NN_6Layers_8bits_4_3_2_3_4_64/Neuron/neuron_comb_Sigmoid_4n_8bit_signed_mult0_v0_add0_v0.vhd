@@ -73,6 +73,7 @@ END COMPONENT;
     SIGNAL s_Wout : signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
 
 BEGIN
+	 inst_shift_reg : shift_reg_4n PORT MAP(update_weights, rst, W_in , s_Wout );
 
         -- MAC ja registra a saida 
     U_MAC : MAC_comb_4n_8bit_signed_mult0_v0_add0_v0 PORT MAP(
@@ -80,7 +81,7 @@ BEGIN
         IO_in,
         s_Wout,
         out_reg_MAC );
-        inst_shift_reg : shift_reg_4n PORT MAP(update_weights, rst, W_in , s_Wout );
+    
 
 
     fx_activation_inst : activation_fx PORT MAP(
