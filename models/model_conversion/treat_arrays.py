@@ -843,3 +843,5 @@ generate_weights_file(arrays_path,
 # path must contain: the model
 # path_log must be created if no exists
 # save_path must exists (path of NN) or it can be created??
+
+# todo: make or find a simulator to get the expected results from the NN
