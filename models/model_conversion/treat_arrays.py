@@ -472,7 +472,7 @@ def write_weights_log(path_log: str, bit_width: int, is_signed: bool, fractional
             writer.write('\n')
 
     # save PM_matrix_bin to a python file
-    save_file(path_log, PM_matrix_bin, file_name="PM_matrix_bin.py")
+    save_file(path_log, pm_matrix_bin, file_name="PM_matrix_bin.py")
 
 # def save_neurons_to_file(path_log, neurons, BIT_WIDTH, is_signed, fractional):
 #     neurons_bin = copy.deepcopy(neurons)
