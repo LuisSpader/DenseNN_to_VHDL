@@ -21,19 +21,19 @@ END ENTITY;
 ARCHITECTURE arch OF activation_fx IS
     -------------------- COMPONENTS --------------------
 
-COMPONENT ReLU IS
-    PORT (
-        fx_in : IN signed(BITS_FX_IN - 1 DOWNTO 0);
-        fx_out : OUT signed (BITS_FX_OUT - 1 DOWNTO 0)
-    );
-END COMPONENT;
+    COMPONENT ReLU IS
+        PORT (
+            fx_in  : IN signed(BITS_FX_IN - 1 DOWNTO 0);
+            fx_out : OUT signed (BITS_FX_OUT - 1 DOWNTO 0)
+        );
+    END COMPONENT;
 
-COMPONENT Leaky_ReLU IS
-    PORT (
-        fx_in : IN signed(BITS_FX_IN - 1 DOWNTO 0);
-        fx_out : OUT signed (BITS_FX_OUT - 1 DOWNTO 0)
-    );
-END COMPONENT;
+    COMPONENT Leaky_ReLU IS
+        PORT (
+            fx_in  : IN signed(BITS_FX_IN - 1 DOWNTO 0);
+            fx_out : OUT signed (BITS_FX_OUT - 1 DOWNTO 0)
+        );
+    END COMPONENT;
 
     -- ROM
     COMPONENT ROM_fx_8bitaddr_8width IS
@@ -64,12 +64,13 @@ BEGIN
         -- BEGIN
         -- fx_in_ROM <= to_signed(to_integer(fx_in), fx_in_ROM'length); -- Numeric_std
         fx_in_ROM <= fx_in((2 * BITS) - 1 DOWNTO BITS);
-        U_ROM : ROM_fx_8bitaddr_8width PORT MAP(
-            STD_LOGIC_VECTOR(fx_in_ROM),
-            s_fx_out_std
-        ); -- input: address (8), output: data_out (8)
+        -- U_ROM : ROM_fx_8bitaddr_8width PORT MAP(
+        --     STD_LOGIC_VECTOR(fx_in_ROM),
+        --     s_fx_out_std
+        -- ); -- input: address (8), output: data_out (8)
         -- END PROCESS fx_activation_inst;
-        s_fx_out <= signed(s_fx_out_std);
+        -- s_fx_out <= signed(s_fx_out_std);
+        s_fx_out  <= fx_in_ROM;
     END GENERATE;
 
     PROCESS (clk, rst)
@@ -82,5 +83,5 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
-    
+
 END ARCHITECTURE;

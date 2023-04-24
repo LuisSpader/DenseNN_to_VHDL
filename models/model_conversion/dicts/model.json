@@ -18,7 +18,7 @@
             "name": "fc1",
             "trainable": true,
             "dtype": "float32",
-            "units": 15,
+            "units": 4,
             "activation": "linear",
             "use_bias": true,
             "kernel_initializer": {
@@ -109,7 +109,7 @@
             "name": "fc2",
             "trainable": true,
             "dtype": "float32",
-            "units": 15,
+            "units": 3,
             "activation": "linear",
             "use_bias": true,
             "kernel_initializer": {
@@ -226,7 +226,7 @@
             "name": "fc3",
             "trainable": true,
             "dtype": "float32",
-            "units": 16,
+            "units": 3,
             "activation": "linear",
             "use_bias": true,
             "kernel_initializer": {
@@ -317,7 +317,7 @@
             "name": "fc4",
             "trainable": true,
             "dtype": "float32",
-            "units": 32,
+            "units": 4,
             "activation": "linear",
             "use_bias": true,
             "kernel_initializer": {
@@ -399,97 +399,6 @@
         "class_name": "QActivation",
         "config": {
             "name": "relu4",
-            "dtype": "float32"
-        }
-    },
-    "fc5": {
-        "class_name": "QDense",
-        "config": {
-            "name": "fc5",
-            "trainable": true,
-            "dtype": "float32",
-            "units": 32,
-            "activation": "linear",
-            "use_bias": true,
-            "kernel_initializer": {
-                "class_name": "QInitializer",
-                "config": {
-                    "initializer": {
-                        "class_name": "LecunUniform",
-                        "config": {
-                            "seed": null
-                        },
-                        "__passive_serialization__": true
-                    },
-                    "use_scale": true,
-                    "quantizer": {
-                        "class_name": "quantized_bits",
-                        "config": {
-                            "bits": 8,
-                            "integer": 0,
-                            "symmetric": 0,
-                            "alpha": 1,
-                            "keep_negative": true,
-                            "use_stochastic_rounding": false,
-                            "qnoise_factor": 1.0
-                        },
-                        "__passive_serialization__": true
-                    }
-                }
-            },
-            "bias_initializer": {
-                "class_name": "Zeros",
-                "config": {}
-            },
-            "kernel_regularizer": null,
-            "bias_regularizer": null,
-            "activity_regularizer": null,
-            "kernel_constraint": {
-                "class_name": "Clip",
-                "config": {
-                    "min_value": -1,
-                    "max_value": 1
-                }
-            },
-            "bias_constraint": {
-                "class_name": "Clip",
-                "config": {
-                    "min_value": -1,
-                    "max_value": 1
-                }
-            },
-            "kernel_quantizer": {
-                "class_name": "quantized_bits",
-                "config": {
-                    "bits": 8,
-                    "integer": 0,
-                    "symmetric": 0,
-                    "alpha": 1,
-                    "keep_negative": true,
-                    "use_stochastic_rounding": false,
-                    "qnoise_factor": 1.0
-                }
-            },
-            "bias_quantizer": {
-                "class_name": "quantized_bits",
-                "config": {
-                    "bits": 8,
-                    "integer": 0,
-                    "symmetric": 0,
-                    "alpha": 1,
-                    "keep_negative": true,
-                    "use_stochastic_rounding": false,
-                    "qnoise_factor": 1.0
-                }
-            },
-            "kernel_range": null,
-            "bias_range": null
-        }
-    },
-    "relu5": {
-        "class_name": "QActivation",
-        "config": {
-            "name": "relu5",
             "dtype": "float32"
         }
     },

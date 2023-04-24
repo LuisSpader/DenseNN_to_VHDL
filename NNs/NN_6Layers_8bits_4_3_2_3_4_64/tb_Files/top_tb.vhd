@@ -4,15 +4,15 @@ USE ieee.numeric_std.ALL;
 USE std.textio.ALL;
 USE ieee.std_logic_textio.ALL; -- para tratamento de arquivos e texto-> file_open...  
 USE work.parameters.ALL;
-ENTITY top_tb IS
 
+ENTITY top_tb IS
     GENERIC (
         BITS       : NATURAL := 8;
         NUM_INPUTS : NATURAL := 64;
         TOTAL_BITS : NATURAL := 512
     );
-
 END top_tb;
+
 ARCHITECTURE tb OF top_tb IS
     CONSTANT clk_hz                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : INTEGER                                      := 100e6;
     CONSTANT clk_period                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         : TIME                                         := 1 sec / clk_hz;

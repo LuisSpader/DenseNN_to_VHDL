@@ -7,7 +7,6 @@ vmap work rtl_work
 
 vlog -vlog01compat -work work +incdir+C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/db {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/db/mult_hb01.v}
 vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/parameters.vhd}
-vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Neuron/ROM_fx_8bitaddr_8width.vhd}
 vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/ReLU.vhd}
 vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/mult0_v0.vhd}
 vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/activation_fx.vhd}

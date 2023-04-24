@@ -1,6 +1,7 @@
 import tensorflow as tf
+import qkeras as qk
 import json
-from qkeras.utils import _add_supported_quantized_objects
+# from qkeras.utils import _add_supported_quantized_objects
 import json
 import numpy as np
 
@@ -106,14 +107,15 @@ def file_to_dict(save_path, model_dict, file_name="model"):
     print(f"tf_to_dict() -> Creating : {save_path}/dicts/model.json")
 
 
-co = {}
-_add_supported_quantized_objects(co)
+co = {'QActivation': qk.qlayers.QActivation}
+qk.utils._add_supported_quantized_objects(co)
 
 # Load the Tensorflow model
 # model = tf.keras.models.load_model("model.h5")
 
 
-model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bits\KERAS_check_best_model.model"
+model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bitsmini\KERAS_check_best_model.model"
+# model_path = r"C:\Users\luisa\OneDrive\Documentos\GitHub\Autoencoder-for-FPGA\model\QAE_model8bits\KERAS_check_best_model.model"
 model = tf.keras.models.load_model(model_path, custom_objects=co)
 tf_to_dict(model, save_path="models/model_conversion")
 

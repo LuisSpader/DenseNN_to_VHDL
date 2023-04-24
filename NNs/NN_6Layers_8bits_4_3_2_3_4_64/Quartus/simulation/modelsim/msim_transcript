@@ -27,16 +27,6 @@
 # -- Compiling package parameters
 # -- Compiling package body parameters
 # -- Loading package parameters
-# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Neuron/ROM_fx_8bitaddr_8width.vhd}
-# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
-# -- Loading package STANDARD
-# -- Loading package TEXTIO
-# -- Loading package std_logic_1164
-# -- Loading package NUMERIC_STD
-# -- Compiling entity ROM_fx_8bitaddr_8width
-# -- Compiling architecture arch of ROM_fx_8bitaddr_8width
-# ** Warning: C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Neuron/ROM_fx_8bitaddr_8width.vhd(281): (vcom-1074) Non-locally static OTHERS choice is allowed only if it is the only choice of the only association.
-# 
 # vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/ReLU.vhd}
 # Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
 # -- Loading package STANDARD
@@ -379,8 +369,7 @@
 # Loading work.camada4_relu_4neuron_8bits_3n_signed(arch)
 # Loading work.camada5_sigmoid_64neuron_8bits_4n_signed(arch)
 # Loading work.neuron_comb_sigmoid_4n_8bit_signed_mult0_v0_add0_v0(behavior)
-# Loading work.rom_fx_8bitaddr_8width(arch)
-# ** Warning: Design size of 1611 instances exceeds ModelSim ALTERA recommended capacity.
+# ** Warning: Design size of 1546 instances exceeds ModelSim ALTERA recommended capacity.
 # This may because you are loading cell libraries which are not recommended with
 # the ModelSim Altera version. Expect performance to be adversely affected.
 # 
@@ -457,6 +446,8 @@
 # add wave -noupdate -group Weights -color Magenta -radix decimal /top_tb/c5_n61_W_in
 # add wave -noupdate -group Weights -color Magenta -radix decimal /top_tb/c5_n62_W_in
 # add wave -noupdate -group Weights -color Magenta -radix decimal /top_tb/c5_n63_W_in
+# add wave -noupdate -expand -group {Output
+# } -radix binary /top_tb/UUT/camada5_inst_5/neuron_inst_0/s_Wout
 # add wave -noupdate -expand -group {Output
 # } -radix binary /top_tb/UUT/camada5_inst_5/neuron_inst_0/out_reg_MAC
 # add wave -noupdate -expand -group {Output
@@ -595,7 +586,6 @@
 # } -radix binary /top_tb/UUT/camada5_inst_5/neuron_inst_63/fx_activation_inst/fx_out
 # add wave -noupdate -expand -group {Output
 # } -color Green -radix unsigned -childformat {{/top_tb/c5_n63_IO_out(7) -radix decimal} {/top_tb/c5_n63_IO_out(6) -radix decimal} {/top_tb/c5_n63_IO_out(5) -radix decimal} {/top_tb/c5_n63_IO_out(4) -radix decimal} {/top_tb/c5_n63_IO_out(3) -radix decimal} {/top_tb/c5_n63_IO_out(2) -radix decimal} {/top_tb/c5_n63_IO_out(1) -radix decimal} {/top_tb/c5_n63_IO_out(0) -radix decimal}} -subitemconfig {/top_tb/c5_n63_IO_out(7) {-color Green -height 15 -radix decimal} /top_tb/c5_n63_IO_out(6) {-color Green -height 15 -radix decimal} /top_tb/c5_n63_IO_out(5) {-color Green -height 15 -radix decimal} /top_tb/c5_n63_IO_out(4) {-color Green -height 15 -radix decimal} /top_tb/c5_n63_IO_out(3) {-color Green -height 15 -radix decimal} /top_tb/c5_n63_IO_out(2) {-color Green -height 15 -radix decimal} /top_tb/c5_n63_IO_out(1) {-color Green -height 15 -radix decimal} /top_tb/c5_n63_IO_out(0) {-color Green -height 15 -radix decimal}} /top_tb/c5_n63_IO_out
-# add wave -noupdate -radix binary /top_tb/UUT/camada5_inst_5/neuron_inst_0/s_Wout
 # add wave -noupdate -radix binary /top_tb/UUT/camada5_inst_5/neuron_inst_63/s_Wout
 # add wave -noupdate -radix binary /top_tb/UUT/camada4_inst_4/neuron_inst_0/out_reg_MAC
 # add wave -noupdate -radix binary /top_tb/UUT/camada4_inst_4/neuron_inst_0/s_Wout
@@ -604,7 +594,7 @@
 # add wave -noupdate -radix binary /top_tb/UUT/camada3_inst_3/neuron_inst_0/out_reg_MAC
 # add wave -noupdate -radix binary /top_tb/UUT/camada3_inst_3/neuron_inst_0/s_Wout
 # TreeUpdate [SetDefaultTree]
-# WaveRestoreCursors {{Cursor 1} {67483 ps} 0}
+# WaveRestoreCursors {{Cursor 1} {54239 ps} 0}
 # quietly wave cursor active 1
 # configure wave -namecolwidth 455
 # configure wave -valuecolwidth 100
@@ -620,136 +610,8 @@
 # configure wave -timeline 0
 # configure wave -timelineunits ns
 # update
-# WaveRestoreZoom {40348 ps} {89902 ps}
+# WaveRestoreZoom {0 ps} {154124 ps}
 # run 50 ms
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_63/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_62/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_61/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_60/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_59/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_58/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_57/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_56/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_55/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_54/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_53/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_52/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_51/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_50/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_49/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_48/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_47/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_46/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_45/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_44/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_43/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_42/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_41/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_40/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_39/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_38/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_37/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_36/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_35/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_34/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_33/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_32/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_31/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_30/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_29/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_28/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_27/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_26/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_25/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_24/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_23/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_22/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_21/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_20/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_19/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_18/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_17/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_16/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_15/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_14/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_13/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_12/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_11/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_10/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_9/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_8/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_7/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_6/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_5/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_4/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_3/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_2/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_1/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_0/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
 # ** Warning: NUMERIC_STD.">": metavalue detected, returning FALSE
 #    Time: 0 ps  Iteration: 0  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.">": metavalue detected, returning FALSE
@@ -814,134 +676,6 @@
 #    Time: 0 ps  Iteration: 2  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.">": metavalue detected, returning FALSE
 #    Time: 0 ps  Iteration: 2  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_0/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_1/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_2/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_3/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_4/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_5/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_6/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_7/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_8/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_9/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_10/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_11/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_12/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_13/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_14/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_15/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_16/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_17/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_18/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_19/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_20/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_21/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_22/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_23/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_24/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_25/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_26/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_27/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_28/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_29/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_30/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_31/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_32/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_33/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_34/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_35/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_36/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_37/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_38/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_39/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_40/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_41/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_42/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_43/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_44/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_45/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_46/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_47/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_48/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_49/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_50/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_51/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_52/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_53/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_54/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_55/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_56/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_57/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_58/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_59/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_60/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_61/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_62/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 3  Instance: /top_tb/UUT/camada5_inst_5/neuron_inst_63/fx_activation_inst/Sigmoid_ROM_inst/U_ROM
 # ** Warning: NUMERIC_STD.">": metavalue detected, returning FALSE
 #    Time: 15 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.">": metavalue detected, returning FALSE
@@ -951,101 +685,101 @@
 # ** Warning: NUMERIC_STD.">": metavalue detected, returning FALSE
 #    Time: 15 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 735 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 725 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 735 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 725 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 755 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 745 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 755 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 745 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 755 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 745 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 755 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 745 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 755 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 745 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 755 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 755 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 765 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 765 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 765 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 765 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 775 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 765 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 775 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 765 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 775 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 775 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 775 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 785 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 775 ns  Iteration: 8  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 795 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 775 ns  Iteration: 8  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 795 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 775 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 795 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 785 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 795 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 795 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 805 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 795 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 815 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 805 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 815 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 805 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 815 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 805 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 815 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 805 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 815 ns  Iteration: 8  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 815 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 815 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 815 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 815 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 815 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 815 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 815 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 815 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 815 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 815 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 825 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 825 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 825 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 825 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 825 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 825 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 825 ns  Iteration: 8  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 835 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 825 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 835 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 825 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 835 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 825 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 835 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 825 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 835 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 825 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 835 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 835 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 835 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 835 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 835 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 835 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 835 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 835 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 835 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 845 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 845 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 845 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 845 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 845 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 845 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 845 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 845 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 845 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
@@ -1057,47 +791,51 @@
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 855 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 855 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 855 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 855 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 855 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 855 ns  Iteration: 8  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 855 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 855 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 855 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 855 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 865 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 855 ns  Iteration: 9  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 865 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 865 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 865 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 865 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 865 ns  Iteration: 8  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 865 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 865 ns  Iteration: 8  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 865 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 865 ns  Iteration: 8  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 865 ns  Iteration: 8  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 865 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 865 ns  Iteration: 8  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 865 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 865 ns  Iteration: 9  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 865 ns  Iteration: 9  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 875 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 875 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 875 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 875 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 875 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 875 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 875 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 875 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 885 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 885 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 885 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 885 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 885 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
@@ -1107,71 +845,83 @@
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1035 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1035 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1035 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1045 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1055 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1055 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1065 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1075 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1075 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1080 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1095 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1095 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1095 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1105 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1105 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1115 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1115 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1125 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1125 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1115 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1125 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1130 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1135 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1135 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1135 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1145 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1175 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1175 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1180 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1195 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1205 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1205 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1215 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1215 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1225 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1230 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1245 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1255 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1255 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1265 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1245 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1275 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1275 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1275 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1280 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1295 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1295 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
@@ -1181,21 +931,23 @@
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1305 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1315 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1315 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1315 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1325 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1325 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1325 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1325 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1330 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1345 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1345 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1345 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1355 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
@@ -1205,25 +957,25 @@
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1365 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1375 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1375 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1380 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1385 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1385 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1395 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1385 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1395 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1395 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1425 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1425 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1430 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1445 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
@@ -1235,17 +987,17 @@
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1465 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1475 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1475 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1475 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1475 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1480 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1485 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1485 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1495 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1495 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1505 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
@@ -1253,41 +1005,55 @@
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1515 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1525 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1525 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1525 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1530 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1535 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1535 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1545 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1575 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1575 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1580 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1585 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1585 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1585 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1585 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1605 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1615 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1605 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1615 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1615 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1625 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1625 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1625 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1630 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1645 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1645 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1675 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1675 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1680 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
@@ -1297,35 +1063,39 @@
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1695 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1695 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1705 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1705 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1715 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1715 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1725 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1725 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1730 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1745 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1745 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1745 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1775 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1775 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1780 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1785 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1785 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1785 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1795 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1795 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1795 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1830 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
@@ -1333,49 +1103,37 @@
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1835 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1855 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1835 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1855 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1865 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1865 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1875 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1875 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1845 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1880 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1905 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1905 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1915 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1915 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1925 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1930 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 1945 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1945 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
 #    Time: 1980 ns  Iteration: 0  Instance: /top_tb
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1985 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1985 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 1995 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
+#    Time: 1995 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 1995 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 2005 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
@@ -1385,1056 +1143,4 @@
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 2015 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2025 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 2025 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2030 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2035 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2080 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2095 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2095 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2105 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2105 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2115 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2125 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2130 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2135 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2145 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2145 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2180 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2195 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2195 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2230 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2245 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2245 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2280 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2295 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2295 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2305 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2315 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2315 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2325 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2325 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2325 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2330 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2345 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2355 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2355 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2365 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2375 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2375 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2375 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2380 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2385 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2385 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2395 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2405 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2405 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2415 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2425 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2425 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2425 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2430 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2445 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2445 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2480 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2485 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2485 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2530 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2535 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2545 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2545 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2555 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2555 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2565 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2575 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2580 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2585 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2630 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2645 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2645 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2655 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2655 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2665 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2665 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2675 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2675 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2675 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2680 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2685 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2695 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2695 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2705 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2715 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2725 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2730 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2745 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2745 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2755 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2765 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2775 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2780 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2785 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2795 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2795 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2805 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2805 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2815 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2825 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2830 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2835 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2845 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2855 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2855 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2865 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2875 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2875 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2875 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2880 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2905 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2905 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2915 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2925 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2925 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2925 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2930 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 2980 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2985 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2985 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2995 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 2995 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3005 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3005 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3015 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3025 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3025 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3025 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3030 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3035 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3035 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3045 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3045 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3045 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3080 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3095 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3105 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3105 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3115 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3125 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3130 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3135 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3145 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3155 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3155 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3165 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3175 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3175 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3175 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3180 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3195 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3230 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3280 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3330 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3355 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3355 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3365 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3365 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3375 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3380 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3385 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3385 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3395 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3405 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3405 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3415 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3415 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3425 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3425 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3430 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3480 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3485 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3485 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3530 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3535 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3535 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3545 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3580 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3585 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3585 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3605 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3605 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3615 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3630 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3645 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3645 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3645 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3655 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3655 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3665 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3665 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3675 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3675 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3680 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3685 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3685 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3695 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3705 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3705 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3715 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3715 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3725 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3725 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3730 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3745 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3780 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3785 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3795 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3805 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3805 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3815 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3815 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3825 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3830 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3835 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3880 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3930 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3945 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3945 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 3980 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3985 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3985 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3995 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 3995 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4005 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4005 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4015 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4025 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4025 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4025 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4030 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4035 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4035 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4045 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4045 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4055 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4065 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4065 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4075 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4075 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4080 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4095 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4105 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4115 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4125 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4125 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4125 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4130 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4135 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4135 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4145 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4145 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4180 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4230 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4245 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4245 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4280 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4295 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4330 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4380 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4385 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4395 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4395 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4395 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4430 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4445 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4445 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4480 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4485 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4485 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4495 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4495 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4505 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4515 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4525 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4530 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4535 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4535 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4535 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4545 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4555 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4555 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4580 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4585 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4585 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4605 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4615 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4615 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4625 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4630 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4645 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4655 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4655 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4665 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4675 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4675 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4675 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4680 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4685 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4685 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4695 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4695 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4705 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4705 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4730 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4745 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4745 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4780 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4785 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4795 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4830 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4835 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4835 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4845 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4845 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4855 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4855 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4865 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4875 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4880 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4905 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4915 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4925 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4930 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4945 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4945 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4945 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 4980 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4985 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4985 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4995 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 4995 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5030 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5035 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5035 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5045 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5045 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5080 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5085 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5095 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5095 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5130 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5135 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5135 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5145 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5155 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5155 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5165 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5165 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5175 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5175 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5180 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5185 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5195 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5195 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5205 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5215 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5225 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5230 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5235 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5245 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5255 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5255 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5265 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5265 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5275 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5275 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5280 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5285 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5330 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5335 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5345 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5345 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5355 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5355 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5380 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5385 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5385 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5395 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5430 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5435 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5445 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5455 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5455 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5465 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5475 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5475 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5475 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5480 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5485 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5485 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5495 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5495 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5495 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5505 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5505 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5515 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5525 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5525 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5525 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5530 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5535 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5545 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5580 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5585 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5595 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5630 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5635 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5645 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5645 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5680 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5685 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5685 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5730 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5735 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5745 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5755 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5755 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5765 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5775 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5775 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5775 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5780 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5785 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5785 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5785 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5830 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5835 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5835 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5845 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5845 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5845 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5880 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5885 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5895 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5905 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5905 ns  Iteration: 7  Instance: /top_tb/UUT/camada2_inst_2/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5915 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5915 ns  Iteration: 7  Instance: /top_tb/UUT/camada3_inst_3/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5925 ns  Iteration: 7  Instance: /top_tb/UUT/camada4_inst_4/neuron_inst_3/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5930 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5935 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5945 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_1/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5945 ns  Iteration: 7  Instance: /top_tb/UUT/camada1_inst_1/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Error: (vsim-3543) TEXTIO procedure READ(CHARACTER) : Parameter L designates an empty string.
-#    Time: 5980 ns  Iteration: 0  Instance: /top_tb
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5985 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_0/fx_activation_inst/ReLU_inst/ReLU_inst
-# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
-#    Time: 5985 ns  Iteration: 6  Instance: /top_tb/UUT/camada0_inst_0/neuron_inst_2/fx_activation_inst/ReLU_inst/ReLU_inst
-write format wave -window .main_pane.wave.interior.cs.body.pw.wf C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/simulation/modelsim/wave.do
-write format wave -window .main_pane.wave.interior.cs.body.pw.wf C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/simulation/modelsim/wave_colors.do
