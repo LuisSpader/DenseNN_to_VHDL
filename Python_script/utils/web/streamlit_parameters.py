@@ -80,14 +80,14 @@ def streamlit_parameters():
 
             # st.write('You selected:', option)
             if fx_activation_option == 'ReLU':
-                BASE_DICT_HIDDEN['Neuron_arch']['Activation_fx']['ReLU'] = True
-                BASE_DICT_HIDDEN['Neuron_arch']['Activation_fx']['Leaky_ReLU']['Using'] = False
+                BASE_DICT_HIDDEN['Neuron_arch']['Activation_function']['ReLU'] = True
+                BASE_DICT_HIDDEN['Neuron_arch']['Activation_function']['Leaky_ReLU']['Using'] = False
                 fig = plot_fx_activations(leaky_attenuation=2)
                 st.plotly_chart(fig, use_container_width=True)
 
             else:
-                BASE_DICT_HIDDEN['Neuron_arch']['Activation_fx']['ReLU'] = False
-                BASE_DICT_HIDDEN['Neuron_arch']['Activation_fx']['Leaky_ReLU']['Using'] = True
+                BASE_DICT_HIDDEN['Neuron_arch']['Activation_function']['ReLU'] = False
+                BASE_DICT_HIDDEN['Neuron_arch']['Activation_function']['Leaky_ReLU']['Using'] = True
 
                 Leaky_attenuation = st.slider(label="Leaky attenuation (divides by 2^n)",
                                               min_value=1,
@@ -95,7 +95,7 @@ def streamlit_parameters():
                                               value=2,
                                               step=1  # int
                                               )
-                BASE_DICT_HIDDEN['Neuron_arch']['Activation_fx']['Leaky_ReLU']['Leaky_attenuation'] = Leaky_attenuation
+                BASE_DICT_HIDDEN['Neuron_arch']['Activation_function']['Leaky_ReLU']['Leaky_attenuation'] = Leaky_attenuation
 
                 fig = plot_fx_activations(leaky_attenuation=Leaky_attenuation)
                 st.plotly_chart(fig, use_container_width=True)

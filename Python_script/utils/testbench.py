@@ -322,7 +322,7 @@ def tb_txt_gen(testbench_path: str,
         os.makedirs(testbench_path)
 
     weights_file_path = f"{testbench_path}/weights_bin.txt"
-    inputs_file_path = f"{testbench_path}/inputs_string.txt"
+    inputs_file_path = f"{testbench_path}/tb_inputs.txt"
     outputs_file_path = f"{testbench_path}/tb_outputs.txt"
     # -----------------------------------------------------------------------------------------------------
     tb_txt = (f'''LIBRARY ieee;

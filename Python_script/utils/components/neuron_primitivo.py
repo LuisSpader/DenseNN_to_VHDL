@@ -215,10 +215,10 @@ def Neuron_Gen_from_dict(
     # output_name = 'IO_out'
 
     neuron_type = fx_activation  # ReLU, Leaky, Softmax
-    leaky_attenuation = layer_dict['Neuron_arch']['Activation_fx']['Leaky_ReLU']['Leaky_attenuation']
+    leaky_attenuation = layer_dict['Neuron_arch']['Activation_function']['Leaky_ReLU']['Leaky_attenuation']
     # leaky_attenuation = int
     # IO_type = IO_type
-    input_mem_bits = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem']
+    input_mem_bits = layer_dict['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem']
 
     # -------------------- PRE DEFINED PARAMETERS --------------------
 
@@ -632,10 +632,10 @@ def Neuron_Gen_from_dict2(
     # output_name = 'IO_out'
 
     neuron_type = fx_activation  # ReLU, Leaky, Softmax
-    leaky_attenuation = layers_dict_list[i]['Neuron_arch']['Activation_fx']['Leaky_ReLU']['Leaky_attenuation']
+    leaky_attenuation = layers_dict_list[i]['Neuron_arch']['Activation_function']['Leaky_ReLU']['Leaky_attenuation']
     # leaky_attenuation = int
     # IO_type = IO_type
-    input_mem_bits = layers_dict_list[i]['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem']
+    input_mem_bits = layers_dict_list[i]['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem']
 
     # -------------------- PRE DEFINED PARAMETERS --------------------
 

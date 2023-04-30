@@ -9,10 +9,10 @@ from utils.general.dict_utils import find_True_dict_Output_print, find_True_dict
 
 def find_fx_activation(layer_dict_arg):
     fx_activation = find_True_dict_Output_print(
-        dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
+        dict_slice=layer_dict_arg['Neuron_arch']['Activation_function'])
     if fx_activation == 'Using':  # caso seja uma fx com dicionário interno de parâmetros, devemos pegar o nome dela e não o 'using'
         """Exemplo:
-           'Activation_fx':{
+           'Activation_function':{
                 'ReLU': False,
                 'Leaky_ReLU': {
                     'Using': False,        # True = usar versão Leaky_ReLU
@@ -25,13 +25,13 @@ def find_fx_activation(layer_dict_arg):
                     'Memory': {
                     'bits_mem': 8,
                     # 'n' binary digits are the fractional part of `x`; = MANTISSA
-                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
+                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem'],
                     }
                     }
                 }
             O que confirma se é a Sigmoid é o {'Using': True }, porém queremos pegar o nome 'Sigmoid', que está um nível de hierarquia acima """
         fx_activation = find_True_dict_Output_print_above_level(
-            dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
+            dict_slice=layer_dict_arg['Neuron_arch']['Activation_function'])
     return fx_activation
 
 
@@ -121,7 +121,7 @@ ENTITY activation_fx IS
     GENERIC (
         BITS_FX_IN        : NATURAL := BITS_FX_IN;
         BITS_FX_OUT       : NATURAL := BITS_FX_OUT;
-        ACTIVATION_TYPE   : NATURAL := {ACTIVATION_TYPE}; -- 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
+        ACTIVATION_TYPE   : NATURAL := {ACTIVATION_TYPE}; -- 0: ReLU, 1: Leaky ReLU, 2: Sigmoid, 3: linear
         Leaky_attenuation : NATURAL := Leaky_attenuation;
         Leaky_ReLU_ones   : signed  := Leaky_ReLU_ones
     );
@@ -178,6 +178,11 @@ BEGIN
         ); -- input: address (8), output: data_out (8)
         -- END PROCESS fx_activation_inst;
         s_fx_out <= signed(s_fx_out_std);
+    END GENERATE;
+
+    linear_inst : IF ACTIVATION_TYPE = 3 GENERATE
+        fx_in_ROM <= fx_in((2 * BITS) - 1 DOWNTO BITS);
+        s_fx_out  <= fx_in_ROM;
     END GENERATE;
 
     PROCESS (clk, rst)

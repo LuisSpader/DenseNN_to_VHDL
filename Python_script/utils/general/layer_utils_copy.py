@@ -396,13 +396,13 @@ def layer_name(layer_dict_arg: dict,
     else:
         IO_type = 'unsigned'
 
-    # fx_activation = find_True_dict(dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
+    # fx_activation = find_True_dict(dict_slice=layer_dict_arg['Neuron_arch']['Activation_function'])
 
     fx_activation = find_True_dict_Output_print(
-        dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
+        dict_slice=layer_dict_arg['Neuron_arch']['Activation_function'])
     if fx_activation == 'Using':  # caso seja uma fx com dicionário interno de parâmetros, devemos pegar o nome dela e não o 'using'
         """Exemplo: 
-           'Activation_fx':{
+           'Activation_function':{
                 'ReLU': False,
                 'Leaky_ReLU': {
                     'Using': False,        # True = usar versão Leaky_ReLU
@@ -412,13 +412,13 @@ def layer_name(layer_dict_arg: dict,
                     'Using': True,        # True = usar versão Sigmoid (Look Up Table)
                     'Memory': {
                     'bits_mem': 8,
-                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
+                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
                     }
                     }
                 }
             O que confirma se é a Sigmoid é o {'Using': True }, porém queremos pegar o nome 'Sigmoid', que está um nível de hierarquia acima """
         fx_activation = find_True_dict_Output_print_above_level(
-            dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
+            dict_slice=layer_dict_arg['Neuron_arch']['Activation_function'])
     #### Nome do arquivo .vhd ####
     file_name = f"camada{str(layer_dict_arg['Layer_num'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['bits'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
     return file_name
@@ -503,10 +503,10 @@ def layer_dict_gen_base(base_dict: dict,
     output_dict['Layer_name'] = layer_name(layer_dict_arg=output_dict)
 
     fx_activation = find_True_dict_Output_print(
-        dict_slice=output_dict['Neuron_arch']['Activation_fx'])
+        dict_slice=output_dict['Neuron_arch']['Activation_function'])
     if fx_activation == 'Using':  # caso seja uma fx com dicionário interno de parâmetros, devemos pegar o nome dela e não o 'using'
         """Exemplo: 
-           'Activation_fx':{
+           'Activation_function':{
                 'ReLU': False,
                 'Leaky_ReLU': {
                     'Using': False,        # True = usar versão Leaky_ReLU
@@ -516,15 +516,15 @@ def layer_dict_gen_base(base_dict: dict,
                     'Using': True,        # True = usar versão Sigmoid (Look Up Table)
                     'Memory': {
                     'bits_mem': 8,
-                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
+                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
                     }
                     }
                 }
             O que confirma se é a Sigmoid é o {'Using': True }, porém queremos pegar o nome 'Sigmoid', que está um nível de hierarquia acima """
         fx_activation = find_True_dict_Output_print_above_level(
-            dict_slice=output_dict['Neuron_arch']['Activation_fx'])
+            dict_slice=output_dict['Neuron_arch']['Activation_function'])
 
-    # activation_fx = find_True_dict_above_level(dict_slice = output_dict['Neuron_arch']['Activation_fx'])
+    # activation_fx = find_True_dict_above_level(dict_slice = output_dict['Neuron_arch']['Activation_function'])
     # if
     # base_dict['Layer_num'] = Layer_num
     # base_dict['Layer_num'] = Layer_num

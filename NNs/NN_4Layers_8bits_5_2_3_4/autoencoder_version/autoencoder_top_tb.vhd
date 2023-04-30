@@ -113,7 +113,7 @@ BEGIN
         -------------------- LEITURA ENTRADA E ESCRITA NO ARQUIVO DE SAIDA -------------------- 
         WAIT FOR (sigmoid_read_time);
         -- arquivo de entrada do tb:
-        file_open(input_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL//NNs/NN_4Layers_8bits_5_2_3_4/tb_Files/inputs_string.txt", read_mode);
+        file_open(input_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL//NNs/NN_4Layers_8bits_5_2_3_4/tb_Files/tb_inputs.txt", read_mode);
         -- arquivo de saida do tb:
         file_open(output_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL//NNs/NN_4Layers_8bits_5_2_3_4/tb_Files/tb_outputs.txt", write_mode);
         WHILE NOT endfile(input_buf) LOOP             --enquanto arquivo nao terminar de ler

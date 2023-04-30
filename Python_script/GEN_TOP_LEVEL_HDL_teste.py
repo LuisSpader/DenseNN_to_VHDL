@@ -4,8 +4,8 @@ from datetime import date
 
 INPUTS_NUMBER = 64
 BIT_WIDTH = 8
-IO_TYPE_STR = 'signed'
 LAYER_NEURONS_NUMBER_LIST = [4, 3, 2, 3, 4, 64]
+IO_TYPE_STR = 'signed'
 
 BASE_DICT_HIDDEN = layer_dict_hidden
 BASE_DICT_SOFTMAX = layer_dict_softmax
