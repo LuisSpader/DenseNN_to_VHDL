@@ -3,6 +3,8 @@ import json
 
 
 def get_weights_by_neuron(model):
+    """Get this weigths a biases but rearrange to get a list like this that each sublist is a layer and each subsublist is a neuron with its weights and bias
+    """
     weights_by_neuron = []
     for layer in model.layers:
         # Check if the layer has weights (Dense layers do, others might not)
@@ -50,6 +52,25 @@ def save_weights_by_neuron_to_json(model, filename):
 
 
 def transform_weights(weights_by_neuron):
+    """
+    Can you create a function that get the 'get_weights_by_neuron' output and rearrange so that the outermost list is indexed by neuron, rather than by layer. Futhermore I want the list to look like this (add the text identifiers 'layer{layer_number}_n{neuron_number}' ):  neurons_joined_PortMap_structure = [
+        [['layer0_n0', bias, [w0, w1, ...]],
+         ['layer1_n0', bias, [w0, w1, ...]],
+         ['layer2_n0', bias, [w0, w1, ...]],
+         ['layer3_n0', bias, [w0, w1, ...]],
+         ['layer4_n0', bias, [w0, w1, ...]],
+         ['layer5_n0', bias, [w0, w1, ...]],
+         ],
+        [['layer0_n1', bias, [w0, w1, ...]]
+         ['layer1_n1', bias, [w0, w1, ...]]
+         [...],
+         [...],
+         [...],
+         [...]
+         ],
+        ...
+]
+    """
     # Determine the maximum number of neurons across all layers
     max_neurons = max(len(layer) for layer in weights_by_neuron)
 

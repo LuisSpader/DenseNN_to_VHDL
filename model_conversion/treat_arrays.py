@@ -1,7 +1,7 @@
 # sourcery skip: avoid-builtin-shadow
 # from load_model import get_model_path, whole_dir
 import tensorflow as tf
-from get_weights import get_weights_by_neuron, transform_weights
+from get_weights import get_weights_by_neuron, transform_weights, save_weights_by_neuron_to_json
 from fxpmath import Fxp
 import copy
 import os
@@ -573,253 +573,6 @@ def save_weights(SAVE_PATH, LOG_PATH, PM_matrix_to_testbench):
 
 
 def generate_weights_file(
-        ARRAYS_PATH: str,
-        LOG_PATH: str,
-        SAVE_PATH: str,
-        IS_SIGNED: bool,
-        BIT_WIDTH: int,
-        REVERSE_WEIGHTS: bool,
-        BIAS_ENDING: bool
-):
-    """
-    Generate a weights file to be used in a neural network in hardware.
-
-    Args:
-    - ARRAYS_PATH (str): Path to the directory containing the bias and weight files.
-    - LOG_PATH (str): Path to the directory where the logs will be saved.
-    - SAVE_PATH (str): Path to the directory where the binary weights will be saved.
-    - IS_SIGNED (bool): Whether the weights are signed or not.
-    - BIT_WIDTH (int): The number of bits used to represent the weights.
-    - REVERSE_WEIGHTS (bool): Whether the order of the weights should be reversed or not.
-    - BIAS_ENDING (bool): Whether the bias should be at the end of the binary weights or not.
-    """
-
-    layers_array = []
-    try:
-        list_dir = sorted(os.listdir(ARRAYS_PATH))
-    except FileNotFoundError:
-        print(
-            f"ERROR: No 'arrays' folder path found in the directory '{ARRAYS_PATH}', it must indicate that the function 'model2_dict_and_testbench()' was not executed to generate the '.npy' files fot this model")
-        return
-    # Iterate through the list of files in the directory to create an array of layer arrays
-    for i in range(0, len(list_dir), 2):
-        print(f"{os.listdir(ARRAYS_PATH)[i]}, {os.listdir(ARRAYS_PATH)[i+1]}")
-        layers_array.append(  # append(bias,array)
-            [np.load(f"{ARRAYS_PATH}/{os.listdir(ARRAYS_PATH)[i]}"), np.load(f"{ARRAYS_PATH}/{os.listdir(ARRAYS_PATH)[i+1]}")])  # [bias, weights]
-    # layers_array = [
-    #     [bias_array, weights_array], # layer0
-    #     [bias_array, weights_array], # layer1
-    #     [bias_array, weights_array], # layer2
-    #     ...
-    # ]
-    flatten_weights(layers_array)
-
-    neurons = neurons_list_gen_save(layers_array, LOG_PATH)
-
-    # neurons = [
-    #     [
-    #         ['layer0_n0', -0.12465311, [...]],    # 'layer0_n0', bias, [weights]
-    #         ['layer0_n1', 0.17614965, [...]],     # 'layer0_n1', bias, [weights]
-    #         ['layer0_n2', 0.8049891, [...]],
-    #         ['layer0_n3', 0.38902378, [...]]
-    #     ],
-    #     [[...], [...], [...]],   # ['layer1_n0', bias, [weights]], ['layer1_n1', bias, [weights]]
-    #     [[...], [...]],                         # 'layer2_n0', bias, [weights]
-    #     [[...], [...], [...]],
-    #     [[...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...], [...], [...], [...], ...]
-    # ]
-    # ----------------------------------------------------------------
-    neurons_joined_PortMap_structure = join_neurons_by_index(
-        layers_array, neurons)
-
-    # neurons_joined_PortMap_structure2 = [
-    #     [['layer0_n0', 0.20191549, [0.11230638, -0.39838392, ...]],
-    #      ['layer1_n0', 0.5917734, [-0.59041774, -0.18674074, ...]]],
-    #      ['layer2_n0', 0.0, [-0.42462823, -0.45524183]],
-    #      ['layer3_n0', 0.00074738206, [-0.07764454, -0.24115725,...]],
-    #     [['layer0_n1', -0.12518504, [...]],
-    #      ['layer1_n1', 0.58087325, [...]],
-    #      ['layer2_n1', 0.0, [...]],
-    #      ['layer3_n1', 0.010814309, [...]]
-    #     ],
-    #     ...
-    #     [['layer3_n63', 0.006242217, [-0.15624219, 0.23424521, -0.03272061, -0.0043053646, 0.018281218, 0.00525572, 0.20047432, -0.00830946, -0.0044191205, ...]]]
-    # ]
-
-    # neurons_joined_PortMap_structure = [
-    #     [['layer0_n0', -0.12465311, [-0.006545105017721653, ...]],
-    #      ['layer1_n0', -0.098881, [0.12465202808380127, ...]],
-    #      ['layer2_n0', -0.00024540332, [0.43135038018226624, ...]],
-    #      ['layer3_n0', -0.0042404337, [0.6779475212097168, ...]],
-    #      ['layer4_n0', 0.0, [-0.9987852573394775, ...]],
-    #      ['layer5_n0', -0.18265386, [0.24596863985061646, ...]]
-    #      ],
-    #     [['layer0_n1', 0.17614965, [0.0708584263920784, ...]],
-    #      ['layer1_n1', 0.30869168, [0.17154280841350555, ...]],
-    #      [...],
-    #      [...],
-    #      [...],
-    #      [...]
-    #      ],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...]],
-    #     ...
-    # ]
-    # -------------------------------------------------
-    max_number_of_layers = 0
-
-    # Find the maximum number of layers in the neural network
-    for neuron_level in neurons_joined_PortMap_structure:
-        if len(neuron_level) > max_number_of_layers:
-            max_number_of_layers = len(neuron_level)
-
-    ghost_neuron_models, layers_num_sequence = create_ghost_neurons(neurons)
-    # ghost_neuron_models = [
-    #     ['layer0_model', 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, ...]],
-    #     ['layer1_model', 0, [0, 0, 0, 0]],
-    #     ['layer2_model', 0, [0, 0, 0]],
-    #     ['layer3_model', 0, [0, 0]],
-    #     ['layer4_model', 0, [0, 0, 0]],
-    #     ['layer5_model', 0, [0, 0, 0, 0]]
-    #     ]
-
-    # Add ghost neurons to layers with fewer neurons.
-    neurons_with_ghosts = add_ghost_neurons(neurons_joined_PortMap_structure,
-                                            max_number_of_layers, ghost_neuron_models, layers_num_sequence)
-    print("ghosts done")
-    # neurons_with_ghosts = [
-    #     [
-    #         ['layer0_n0', -0.12465311, [...]],  # 'layer0_n0', bias, [weights]
-    #         ['layer0_n1', 0.17614965, [...]],
-    #         ['layer0_n2', 0.8049891, [...]],
-    #         ['layer0_n3', 0.38902378, [...]],
-    #         ['layer0_n4', 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, ...]],  # ghost
-    #         ['layer0_n5', 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, ...]],  # ghost
-    #         ...
-    #     ],
-    #     [[...], [...], [...]],                  # 'layer1_n0', bias, [weights]
-    #     [
-    #         ['layer0_n2', 0.8049891, [...]],    # 'layer2_n0', bias, [weights]
-    #         ['layer1_n2', 0.14208536, [...]],
-    #         ['layer3_n2', 0.0, [...]],
-    #         ['layer4_n2', 0.0060660695, [...]],
-    #         ['layer5_n2', 0.025634281, [...]],
-    #         ['layer2_model', 0, [...]]          # ghost
-    #     ],
-    #     [[...], [...], [...]],
-    #     [[...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...], [...], [...], [...], [...], ...]
-    # ]
-
-    # ----------------------------------------------------------------
-
-    PM_matrix_list = convert_neuron_structure_to_PM_matrix(neurons_with_ghosts)
-    # PM_matrix_list = [
-    #     [
-    #         [-0.18265386, [0.24596863985061646, ...]],      # layer5_n0
-    #         [0.0, [-0.9987852573394775, ...]],              # layer4_n0
-    #         [-0.0042404337, [0.6779475212097168,...]],      # layer3_n0
-    #         [...],                                          # layer2_n0
-    #         [...],                                          # layer1_n0
-    #         [...]                                           # layer0_n0
-    #     ],
-    #     [[...], [...], [...], [...], [...]],                # next neuron
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     ...
-    #     ]
-    # ----------------------------------------------------------------
-    # Transform the PM_matrix to a list of lists (weights and bias on same sublist).
-    PM_matrix_list2 = prepare_PM_matrix(
-        REVERSE_WEIGHTS, BIAS_ENDING, LOG_PATH, PM_matrix_list)
-    # PM_matrix_list2 = [
-    #     [ # neuron 0
-    #         ['layer5_n0', [...]], # [bias, weights] float list
-    #         ['layer4_n0', [...]],
-    #         ['layer3_n0', [...]],
-    #         ['layer2_n0', [...]],
-    #         ['layer1_n0', [...]]
-    #     ],
-    #     [[...], [...], [...], [...], [...]],  # neuron 1
-    #     [[...], [...], [...], [...], [...]],  # neuron 2
-    #     [[...], [...], [...], [...], [...]],  # neuron 3
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     ...
-    # ]
-    # ----------------------------------------------------------------
-    fractional = BIT_WIDTH - 1
-    rescale = 2**(BIT_WIDTH-1) if IS_SIGNED else 2**(BIT_WIDTH)
-
-    PM_matrix_bin = copy.deepcopy(PM_matrix_list2)
-    # PM_matrix_bin = [
-    #     [ # neuron 0
-    #         ['layer5_n0', ['11101001', ...]], # [bias, weights] bin list
-    #         ['layer4_n0', [...]],
-    #         ['layer3_n0', [...]],
-    #         ['layer2_n0', [...]],
-    #         ['layer1_n0', [...]]
-    #     ],
-    #     [[...], [...], [...], [...], [...]],  # neuron 1
-    #     [[...], [...], [...], [...], [...]],  # neuron 2
-    #     [[...], [...], [...], [...], [...]],  # neuron 3
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     [[...], [...], [...], [...], [...]],
-    #     ...
-    # ]
-    # ----------------------------------------------------------------
-    # ! saving 'weights_bin_log.txt' & 'PM_matrix_bin_log.txt' files
-    write_weights_log(LOG_PATH, BIT_WIDTH, IS_SIGNED,
-                      fractional, rescale, PM_matrix_bin)  # log files (for debug)
-
-    # saving 'neurons_bin.py' file
-    save_neurons_logs(LOG_PATH, neurons, BIT_WIDTH,
-                      IS_SIGNED, fractional)  # log files (for debug)
-
-    PM_matrix_to_testbench = create_binary_neuron_list(PM_matrix_bin)
-
-    # ! this file is saving 'weights_bin_log.txt' twice with write_weights_log() function
-    save_weights(SAVE_PATH, LOG_PATH, PM_matrix_to_testbench)
-
-
-def generate_weights_file(
         MODEL_PATH: str,
         LOG_PATH: str,
         SAVE_PATH: str,
@@ -842,7 +595,6 @@ def generate_weights_file(
     """
 
     layers_array = []
-    layers_array2 = []
     # try:
     #     list_dir = sorted(os.listdir(ARRAYS_PATH))
     # except FileNotFoundError:
@@ -1113,9 +865,21 @@ generate_weights_file(
 # todo: make or find a simulator to get the expected results from the NN
 
 
-# Qaware.MNIST_database - - -> Qaware.data_zoom - - -> Qaware.class_QAutocender(
-#     gen_QAutoencoder_models
-#     tf_to_dict: tf_dict.json,   w_b_arrays.npy - - -> load_model: tb_inputs, expected_results
-#     w_b_arrays.npy - - -> treat_arrays: weights_bin.txt, weights_bin_log.txt, neurons_bin.py
-#     tf_dict.json - - -> dict_to_dense: NN_folder(same folder of saved model)
+# Qaware.MNIST_database -> Qaware.data_zoom -> Qaware.class_QAutocender(
+#     gen_QAutoencoder_models: model_folder, model.model
+#     (
+#         model.model -> tf_to_dict: tf_dict.json
+#         model.model -> treat_arrays: weights_bin.txt, weights_bin_log.txt, neurons_bin.py
+#     )
+
+#     tf_dict.json + model_folder(model_obj.model_predictions) -> load_model: tb_inputs, expected_results
+
+#     tf_dict.json -> dict_to_dense: NN_folder(same folder of saved model)
 # )
+# todo: investigar se o mapeamento dos pesos estão corretos em 'treat_arrays.py': analisar se o bias está 'indo primeiro' na saída
+# todo: salvar o JSON dos pesos na pasta do 'model_folder': float, int(2**(BIT_WIDTH)) e bin
+# todo: fazer 'tf_dict.json -> dict_to_dense'
+# todo: unir tudo para funcionar de juma vez só tendo 2 opções: 1) começar desde o treinamento 2) começar utilizando modelo já treinado
+
+# 1) Qaware.MNIST_database -> Qaware.data_zoom -> model_obj(class_QAutoencoder) ->  model_folder(gen_QAutoencoder_models) -> tf_dict.json(tf_to_dict) + weights_bin.txt(treat_arrays) ->  tb_inputs, expected_results(load_model) -> NN_folder(dict_to_dense)
+# 2)                                                                                model_folder(gen_QAutoencoder_models) -> tf_dict.json(tf_to_dict) + weights_bin.txt(treat_arrays) ->  tb_inputs, expected_results(load_model) -> NN_folder(dict_to_dense)
