@@ -46,6 +46,9 @@ def tf_to_dict(model, save_path: str = "models/model_conversion") -> None:
         # Include the layer weights_and_biases
         weights_and_biases = layer.get_weights()
 
+        # weights = layer.weights
+        # bias = layer.bias.np()
+
         if weights_and_biases:
             print(layer.name)
             for w in weights_and_biases:
@@ -65,10 +68,12 @@ def tf_to_dict(model, save_path: str = "models/model_conversion") -> None:
 
             # -------------------------------------------------------------------------
             # saving numpy arrays on '.npy' file format
-            path_name = f"{save_path}/arrays/layer_{l:03}_{layer_dict['class_name']}_weights_array"
+            path_arrays = f"{save_path}/arrays"
 
-            if not os.path.exists(f"{path_name}/arrays"):
-                os.makedirs(f"{path_name}/arrays")
+            if not os.path.exists(f"{path_arrays}"):
+                os.makedirs(f"{path_arrays}")
+
+            path_name = f"{save_path}/arrays/layer_{l:03}_{layer_dict['class_name']}_weights_array"
 
             np.save(path_name, neurons_weights,
                     allow_pickle=True, fix_imports=True)

@@ -1,4 +1,3 @@
-import os
 import pickle
 
 from Qaware.class_QAutoencoder import *
@@ -154,7 +153,7 @@ def expected_results_gen(loaded_model_obj: QAutoencoder, TB_FILES_DIR: str, is_s
 # expected_results_gen(loaded_model_obj, TB_FILES_DIR)
 
 
-def get_model_path(whole_dir, MINI_MODEL, model_path):
+def get_model_path(whole_dir: str, MINI_MODEL: bool, model_path: str):
     if model_path:
         return model_path
     path = f'{whole_dir}/models/normal'
@@ -202,4 +201,4 @@ def model2_dict_and_testbench(MINI_MODEL: bool = False, model_path: str = ''):
 # whole_dir = os.path.abspath(".")
 
 
-model2_dict_and_testbench(MINI_MODEL=True, model_path='')
+# model2_dict_and_testbench(MINI_MODEL=True, model_path='')
