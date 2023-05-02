@@ -46,32 +46,6 @@ def flatten_weights(layers_array):
     Returns:
     - flattened_weights: a list of weights flattened from the nested arrays
     """
-
-    # Convert 1-item arrays to lists of 1 item
-    for l, layer in enumerate(layers_array):
-        layers_array[l][1] = layers_array[l][1].tolist()
-
-    # Flatten list of weights by removing nested arrays
-    #  removing list of 1 item to be just the item (made on weights_array)
-    for l, layer in enumerate(layers_array):
-        for n, neuron in enumerate(layer[1]):
-            flat_list = []
-            for weight in neuron:
-                flat_list.append(weight[0])
-            layers_array[l][1][n] = flat_list
-
-
-def flatten_weights2(layers_array):
-    """
-    Converts a list of nested arrays of weights to a flattened list of weights.
-    Each weight in the nested arrays is represented as a list with a single element.
-
-    Args:
-    - weights_array: a list of nested arrays of weights
-
-    Returns:
-    - flattened_weights: a list of weights flattened from the nested arrays
-    """
     # Convert 1-item arrays to lists of 1 item
     for l, layer in enumerate(layers_array):
         layers_array[l][1] = layers_array[l][1].tolist()
@@ -110,16 +84,20 @@ def neurons_list_gen_save(layers_array, LOG_PATH):
     - neurons: a list of lists, where each nested list contains a neuron's name, bias, and weights
         neurons = [
                     [
-                        ['layer0_n0', -0.12465311, [...]],  # 'layer0_n0', bias, [weights]
+                        # 'layer0_n0', bias, [weights]
+                        ['layer0_n0', -0.12465311, [...]],
                         ['layer0_n1', 0.17614965, [...]],
                         ['layer0_n2', 0.8049891, [...]],
                         ['layer0_n3', 0.38902378, [...]]
                     ],
-                    [[...], [...], [...]],                  # 'layer1_n0', bias, [weights]
-                    [[...], [...]],                         # 'layer2_n0', bias, [weights]
+                    # 'layer1_n0', bias, [weights]
+                    [[...], [...], [...]],
+                    # 'layer2_n0', bias, [weights]
+                    [[...], [...]],
                     [[...], [...], [...]],
                     [[...], [...], [...], [...]],
-                    [[...], [...], [...], [...], [...], [...], [...], [...], [...], ...]
+                    [[...], [...], [...], [...], [...],
+                        [...], [...], [...], [...], ...]
                 ]
     """
 
@@ -159,7 +137,7 @@ def join_neurons_by_index(layers_array, neurons):
     Returns:
     - neurons_joined_PortMap_structure: a list of lists, where each nested list contains neurons with the same index
     neurons_joined_PortMap_structure = [
-        [   
+        [
             ['layer0_n0', -0.12465311, [-0.006545105017721653, ...]],
             ['layer1_n0', -0.098881, [0.12465202808380127, ...]],
             ['layer2_n0', -0.00024540332, [0.43135038018226624, ...]],
@@ -240,7 +218,7 @@ def add_ghost_neurons(neurons_joined, max_num_layers, ghost_neuron_models, layer
 
     Returns:
         list: List of neurons with added ghost neurons.
-        neurons_with_ghosts = \ 
+        neurons_with_ghosts = \
     [
         [
             ['layer0_n0', -0.12465311, [...]],  # 'layer0_n0', bias, [weights]
@@ -310,7 +288,7 @@ def convert_neuron_structure_to_PM_matrix(neurons_with_ghosts):
             [...],                                          # layer2_n0
             [...],                                          # layer1_n0
             [...]                                           # layer0_n0
-        ],                                         
+        ],
         [[...], [...], [...], [...], [...]],                # next neuron
         [[...], [...], [...], [...], [...]],
         [[...], [...], [...], [...], [...]],
@@ -409,13 +387,20 @@ def prepare_PM_matrix(REVERSE_WEIGHTS: bool, BIAS_ENDING: bool, LOG_PATH: str, P
     return PM_matrix_list2
 
 
-def write_weights_log(LOG_PATH: str, bit_width: int, IS_SIGNED: bool, fractional: int, rescale: float, pm_matrix_bin: list) -> None:
+def conv_to_bin_AND_write_weights_log(
+        LOG_PATH: str,
+        BIT_WIDTH: int,
+        IS_SIGNED: bool,
+        # fractional: int,
+        # rescale: float,
+        pm_matrix: list
+) -> None:
     """
     Write the binary weights and biases of a given PM_matrix_bin to a text file in the specified directory.
 
     Args:
     - LOG_PATH (str): the path of the directory where the text file will be saved.
-    - bit_width (int): the number of bits used to represent each weight and bias in binary format.
+    - BIT_WIDTH (int): the number of bits used to represent each weight and bias in binary format.
     - IS_SIGNED (bool): whether the weights and biases can be negative or not.
     - fractional (int): the number of bits reserved for the fractional part of each weight and bias.
     - rescale (float): a scaling factor used to reduce the size of each weight and bias.
@@ -448,7 +433,10 @@ def write_weights_log(LOG_PATH: str, bit_width: int, IS_SIGNED: bool, fractional
         ...
     ]
     """
-    # ! saving again??
+    pm_matrix_bin = copy.deepcopy(pm_matrix)
+    multiply_nested_list(pm_matrix_bin, (2**BIT_WIDTH))
+    round_nested_list(pm_matrix_bin)
+
     with open(f"{LOG_PATH}/weights_bin_log.txt", "w") as writer:
         for neuron_level in pm_matrix_bin:
             writer.write(
@@ -460,16 +448,21 @@ def write_weights_log(LOG_PATH: str, bit_width: int, IS_SIGNED: bool, fractional
                 weights_bias_list = []
                 for item in neuron[1]:
                     # Convert each weight or bias to binary format using the Fxp class
+                    # binary_item = Fxp(item, signed=IS_SIGNED,
+                    #                   n_word=BIT_WIDTH, n_frac=fractional).bin()  # when float
                     binary_item = Fxp(item, signed=IS_SIGNED,
-                                      n_word=bit_width, n_frac=fractional).bin()
+                                      n_word=BIT_WIDTH, n_frac=0).bin()  # when integer
+
                     # Append the binary string to the weights_bias_list
                     weights_bias_list.append(binary_item)
 
                     # Write the original value, the rescaled value and the binary string to the log file
                     bin_str = f"0b{binary_item}"
 
+                    # writer.write(
+                    #     f"{str(item).ljust(25, ' ')} -> {str(item * rescale).ljust(25, ' ')}:     {binary_item} = {str(Fxp(val= bin_str, signed=IS_SIGNED, n_word=BIT_WIDTH, n_frac=fractional).base_repr(base=10, frac_dot=True)).ljust(5, ' ')} \n")
                     writer.write(
-                        f"{str(item).ljust(25, ' ')} -> {str(item * rescale).ljust(25, ' ')}:     {binary_item} = {str(Fxp(val= bin_str, signed=IS_SIGNED, n_word=bit_width, n_frac=fractional).base_repr(base=10, frac_dot=True)).ljust(5, ' ')} \n")
+                        f"{str(item).ljust(25, ' ')} -> {str(item).ljust(25, ' ')}:     {binary_item} = {str(Fxp(val= bin_str, signed=IS_SIGNED, n_word=BIT_WIDTH, n_frac=0).base_repr(base=10, frac_dot=False)).ljust(5, ' ')} \n")
                 # Update the weights and biases in the neuron with their binary string representation
                 neuron[1] = weights_bias_list
             writer.write('\n')
@@ -477,16 +470,17 @@ def write_weights_log(LOG_PATH: str, bit_width: int, IS_SIGNED: bool, fractional
 
     # save PM_matrix_bin to a python file
     save_file(LOG_PATH, pm_matrix_bin, file_name="PM_matrix_bin.py")
+    return pm_matrix_bin
 
 
-def save_neurons_logs(SAVE_PATH: str, neurons: list, bit_width: int, IS_SIGNED: bool, fractional: int) -> None:
+def save_neurons_logs(SAVE_PATH: str, neurons: list, BIT_WIDTH: int, IS_SIGNED: bool, fractional: int) -> None:
     """
     Save a list of neural network neurons informations (name, bias, weights) to a Python file with fixed-point binary representation.
 
     Args:
     - SAVE_PATH (str): Path to save the file.
     - neurons (List[List[List[Union[str, List[float]]]]]): List of neural network neurons to be saved.
-    - bit_width (int): Number of bits to represent the fixed-point number.
+    - BIT_WIDTH (int): Number of bits to represent the fixed-point number.
     - IS_SIGNED (bool): Indicates whether the fixed-point number is signed.
     - fractional (int): Number of fractional bits.
 
@@ -498,12 +492,12 @@ def save_neurons_logs(SAVE_PATH: str, neurons: list, bit_width: int, IS_SIGNED: 
         for neuron in layer:
             # Convert the bias of the neuron to binary representation.
             neuron[1] = Fxp(neuron[1], signed=IS_SIGNED,
-                            n_word=bit_width, n_frac=fractional).bin()
+                            n_word=BIT_WIDTH, n_frac=fractional).bin()
 
             # Convert the weights of the neuron to binary representation.
             weights_bias_list = [
                 Fxp(
-                    item, signed=IS_SIGNED, n_word=bit_width, n_frac=fractional
+                    item, signed=IS_SIGNED, n_word=BIT_WIDTH, n_frac=fractional
                 ).bin()
                 for item in neuron[2]
             ]
@@ -551,35 +545,68 @@ def save_weights(SAVE_PATH, LOG_PATH, PM_matrix_to_testbench):
                 writer.write(f"{neuron_level[i]} ")
             writer.write("\n")
 
-    # ! this file is saving 'weights_bin_log.txt' twice with write_weights_log() function
-    with open(f"{LOG_PATH}/weights_bin_log.txt", "w") as writer:
-        for i in range(len(PM_matrix_to_testbench[0])):  # width range
-            for n, neuron_level in enumerate(PM_matrix_to_testbench):
-                writer.write(str(f"it{i}_n{n}").ljust(
-                    8, ' ') + f":{neuron_level[i]}  ")
-            #     writer.write(f"{neuron} ")
-            writer.write("\n")
-
-# ----------------------------------------------------------------
-# saving weights_bin.txt to the NNs folder
-
-    # with open(f"{NN_SAVE_PATH}/weights_bin.txt", "w") as writer:
-    #     for i in range(len(PM_matrix_to_testbench[0])):  # width range
-    #         for neuron_level in PM_matrix_to_testbench:
-    #             writer.write(f"{neuron_level[i]} ")
-    #         writer.write("\n")
-
     print("weights_bin.txt: done")
+
+
+def get_model_weights(MODEL_PATH, BIT_WIDTH, LOAD_QUANTIZED_MODEL):
+    if LOAD_QUANTIZED_MODEL:
+        layers_array_q = []
+        model_q = tf.keras.models.load_model(
+            f"{MODEL_PATH}/quant_model{BIT_WIDTH}bits/KERAS_check_best_model.model")
+        layers_array_q = get_quantized_model_weights(layers_array_q, model_q)
+        return layers_array_q, model_q
+    else:
+        layers_array = []
+        model = tf.keras.models.load_model(
+            f"{MODEL_PATH}/KERAS_check_best_model.model")
+        layers_array = get_float_model_weights(layers_array, model)
+        return layers_array, model
+
+
+def get_quantized_model_weights(layers_array_q, model_q):
+    for i, layer in enumerate(model_q.layers):
+        if i > 1 and len(layer.get_weights()) > 0:
+            print(
+                f"Layer {i}: {layer.name}, Weights: {len(layer.get_weights())}")
+            get_weights = layer.get_weights()
+            layers_array_q.append(
+                [get_weights[1], get_weights[0].T])  # bias, weights
+    return layers_array_q
+
+
+def get_float_model_weights(layers_array, model):
+    for i, layer in enumerate(model.layers):
+        if len(layer.get_weights()) > 0:
+            print(
+                f"Layer {i}: {layer.name}, Weights: {len(layer.get_weights())}")
+            weights, biases = layer.get_weights()
+            layers_array.append([biases, weights.T])
+    return layers_array
+
+
+def multiply_nested_list(nested_list, factor):
+    for i, item in enumerate(nested_list):
+        if isinstance(item, list):
+            multiply_nested_list(item, factor)
+        elif isinstance(item, (int, float)):
+            nested_list[i] *= factor
+
+
+def round_nested_list(nested_list):
+    for i, item in enumerate(nested_list):
+        if isinstance(item, list):
+            round_nested_list(item)
+        elif isinstance(item, (int, float)):
+            nested_list[i] = round(nested_list[i])
 
 
 def generate_weights_file(
         MODEL_PATH: str,
-        LOG_PATH: str,
-        SAVE_PATH: str,
         IS_SIGNED: bool,
         BIT_WIDTH: int,
         REVERSE_WEIGHTS: bool,
-        BIAS_ENDING: bool
+        BIAS_ENDING: bool,
+        LOAD_QUANTIZED_MODEL: bool
 ):
     """
     Generate a weights file to be used in a neural network in hardware.
@@ -593,8 +620,8 @@ def generate_weights_file(
     - REVERSE_WEIGHTS (bool): Whether the order of the weights should be reversed or not.
     - BIAS_ENDING (bool): Whether the bias should be at the end of the binary weights or not.
     """
-
-    layers_array = []
+    LOG_PATH = f"{MODEL_PATH}/saved_objects/logs"
+    SAVE_PATH = f"{MODEL_PATH}/testbench_files"
     # try:
     #     list_dir = sorted(os.listdir(ARRAYS_PATH))
     # except FileNotFoundError:
@@ -606,12 +633,9 @@ def generate_weights_file(
     #     print(f"{os.listdir(ARRAYS_PATH)[i]}, {os.listdir(ARRAYS_PATH)[i+1]}")
     #     layers_array.append(  # append(bias,array)
     #         [np.load(f"{ARRAYS_PATH}/{os.listdir(ARRAYS_PATH)[i]}"), np.load(f"{ARRAYS_PATH}/{os.listdir(ARRAYS_PATH)[i+1]}")])  # [bias, weights]
-    model = tf.keras.models.load_model(
-        f"{MODEL_PATH}/KERAS_check_best_model.model")
-    for layer in model.layers:
-        if len(layer.get_weights()) > 0:
-            weights, biases = layer.get_weights()
-            layers_array.append([biases, weights.T])
+
+    layers_array, model = get_model_weights(
+        MODEL_PATH, BIT_WIDTH, LOAD_QUANTIZED_MODEL)
 
     # layers_array = [
     #     [bias_array, weights_array], # layer0
@@ -620,7 +644,7 @@ def generate_weights_file(
     #     ...
     # ]
     # flatten_weights(layers_array)
-    flatten_weights2(layers_array)
+    flatten_weights(layers_array)
 
     neurons = neurons_list_gen_save(layers_array, LOG_PATH)
 
@@ -791,7 +815,6 @@ def generate_weights_file(
     fractional = BIT_WIDTH - 1
     rescale = 2**(BIT_WIDTH-1) if IS_SIGNED else 2**(BIT_WIDTH)
 
-    PM_matrix_bin = copy.deepcopy(PM_matrix_list2)
     # PM_matrix_bin = [
     #     [ # neuron 0
     #         ['layer5_n0', ['11101001', ...]], # [bias, weights] bin list
@@ -816,9 +839,14 @@ def generate_weights_file(
     #     ...
     # ]
     # ----------------------------------------------------------------
-    # ! saving 'weights_bin_log.txt' & 'PM_matrix_bin_log.txt' files
-    write_weights_log(LOG_PATH, BIT_WIDTH, IS_SIGNED,
-                      fractional, rescale, PM_matrix_bin)  # log files (for debug)
+    # todo: salvar tbm _bin.JSON
+    # todo: conferir o bias
+    save_weights_by_neuron_to_json(
+        model, filename=f"{LOG_PATH}/weights_by_neuron.json", bit_width=BIT_WIDTH, LOAD_QUANTIZED_MODEL=LOAD_QUANTIZED_MODEL)
+
+    # saving 'weights_bin_log.txt' & 'PM_matrix_bin_log.txt' files
+    PM_matrix_bin = conv_to_bin_AND_write_weights_log(LOG_PATH, BIT_WIDTH, IS_SIGNED,
+                                                      fractional, rescale, PM_matrix_list2)  # log files (for debug)
 
     # saving 'neurons_bin.py' file
     save_neurons_logs(LOG_PATH, neurons, BIT_WIDTH,
@@ -826,8 +854,11 @@ def generate_weights_file(
 
     PM_matrix_to_testbench = create_binary_neuron_list(PM_matrix_bin)
 
-    # ! this file is saving 'weights_bin_log.txt' twice with write_weights_log() function
+    # saving 'weights_bin.txt' file
     save_weights(SAVE_PATH, LOG_PATH, PM_matrix_to_testbench)
+    # todo: save_weights() gerar tbm: weights_int.txt
+    # todo: conferir o bias
+
 
 # ==============================================================
 
@@ -836,12 +867,8 @@ def generate_weights_file(
 best_model_path = get_model_path(whole_dir, MINI_MODEL=False, model_path='')
 
 # 64inp -> 4 3 2 3 4 64
-ARRAYS_PATH = f"{best_model_path}/saved_objects/arrays"
-# list_dir = sorted(os.listdir(ARRAYS_PATH))
 # NN_SAVE_PATH = f"{whole_dir}/NNs/NN_6Layers_8bits_4_3_2_3_4_64/tb_Files"
 
-LOG_PATH = f"{best_model_path}/saved_objects/logs"
-SAVE_PATH = f"{best_model_path}/testbench_files"
 
 REVERSE_WEIGHTS = False
 BIAS_ENDING = True  # if True, bias is at the end of the shift_registers
@@ -851,12 +878,12 @@ IS_SIGNED = True
 
 generate_weights_file(
     r"C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\models\normal\model_15_2_15_64_0.06858loss",
-    LOG_PATH,
-    SAVE_PATH,
+    # best_model_path,
     IS_SIGNED,
     BIT_WIDTH,
     REVERSE_WEIGHTS,
-    BIAS_ENDING)
+    BIAS_ENDING,
+    LOAD_QUANTIZED_MODEL=True)
 # todo: add a function to use 'generate_weights_file' based on a list of paths containing: the model.json and the 'weight_&_bias' arrays of each layer
 # ARRAYS_PATH must contain: the model
 # Ok LOG_PATH must be created if no exists
@@ -872,13 +899,13 @@ generate_weights_file(
 #         model.model -> treat_arrays: weights_bin.txt, weights_bin_log.txt, neurons_bin.py
 #     )
 
-#     tf_dict.json + model_folder(model_obj.model_predictions) -> load_model: tb_inputs, expected_results
+#!     tf_dict.json + model_folder(model_obj.model_predictions) -> load_model: tb_inputs, expected_results todo: CONFERIR SE SÃO AS PREDIÇÕES DO MODELO QUANTIZADO
 
-#     tf_dict.json -> dict_to_dense: NN_folder(same folder of saved model)
+#     tf_dict.json -> dict_to_dense: NN_folder(same folder of saved model) generates VHDL
 # )
-# todo: investigar se o mapeamento dos pesos estão corretos em 'treat_arrays.py': analisar se o bias está 'indo primeiro' na saída
+# todo: fazer 'tf_dict.json -> dict_to_dense (gera NN em VHDL)
+# todo: investigar se o mapeamento dos pesos estão corretos em 'treat_arrays.py': analisar se o bias está 'indo primeiro' na saída -> COMPARAR COM ARQUITETURA RTL (investigar no ModelSim) -> testar com modelo de 1 camada só
 # todo: salvar o JSON dos pesos na pasta do 'model_folder': float, int(2**(BIT_WIDTH)) e bin
-# todo: fazer 'tf_dict.json -> dict_to_dense'
 # todo: unir tudo para funcionar de juma vez só tendo 2 opções: 1) começar desde o treinamento 2) começar utilizando modelo já treinado
 
 # 1) Qaware.MNIST_database -> Qaware.data_zoom -> model_obj(class_QAutoencoder) ->  model_folder(gen_QAutoencoder_models) -> tf_dict.json(tf_to_dict) + weights_bin.txt(treat_arrays) ->  tb_inputs, expected_results(load_model) -> NN_folder(dict_to_dense)

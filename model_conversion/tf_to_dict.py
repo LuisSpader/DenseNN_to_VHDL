@@ -47,6 +47,50 @@ def tf_to_dict(model, save_path: str = "models/model_conversion") -> None:
 
         tf_dict[layer.name] = layer_dict
 
+        # Include the layer weights_and_biases
+        weights_and_biases = layer.get_weights()
+
+        # weights = layer.weights
+        # bias = layer.bias.np()
+
+        if weights_and_biases:
+            print(layer.name)
+            for w in weights_and_biases:
+                print(w.shape)
+                print(w)
+        # for weight_bias in weights_and_biases:
+        weights = []
+        if weights_and_biases != []:
+
+            # split the weights array into num_neurons subarrays
+            # neurons_weights is a list of num_neurons numpy arrays, each with shape (input_dim, 1)
+            # i.e., each subarray contains the weights for a single neuron
+            neurons_weights = np.split(
+                weights_and_biases[0], weights_and_biases[0].shape[1], axis=1)
+            neurons_bias = weights_and_biases[1]
+
+            # -------------------------------------------------------------------------
+            # saving numpy arrays on '.npy' file format
+
+            '''
+            https://numpy.org/doc/stable/reference/generated/numpy.save.html
+            numpy.save(file, arr, allow_pickle=True, fix_imports=True)
+
+            Parameters:
+            file: file, str, or pathlib.Path
+                File or filename to which the data is saved. If file is a file-object, then the filename is unchanged. If file is a string or Path, a .npy extension will be appended to the filename if it does not already have one.
+
+            arr: array_like
+                Array data to be saved.
+
+            allow_pickle: bool, optional
+                Allow saving object arrays using Python pickles. Reasons for disallowing pickles include security (loading pickled data can execute arbitrary code) and portability (pickled objects may not be loadable on different Python installations, for example if the stored objects require libraries that are not available, and not all pickled data is compatible between Python 2 and Python 3). Default: True
+
+            fix_imports: bool, optional
+                Only useful in forcing objects in object arrays on Python 3 to be pickled in a Python 2 compatible way. If fix_imports is True, pickle will try to map the new Python 3 names to the old module names used in Python 2, so that the pickle data stream is readable with Python 2.
+            '''
+            # -------------------------------------------------------------------------
+
         # Add the layer to the model's dictionary
         model_dict[layer.name] = layer_dict
 
@@ -61,8 +105,8 @@ def dict_to_JSON(save_path, model_dict, file_name="model"):
     print(f"tf_to_dict() -> created: {save_path}/model.json")
 
 
-# custom_object_quant = {'QActivation': qk.qlayers.QActivation}
-# qk.utils._add_supported_quantized_objects(custom_object_quant)
+custom_object_quant = {'QActivation': qk.qlayers.QActivation}
+qk.utils._add_supported_quantized_objects(custom_object_quant)
 
 # Load the Tensorflow model
 # model = tf.keras.models.load_model("model.h5")
