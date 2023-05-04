@@ -68,7 +68,7 @@ def bin_images_gen(OUTPUT_BASE_DIR_PATH: str,
             f.write('\n')
 
 
-# OUTPUT_BASE_DIR_PATH = r"C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\tb_Files"
+# OUTPUT_BASE_DIR_PATH = r"C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\testbench_files"
 # BIT_WIDTH = 8
 # is_signed = False
 # n_image_test = 100

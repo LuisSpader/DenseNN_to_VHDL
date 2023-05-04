@@ -1,3 +1,4 @@
+import datetime
 import copy
 from utils.GLOBALS import GLOBAL
 from utils.SETTINGS import PARAMS
@@ -21,6 +22,12 @@ sys.path.append('./utils')
 # settings.init()          # Call only once
 global remove_signals_list
 
+# TODO: colocar opção inteiramente combinacional -> Reg só dps FX ACTIVATION
+# TODO: gerar top level e controles(update_NN)
+# TODO: tamanho padrao da camada oculta (somente usado quando dead neurons = True)
+'''DEAD_NEURONS:
+       só colocar pesos zerados'''
+
 
 def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                       BIT_WIDTH: int = 8,
@@ -34,6 +41,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                       DEAD_NEURONS: bool = True,
                       DEBUG: bool = False
                       ):
+    print("====================== COMEÇO =========================")
 
     NUMBER_OF_LAYERS = len(LAYER_NEURONS_NUMBER_LIST)
     neurons_PM_matrix_local = PortMap_matrix(LAYER_NEURONS_NUMBER_LIST)
@@ -45,7 +53,8 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # ]
 
     OUTPUT_BASE_DIR_PATH = generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN,
-                                                OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS)
+                                                OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS,
+                                                include_datetime=False)
 
     print(" ================================== FAZENDO CAMADAS ==================================")
     layers_dict_list = all_dense_layers_gen(
@@ -88,8 +97,9 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
             neurons_PM_matrix_local, layers_dict_list)
 
     # ==================================== TESTBENCH ====================================
-    whole_dir = os.path.abspath(".")
-    testbench_gen(testbench_path=f"{whole_dir}{OUTPUT_BASE_DIR_PATH[1:]}/tb_Files",
+    # whole_dir = os.path.abspath(".")
+    # testbench_gen(testbench_path=f"{whole_dir}{OUTPUT_BASE_DIR_PATH[1:]}/testbench_files",
+    testbench_gen(testbench_path=f"{OUTPUT_BASE_DIR_PATH}/testbench_files",
                   top_dict=top_dict,
                   id_IO_in='IO_in',
                   id_W_in='W_in',
@@ -540,7 +550,7 @@ def optimize_signal_declaration(neurons_PM_matrix_local: list, layers_dict_list:
         f"SIGNAL {', '.join(map(str, (signals_Wout_list)))}: {layers_dict_list[0]['IO_type']}(BITS - 1 DOWNTO 0);")
 
 
-def generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN, OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS):
+def generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN, OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS, include_datetime: bool = True):
     """Optimized function that returns the path for saving the output files.
 
     Args:
@@ -564,8 +574,13 @@ def generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN,
 
     arch = '_' + '_'.join(map(str, LAYER_NEURONS_NUMBER_LIST))
 
+    date_string = ''
+    if include_datetime:
+        now = datetime.datetime.now()
+        date_string = now.strftime("%d_%m_%H_%M")
+
     if INCLUDE_PARAMETERS_ON_FOLDERNAME:
-        path_parameters = f"{OUTPUT_BASE_DIR_PATH}/NN_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits{arch}{barriers}"
+        path_parameters = f"{OUTPUT_BASE_DIR_PATH}/NN_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits{arch}{barriers}{date_string}"
         OUTPUT_BASE_DIR_PATH = path_parameters
     else:
         OUTPUT_BASE_DIR_PATH = OUTPUT_BASE_DIR_PATH

@@ -1143,8 +1143,8 @@ R5
 R6
 R7
 R8
-Z158 8C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/../tb_Files/top_tb.vhd
-Z159 FC:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/../tb_Files/top_tb.vhd
+Z158 8C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/../testbench_files/top_tb.vhd
+Z159 FC:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/../testbench_files/top_tb.vhd
 l0
 L8
 VS@9=@B8T_:YKK@U9YN3dR1
@@ -1153,8 +1153,8 @@ R11
 31
 !i10b 1
 Z160 !s108 1682294915.744000
-Z161 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/../tb_Files/top_tb.vhd|
-Z162 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/../tb_Files/top_tb.vhd|
+Z161 !s90 -reportprogress|300|-93|-work|work|C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/../testbench_files/top_tb.vhd|
+Z162 !s107 C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/../testbench_files/top_tb.vhd|
 R15
 R16
 Atb

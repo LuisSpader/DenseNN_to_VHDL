@@ -98,7 +98,7 @@ BEGIN
     BEGIN
 
         -------------------- ATUALIZACAO DOS PESOS DA NN --------------------
-        file_open(NN_weights_buff, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\tb_Files/weights_bin.txt", read_mode);
+        file_open(NN_weights_buff, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\testbench_files/weights_bin.txt", read_mode);
         -- file_open(NN_weights_buff, "../Testbench/Files/weights_bin.txt", read_mode);
         file_handle <= OSVVM_textio.FOpen("relative/path/to/file.txt", OSVVM_textio.read_mode);
         OSVVM_textio.GetLine(file_handle, line);
@@ -142,11 +142,11 @@ BEGIN
         -------------------- LEITURA ENTRADA E ESCRITA NO ARQUIVO DE SAIDA -------------------- 
         WAIT FOR (sigmoid_read_time);
         -- arquivo de entrada do tb:
-        file_open(input_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\tb_Files/tb_inputs.txt", read_mode);
+        file_open(input_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\testbench_files/tb_inputs.txt", read_mode);
         -- file_open(input_buf, "./Files/tb_inputs.txt", read_mode);
 
         -- arquivo de saida do tb:
-        file_open(output_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\tb_Files/tb_outputs.txt", write_mode);
+        file_open(output_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\testbench_files/tb_outputs.txt", write_mode);
         -- file_open(output_buf, "./Files/tb_outputs.txt", write_mode);
 
         WHILE NOT endfile(input_buf) LOOP             --enquanto arquivo nao terminar de ler

@@ -319,7 +319,7 @@
 # -- Loading entity camada4_ReLU_4neuron_8bits_3n_signed
 # -- Loading entity camada5_Sigmoid_64neuron_8bits_4n_signed
 # 
-# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/../tb_Files/top_tb.vhd}
+# vcom -93 -work work {C:/Users/luisa/OneDrive/Documentos/GitHub/DenseNN_to_VHDL/NNs/NN_6Layers_8bits_4_3_2_3_4_64/Quartus/../testbench_files/top_tb.vhd}
 # Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
 # -- Loading package STANDARD
 # -- Loading package TEXTIO

@@ -77,7 +77,7 @@ BEGIN
         VARIABLE val_SPACE                                      : CHARACTER;                                                                 -- espacos da leitura de cada linha de entrada
     BEGIN
         -------------------- ATUALIZACAO DOS PESOS DA NN --------------------
-        file_open(NN_weights_buff, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/tb_Files/weights_bin.txt", read_mode);
+        file_open(NN_weights_buff, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL/NNs/NN_4Layers_8bits_5_2_3_4/testbench_files/weights_bin.txt", read_mode);
         rst <= '1', '0' AFTER clk_period;
         WAIT UNTIL rst = '0';                   -- espera rst desligar
         WHILE NOT endfile(NN_weights_buff) LOOP --enquanto arquivo nao terminar de ler
@@ -113,9 +113,9 @@ BEGIN
         -------------------- LEITURA ENTRADA E ESCRITA NO ARQUIVO DE SAIDA -------------------- 
         WAIT FOR (sigmoid_read_time);
         -- arquivo de entrada do tb:
-        file_open(input_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL//NNs/NN_4Layers_8bits_5_2_3_4/tb_Files/tb_inputs.txt", read_mode);
+        file_open(input_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL//NNs/NN_4Layers_8bits_5_2_3_4/testbench_files/tb_inputs.txt", read_mode);
         -- arquivo de saida do tb:
-        file_open(output_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL//NNs/NN_4Layers_8bits_5_2_3_4/tb_Files/tb_outputs.txt", write_mode);
+        file_open(output_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL//NNs/NN_4Layers_8bits_5_2_3_4/testbench_files/tb_outputs.txt", write_mode);
         WHILE NOT endfile(input_buf) LOOP             --enquanto arquivo nao terminar de ler
             readline(input_buf, read_col_from_input_buf); --le_linha buffer primeira linha -> escreve na variavel
             read(read_col_from_input_buf, val_IO_in);

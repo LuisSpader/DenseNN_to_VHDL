@@ -1,4 +1,8 @@
 {
+    "general_config": {
+        "bit_width": 8,
+        "class_name": "general_config"
+    },
     "input_5": {
         "class_name": "InputLayer",
         "config": {

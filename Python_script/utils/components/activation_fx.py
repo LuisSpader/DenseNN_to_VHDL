@@ -236,6 +236,8 @@ def activation_fx_gen(ReLU_txt: str = ReLU_txt,
         ACTIVATION_TYPE = 1
     elif fx_activation == 'Sigmoid':
         ACTIVATION_TYPE = 2
+    else:  # linear
+        ACTIVATION_TYPE = 3
 
     activation_fx_entity, activation_fx_txt = activation_fx_vhd_gen(ReLU_entity=ReLU_entity,
                                                                     Leaky_entity=Leaky_entity,

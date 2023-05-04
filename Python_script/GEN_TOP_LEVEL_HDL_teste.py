@@ -1,6 +1,4 @@
 from GEN_TOP_LEVEL_HDL import *
-from datetime import date
-
 
 INPUTS_NUMBER = 64
 BIT_WIDTH = 8
@@ -22,14 +20,9 @@ BASE_DICT_SOFTMAX['Neuron_arch']['Include_MAC_type'] = INCLUDE_MAC_TYPE
 BARRIERS = False
 
 
-print("====================== COMEÇO =========================")
 NUMBER_OF_LAYERS = len(LAYER_NEURONS_NUMBER_LIST)
 BASE_DICT_HIDDEN['Neuron_arch']['Barriers'] = BARRIERS
 BASE_DICT_SOFTMAX['Neuron_arch']['Barriers'] = BARRIERS
-PATH_LEVEL = False  # True: pasta acima | False: Pasta paralela à deste .py
-#! remover PATH_LEVEL
-# today = date.today()
-# PATH = f'./NN{today}'
 
 GEN_TOP_LEVEL_HDL(INPUTS_NUMBER=INPUTS_NUMBER,
                   BIT_WIDTH=BIT_WIDTH,
@@ -44,9 +37,3 @@ GEN_TOP_LEVEL_HDL(INPUTS_NUMBER=INPUTS_NUMBER,
                   DEBUG=False
                   )
 # print("====================== FIM =========================")
-
-# TODO: colocar opção inteiramente combinacional -> Reg só dps FX ACTIVATION
-# TODO: gerar top level e controles(update_NN)
-# TODO: tamanho padrao da camada oculta (somente usado quando dead neurons = True)
-'''DEAD_NEURONS:
-       só colocar pesos zerados'''
