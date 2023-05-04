@@ -5,7 +5,6 @@ USE ieee.numeric_std.ALL;
 
 ----------------
 
-ENTITY ROM_fx_8bitaddr_8width IS
 	GENERIC (
 		addr_width : INTEGER := 256; -- store 256 elements 
 		addr_bits  : INTEGER := 8;   -- required bits to store 256 elements

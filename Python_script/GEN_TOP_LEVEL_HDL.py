@@ -1,3 +1,4 @@
+import datetime
 import copy
 from utils.GLOBALS import GLOBAL
 from utils.SETTINGS import PARAMS
@@ -21,6 +22,12 @@ sys.path.append('./utils')
 # settings.init()          # Call only once
 global remove_signals_list
 
+# TODO: colocar opção inteiramente combinacional -> Reg só dps FX ACTIVATION
+# TODO: gerar top level e controles(update_NN)
+# TODO: tamanho padrao da camada oculta (somente usado quando dead neurons = True)
+'''DEAD_NEURONS:
+       só colocar pesos zerados'''
+
 
 def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                       BIT_WIDTH: int = 8,
@@ -34,6 +41,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                       DEAD_NEURONS: bool = True,
                       DEBUG: bool = False
                       ):
+    print("====================== COMEÇO =========================")
 
     NUMBER_OF_LAYERS = len(LAYER_NEURONS_NUMBER_LIST)
     neurons_PM_matrix_local = PortMap_matrix(LAYER_NEURONS_NUMBER_LIST)
@@ -45,7 +53,8 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # ]
 
     OUTPUT_BASE_DIR_PATH = generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN,
-                                                OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS)
+                                                OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS,
+                                                include_datetime=False)
 
     print(" ================================== FAZENDO CAMADAS ==================================")
     layers_dict_list = all_dense_layers_gen(
@@ -88,7 +97,9 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
             neurons_PM_matrix_local, layers_dict_list)
 
     # ==================================== TESTBENCH ====================================
-    testbench_gen(OUTPUT_BASE_DIR_PATH=OUTPUT_BASE_DIR_PATH,
+    # whole_dir = os.path.abspath(".")
+    # testbench_gen(testbench_path=f"{whole_dir}{OUTPUT_BASE_DIR_PATH[1:]}/testbench_files",
+    testbench_gen(testbench_path=f"{OUTPUT_BASE_DIR_PATH}/testbench_files",
                   top_dict=top_dict,
                   id_IO_in='IO_in',
                   id_W_in='W_in',
@@ -122,20 +133,28 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
         print(" ---------------------- OUT ---------------------- ")
         print(lista_camada_outputs)
 
-    # ---------------- PORT MAP NEURONS MATRIX
+    # ---------------- PORT MAP NEURONS MATRIX ----------------
     txt_top_port_map_split = txt_top_port_map.split("\n")
     assign_list = []
 
-    # neurons_PM_matrix_local = [
+   # neurons_PM_matrix_local = [
     #     ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out'],
     #     ['c0_n1_W_out', 'c1_n1_W_out', 'c2_n1_W_out', 'c3_n1_W_out'],
     #     ['c0_n2_W_out', 'c2_n2_W_out', 'c3_n2_W_out'],
     #     ['c0_n3_W_out', 'c3_n3_W_out'],
     #     ['c0_n4_W_out']]
     # lista de sinais para declarar dps: SIGNAL .... (... -1 downto 0);
+
+    # creating list of W_in necessary inputs -> When intermediate layer (or final layer) is bigger than 1st layer, we need to put some W_in directly on the top_entity
+    necessary_W_in = [item[0] for item in neurons_PM_matrix_local]
+    for i, item in enumerate(necessary_W_in):
+        necessary_W_in[i] = necessary_W_in[i].replace('out', 'in')
+    # --------------
     optimize_signal_declaration(
         neurons_PM_matrix_local, layers_dict_list, assign_list)
+
     # neurons_PM_matrix_local = [['c3_n0_W_out'], ['c3_n1_W_out']]
+
     # assign_list = [
     #     'c0_n0_W_out => c0_n0_W_out,',
     #     'c0_n1_W_out => c0_n1_W_out,',
@@ -149,8 +168,48 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
     # ]
 
     # substituindo atribuição antiga (errada) por atribuição certa entre camadas
-    txt_top_port_map = generate_top_port_map(
-        DEBUG, layers_dict_list, lista_camada_inputs, lista_camada_outputs, txt_top_port_map_split, assign_list)
+    # OK todo: Falta alterar aqui para que comporte todas as necessary_W_in
+    txt_top_port_map_split = fix_top_port_map_layers(
+        txt_top_port_map_split, assign_list)
+
+    # Extract input and output lists from IO dictionaries and update top_dict
+    update_top_dict_IO(DEBUG, layers_dict_list,
+                       lista_camada_inputs, lista_camada_outputs)
+
+    # finding correct_IO_type to add some necessary_W_in inputs
+    for IO_type in top_dict['IO']['IN']:
+        if top_dict['IO']['IN'][IO_type] != None:
+            for item in top_dict['IO']['IN'][IO_type]:
+                if necessary_W_in[0][:4] in item:
+                    correct_IO_type = IO_type
+                    break
+
+    # removing W_in from 'necessary_W_in' list that already exists on top_dict
+    for item in top_dict['IO']['IN'][str(correct_IO_type)]:
+        if item in necessary_W_in:
+            necessary_W_in.remove(item)
+
+    # adding W_in which top_dict IOs didn't had already
+    top_dict['IO']['IN'][str(correct_IO_type)].extend(necessary_W_in)
+
+    # Now we need to correct some port_map assignments. Remember: When intermediate layer (or final layer) is bigger than 1st layer, we need to put some W_in directly on the top_entity
+    # If necessary_W_in is: ['c5_n4_W_in', 'c5_n5_W_in', 'c5_n6_W_in']
+    # We need to have on the layer 5 (c5) at some point, this port map assignments:
+    # txt_top_port_map = [
+    # ...
+    # '            c5_n4_W_in=> c5_n4_W_in,'
+    # '            c5_n5_W_in=> c5_n5_W_in,'
+    # '            c5_n6_W_in=> c5_n6_W_in,'
+    # ...
+    # ]
+    necessary_W_in_assign = []
+    for item in necessary_W_in:
+        necessary_W_in_assign.append(f"            {item}=> {item},")
+
+    txt_top_port_map_split = fix_top_port_map_layers(
+        txt_top_port_map_split, necessary_W_in_assign)
+
+    txt_top_port_map = '\n'.join(txt_top_port_map_split)
 
     # https://youtu.be/oHSrqVhee_8
     nomes, nomes_all, remove_list = extract_IO_names(layers_dict_list)
@@ -178,7 +237,39 @@ def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: lis
         print(f"top_gen() -> Criando Top: {top_dir}")
 
 
-def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inputs: list, lista_camada_outputs: list, txt_top_port_map_split: list, assign_list: list) -> str:
+def fix_top_port_map_layers(txt_top_port_map_split: list, assign_list: list) -> list:
+    """
+    Generates a top port map by replacing wrong assignments between layers with correct ones.
+
+    The function iterates through each item in txt_top_port_map_split and checks if there is a wrong assignment that needs to be replaced with a correct one. 
+    It does this by iterating through each item in assign_list and comparing the correct assignment with the original assignment. 
+        If the correct assignment is found within the original assignment, it replaces the original assignment with the correct one.
+    Finally, the function returns a string containing the updated top port map with correct assignments. The list of strings in txt_top_port_map_split is joined into a single string with line breaks using '\n'.join().
+
+    Args:
+        txt_top_port_map_split (list): A list of strings containing the original top port map split by lines.
+        assign_list (list): A list of strings containing the correct assignments between layers.
+
+    Returns:
+        list: A list containing the updated top port map with correct assignments.
+    """
+    # Replace wrong assignments between layers with correct ones
+    for j, itemj in enumerate(txt_top_port_map_split):
+        for item in assign_list:
+            # Extract the original assignment before '=>'
+            buff_original = itemj.split('=>')[0].strip()
+            # Extract the correct assignment before '=>'
+            buff_subs = item.split('=>')[0].strip()
+            if buff_subs in buff_original:
+                # Replace the original assignment with the correct one
+                txt_top_port_map_split[j] = item
+
+    # Join the list of strings into a single string with line breaks
+    # return '\n'.join(txt_top_port_map_split)
+    return txt_top_port_map_split
+
+
+def update_top_dict_IO(DEBUG: bool, layers_dict_list: list, entity_inputs: list, entity_outputs: list):
     """
     Generates the top-level port map string for a VHDL entity based on the inputs, outputs, and layers information.
 
@@ -191,21 +282,10 @@ def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inpu
         str: A string containing the top-level port map for the VHDL entity.
 
     Example:
-        generate_top_port_map(layers_dict_list, entity_inputs, entity_outputs)
+        fix_top_port_map_layers(layers_dict_list, entity_inputs, entity_outputs)
     """
-    # Replace wrong assignments between layers with correct ones
-    for j, itemj in enumerate(txt_top_port_map_split):
-        for item in assign_list:
-            buff_original = itemj.split('=>')[0].strip()
-            buff_subs = item.split('=>')[0].strip()
-            if buff_subs in buff_original:
-                txt_top_port_map_split[j] = item
-
-    txt_top_port_map = '\n'.join(txt_top_port_map_split)
-
-    # Extract input and output lists from IO dictionaries
-    camada_inputs = extrai_lista_IO(list_IO=lista_camada_inputs)
-    camada_outputs = extrai_lista_IO(list_IO=lista_camada_outputs)
+    camada_inputs = extrai_lista_IO(list_IO=entity_inputs)
+    camada_outputs = extrai_lista_IO(list_IO=entity_outputs)
 
     if DEBUG:
         print(
@@ -245,8 +325,6 @@ def generate_top_port_map(DEBUG: bool, layers_dict_list: list, lista_camada_inpu
     top_dict['IO']['OUT']['STD_LOGIC_VECTOR'] = l_outputs[1]
     top_dict['IO']['OUT']['SIGNED'] = l_outputs[2]
     top_dict['IO']['OUT']['manual'] = l_outputs[3]
-
-    return txt_top_port_map
 
 
 def generate_signal_assignments(layers_dict_list: list, nomes: list, nomes_all: list, itertools):
@@ -472,7 +550,7 @@ def optimize_signal_declaration(neurons_PM_matrix_local: list, layers_dict_list:
         f"SIGNAL {', '.join(map(str, (signals_Wout_list)))}: {layers_dict_list[0]['IO_type']}(BITS - 1 DOWNTO 0);")
 
 
-def generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN, OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS):
+def generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN, OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS, include_datetime: bool = True):
     """Optimized function that returns the path for saving the output files.
 
     Args:
@@ -496,8 +574,13 @@ def generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN,
 
     arch = '_' + '_'.join(map(str, LAYER_NEURONS_NUMBER_LIST))
 
+    date_string = ''
+    if include_datetime:
+        now = datetime.datetime.now()
+        date_string = now.strftime("%d_%m_%H_%M")
+
     if INCLUDE_PARAMETERS_ON_FOLDERNAME:
-        path_parameters = f"{OUTPUT_BASE_DIR_PATH}/NN_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits{arch}{barriers}"
+        path_parameters = f"{OUTPUT_BASE_DIR_PATH}/NN_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits{arch}{barriers}{date_string}"
         OUTPUT_BASE_DIR_PATH = path_parameters
     else:
         OUTPUT_BASE_DIR_PATH = OUTPUT_BASE_DIR_PATH
@@ -537,12 +620,42 @@ def PortMap_matrix(LAYER_NEURONS_NUMBER_LIST):
         for j in range(item):
             GLOBAL.PM_MATRIX.neurons_PM_matrix[i].append(f"c{i}_n{j}_W_out")
 
+    ''' example for an NN [4, 3, 2, 3, 4, 7]:
+    GLOBAL.PM_MATRIX.neurons_PM_matrix = [
+        ['c0_n0_W_out', 'c0_n1_W_out', 'c0_n2_W_out', 'c0_n3_W_out'], 
+        ['c1_n0_W_out', 'c1_n1_W_out', 'c1_n2_W_out'], 
+        ['c2_n0_W_out', 'c2_n1_W_out'], 
+        ['c3_n0_W_out', 'c3_n1_W_out', 'c3_n2_W_out'], 
+        ['c4_n0_W_out', 'c4_n1_W_out', 'c4_n2_W_out', 'c4_n3_W_out'], 
+        ['c5_n0_W_out', 'c5_n1_W_out', 'c5_n2_W_out', 'c5_n3_W_out', 'c5_n4_W_out', 'c5_n5_W_out', 'c5_n6_W_out']]'''
+
     GLOBAL.PM_MATRIX.neurons_PM_matrix = list(
         map(list, zip_longest(*GLOBAL.PM_MATRIX.neurons_PM_matrix, fillvalue=None)))
+
+    '''GLOBAL.PM_MATRIX.neurons_PM_matrix = [
+        ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out', 'c4_n0_W_out', 'c5_n0_W_out'], 
+        ['c0_n1_W_out', 'c1_n1_W_out', 'c2_n1_W_out', 'c3_n1_W_out', 'c4_n1_W_out', 'c5_n1_W_out'], 
+        ['c0_n2_W_out', 'c1_n2_W_out',      None,     'c3_n2_W_out', 'c4_n2_W_out', 'c5_n2_W_out'], 
+        ['c0_n3_W_out',     None,           None,          None,     'c4_n3_W_out', 'c5_n3_W_out'], 
+        [   None,           None,           None,          None,        None,       'c5_n4_W_out'], 
+        [   None,           None,           None,          None,        None,       'c5_n5_W_out'], 
+        [   None,           None,           None,          None,        None,       'c5_n6_W_out']
+        ]'''
+
     neurons_PM_matrix_local = copy.deepcopy(GLOBAL.PM_MATRIX.neurons_PM_matrix)
 
     for i, item in enumerate(GLOBAL.PM_MATRIX.neurons_PM_matrix):
         neurons_PM_matrix_local[i] = [x for x in item if x is not None]
+
+    '''neurons_PM_matrix_local = [
+        ['c0_n0_W_out', 'c1_n0_W_out', 'c2_n0_W_out', 'c3_n0_W_out', 'c4_n0_W_out', 'c5_n0_W_out'], 
+        ['c0_n1_W_out', 'c1_n1_W_out', 'c2_n1_W_out', 'c3_n1_W_out', 'c4_n1_W_out', 'c5_n1_W_out'], 
+        ['c0_n2_W_out', 'c1_n2_W_out', 'c3_n2_W_out', 'c4_n2_W_out', 'c5_n2_W_out'], 
+        ['c0_n3_W_out', 'c4_n3_W_out', 'c5_n3_W_out'], 
+        ['c5_n4_W_out'], 
+        ['c5_n5_W_out'], 
+        ['c5_n6_W_out']
+        ]'''
 
     return neurons_PM_matrix_local
 

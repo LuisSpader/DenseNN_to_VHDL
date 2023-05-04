@@ -148,7 +148,7 @@ layer_dict_hidden = {
 
         # -------------
         'MAC_type': False,  # False = combinational(árvore) | True = Sequential
-
+        'MAC_out_with_register': False,
         # -------------
         'Barriers': False,  # True = com barreiras de registradores
 
@@ -170,7 +170,7 @@ layer_dict_hidden = {
         },
 
         # -------------
-        'Activation_fx': {
+        'Activation_function': {
             'ReLU': True,
             'Leaky_ReLU': {
                 'Using': False,        # True = usar versão Leaky_ReLU
@@ -184,9 +184,10 @@ layer_dict_hidden = {
                     'bits_mem': 8,  # por enquanto input_bits = output_bits
                     # 'n' binary digits are the fractional part of `x`; = MANTISSA
                     # deste modo não temos parte 'inteiro', apenas mantissa
-                    'input_mem_bits': lambda: layer_dict_hidden['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem']
+                    'input_mem_bits': lambda: layer_dict_hidden['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem']
                 }
-            }
+            },
+            'Linear': False
         }
     }
 
@@ -227,10 +228,10 @@ def update_neuron_name_from_LayerDict(layer_dict):
 
 def update_dict_fx_activation(layer_dict: dict):
     fx_activation = find_True_dict_Output_print(
-        dict_slice=layer_dict['Neuron_arch']['Activation_fx'])
+        dict_slice=layer_dict['Neuron_arch']['Activation_function'])
     if fx_activation == 'Using':  # caso seja uma fx com dicionário interno de parâmetros, devemos pegar o nome dela e não o 'using'
         """Exemplo:
-        'Activation_fx':{
+        'Activation_function':{
             'ReLU': False,
             'Leaky_ReLU': {
                 'Using': False,        # True = usar versão Leaky_ReLU
@@ -243,22 +244,22 @@ def update_dict_fx_activation(layer_dict: dict):
                 'Memory': {
                 'bits_mem': 8,
                 # 'n' binary digits are the fractional part of `x`; = MANTISSA
-                'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
+                'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem'],
                 }
                 }
             }
         O que confirma se é a Sigmoid é o {'Using': True }, porém queremos pegar o nome 'Sigmoid', que está um nível de hierarquia acima """
         fx_activation = find_True_dict_Output_print_above_level(
-            dict_slice=layer_dict['Neuron_arch']['Activation_fx'])
-        # activation_fx = find_True_dict_above_level(dict_slice = output_dict['Neuron_arch']['Activation_fx'])
+            dict_slice=layer_dict['Neuron_arch']['Activation_function'])
+        # activation_fx = find_True_dict_above_level(dict_slice = output_dict['Neuron_arch']['Activation_function'])
 
 
 def get_dict_fx_activation(layer_dict: dict):
     fx_activation = find_True_dict_Output_print(
-        dict_slice=layer_dict['Neuron_arch']['Activation_fx'])
+        dict_slice=layer_dict['Neuron_arch']['Activation_function'])
     if fx_activation == 'Using':  # caso seja uma fx com dicionário interno de parâmetros, devemos pegar o nome dela e não o 'using'
         """Exemplo:
-        'Activation_fx':{
+        'Activation_function':{
             'ReLU': False,
             'Leaky_ReLU': {
                 'Using': False,        # True = usar versão Leaky_ReLU
@@ -271,13 +272,13 @@ def get_dict_fx_activation(layer_dict: dict):
                 'Memory': {
                 'bits_mem': 8,
                 # 'n' binary digits are the fractional part of `x`; = MANTISSA
-                'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
+                'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem'],
                 }
                 }
             }
         O que confirma se é a Sigmoid é o {'Using': True }, porém queremos pegar o nome 'Sigmoid', que está um nível de hierarquia acima """
         fx_activation = find_True_dict_Output_print_above_level(
-            dict_slice=layer_dict['Neuron_arch']['Activation_fx'])
+            dict_slice=layer_dict['Neuron_arch']['Activation_function'])
 
     return fx_activation
 
@@ -288,7 +289,8 @@ def get_dict_fx_activation(layer_dict: dict):
 
 def update_dict_neuron(layer_dict):
     # upload dos parâmetros do neurônio com base nos parâmetros da camada da NN
-    layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['input_mem_bits'] = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem']
+    layer_dict['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['input_mem_bits'] = layer_dict[
+        'Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem']
 
     layer_dict['Neuron_arch']['Inputs_number'] = layer_dict['Inputs_number']
     # define o número de BIT_WIDTH para as entradas e pesos
@@ -319,14 +321,14 @@ def get_neuron_data_from_LayerDict(layer_dict: dict, DEBUG: bool = False):
         IO_type = layer_dict['Neuron_arch']['IO_type']()
         Include_MAC_type = layer_dict['Neuron_arch']['Include_MAC_type']()
 
-        input_mem_bits = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['input_mem_bits'](
+        input_mem_bits = layer_dict['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['input_mem_bits'](
         )
         if DEBUG:
             print(
                 f"get_neuron_data_from_LayerDict() -> layer_dict['Neuron_arch']['IO_type'](): {layer_dict['Neuron_arch']['IO_type']()}")
     except:
         BIT_WIDTH = layer_dict['Neuron_arch']['Bit_WIDTH']
-        input_mem_bits = layer_dict['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['input_mem_bits']
+        input_mem_bits = layer_dict['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['input_mem_bits']
         num_inputs = layer_dict['Neuron_arch']['Inputs_number']
         IO_type = layer_dict['Neuron_arch']['IO_type']
         Include_MAC_type = layer_dict['Neuron_arch']['Include_MAC_type']
@@ -480,6 +482,7 @@ layer_dict_softmax = {
 
         # -------------
         'MAC_type': False,  # False = combinational(árvore) | True = Sequential
+        'MAC_out_with_register': False,
 
         # -------------
         'Barriers': True,  # True = com barreiras de registradores
@@ -502,7 +505,7 @@ layer_dict_softmax = {
         },
 
         # -------------
-        'Activation_fx': {
+        'Activation_function': {
             'ReLU': False,
             'Leaky_ReLU': {
                 'Using': False,        # True = usar versão Leaky_ReLU
@@ -511,13 +514,14 @@ layer_dict_softmax = {
             },
             'Sigmoid': {
                 # True = usar versão Sigmoid (Look Up Table)
-                'Using': True,
+                'Using': False,
                 'Memory': {
                     'bits_mem': 8,
                     # 'n' binary digits are the fractional part of `x`; = MANTISSA
-                    'input_mem_bits': lambda: layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],
+                    'input_mem_bits': lambda: layer_dict_softmax['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem'],
                 }
-            }
+            },
+            'Linear': True
         }
     }
 

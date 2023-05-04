@@ -4,33 +4,33 @@ USE ieee.numeric_std.ALL;
 USE ieee.math_real.ALL;
 USE work.parameters.ALL;
 
-  ENTITY  MAC_comb_Barriers_1n_8bit_signed_mult0_v0_add0_v0 IS
-    GENERIC (
-        BITS : NATURAL := BITS;
-        NUM_INPUTS : NATURAL := 1;
-        TOTAL_BITS : NATURAL := 8
-    );
-    PORT (
-      clk, rst: IN STD_LOGIC;
-      IO_in : IN signed(TOTAL_BITS - 1 DOWNTO 0);
-      W_in : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
-      ----------------------------------------------
-      IO_out: OUT signed(BITS -1 DOWNTO 0)
-    );
-  end ENTITY;
+ENTITY MAC_comb_Barriers_1n_8bit_signed_mult0_v0_add0_v0 IS
+  GENERIC (
+    BITS       : NATURAL := BITS;
+    NUM_INPUTS : NATURAL := 1;
+    TOTAL_BITS : NATURAL := 8
+  );
+  PORT (
+    clk, rst : IN STD_LOGIC;
+    IO_in    : IN signed(TOTAL_BITS - 1 DOWNTO 0);
+    W_in     : IN signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
+    ----------------------------------------------
+    IO_out   : OUT signed(BITS - 1 DOWNTO 0)
+  );
+END ENTITY;
 
-ARCHITECTURE arch OF  MAC_comb_Barriers_1n_8bit_signed_mult0_v0_add0_v0  IS
+ARCHITECTURE arch OF MAC_comb_Barriers_1n_8bit_signed_mult0_v0_add0_v0 IS
 
-    ---------- SINAIS ----------
-  SIGNAL s_Xi : signed(TOTAL_BITS - 1 DOWNTO 0);
-  SIGNAL s_Win : signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
+  ---------- SINAIS ----------
+  SIGNAL s_Xi               : signed(TOTAL_BITS - 1 DOWNTO 0);
+  SIGNAL s_Win              : signed((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO 0);
   SIGNAL s_mult, s_mult_reg : signed(((2 * BITS) * (NUM_INPUTS)) - 1 DOWNTO 0);
-  SIGNAL bias : signed(BITS - 1 DOWNTO 0);
-  SIGNAL sbias : signed((2 * BITS) - 1 DOWNTO 0); -- barriers
-    SIGNAL sum_all : signed((2*BITS) - 1 DOWNTO 0);
+  SIGNAL bias               : signed(BITS - 1 DOWNTO 0);
+  SIGNAL sbias              : signed((2 * BITS) - 1 DOWNTO 0); -- barriers
+  SIGNAL sum_all            : signed((2 * BITS) - 1 DOWNTO 0);
   TYPE mult_array_type IS ARRAY (1 TO NUM_INPUTS) OF signed((2 * BITS) - 1 DOWNTO 0);
   SIGNAL mult_array, sum_array, sum_array_reg : mult_array_type;
-    
+
   COMPONENT mult0_v0 IS
     GENERIC (
       BITS : NATURAL := BITS
@@ -42,19 +42,19 @@ ARCHITECTURE arch OF  MAC_comb_Barriers_1n_8bit_signed_mult0_v0_add0_v0  IS
     );
   END COMPONENT;
 
-COMPONENT add0_v0 IS
+  COMPONENT add0_v0 IS
     GENERIC (
-        BITS : NATURAL := 8
+      BITS : NATURAL := 8
     );
     PORT (
-        X : IN signed((2* BITS) - 1 DOWNTO 0);
-        W : IN signed((2* BITS) - 1 DOWNTO 0);
-        Y : OUT signed((2* BITS) - 1 DOWNTO 0)
+      X : IN signed((2 * BITS) - 1 DOWNTO 0);
+      W : IN signed((2 * BITS) - 1 DOWNTO 0);
+      Y : OUT signed((2 * BITS) - 1 DOWNTO 0)
     );
-END COMPONENT;
+  END COMPONENT;
 
 BEGIN
-  s_Xi <= IO_in;
+  s_Xi  <= IO_in;
   s_Win <= W_in;
 
   -- ----------------- MULTIPLIERS ------------------------------
@@ -68,7 +68,7 @@ BEGIN
     );
   END GENERATE;
 
-  -- # Registradores sai�da dos multiplicadores
+  -- # Registradores sai�da dos multiplicadores
   PROCESS (rst, clk)
   BEGIN
     IF (rst = '1') THEN
@@ -83,7 +83,7 @@ BEGIN
   loop_Mult_signal : FOR i IN 0 TO (NUM_INPUTS - 1) GENERATE
     mult_array(i + 1) <= s_mult_reg(((2 * BITS) * (i + 1)) - 1 DOWNTO ((2 * BITS) * (i)));
   END GENERATE;
-  bias <= s_Win((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO (BITS * (NUM_INPUTS)));
+  bias  <= s_Win((BITS * (NUM_INPUTS + 1)) - 1 DOWNTO (BITS * (NUM_INPUTS)));
   sbias <= resize(bias, sbias'length);
   ---------------------- EVEN (PAR) --------------------------
   even_inst : IF (NUM_INPUTS MOD 2) = 0 GENERATE -- it's even
@@ -93,7 +93,7 @@ BEGIN
         soma_i_inst : add0_v0 PORT MAP(
           X => mult_array((2 * i) + 1), -- mult 1,3,5, ...
           W => mult_array((2 * i) + 2), -- mult 2,4,6, ...
-          Y => sum_array(i + 1) -- sum 1,2,3, ...
+          Y => sum_array(i + 1)         -- sum 1,2,3, ...
         );
       END GENERATE;
 
@@ -125,7 +125,7 @@ BEGIN
         soma_i_inst : add0_v0 PORT MAP(
           X => mult_array((2 * i) + 1), -- mult 1,3,5 ...
           W => mult_array((2 * i) + 2), -- mult 2,4,6 ...
-          Y => sum_array(i + 1) -- sum 1,2,3 ...
+          Y => sum_array(i + 1)         -- sum 1,2,3 ...
         );
       END GENERATE;
 
@@ -133,8 +133,8 @@ BEGIN
       sum_half_inst : IF (i = ((NUM_INPUTS - 1)/2)) GENERATE
         soma_i_inst : add0_v0 PORT MAP(
           X => mult_array((2 * i) + 1), -- mult 7
-          W => sum_array_reg(1), -- sum_reg 1
-          Y => sum_array(i + 1) -- sum 4
+          W => sum_array_reg(1),        -- sum_reg 1
+          Y => sum_array(i + 1)         -- sum 4
         );
       END GENERATE;
 
@@ -172,6 +172,6 @@ BEGIN
   END PROCESS;
   -------------------------------------------------------------
   sum_all <= sum_array_reg(NUM_INPUTS);
-  IO_out <= sum_all((2 * BITS) - 1 DOWNTO BITS); --!! OVERFLOW está sem tratamento!!
+  IO_out  <= sum_all((2 * BITS) - 1 DOWNTO BITS); --!! OVERFLOW está sem tratamento!!
 
 END arch;

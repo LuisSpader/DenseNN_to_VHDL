@@ -5,7 +5,7 @@
 -- 		VARIABLE val_IO_in
 
 -- path: weights_bin.txt
--- path: inputs_string.txt
+-- path: tb_inputs.txt
 -- path: tb_outputs.txt
 
 LIBRARY ieee;
@@ -91,8 +91,8 @@ BEGIN
     BEGIN
         -- report "path: " & path 
         -------------------- ATUALIZACAO DOS PESOS DA NN --------------------
-        file_open(NN_weights_buff, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\tb_Files/weights_bin.txt", read_mode);
-        -- file_open(NN_weights_buff, "./tb_Files/weights_bin.txt", read_mode);
+        file_open(NN_weights_buff, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\testbench_files/weights_bin.txt", read_mode);
+        -- file_open(NN_weights_buff, "./testbench_files/weights_bin.txt", read_mode);
 
         rst <= '1', '0' AFTER clk_period;
 
@@ -132,11 +132,11 @@ BEGIN
         -------------------- LEITURA ENTRADA E ESCRITA NO ARQUIVO DE SAIDA -------------------- 
         WAIT FOR (sigmoid_read_time);
         -- arquivo de entrada do tb:
-        file_open(input_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\tb_Files/inputs_string.txt", read_mode);
-        -- file_open(input_buf, "./Files/inputs_string.txt", read_mode);
+        file_open(input_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\testbench_files/tb_inputs.txt", read_mode);
+        -- file_open(input_buf, "./Files/tb_inputs.txt", read_mode);
 
         -- arquivo de saida do tb:
-        file_open(output_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\tb_Files/tb_outputs.txt", write_mode);
+        file_open(output_buf, "C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\NNs\NN_4Layers_8bits_5_2_3_4\testbench_files/tb_outputs.txt", write_mode);
         -- file_open(output_buf, "./Files/tb_outputs.txt", write_mode);
 
         WHILE NOT endfile(input_buf) LOOP             --enquanto arquivo nao terminar de ler

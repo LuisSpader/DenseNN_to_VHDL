@@ -1,0 +1,1 @@
+signal label_0 : std_logic_vector(3 downto 0) :=  

@@ -10,6 +10,7 @@ from utils.general.name import *
 from utils.GLOBALS import GLOBAL
 from utils.SETTINGS import PARAMS
 import copy
+from utils.components.activation_fx import find_fx_activation
 # from dict_utils import *
 # from txt_utils import *
 
@@ -96,69 +97,69 @@ def layer_neurons_port_map(number_of_neurons: int,
                            num_inputs: int,
                            ID_camada: str,
                            n_max: int):
-    """Função para gerar o mapeamento de TODOS OS NEURÔNIOS de uma camada. 
+    """Função para gerar o mapeamento de TODOS OS NEURÔNIOS de uma camada.
     Exemplo:
-      layer_neurons_port_map(number_of_neurons = 3, 
-                             IN_port_map = Neuron_IN_port_map, 
+      layer_neurons_port_map(number_of_neurons = 3,
+                             IN_port_map = Neuron_IN_port_map,
                              OUT_port_map = ''
                              )
       Output:
         test_0: ENTITY work.test
           PORT MAP (
                     ---------- Entradas ----------
-                    -- ['IN']['STD_LOGIC'] 
-                    clk=> clk, 
-                    rst=> rst, 
-                    -- ['IN']['STD_LOGIC_VECTOR'] 
-                    A=>  c1_n0_A, 
-                    B=>  c1_n0_B, 
-                    -- ['IN']['SIGNED_num_inputs'] 
-                    x1=> x1, 
-                    x2=> x2, 
-                    x3=> x3, 
-                    -- ['IN']['SIGNED'] 
-                    bias=>  c1_n0_bias, 
-                    ---------- Saidas ---------- 
+                    -- ['IN']['STD_LOGIC']
+                    clk=> clk,
+                    rst=> rst,
+                    -- ['IN']['STD_LOGIC_VECTOR']
+                    A=>  c1_n0_A,
+                    B=>  c1_n0_B,
+                    -- ['IN']['SIGNED_num_inputs']
+                    x1=> x1,
+                    x2=> x2,
+                    x3=> x3,
+                    -- ['IN']['SIGNED']
+                    bias=>  c1_n0_bias,
+                    ---------- Saidas ----------
 
-          );           
+          );
 
         test_1: ENTITY work.test
           PORT MAP (
                     ---------- Entradas ----------
-                    -- ['IN']['STD_LOGIC'] 
-                    clk=> clk, 
-                    rst=> rst, 
-                    -- ['IN']['STD_LOGIC_VECTOR'] 
-                    A=>  c1_n1_A, 
-                    B=>  c1_n1_B, 
-                    -- ['IN']['SIGNED_num_inputs'] 
-                    x1=> x1, 
-                    x2=> x2, 
-                    x3=> x3, 
-                    -- ['IN']['SIGNED'] 
-                    bias=>  c1_n1_bias, 
-                    ---------- Saidas ---------- 
+                    -- ['IN']['STD_LOGIC']
+                    clk=> clk,
+                    rst=> rst,
+                    -- ['IN']['STD_LOGIC_VECTOR']
+                    A=>  c1_n1_A,
+                    B=>  c1_n1_B,
+                    -- ['IN']['SIGNED_num_inputs']
+                    x1=> x1,
+                    x2=> x2,
+                    x3=> x3,
+                    -- ['IN']['SIGNED']
+                    bias=>  c1_n1_bias,
+                    ---------- Saidas ----------
 
-          );           
+          );
 
         test_2: ENTITY work.test
           PORT MAP (
                     ---------- Entradas ----------
-                    -- ['IN']['STD_LOGIC'] 
-                    clk=> clk, 
-                    rst=> rst, 
-                    -- ['IN']['STD_LOGIC_VECTOR'] 
-                    A=>  c1_n2_A, 
-                    B=>  c1_n2_B, 
-                    -- ['IN']['SIGNED_num_inputs'] 
-                    x1=> x1, 
-                    x2=> x2, 
-                    x3=> x3, 
-                    -- ['IN']['SIGNED'] 
-                    bias=>  c1_n2_bias, 
-                    ---------- Saidas ---------- 
+                    -- ['IN']['STD_LOGIC']
+                    clk=> clk,
+                    rst=> rst,
+                    -- ['IN']['STD_LOGIC_VECTOR']
+                    A=>  c1_n2_A,
+                    B=>  c1_n2_B,
+                    -- ['IN']['SIGNED_num_inputs']
+                    x1=> x1,
+                    x2=> x2,
+                    x3=> x3,
+                    -- ['IN']['SIGNED']
+                    bias=>  c1_n2_bias,
+                    ---------- Saidas ----------
 
-          );    
+          );
 
     ------------------------------------------------------------------------------------
     Args:
@@ -170,7 +171,7 @@ def layer_neurons_port_map(number_of_neurons: int,
 
     Returns:
         txt(str): Retorna texto com todos os componentes mapeados, conforme exemplo acima.'
-        lista_camada_inputs(list): lista com INPUTS. Cada sublista é um tipo de INPUT. Formato igual ao exemplo de 'lista_camada_outputs'. 
+        lista_camada_inputs(list): lista com INPUTS. Cada sublista é um tipo de INPUT. Formato igual ao exemplo de 'lista_camada_outputs'.
         lista_camada_outputs(list): lista com OUTPUTS. Cada sublista é um tipo de OUTPUT. Formato abaixo:
             lista_camada_outputs[0] -> 'STD_LOGIC'
             lista_camada_outputs[1] -> 'STD_LOGIC_VECTOR'
@@ -311,15 +312,15 @@ def layer_neurons_port_map_ALL(layer_dict_arg: dict,
     """Função para gerar o mapeamento de TODOS OS NEURÔNIOS de uma camada, com base no dicionário do COMPONENTE desejado (neurônio).
 
     Args:
-        layer_dict_arg (dict, optional): dicionário da camada. Contem toda as descrições da camada e do tipo de neuronio que a compõe. 
+        layer_dict_arg (dict, optional): dicionário da camada. Contem toda as descrições da camada e do tipo de neuronio que a compõe.
         ----------------------------------------------------------------
         ID_camada (str, optional): string identificador da camada e neurônio. 'c1_n1' = camada 1 e neurônio 1. Defaults to 'c1_n1'.
-------------------------------------------------------------------------     
+------------------------------------------------------------------------
 
     Returns:
         camada_inputs(list), camada_outputs(list): listas de INPUTS e OUTPUTS que servirão para construção da camada.
 
-        port_map_txt (txt): Texto com todo o mapeamento. 
+        port_map_txt (txt): Texto com todo o mapeamento.
             Exemplo:
                 port_map_txt, camada_inputs, camada_outputs = layer_neurons_port_map_ALL(
                     neuron_dict = layer_dict_arg['Neuron_arch']['IO'],
@@ -332,48 +333,48 @@ def layer_neurons_port_map_ALL(layer_dict_arg: dict,
                     neuron_inst_0: ENTITY work.neuron_comb_ReLU_3n_8bit_signed_mul1a_v0_add0_v0
                         PORT MAP (
                                     ---------- Entradas ----------
-                                    -- ['IN']['STD_LOGIC'] 
-                                    clk=> clk, 
-                                    rst=> rst, 
-                                    -- ['IN']['SIGNED'] 
-                                    bias=>  c1_n0_bias, 
-                                    -- ['IN']['SIGNED_num_inputs'] 
-                                    x1=> x1, 
-                                    x2=> x2, 
-                                    x3=> x3, 
-                                    w1=>  c1_n0_w1, 
-                                    w2=>  c1_n0_w2, 
-                                    w3=>  c1_n0_w3, 
-                                    ---------- Saidas ---------- 
-                                    -- ['OUT']['SIGNED'] 
-                                    y=>  c1_n0_y, 
-                        );           
+                                    -- ['IN']['STD_LOGIC']
+                                    clk=> clk,
+                                    rst=> rst,
+                                    -- ['IN']['SIGNED']
+                                    bias=>  c1_n0_bias,
+                                    -- ['IN']['SIGNED_num_inputs']
+                                    x1=> x1,
+                                    x2=> x2,
+                                    x3=> x3,
+                                    w1=>  c1_n0_w1,
+                                    w2=>  c1_n0_w2,
+                                    w3=>  c1_n0_w3,
+                                    ---------- Saidas ----------
+                                    -- ['OUT']['SIGNED']
+                                    y=>  c1_n0_y,
+                        );
 
                         neuron_inst_1: ENTITY work.neuron_comb_ReLU_3n_8bit_signed_mul1a_v0_add0_v0
                         PORT MAP (
                                     ---------- Entradas ----------
-                                    -- ['IN']['STD_LOGIC'] 
-                                    clk=> clk, 
-                                    rst=> rst, 
-                                    -- ['IN']['SIGNED'] 
-                                    bias=>  c1_n1_bias, 
-                                    -- ['IN']['SIGNED_num_inputs'] 
-                                    x1=> x1, 
-                                    x2=> x2, 
-                                    x3=> x3, 
-                                    w1=>  c1_n1_w1, 
-                                    w2=>  c1_n1_w2, 
-                                    w3=>  c1_n1_w3, 
-                                    ---------- Saidas ---------- 
-                                    -- ['OUT']['SIGNED'] 
-                                    y=>  c1_n1_y, 
-                        );           
+                                    -- ['IN']['STD_LOGIC']
+                                    clk=> clk,
+                                    rst=> rst,
+                                    -- ['IN']['SIGNED']
+                                    bias=>  c1_n1_bias,
+                                    -- ['IN']['SIGNED_num_inputs']
+                                    x1=> x1,
+                                    x2=> x2,
+                                    x3=> x3,
+                                    w1=>  c1_n1_w1,
+                                    w2=>  c1_n1_w2,
+                                    w3=>  c1_n1_w3,
+                                    ---------- Saidas ----------
+                                    -- ['OUT']['SIGNED']
+                                    y=>  c1_n1_y,
+                        );
     """
     # GERA TEXTO DO DO MAPEAMENTO DAS ENTRADAS E SAÍDAS DO DICIONÁRIO
     """Exemplo:
-            -- ['IN']['STD_LOGIC'] 
-            clk=> clk, 
-            rst=> rst, 
+            -- ['IN']['STD_LOGIC']
+            clk=> clk,
+            rst=> rst,
             ...
             """
     # for i in range(0,num_inputs):
@@ -512,32 +513,12 @@ def layer_name(layer_dict_arg: dict,
     # else:
     #     IO_type = 'unsigned'
     IO_type = layer_dict_arg['IO_type']
-    # fx_activation = find_True_dict(dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
+    # fx_activation = find_True_dict(dict_slice=layer_dict_arg['Neuron_arch']['Activation_function'])
 
-    fx_activation = find_True_dict_Output_print(
-        dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
-    if fx_activation == 'Using':  # caso seja uma fx com dicionário interno de parâmetros, devemos pegar o nome dela e não o 'using'
-        """Exemplo: 
-           'Activation_fx':{
-                'ReLU': False,
-                'Leaky_ReLU': {
-                    'Using': False,        # True = usar versão Leaky_ReLU
-                    'Leaky_attenuation': 2 #número de vezes que divide por 2 a ReLU (shift right)
-                },
-                'Sigmoid': {
-                    'Using': True,        # True = usar versão Sigmoid (Look Up Table)
-                    'Memory': {
-                    'bits_mem': 8,
-                    'input_mem_bits': lambda:layer_dict_softmax['Neuron_arch']['Activation_fx']['Sigmoid']['Memory']['bits_mem'],  # 'n' binary digits are the fractional part of `x`; = MANTISSA
-                    }
-                    }
-                }
-            O que confirma se é a Sigmoid é o {'Using': True }, porém queremos pegar o nome 'Sigmoid', que está um nível de hierarquia acima """
-        fx_activation = find_True_dict_Output_print_above_level(
-            dict_slice=layer_dict_arg['Neuron_arch']['Activation_fx'])
-    #### Nome do arquivo .vhd ####
-    file_name = f"camada{str(layer_dict_arg['Layer_num'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['bits'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
-    return file_name
+    fx_activation = find_fx_activation(layer_dict_arg)
+    return f"camada{str(layer_dict_arg['Layer_num'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['bits'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
+
+
 # EXEMPLO
 # file_name  = layer_name(layer_num =1,
 #                neuron_num = layer_dict_arg['Neurons_number'],
@@ -584,14 +565,14 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE work.parameters.ALL;
 
-{layerDict_to_entityTxt(layer_dict = output_dict,  
+{layerDict_to_entityTxt(layer_dict = output_dict,
                     remove_dict_items=[],
                     generic = True
              )}
 
-ARCHITECTURE arch OF  {output_dict['Layer_name']}  IS 
+ARCHITECTURE arch OF  {output_dict['Layer_name']}  IS
 BEGIN
-{port_map_txt} 
+{port_map_txt}
 END ARCHITECTURE;
 '''
                   )
@@ -653,9 +634,10 @@ def all_dense_layers_gen(
     OUTPUT_BASE_DIR_PATH: str,
     DOWNLOAD_VHD: bool = True,
     gen_dead_neurons: bool = False,
+    FX_ACTIVATION_LIST: list = [],
     DEBUG: bool = False
 ) -> list:
-    """Função para gerar todas as camadas da NN com base em dicionários base e outros parâmetros passados. Dicionários base, são dicionários que serão utilizados em toda 1 ou mais vezes, só alterando os outros parâmetros passados como 'Inputs_number', 'bits', 'IO_type' e 'Layer_Neurons_number_list'. 
+    """Função para gerar todas as camadas da NN com base em dicionários base e outros parâmetros passados. Dicionários base, são dicionários que serão utilizados em toda 1 ou mais vezes, só alterando os outros parâmetros passados como 'Inputs_number', 'bits', 'IO_type' e 'Layer_Neurons_number_list'.
         Ao final, irá gerar os arquivos VHDL de todas as camadas, salvando napasta 'NNs/Camadas', caso o parâmetro download_vhd == True
 
     Args:
@@ -693,7 +675,7 @@ def all_dense_layers_gen(
     layers_dict_list = [[None] for i in range(number_of_layers)]
 
     # --------------------------------------------------------
-    """ atribuindo os dicionários base para cada item da lista. 
+    """ atribuindo os dicionários base para cada item da lista.
     Sendo:
     dicionário base das 'hidden_layers' = layer_dict_hidden
     dicionário base da camada softmax = layer_dict_softmax
@@ -739,6 +721,8 @@ def all_dense_layers_gen(
                                                   Neurons_number=neurons_number,
                                                   Layer_num=i
                                                   )
+    if FX_ACTIVATION_LIST != []:
+        update_fx_activation(FX_ACTIVATION_LIST, layers_dict_list)
 
     # --------------------------------------------------------
     #  CRIANDO PASTA
@@ -802,6 +786,46 @@ def all_dense_layers_gen(
     #             print(f"all_dense_layers_gen()  ->  dict[{i}] -> erro")
 
     return layers_dict_list
+
+
+def update_fx_activation(FX_ACTIVATION_LIST, layers_dict_list):
+    """
+    Update the activation function for each layer in a neural network architecture.
+
+    Args:
+        FX_ACTIVATION_LIST (list): List of strings representing the activation function to be used in each layer.
+        layers_dict_list (list): List of dictionaries, where each dictionary contains the architecture of a layer.
+
+    Returns:
+        None
+
+    Raises:
+        SystemExit: If an unknown activation function is provided in FX_ACTIVATION_LIST.
+
+    """
+    # Loop through each layer in the architecture
+    for i in range(0, len(layers_dict_list)):
+        # Reset all activation functions to False
+        layers_dict_list[i]['Neuron_arch']['Activation_function']['ReLU'] = False
+        layers_dict_list[i]['Neuron_arch']['Activation_function']['Leaky_ReLU']['Using'] = False
+        layers_dict_list[i]['Neuron_arch']['Activation_function']['Sigmoid']['Using'] = False
+        layers_dict_list[i]['Neuron_arch']['Activation_function']['Linear'] = False
+
+        # Set the activation function for this layer based on FX_ACTIVATION_LIST[i]
+        # get lowercase string
+        if FX_ACTIVATION_LIST[i].lower() == 'ReLU'.lower():
+            layers_dict_list[i]['Neuron_arch']['Activation_function']['ReLU'] = True
+        elif FX_ACTIVATION_LIST[i].lower() == 'Leaky_ReLU'.lower():
+            layers_dict_list[i]['Neuron_arch']['Activation_function']['Leaky_ReLU']['Using'] = True
+        elif FX_ACTIVATION_LIST[i].lower() == 'Sigmoid'.lower():
+            layers_dict_list[i]['Neuron_arch']['Activation_function']['Sigmoid']['Using'] = True
+        elif FX_ACTIVATION_LIST[i].lower() == 'Linear'.lower():
+            layers_dict_list[i]['Neuron_arch']['Activation_function']['Linear'] = True
+        else:
+            # If the activation function is not recognized, exit the program
+            print('ERROR: Unrecognized activation function')
+            sys.exit()
+
 # # imprimindo texto VHDL para análise no Jupyter Notebook
 # if (print_cells_result == 1):
 #   print(layer_text)

@@ -1,0 +1,2 @@
+do wave_colors.do
+run 7 us
