@@ -8,7 +8,7 @@
 # #     'IO_type': True,     # 1= signed || 0= unsigned
 # #     'Neurons_number': 4,  # número de neurônios da camada
 # #     'Layer_name': '',  # nome do '.vhd' da camada
-# #     'Layer_num': '',  # número da camada
+# #     'Layer_number': '',  # número da camada
 # #     # --------------------------
 # #     # DEVE SE ALTERAR AUTOMATICAMENTE COM BASE NA CONFIG DO NEURÔNIO
 # #     'IO': {  # INPUT & OUTPUT
@@ -42,7 +42,7 @@
 # #         # -------------------------
 
 # #         # --------- Geração do nome do neurônio ---------
-# #         'Neuron_name': '',
+# #         'neuron_name': '',
 # #         # 0 = don't include | 1 = include 'seq' or 'comb' on vhd_names
 # #         'Include_MAC_type': True,
 

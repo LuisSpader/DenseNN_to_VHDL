@@ -1436,7 +1436,7 @@ def IO_manager_layer(IO_dict: dict = {},
     # text = text[:-1] #tira ';' e uma linha em branco
     return (IO_text, traço)
 # EXEMPLO
-# print(entity(name = layer_dict['Neuron_arch']['Neuron_name'],
+# print(entity(name = layer_dict['Neuron_arch']['neuron_name'],
 #              BIT_WIDTH = 8,
 #              num_inputs = 3,
 #              IO_dict_list = [layer_dict['Neuron_arch']['shared_IO']['IO'], layer_dict['Neuron_arch']['unique_IO']['IO']]

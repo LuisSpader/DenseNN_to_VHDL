@@ -1,11 +1,12 @@
 # a- reads JSON format
 # b- generates>> INPUTS_NUMBER, BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, FX_ACTIVATION_LIST
+from model_conversion.model_2_object import model_2_object
 import json
 import os
 from fxpmath import Fxp
 import sys
 from model_conversion.Qaware.model_utils import whole_dir, get_model_path
-from model_conversion.Qaware.class_QAutoencoder import QAutoencoder, np
+from model_conversion.Qaware.class_QAutoencoder import *
 from model_conversion.tf_to_dict import tf_to_dict
 from model_conversion.load_model import load_objects
 from model_conversion.treat_arrays import generate_weights_file
@@ -62,37 +63,40 @@ def expected_results_gen(loaded_model_obj: QAutoencoder, tb_files_dir: str, is_s
 # expected_results_gen(loaded_model_obj, tb_files_dir)
 
 
-def model2_testbench(loaded_model_obj, model_path: str, NN_VHDL_path: str = None, IS_SIGNED: bool = True):
+def model2_testbench(loaded_model_obj, model_path: str, NN_VHDL_path: str = None, IS_SIGNED: bool = True, is_QAutoencoder: bool = True, model_name: str = None):
 
     tb_files_dir = f'{NN_VHDL_path}/testbench_files'
     if not os.path.exists(tb_files_dir):
         os.makedirs(tb_files_dir)
 
-    # --- Plotins models predictions ---
-    # loaded_model_obj.plot_float_model()
-    # loaded_model_obj.plot_quantized_model()
-    # # loaded_model_obj.quantized_predictions(n=20)
-    # # loaded_model_obj.plot_quantized_model(n=20)
+    if is_QAutoencoder:
+        # --- Plotins models predictions ---
+        # loaded_model_obj.plot_float_model()
+        # loaded_model_obj.plot_quantized_model()
+        # # loaded_model_obj.quantized_predictions(n=20)
+        # # loaded_model_obj.plot_quantized_model(n=20)
 
-    tb_inputs_gen(loaded_model_obj, tb_files_dir)
-    # todo: 'is_signed' deve ser definida em um arquivo centralizado
-    expected_results_gen(loaded_model_obj, tb_files_dir, is_signed=True)
+        tb_inputs_gen(loaded_model_obj, tb_files_dir)
+        # todo: 'is_signed' deve ser definida em um arquivo centralizado
+        expected_results_gen(loaded_model_obj, tb_files_dir, is_signed=True)
 
-    generate_weights_file(
-        model_path,
-        tb_files_dir,
-        # best_model_path,
-        IS_SIGNED,
-        BIT_WIDTH=loaded_model_obj.BIT_WIDTH,
-        REVERSE_WEIGHTS=False,
-        BIAS_ENDING=True,
-        LOAD_QUANTIZED_MODEL=True)
+        generate_weights_file(
+            model_path,
+            tb_files_dir,
+            # best_model_path,
+            IS_SIGNED,
+            BIT_WIDTH=loaded_model_obj.BIT_WIDTH,
+            REVERSE_WEIGHTS=False,
+            BIAS_ENDING=True,
+            LOAD_QUANTIZED_MODEL=True,
+            model_name=model_name)
+    else:
+        pass
 
 
 def load_model_obj_AND_gen_dict(model_path: str = None):
     # whole_dir defined on 'class_Autoencoder.py' file
     # --------------- Getting model with lowest loss ---------------
-    # best_model_path = get_model_path(whole_dir, MINI_MODEL, model_path)
 
     if not model_path:
         print('load_model.py -> model2_dict_and_testbench(): model_path is empty, please provide a valid path')
@@ -111,15 +115,38 @@ def load_model_obj_AND_gen_dict(model_path: str = None):
     return loaded_model_obj
 
 
-def dict_to_dense(MINI_MODEL: bool = False, model_path: str = None):
+def dict_to_dense(MINI_MODEL: bool = False, model_path: str = None, data=None, Q_EPOCHS: int = 1):
 
     IO_TYPE_STR = 'signed'
 
     BASE_DICT_HIDDEN = layer_dict_hidden
     BASE_DICT_SOFTMAX = layer_dict_softmax
-    # get the model with the lowest loss
-    best_model_path = get_model_path(
+
+    # get the model with the lowest loss or get model folder
+    best_model_path, model_name = get_model_path(
         whole_dir, MINI_MODEL=MINI_MODEL, model_path=model_path)
+
+    save_objects_path = f"{best_model_path}/saved_objects"
+
+    if not model_path:  # get QAutoencoder object
+        loaded_model_obj = load_model_obj_AND_gen_dict(
+            model_path=best_model_path)
+    else:
+        loaded_model_obj = model_2_object(
+            model=model_path, model_folder=best_model_path, model_name=model_name,
+            data=data, Q_EPOCHS=Q_EPOCHS, BIT_WIDTH=8)
+        # loaded_model = tf.keras.models.load_model(best_model_path)
+        # generates the model_dict
+        tf_to_dict(loaded_model_obj.model,
+                   loaded_model_obj.BIT_WIDTH,
+                   save_path=loaded_model_obj.save_objects_path
+                   )
+
+    model_dict_dir = f"{save_objects_path}/model.json"
+    # open a JSON file as dictionary
+    with open(model_dict_dir) as json_file:
+        model_dict = json.load(json_file)
+
     # OUTPUT_BASE_DIR_PATH = './NNs'
     OUTPUT_BASE_DIR_PATH = f"{best_model_path}/VHDL"
 
@@ -141,13 +168,6 @@ def dict_to_dense(MINI_MODEL: bool = False, model_path: str = None):
     IS_SIGNED = False
     if IO_TYPE_STR == 'signed':
         IS_SIGNED = True
-
-    loaded_model_obj = load_model_obj_AND_gen_dict(model_path=best_model_path)
-
-    model_dict_dir = f"{best_model_path}/saved_objects/model.json"
-    # open a JSON file as dictionary
-    with open(model_dict_dir) as json_file:
-        model_dict = json.load(json_file)
 
     BIT_WIDTH = model_dict['general_config']['bit_width']
 
@@ -178,7 +198,23 @@ def dict_to_dense(MINI_MODEL: bool = False, model_path: str = None):
                       )
 
     model2_testbench(loaded_model_obj, model_path=best_model_path,
-                     NN_VHDL_path=PARAMS.path, IS_SIGNED=IS_SIGNED)
+                     NN_VHDL_path=PARAMS.path, IS_SIGNED=IS_SIGNED, is_QAutoencoder=True, model_name=model_name)
+
+    # -------------------------------------
+# dict_to_dense(MINI_MODEL=False, model_path='')
 
 
-dict_to_dense(MINI_MODEL=True, model_path='')
+class Data:
+    def __init__(self, x_train, y_train, x_test, y_test):
+        self.x_train = x_train
+        self.y_train = y_train
+        self.x_test = x_test
+        self.y_test = y_test
+
+
+X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+y = np.array([[0], [1], [1], [0]])
+data = Data(x_train=X, y_train=y, x_test=X, y_test=y)
+
+dict_to_dense(MINI_MODEL=False,
+              model_path=r'C:\Users\luisa\OneDrive\Documentos\GitHub\DenseNN_to_VHDL\models\XOR\xor.h5', data=data, Q_EPOCHS=1)

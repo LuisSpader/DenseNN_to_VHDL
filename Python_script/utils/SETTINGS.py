@@ -16,8 +16,10 @@ class Signals():
             self.signals_stack.append([item, layer_number])
 
     def signals_to_text(self):
-        self.signals_txt = '\n'.join(map(str, (self.signals_dec)))
-        self.signals_txt = txt_add_space_begin(txt=self.signals_txt, space=1)
+        if self.signals_dec != []:
+            self.signals_txt = '\n'.join(map(str, (self.signals_dec)))
+            self.signals_txt = txt_add_space_begin(
+                txt=self.signals_txt, space=1)
 
     def Get_signals_txt(self):
         return self.signals_txt

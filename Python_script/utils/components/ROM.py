@@ -371,7 +371,7 @@ def ROM_Sigmoid_gen(
         text_file = open(final_path, "w")
         text_file.write(rom_text_asic)
         text_file.close()
-        print(f"arquivo gerado: {final_path}.vhd")
+        print(f"arquivo gerado: {final_path}")
 
 
 # ------------------------------------

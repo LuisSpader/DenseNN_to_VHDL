@@ -327,7 +327,7 @@ def layer_neurons_port_map_ALL(layer_dict_arg: dict,
                     ID_camada = 'c1',
                     number_of_neurons= 2,
                     num_inputs = 3,
-                    vhd_name = layer_dict_arg['Neuron_arch']['Neuron_name'])
+                    vhd_name = layer_dict_arg['Neuron_arch']['neuron_name'])
 
                 Output -> print(port_map_txt):
                     neuron_inst_0: ENTITY work.neuron_comb_ReLU_3n_8bit_signed_mul1a_v0_add0_v0
@@ -393,7 +393,7 @@ def layer_neurons_port_map_ALL(layer_dict_arg: dict,
     # mapeamento de TODOS OS NEURÔNIOS da camada
     port_map_txt, camada_inputs, camada_outputs = layer_neurons_port_map(
         number_of_neurons=output_dict['Neurons_number'],
-        vhd_name=output_dict['Neuron_arch']['Neuron_name'],
+        vhd_name=output_dict['Neuron_arch']['neuron_name'],
         neuron_dict=output_dict['Neuron_arch'],
         num_inputs=output_dict['Inputs_number'],
         ID_camada=ID_camada,
@@ -516,7 +516,7 @@ def layer_name(layer_dict_arg: dict,
     # fx_activation = find_True_dict(dict_slice=layer_dict_arg['Neuron_arch']['Activation_function'])
 
     fx_activation = find_fx_activation(layer_dict_arg)
-    return f"camada{str(layer_dict_arg['Layer_num'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['bits'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
+    return f"camada{str(layer_dict_arg['Layer_number'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['bits'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
 
 
 # EXEMPLO
@@ -532,25 +532,25 @@ def layer_name(layer_dict_arg: dict,
 def layer_gen(
     layer_dict_arg: dict,
     n_max=int,
-    Layer_num: int = 0,
+    Layer_number: int = 0,
 ) -> str:
     """Função para gerar texto de uma camada, de acordo com 'layer_dict_arg'.
 
     Args:
         layer_dict_arg (dict): Dicionário da camada.
-        Layer_num (int, optional): Número da camada. Defaults to 0.
+        Layer_number (int, optional): Número da camada. Defaults to 0.
 
     Returns:
         str: _description_
     """
-    PARAMS.layer_iteration = Layer_num
+    PARAMS.layer_iteration = Layer_number
     # output_dict = copy.deepcopy(layer_dict_arg)
     output_dict = layer_dict_arg
-    output_dict['Layer_num'] = Layer_num
+    output_dict['Layer_number'] = Layer_number
 
     # gerando o nome da camada com base nos parâmetros passados no dicionário
     output_dict['Layer_name'] = layer_name(layer_dict_arg=output_dict)
-    ID_camada = f"c{Layer_num}"
+    ID_camada = f"c{Layer_number}"
 
     # gerando texto port_map dos neurônios e atualizando as IO do 'layer'dict' (dicionário da camada)
     port_map_txt, output_dict = layer_neurons_port_map_ALL(
@@ -584,7 +584,7 @@ def layer_dict_gen_base(base_dict: dict,
                         bits: int,
                         IO_type: str,  # 1= signed || 0= unsigned
                         Neurons_number: int,
-                        Layer_num: int
+                        Layer_number: int
                         ) -> dict:
     """Função para gerar um dicionário novo mais rapidamente através de um dicionário base já definido anteriormente. Desta forma definimos inicialmente um dicionário base, com a maioria dos parâmetros da arquitetura já definidos (tipo de multiplicador, adder, etc),  tendo assim uma arquitetura mais padrão e após isso geramos um novo dicionário, que será idêntico ao dicionário EXCETO pelos parâmetros que esta função possui, como: número de entradas, número de bits, tipo de IO (com ou sem sinal), número de neurônios da camada e por último, o número da camada (ordem crescente).
 
@@ -593,7 +593,7 @@ def layer_dict_gen_base(base_dict: dict,
       Inputs_number (int): número de entradas da camada
       bits (int): número de bits para representação das entradas e saídas da camada
       IO_type (bool): tipo de represenação numérica (com ou sem sinal). 1 = signed | 0 = unsigned
-      Layer_num (int): número da camada
+      Layer_number (int): número da camada
 
     Returns:
         dict: Dicionário de saída, que será quase igual ao 'base_dict' exceto pelos parâmetros passados nesta função.
@@ -607,7 +607,7 @@ def layer_dict_gen_base(base_dict: dict,
     output_dict['IO_type'] = IO_type
     output_dict['Neurons_number'] = Neurons_number
     output_dict['Layer_name'] = layer_name(layer_dict_arg=output_dict)
-    output_dict['Layer_num'] = Layer_num
+    output_dict['Layer_number'] = Layer_number
 
     # ------- ALTERA DICIONÁRIO: PARTE DO NEURÔNIO -------
     update_dict_neuron(layer_dict=output_dict)
@@ -699,7 +699,7 @@ def all_dense_layers_gen(
                                               bits=BIT_WIDTH,
                                               IO_type=IO_type_str,  # 1= signed || 0= unsigned
                                               Neurons_number=neurons_number,
-                                              Layer_num=0
+                                              Layer_number=0
                                               )
 
     if (gen_dead_neurons == True):  # com neuronios mortos
@@ -719,7 +719,7 @@ def all_dense_layers_gen(
                                                   bits=BIT_WIDTH,
                                                   IO_type=IO_type_str,  # 1= signed || 0= unsigned
                                                   Neurons_number=neurons_number,
-                                                  Layer_num=i
+                                                  Layer_number=i
                                                   )
     if FX_ACTIVATION_LIST != []:
         update_fx_activation(FX_ACTIVATION_LIST, layers_dict_list)
@@ -743,16 +743,16 @@ def all_dense_layers_gen(
         if (gen_dead_neurons == True):  # caso queiramos gerar neurônios mortos
             # layer_text = layer_gen(
             #     layer_dict_arg = layers_dict_list[i],
-            #     Layer_num = layers_dict_list[i]['Layer_num'],
+            #     Layer_number = layers_dict_list[i]['Layer_number'],
             #     n_max = np.max(Layer_Neurons_number_list))
             layer_text = layer_gen(
                 layer_dict_arg=layers_dict_list[i],
-                Layer_num=layers_dict_list[i]['Layer_num'],
+                Layer_number=layers_dict_list[i]['Layer_number'],
                 n_max=np.max(Layer_Neurons_number_list))
         else:  # caso não queiramos gerar neurônios mortos
             layer_text = layer_gen(
                 layer_dict_arg=layers_dict_list[i],
-                Layer_num=layers_dict_list[i]['Layer_num'],
+                Layer_number=layers_dict_list[i]['Layer_number'],
                 n_max=0)
 
         # salvando VHDL

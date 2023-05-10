@@ -165,7 +165,7 @@ vhd3 = VHD_obj(name='vhd3', bits=7, num_inputs=4,
 vhd = VHD_obj(name='vhd_neuron', bits=4, num_inputs=2, IO_dict=None,
               VHD_obj_list=[vhd2, vhd3])
 
-print(" =========================== COMEÇO ============================= ")
+print(" ===== ================================== starting GEN_TOP_LEVEL_HDL function  ... ====================================== ")
 
 # print(f"bits: {vhd.entity.bits}")
 # print(f"num_inputs: {vhd.entity.num_inputs}")

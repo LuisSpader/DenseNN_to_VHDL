@@ -50,7 +50,7 @@ layer_dict_hidden = {
     'IO_type': 'signed',     # 'signed' | 'unsigned' | 'std_logic_vector'
     'Neurons_number': 4,  # número de neurônios da camada
     'Layer_name': '',  # nome do '.vhd' da camada
-    'Layer_num': '',  # número da camada
+    'Layer_number': '',  # número da camada
     # --------------------------
     # DEVE SE ALTERAR AUTOMATICAMENTE COM BASE NA CONFIG DO NEURÔNIO
     'IO': {  # INPUT & OUTPUT
@@ -91,7 +91,7 @@ layer_dict_hidden = {
         # -------------------------
 
         # --------- Geração do nome do neurônio ---------
-        'Neuron_name': '',
+        'neuron_name': '',
         # 0 = don't include | 1 = include 'seq' or 'comb' on vhd_names
         'Include_MAC_type': False,
 
@@ -198,11 +198,12 @@ layer_dict_hidden = {
 
 def update_neuron_name_from_LayerDict(layer_dict):
     # ['ReLU', 'Leaky ReLU', 'Sigmoid']
-    fx_activation = get_dict_fx_activation(layer_dict=layer_dict)
+    # fx_activation = get_dict_fx_activation(layer_dict=layer_dict)
     # Definindo nome do neurônio
-    layer_dict['Neuron_arch']['Neuron_name'] = vhd_name(
+    layer_dict['Neuron_arch']['neuron_name'] = vhd_name(
         # modelo de função de ativação
-        vhd_name=f"neuron_{fx_activation}",
+        # vhd_name=f"neuron_{fx_activation}",
+        vhd_name=f"neuron_layer{layer_dict['Layer_number']}",
         # Obs: dict_list 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
         # Quantidade de BIT_WIDTH para representação
         BIT_WIDTH=layer_dict['BIT_WIDTH'],
@@ -337,11 +338,11 @@ def get_neuron_data_from_LayerDict(layer_dict: dict, DEBUG: bool = False):
             print(
                 f"get_neuron_data_from_LayerDict() -> layer_dict['Neuron_arch']['IO_type']: {layer_dict['Neuron_arch']['IO_type']}")
 
-    Neuron_name = layer_dict['Neuron_arch']['Neuron_name']
+    neuron_name = layer_dict['Neuron_arch']['neuron_name']
     if DEBUG:
         print(f"get_neuron_data_from_LayerDict() -> IO_type: {IO_type}")
         print(
-            f"get_neuron_data_from_LayerDict() -> Neuron_name: {Neuron_name}")
+            f"get_neuron_data_from_LayerDict() -> neuron_name: {neuron_name}")
         print(
             "-------------------- get_neuron_data_from_LayerDict() ------------------------")
 
@@ -351,16 +352,16 @@ def get_neuron_data_from_LayerDict(layer_dict: dict, DEBUG: bool = False):
 
     output_mem_bits = input_mem_bits  # por enquanto entrada = saída
 
-    return num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, input_mem_bits, input_mem_bits, output_mem_bits
+    return num_inputs, BIT_WIDTH, IO_type, neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, input_mem_bits, input_mem_bits, output_mem_bits
 
 
 # print(f"-------- get_neuron_data_from_LayerDict(layer_dict: dict) ----------- ")
-# num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, input_mem_bits, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
+# num_inputs, BIT_WIDTH, IO_type, neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, input_mem_bits, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
 #     layer_dict=layer_dict_hidden)
 # print(f"num_inputs: {num_inputs}")
 # print(f"BIT_WIDTH: {BIT_WIDTH}")
 # print(f"IO_type: {IO_type}")
-# print(f"Neuron_name: {Neuron_name}")
+# print(f"neuron_name: {neuron_name}")
 # print(f"Include_MAC_type: {Include_MAC_type}")
 # print(f"MAC_type: {MAC_type}")
 # print(f"Barriers: {Barriers}")
@@ -382,7 +383,7 @@ layer_dict_softmax = {
     'IO_type': 'signed',     # 'signed' | 'unsigned' | 'std_logic_vector'
     'Neurons_number': 2,  # número de neurônios da camada
     'Layer_name': '',  # nome do '.vhd' da camada
-    'Layer_num': '',  # número da camada
+    'Layer_number': '',  # número da camada
     # --------------------------
     # DEVE SE ALTERAR AUTOMATICAMENTE COM BASE NA CONFIG DO NEURÔNIO
     'IO': {  # INPUT & OUTPUT
@@ -423,7 +424,7 @@ layer_dict_softmax = {
         # -------------------------
 
         # --------- Geração do nome do neurônio ---------
-        'Neuron_name': '',
+        'neuron_name': '',
         # 0 = don't include | 1 = include 'seq' or 'comb' on vhd_names
         'Include_MAC_type': True,
 
@@ -528,9 +529,10 @@ layer_dict_softmax = {
 
 }
 # Definindo nome do neurônio
-layer_dict_softmax['Neuron_arch']['Neuron_name'] = vhd_name(
+layer_dict_softmax['Neuron_arch']['neuron_name'] = vhd_name(
     # modelo de função de ativação
-    vhd_name=f"neuron_{dict_list[0]}",
+    # vhd_name=f"neuron_{dict_list[0]}",
+    vhd_name=f"neuron_layer{layer_dict_softmax['Layer_number']}",
     # Obs: dict_list 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
     # Quantidade de BIT_WIDTH para representação
     BIT_WIDTH=layer_dict_softmax['BIT_WIDTH'],
@@ -552,7 +554,7 @@ layer_dict_softmax['Neuron_arch']['Neuron_name'] = vhd_name(
     adder_number=find_True_dict_split(
         split_str='-', dict=layer_dict_softmax['Neuron_arch']['Adder'], position=0),     # análogo ao 'mult_number'
     adder_version=0)
-# layer_dict_softmax['Neuron_arch']['Neuron_name']
+# layer_dict_softmax['Neuron_arch']['neuron_name']
 
 layer_dict_softmax['Neuron_arch']['IO']['GENERIC']['TOTAL_BITS'] = layer_dict_softmax['Neuron_arch']['IO']['GENERIC']['BITS'](
 )*layer_dict_softmax['Neuron_arch']['IO']['GENERIC']['NUM_INPUTS']()

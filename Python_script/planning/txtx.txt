@@ -5,14 +5,15 @@ st9=>start: start GEN_TOP_LEVEL_HDL
 io11=>inputoutput: input: INPUTS_NUMBER, BIT_WIDTH, IO_TYPE_STR, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN, BASE_DICT_SOFTMAX, OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, DOWNLOAD_VHD, DEAD_NEURONS, DEBUG
 op14=>operation: NUMBER_OF_LAYERS = len(LAYER_NEURONS_NUMBER_LIST)
 op16=>operation: layers_dict_list = []
-sub18=>subroutine: print(' ================================== FAZENDO CAMADAS ==================================')
+sub18=>subroutine: print(' ================================== Creating Layers
+==================================')
 op20=>operation: layers_dict_list = all_dense_layers_gen(Inputs_number=INPUTS_NUMBER, bits=BIT_WIDTH, IO_type_str=IO_TYPE_STR, number_of_layers=NUMBER_OF_LAYERS, Layer_Neurons_number_list=LAYER_NEURONS_NUMBER_LIST, base_dict_hidden_layers=BASE_DICT_HIDDEN, base_dict_softmax_layer=BASE_DICT_SOFTMAX, OUTPUT_BASE_DIR_PATH=f'{OUTPUT_BASE_DIR_PATH}', Include_parameters_on_FolderName=INCLUDE_PARAMETERS_ON_FOLDERNAME, download_vhd=DOWNLOAD_VHD, 
 gen_dead_neurons=DEAD_NEURONS, DEBUG=DEBUG)
 op22=>operation: OUTPUT_BASE_DIR_PATH = OUTPUT_BASE_DIR_PATH
 cond25=>condition: if INCLUDE_PARAMETERS_ON_FOLDERNAME
 op29=>operation: path_parameters = f'{OUTPUT_BASE_DIR_PATH}_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits'
 op31=>operation: OUTPUT_BASE_DIR_PATH = f'{path_parameters}'
-sub38=>subroutine: print(' ================================== FAZENDO NEURONIOS ==================================')
+sub38=>subroutine: print(' ================================== Creating Neurons ==================================')
 cond41=>operation: Neuron_Gen_from_dict(download_vhd=DOWNLOAD_VHD, layer_dict=layer_dict_i, OUTPUT_BASE_DIR_PATH=f'{OUTPUT_BASE_DIR_PATH}/Neuron', 
 DEBUG=True) while  layer_dict_i in layers_dict_list
 sub53=>subroutine: parameters_vhd_gen(BIT_WIDTH, parameters_vhd_name='parameters', OUTPUT_BASE_DIR_PATH=OUTPUT_BASE_DIR_PATH, create_path_folder=False)

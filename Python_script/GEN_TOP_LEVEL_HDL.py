@@ -41,7 +41,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                       DEAD_NEURONS: bool = True,
                       DEBUG: bool = False
                       ):
-    print("====================== COMEÇO =========================")
+    print(" ================================== starting GEN_TOP_LEVEL_HDL function  ... ==================================")
 
     NUMBER_OF_LAYERS = len(LAYER_NEURONS_NUMBER_LIST)
     neurons_PM_matrix_local = PortMap_matrix(LAYER_NEURONS_NUMBER_LIST)
@@ -56,7 +56,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                                                 OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS,
                                                 include_datetime=False)
 
-    print(" ================================== FAZENDO CAMADAS ==================================")
+    print(" == == == == == == == == == == == == == == == == == Creating Layers == == == == == == == == == == == == == == == == ==")
     layers_dict_list = all_dense_layers_gen(
         Inputs_number=INPUTS_NUMBER,
         BIT_WIDTH=BIT_WIDTH,
@@ -72,7 +72,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     )
     PARAMS.layers_dict_list = layers_dict_list
 
-    print(" ================================== FAZENDO NEURONIOS ==================================")
+    print(" ================================== Creating Neurons ==================================")
 
     for i, item in enumerate(layers_dict_list):
         PARAMS.layer_iteration = i
@@ -105,7 +105,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                   id_W_in='W_in',
                   id_IO_out='IO_out'
                   )
-    print(' #################### FINAL #################### ')
+    print(' == == == == == == == == == == == == == == == == == Finished GEN_TOP_LEVEL_HDL function == == == == == == == == == == == == == == == == == ')
 
 
 def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: list, layers_dict_list: list):
@@ -545,9 +545,9 @@ def optimize_signal_declaration(neurons_PM_matrix_local: list, layers_dict_list:
 
                 except:
                     del neurons_PM_matrix_local[n]  # c0_n3_W_out retirar
-
-    signals.signals_dec.append(
-        f"SIGNAL {', '.join(map(str, (signals_Wout_list)))}: {layers_dict_list[0]['IO_type']}(BITS - 1 DOWNTO 0);")
+    if signals_Wout_list != []:
+        signals.signals_dec.append(
+            f"SIGNAL {', '.join(map(str, (signals_Wout_list)))}: {layers_dict_list[0]['IO_type']}(BITS - 1 DOWNTO 0);")
 
 
 def generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN, OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS, include_datetime: bool = True):

@@ -229,7 +229,7 @@ class QAutoencoder:
         quantize_model = tfmot.quantization.keras.quantize_model
         self.q_aware_model = quantize_model(self.model)
         self.q_aware_model.compile(optimizer='adam', loss='mse')
-        self.fit_data_Q_aware()
+        self.fit_data_Q_aware(epochs=self.Q_EPOCHS)
         # loss = self.q_aware_model.evaluate(self.x_test, self.x_test, verbose=0)
 
         # # Save the quantized model
@@ -242,10 +242,11 @@ class QAutoencoder:
         """Write the fit function for the autoencoder. 
         Storing the fit history in self.history to be able to plot the fitting scores."""
 
-        self.path_to_quantized_model = f'{whole_dir}/models/{self.model_type}{self.model_name_id}_{str(self.loss)[0:7]}loss/quant_model{self.BIT_WIDTH}bits/KERAS_check_best_model.model'
+        folder_path = f'{whole_dir}/models/{self.model_type}{self.model_name_id}_{str(self.loss)[0:7]}loss/quant_model{self.BIT_WIDTH}bits'
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
 
-        if not os.path.exists(self.path_to_quantized_model):
-            os.makedirs(self.path_to_quantized_model)
+        self.path_to_quantized_model = f'{folder_path}/KERAS_check_best_model.h5'
 
         callbacks = all_callbacks(stop_patience=1000,
                                   lr_factor=0.5,

@@ -829,14 +829,14 @@ def port_map_dict_i_iplus1(dict_list: dict,
     layer_IO_in_concat = []
     # global signals
 
-    if dict_list[i]['Layer_num'] == 0:
+    if dict_list[i]['Layer_number'] == 0:
         if IO_type == 'IN':
             for j in range(0, len(port_map_list)):  # iterando sobre 'OUT'
                 if 'IO_in' in port_map_list[j]:
                     buff = f"reg_{port_map_list[j]}"
                     port_map_list[j] = buff
 
-    if dict_list[i]['Layer_num'] > 0:
+    if dict_list[i]['Layer_number'] > 0:
         # se for a segunda camada 'c1' ou em diante:
         port_map_list_previous = dict_list_exceptNone(
             dict_slice=dict_list[i-1]['IO']['OUT'][port_type],

@@ -203,7 +203,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict(MAC_name='MAC',
     """
     mult_version = 0
     # pegando dados do dicionário
-    num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
+    num_inputs, BIT_WIDTH, IO_type, neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
         layer_dict=layer_dict)
 
     output_name = dict_list_exceptNone(
@@ -314,7 +314,7 @@ def MAC_Tree_Barriers_TxtGen_from_dict2(MAC_name='MAC',
     mult_version = 0
 
     # pegando dados do dicionário
-    num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
+    num_inputs, BIT_WIDTH, IO_type, neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
         layer_dict=layer_dict)
     layer_dict
 
@@ -666,7 +666,7 @@ def MAC_Tree_NoBarriers_TxtGen_from_dict(MAC_name='MAC',
     mult_version = 0
 
     # pegando dados do dicionário
-    num_inputs, BIT_WIDTH, IO_type, Neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
+    num_inputs, BIT_WIDTH, IO_type, neuron_name, Include_MAC_type, MAC_type, Barriers, fx_activation, n_bin, input_mem_bits, output_mem_bits = get_neuron_data_from_LayerDict(
         layer_dict=layer_dict)
 
     output_name = dict_list_exceptNone(

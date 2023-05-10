@@ -2,12 +2,11 @@
 # from load_model import get_model_path, whole_dir
 import tensorflow as tf
 from model_conversion.get_weights import save_weights_by_neuron_to_json
+import tensorflow_model_optimization as tfmot
 from fxpmath import Fxp
 import copy
 import os
 import numpy as np
-
-from model_conversion.Qaware.model_utils import get_model_path, whole_dir
 
 
 # ---------------- Functions ----------------
@@ -548,17 +547,26 @@ def save_weights(SAVE_PATH, LOG_PATH, PM_matrix_to_testbench):
     print("weights_bin.txt: done")
 
 
-def get_model_weights(MODEL_PATH, BIT_WIDTH, LOAD_QUANTIZED_MODEL):
+def get_model_weights(MODEL_PATH: str, model_name: str, BIT_WIDTH: int, LOAD_QUANTIZED_MODEL: bool, is_QAutoencoder_object: bool):
+
+    if is_QAutoencoder_object:
+        path_to_Qmodel = f"{MODEL_PATH}/quant_model{BIT_WIDTH}bits/KERAS_check_best_model.h5"
+        path_to_model = f"{MODEL_PATH}/KERAS_check_best_model.model"
+    else:
+        path_to_Qmodel = f"{MODEL_PATH}/{model_name}.h5"
+        path_to_model = path_to_Qmodel
+
     if LOAD_QUANTIZED_MODEL:
         layers_array_q = []
-        model_q = tf.keras.models.load_model(
-            f"{MODEL_PATH}/quant_model{BIT_WIDTH}bits/KERAS_check_best_model.model")
+        # path_to_model = f"{MODEL_PATH}/quant_model{BIT_WIDTH}bits/KERAS_check_best_model.model"
+        path_to_Qmodel = path_to_Qmodel.replace("\\", "/")
+        with tfmot.quantization.keras.quantize_scope():
+            model_q = tf.keras.models.load_model(path_to_Qmodel)
         layers_array_q = get_quantized_model_weights(layers_array_q, model_q)
         return layers_array_q, model_q
     else:
         layers_array = []
-        model = tf.keras.models.load_model(
-            f"{MODEL_PATH}/KERAS_check_best_model.model")
+        model = tf.keras.models.load_model(path_to_model)
         layers_array = get_float_model_weights(layers_array, model)
         return layers_array, model
 
@@ -607,7 +615,8 @@ def generate_weights_file(
         BIT_WIDTH: int,
         REVERSE_WEIGHTS: bool,
         BIAS_ENDING: bool,
-        LOAD_QUANTIZED_MODEL: bool
+        LOAD_QUANTIZED_MODEL: bool,
+        model_name: str
 ):
     """
     Generate a weights file to be used in a neural network in hardware.
@@ -636,7 +645,7 @@ def generate_weights_file(
     #         [np.load(f"{ARRAYS_PATH}/{os.listdir(ARRAYS_PATH)[i]}"), np.load(f"{ARRAYS_PATH}/{os.listdir(ARRAYS_PATH)[i+1]}")])  # [bias, weights]
 
     layers_array, model = get_model_weights(
-        MODEL_PATH, BIT_WIDTH, LOAD_QUANTIZED_MODEL)
+        MODEL_PATH, model_name, BIT_WIDTH, LOAD_QUANTIZED_MODEL)
 
     # layers_array = [
     #     [bias_array, weights_array], # layer0
@@ -733,7 +742,7 @@ def generate_weights_file(
     # Add ghost neurons to layers with fewer neurons.
     neurons_with_ghosts = add_ghost_neurons(neurons_joined_PortMap_structure,
                                             max_number_of_layers, ghost_neuron_models, layers_num_sequence)
-    print("ghosts done")
+    # print("ghosts done")
     # neurons_with_ghosts = [
     #     [
     #         ['layer0_n0', -0.12465311, [...]],  # 'layer0_n0', bias, [weights]
@@ -864,7 +873,7 @@ def generate_weights_file(
 
 # ==============================================================
 
-
+# from model_conversion.Qaware.model_utils import get_model_path, whole_dir
 # # whole_dir = os.getcwd()
 # best_model_path = get_model_path(whole_dir, MINI_MODEL=False, model_path='')
 

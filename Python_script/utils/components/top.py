@@ -9,11 +9,11 @@ INPUTS_NUMBER = 5
 
 # # output_dict = copy.deepcopy(layer_dict_arg)
 # output_dict = layer_dict_hidden
-# # output_dict['Layer_num'] = Layer_num
+# # output_dict['Layer_number'] = Layer_number
 
 # # gerando o nome da camada com base nos parâmetros passados no dicionário
 # # output_dict['Layer_name'] = layer_name(layer_dict_arg=output_dict)
-# # ID_camada = f"c{Layer_num}"
+# # ID_camada = f"c{Layer_number}"
 
 # txt, camada_inputs, camada_outputs = (entity_port_map(
 #     vhd_name='topname',

@@ -22,7 +22,7 @@ layers_dict_list = all_dense_layers_gen(
 			- ------
 			    output_dict=layer_dict_arg
 			    neuron_dict=output_dict['Neuron_arch']['IO']
-			    neuron_vhd_name=output_dict['Neuron_arch']['Neuron_name']
+			    neuron_vhd_name=output_dict['Neuron_arch']['neuron_name']
 			    number_of_neurons=output_dict['Neurons_number']
 			    num_inputs=output_dict['Inputs_number']
 

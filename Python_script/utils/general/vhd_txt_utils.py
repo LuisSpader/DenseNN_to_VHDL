@@ -90,15 +90,15 @@ def entity(name: str,
     dict_list_IO = [layer_dict['Neuron_arch']['shared_IO']['IO'], layer_dict['Neuron_arch']
         ['unique_IO']['IO']] # estamos usando as IO 'shared_IO' e 'unique_IO'
 
-    layer_dict['Neuron_arch']['Neuron_name'] = neuron_comb_ReLU_3n_8bit_unsigned_mul1a_v0_add0_v0
+    layer_dict['Neuron_arch']['neuron_name'] = neuron_comb_3n_8bit_unsigned_mul1a_v0_add0_v0
 
-      entity(name = layer_dict['Neuron_arch']['Neuron_name'],
+      entity(name = layer_dict['Neuron_arch']['neuron_name'],
                BIT_WIDTH = 8,
                num_inputs = 3,
                IO_dict_list = dict_list_IO)
 
       Output:
-        ENTITY  neuron_comb_ReLU_3n_8bit_unsigned_mul1a_v0_add0_v0 IS
+        ENTITY  neuron_comb_3n_8bit_unsigned_mul1a_v0_add0_v0 IS
           PORT (
             clk, rst: IN STD_LOGIC;
             bias: IN signed(7 DOWNTO 0);
@@ -252,9 +252,9 @@ def entity_MAC(name: str,
     dict_list_IO = [layer_dict['Neuron_arch']['shared_IO']['IO'], layer_dict['Neuron_arch']
         ['unique_IO']['IO']] # estamos usando as IO 'shared_IO' e 'unique_IO'
 
-    layer_dict['Neuron_arch']['Neuron_name'] = neuron_comb_ReLU_3n_8bit_unsigned_mul1a_v0_add0_v0
+    layer_dict['Neuron_arch']['neuron_name'] = neuron_comb_3n_8bit_unsigned_mul1a_v0_add0_v0
 
-      entity(name = layer_dict['Neuron_arch']['Neuron_name'],
+      entity(name = layer_dict['Neuron_arch']['neuron_name'],
                BIT_WIDTH = 8,
                num_inputs = 3,
                IO_dict_list = dict_list_IO)
@@ -419,7 +419,7 @@ end ENTITY;
     return txt
 
 # print(entity(sum_name, BIT_WIDTH, num_inputs, [MAC_IO_dict]))
-# print(entity(name=layer_dict_hidden['Neuron_arch']['Neuron_name'],
+# print(entity(name=layer_dict_hidden['Neuron_arch']['neuron_name'],
 #              BIT_WIDTH=8,
 #              num_inputs=3,
 #              IO_dict_list=[layer_dict_hidden['Neuron_arch']['IO']['shared_IO'],
