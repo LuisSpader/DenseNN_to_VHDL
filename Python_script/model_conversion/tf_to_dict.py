@@ -92,11 +92,25 @@ def tf_to_dict(model, BIT_WIDTH: int, save_path: str = "models/model_conversion"
         #     # -------------------------------------------------------------------------
 
         # Add the layer to the model's dictionary
-        model_dict["general_config"] = {}
-        model_dict["general_config"]["bit_width"] = BIT_WIDTH
-        model_dict["general_config"]["class_name"] = "general_config"
-
+        # check if item exists in dictionary
         model_dict[layer.name] = layer_dict
+
+    if not "InputLayer" in model_dict:
+        model_dict["InputLayer"] = {"config": {}, "class_name": "InputLayer"}
+        model_dict["InputLayer"]['config']['batch_input_shape'] = [None,None]
+        try:
+        # a = model.__class__.input_spec
+        # ['input_spec']
+            model_dict["InputLayer"]['config']['batch_input_shape'] = model.input_shape
+        except AttributeError:
+            print("InputLayer and model['input_spech'][0]['ndim'] not found. They're used as information for the number of inputs 'INPUTS_NUMBER' in the model.json file. Please, add them manually.")
+            inputs_number = input("Enter the Neural Network number of inputs (on 1st layer): ")
+            model_dict["InputLayer"]['config']['batch_input_shape'][1] = int(inputs_number)
+            
+    model_dict["general_config"] = {}
+    model_dict["general_config"]["bit_width"] = BIT_WIDTH
+    model_dict["general_config"]["class_name"] = "general_config"
+
 
     # Save model dicts to a file
     dict_to_JSON(save_path, model_dict)

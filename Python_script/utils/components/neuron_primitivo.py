@@ -445,7 +445,7 @@ def Neuron_Gen_from_dict2(
             print("ERROR: neuron_type not found")
             exit()
 
-        is_last_layer = True
+        is_last_layer = True 
         if is_last_layer:
             download_text_to_path(f"{OUTPUT_BASE_DIR_PATH}/{neuron_name}.vhd",
                                   neuron_txt)  # download neuron

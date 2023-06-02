@@ -89,7 +89,8 @@ def model2_testbench(loaded_model_obj, model_path: str, NN_VHDL_path: str = None
             REVERSE_WEIGHTS=False,
             BIAS_ENDING=True,
             LOAD_QUANTIZED_MODEL=True,
-            model_name=model_name)
+            model_name=model_name,
+            is_QAutoencoder = is_QAutoencoder)
     else:
         pass
 
@@ -131,7 +132,9 @@ def dict_to_dense(MINI_MODEL: bool = False, model_path: str = None, data=None, Q
     if not model_path:  # get QAutoencoder object
         loaded_model_obj = load_model_obj_AND_gen_dict(
             model_path=best_model_path)
+        is_QAutoencoder = True
     else:
+        is_QAutoencoder = False
         loaded_model_obj = model_2_object(
             model=model_path, model_folder=best_model_path, model_name=model_name,
             data=data, Q_EPOCHS=Q_EPOCHS, BIT_WIDTH=8)
@@ -196,9 +199,9 @@ def dict_to_dense(MINI_MODEL: bool = False, model_path: str = None, data=None, Q
                       DEAD_NEURONS=DEAD_NEURONS,
                       DEBUG=False
                       )
-
+    
     model2_testbench(loaded_model_obj, model_path=best_model_path,
-                     NN_VHDL_path=PARAMS.path, IS_SIGNED=IS_SIGNED, is_QAutoencoder=True, model_name=model_name)
+                     NN_VHDL_path=PARAMS.path, IS_SIGNED=IS_SIGNED, is_QAutoencoder=is_QAutoencoder, model_name=model_name)
 
     # -------------------------------------
 # dict_to_dense(MINI_MODEL=False, model_path='')

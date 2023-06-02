@@ -23,10 +23,10 @@ if FIT_MODEL:
                 EPOCHS = 1
                 Q_EPOCHS = 1
             else:
-                # EPOCHS = 1
-                # Q_EPOCHS = 1
-                EPOCHS = 80
-                Q_EPOCHS = 25
+                EPOCHS = 1
+                Q_EPOCHS = 1
+                # EPOCHS = 80
+                # Q_EPOCHS = 25
 
             for item in MODEL_SIZE_list:
                 MODEL_SIZE = item

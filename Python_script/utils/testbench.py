@@ -199,6 +199,11 @@ def testbench_lists(id_IO_in: str = 'IO_in',
                 inputs = item[0]
                 inputs_val = f"val_{item[0]}"
                 text_val_inputs = f"VARIABLE {inputs_val}: STD_LOGIC_VECTOR(TOTAL_BITS - 1 DOWNTO 0) := (OTHERS => '0'); "
+            elif id_IO_out in item[0]:   # outputs variables (IO_out)
+                # buff_IO_out = []
+                # for jitem in item[0]:
+                #     buff_IO_out.append(f"val_{jitem}")
+                outputs_concatenation = item[0]
         else:  # is not str --> is sublist
             if id_W_in in item[0][0]:  # weights variables
                 buff_weights = [f"val_{jitem}" for jitem in item[0]]

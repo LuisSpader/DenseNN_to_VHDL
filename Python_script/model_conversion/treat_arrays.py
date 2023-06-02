@@ -616,7 +616,8 @@ def generate_weights_file(
         REVERSE_WEIGHTS: bool,
         BIAS_ENDING: bool,
         LOAD_QUANTIZED_MODEL: bool,
-        model_name: str
+        model_name: str,
+        is_QAutoencoder_object:bool
 ):
     """
     Generate a weights file to be used in a neural network in hardware.
@@ -645,7 +646,7 @@ def generate_weights_file(
     #         [np.load(f"{ARRAYS_PATH}/{os.listdir(ARRAYS_PATH)[i]}"), np.load(f"{ARRAYS_PATH}/{os.listdir(ARRAYS_PATH)[i+1]}")])  # [bias, weights]
 
     layers_array, model = get_model_weights(
-        MODEL_PATH, model_name, BIT_WIDTH, LOAD_QUANTIZED_MODEL)
+        MODEL_PATH, model_name, BIT_WIDTH, LOAD_QUANTIZED_MODEL,is_QAutoencoder_object)
 
     # layers_array = [
     #     [bias_array, weights_array], # layer0

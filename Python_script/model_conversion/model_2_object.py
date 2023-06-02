@@ -132,9 +132,13 @@ class Qmodel:
     def representative_dataset(self):
         for data in self.x_train:
             # Scale the data using min and max values
-            scaled_data = (data - self.input_min) / (self.input_max -
-                                                     self.input_min) * (2 ** (self.BIT_WIDTH - 1))
-            yield [np.array([scaled_data], dtype=np.float32)]
+            # scaled_data = (data - self.input_min) / (self.input_max -
+            #                                          self.input_min) * (2 ** (self.BIT_WIDTH - 1))
+            # yield [np.array([scaled_data], dtype=np.float32)]
+
+            # data = np.expand_dims(data, axis=0).astype(np.float32)
+            # yield [data]
+            yield [np.array([data], dtype=np.float32)]
 
     def convert_to_Q_aware(self):
         quantize_model = tfmot.quantization.keras.quantize_model
@@ -185,10 +189,10 @@ class Qmodel:
             self.q_aware_model)
         converter.optimizations = [tf.lite.Optimize.DEFAULT]
         converter.representative_dataset = self.representative_dataset
-        converter.target_spec.supported_ops = [
-            tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
-        converter.inference_input_type = tf.int8
-        converter.inference_output_type = tf.int8
+        #$ converter.target_spec.supported_ops = [
+        #$     tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+        #$ converter.inference_input_type = tf.int8
+        #$ converter.inference_output_type = tf.int8
 
         self.quantized_tflite_model = converter.convert()
 
@@ -204,49 +208,62 @@ class Qmodel:
         self.interpreter = tf.lite.Interpreter(
             model_content=self.quantized_tflite_model)
 
-        self.interpreter.allocate_tensors()
+        # $ self.interpreter.allocate_tensors()
 
         # Get input and output details
         self.input_details = self.interpreter.get_input_details()
         self.output_details = self.interpreter.get_output_details()
+        print("Input Shape:", self.input_details[0]['shape'])   # $ added
+        print("Input Type:", self.input_details[0]['dtype'])    # $ added
+        print("Output Shape:", self.output_details[0]['shape']) # $ added
+        print("Output Type:", self.output_details[0]['dtype'])  # $ added
+        # self.interpreter.resize_tensor_input(self.input_details[0]['index'], (10000, 28, 28))# $ added
+        # self.interpreter.resize_tensor_input(self.output_details[0]['index'], (10000, 10))   # $ added
+        self.interpreter.allocate_tensors() # $ added
+
+        # print("Input Shape:", self.input_details[0]['shape'])   # $ added
+        # print("Input Type:", self.input_details[0]['dtype'])    # $ added
+        # print("Output Shape:", self.output_details[0]['shape']) # $ added
+        # print("Output Type:", self.output_details[0]['dtype'])  # $ added
+
+
         self.quantized_predictions()
         self.save_objects()
 
     def quantized_predictions(self, n=50):
-        quantized_model_predictions = []
-        if n > len(self.x_test):
-            n = len(self.x_test)
-        for i in range(n):
-            # Prepare input data
-            # input_data = np.array(
-            #     [self.x_test[i]*(2**(self.BIT_WIDTH-1))], dtype=np.int8)
-            # input_data = np.array([(self.x_test[i] - self.input_min) / (self.input_max - self.input_min) * (2 ** (self.BIT_WIDTH - 1))], dtype=np.int8)
-            # ! PAREI AQUI
-            input_array = [((self.x_test[i] - self.input_min) / (
-                self.input_max - self.input_min)) * (2 ** (self.BIT_WIDTH))]
+        self.float_model_predictions = self.model.predict(self.x_test)
+        self.qaware_model_predictions = self.q_aware_model.predict(self.x_test)
 
-            input_data = np.array(input_array, dtype=np.int8)
+        quantized_model_predictions = []
+        for item in self.x_test:
+            print(f"item: {item}")
+            # input_data = np.array([item], dtype=np.int8)
+            input_data = np.array([item], dtype=np.float32)
+            # scaled =  item*( (2 ** (self.BIT_WIDTH -1))-1)
+            # input_data = np.array([scaled], dtype=np.int8)
+            # input_data = np.array([scaled], dtype=np.int8)[np.newaxis, :]
+            # input_data = np.array(scaled, dtype=np.int8)[:,np.newaxis]
+            print(f"input_data: {input_data}")
 
             self.interpreter.set_tensor(
                 self.input_details[0]['index'], input_data)
-            # print(f"input_data: {input_data}")
 
             # Run inference
             self.interpreter.invoke()
-
             # Get output
             output_data = self.interpreter.get_tensor(
                 self.output_details[0]['index'])
-            output_data = self.interpreter.get_tensor(
-                # self.output_details[0]['index']) / (2 ** (self.BIT_WIDTH - 1))
-                self.output_details[0]['index'])
-            # output_data = output_data * (self.input_max - self.input_min) / (2 ** (self.BIT_WIDTH - 1)) + self.input_min
-            # output_data = output_data / (2 ** (self.BIT_WIDTH - 1))
-            quantized_model_predictions.append(output_data)
-            # print(f"output_data: {output_data}")
-
+            print(f"output_data: {output_data}")
+            # output_data = self.interpreter.get_tensor(
+            #     self.output_details[0]['index'])
+            quantized_model_predictions.append(output_data*(2**(self.BIT_WIDTH-1)))
         self.quantized_model_predictions = quantized_model_predictions
-        # self.compute_mse()
+        #? self.quantized_model_predictions = [
+        #     array([[-126]], dtype=int8),    # -126  = 10000010 = 130
+        #     array([[0]], dtype=int8),       # 0     = 00000000 = 0
+        #     array([[9]], dtype=int8),       # 9     = 00001001 = 9
+        #     array([[-127]], dtype=int8)     # -127  = 10000001 = 129
+        #     ]
 
     def quantized_predictions2(self, n=50):
         quantized_model_predictions = []
@@ -257,7 +274,7 @@ class Qmodel:
             #     [self.x_test[i]*(2**(self.BIT_WIDTH-1))], dtype=np.int8)
             # input_data = np.array([(self.x_test[i] - self.input_min) / (self.input_max - self.input_min) * (2 ** (self.BIT_WIDTH - 1))], dtype=np.int8)
             input_data = np.array([(self.x_test[i] - self.input_min) / (
-                self.input_max - self.input_min) * (2 ** (self.BIT_WIDTH))], dtype=np.int64)
+                self.input_max - self.input_min) * (2 ** (self.BIT_WIDTH))], dtype=np.int8)
 
             self.interpreter.set_tensor(
                 self.input_details[0]['index'], input_data)
