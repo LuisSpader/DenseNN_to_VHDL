@@ -31,7 +31,7 @@
 # #         # número de entradas e pesos do perceptron
 # #         'Inputs_number': lambda: layer_dict_hidden['Inputs_number'],
 # #         # define o número de bits para as entradas e pesos
-# #         'Bit_WIDTH': lambda: layer_dict_hidden['bits'],
+# #         'Bit_WIDTH': lambda: layer_dict_hidden['BIT_WIDTH'],
 # #         # True= signed || 0= unsigned
 # #         'IO_type': lambda: layer_dict_hidden['IO_type'],
 

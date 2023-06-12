@@ -19,7 +19,7 @@ USE work.parameters.ALL;
   );
   end ENTITY;
 
-ARCHITECTURE arch OF  camada1_ReLU_3neuron_8bits_4n_signed  IS 
+ARCHITECTURE arch OF  camada1_ReLU_3neuron_8bits_4n_signed  IS
 BEGIN
 
 neuron_inst_0: ENTITY work.neuron_comb_ReLU_4n_8bit_signed_mult0_v0_add0_v0_out
@@ -72,5 +72,5 @@ neuron_inst_2: ENTITY work.neuron_comb_ReLU_4n_8bit_signed_mult0_v0_add0_v0_out
             -- ['OUT']['manual'] 
             W_out=> c1_n2_W_out
    );
-             
+            
 END ARCHITECTURE;

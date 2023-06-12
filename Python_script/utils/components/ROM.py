@@ -366,6 +366,7 @@ def ROM_Sigmoid_gen(
     rom_text_asic = ROM_txt_gen(
         text_rom_to_asic, ROM_clk, ROM_name, memory_width, memory_depth)
 
+    # print(f"ROM_Sigmoid_gen: \n{rom_text_asic}")
     if DOWNLOAD:
         final_path = f"{path}/{ROM_name}.vhd"
         text_file = open(final_path, "w")

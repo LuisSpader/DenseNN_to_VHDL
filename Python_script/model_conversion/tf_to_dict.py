@@ -42,7 +42,7 @@ def tf_to_dict(model, BIT_WIDTH: int, save_path: str = "models/model_conversion"
         if layer_dict["class_name"] == 'QActivation':
             layer_dict["config"] = {'name': layer_dict["config"]['name'],
                                     'dtype': layer_dict["config"]['dtype']
-                                    # 'bits': layer_dict["config"]['activation']['bits']
+                                    # 'bits': layer_dict["config"]['activation']['BIT_WIDTH']
                                     }
 
         tf_dict[layer.name] = layer_dict

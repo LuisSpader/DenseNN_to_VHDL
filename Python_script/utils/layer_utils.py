@@ -516,13 +516,13 @@ def layer_name(layer_dict_arg: dict,
     # fx_activation = find_True_dict(dict_slice=layer_dict_arg['Neuron_arch']['Activation_function'])
 
     fx_activation = find_fx_activation(layer_dict_arg)
-    return f"camada{str(layer_dict_arg['Layer_num'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['bits'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
+    return f"camada{str(layer_dict_arg['Layer_num'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['BIT_WIDTH'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
 
 
 # EXEMPLO
 # file_name  = layer_name(layer_num =1,
 #                neuron_num = layer_dict_arg['Neurons_number'],
-#                bits = layer_dict_arg['bits'],
+#                bits = layer_dict_arg['BIT_WIDTH'],
 #                num_inputs = layer_dict_arg['Inputs_number'],
 #                IO_type = layer_dict_arg['IO_type'])
 # if (print_cells_result == 1):
@@ -581,7 +581,7 @@ END ARCHITECTURE;
 
 def layer_dict_gen_base(base_dict: dict,
                         Inputs_number: int,
-                        bits: int,
+                        BIT_WIDTH: int,
                         IO_type: str,  # 1= signed || 0= unsigned
                         Neurons_number: int,
                         Layer_num: int
@@ -603,7 +603,7 @@ def layer_dict_gen_base(base_dict: dict,
 
     # ------- ALTERA DICIONÁRIO: PARTE DA CAMADA -------
     output_dict['Inputs_number'] = Inputs_number
-    output_dict['bits'] = bits
+    output_dict['BIT_WIDTH'] = BIT_WIDTH
     output_dict['IO_type'] = IO_type
     output_dict['Neurons_number'] = Neurons_number
     output_dict['Layer_name'] = layer_name(layer_dict_arg=output_dict)
@@ -696,7 +696,7 @@ def all_dense_layers_gen(
 
     layers_dict_list[0] = layer_dict_gen_base(base_dict=layers_dict_list[0],
                                               Inputs_number=Inputs_number,
-                                              bits=BIT_WIDTH,
+                                              BIT_WIDTH=BIT_WIDTH,
                                               IO_type=IO_type_str,  # 1= signed || 0= unsigned
                                               Neurons_number=neurons_number,
                                               Layer_num=0
@@ -716,7 +716,7 @@ def all_dense_layers_gen(
         layers_dict_list[i] = layer_dict_gen_base(base_dict=layers_dict_list[i],
                                                   Inputs_number=layers_dict_list[i -
                                                                                  1]['Neurons_number'],
-                                                  bits=BIT_WIDTH,
+                                                  BIT_WIDTH=BIT_WIDTH,
                                                   IO_type=IO_type_str,  # 1= signed || 0= unsigned
                                                   Neurons_number=neurons_number,
                                                   Layer_num=i

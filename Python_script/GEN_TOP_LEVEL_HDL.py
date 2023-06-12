@@ -313,9 +313,9 @@ def update_top_dict_IO(DEBUG: bool, layers_dict_list: list, entity_inputs: list,
 
     # Update top_dict with input and output information
     top_dict['Inputs_number'] = layers_dict_list[0]['Inputs_number']
-    top_dict['bits'] = layers_dict_list[0]['bits']
+    top_dict['BIT_WIDTH'] = layers_dict_list[0]['BIT_WIDTH']
     top_dict['IO']['GENERIC']['TOTAL_BITS'] = layers_dict_list[0]['Inputs_number'] * \
-        layers_dict_list[0]['bits']
+        layers_dict_list[0]['BIT_WIDTH']
     top_dict['IO']['IN']['STD_LOGIC'] = l_inputs[0]
     top_dict['IO']['IN']['STD_LOGIC_VECTOR'] = l_inputs[1]
     top_dict['IO']['IN']['SIGNED'] = l_inputs[2]
