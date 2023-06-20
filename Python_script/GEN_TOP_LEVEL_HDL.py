@@ -53,7 +53,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # ]
 
     OUTPUT_BASE_DIR_PATH = generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN,
-                                                OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS,
+                                                OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS,INPUTS_NUMBER,
                                                 include_datetime=False)
 
     print(" == == == == == == == == == == == == == == == == == Creating Layers == == == == == == == == == == == == == == == == ==")
@@ -550,7 +550,7 @@ def optimize_signal_declaration(neurons_PM_matrix_local: list, layers_dict_list:
             f"SIGNAL {', '.join(map(str, (signals_Wout_list)))}: {layers_dict_list[0]['IO_type']}(BITS - 1 DOWNTO 0);")
 
 
-def generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN, OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS, include_datetime: bool = True):
+def generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN, OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS, INPUTS_NUMBER, include_datetime: bool = True):
     """Optimized function that returns the path for saving the output files.
 
     Args:
@@ -580,7 +580,7 @@ def generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN,
         date_string = now.strftime("%d_%m_%H_%M")
 
     if INCLUDE_PARAMETERS_ON_FOLDERNAME:
-        path_parameters = f"{OUTPUT_BASE_DIR_PATH}/NN_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits{arch}{barriers}{date_string}"
+        path_parameters = f"{OUTPUT_BASE_DIR_PATH}/NN_{NUMBER_OF_LAYERS}Layers_{BIT_WIDTH}bits_{INPUTS_NUMBER}{arch}{barriers}{date_string}"
         OUTPUT_BASE_DIR_PATH = path_parameters
     else:
         OUTPUT_BASE_DIR_PATH = OUTPUT_BASE_DIR_PATH
