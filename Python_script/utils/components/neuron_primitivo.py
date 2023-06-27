@@ -55,8 +55,8 @@ def reg_XW_sequence(num_inputs: int) -> tuple:
     while True:
         if (i < num_inputs):
             # reg_xi e reg_wi
-            reg_x_sequence.append("reg_x"+str(i+1))
-            reg_w_sequence.append("reg_w"+str(i+1))
+            reg_x_sequence.append(f"reg_x{str(i + 1)}")
+            reg_w_sequence.append(f"reg_w{str(i + 1)}")
             i = i+1
 
         else:
@@ -93,10 +93,7 @@ def rst_receive_gen(num_inputs: int,
     rst_space = tab_space(tab_space_num=rst_space)
     reg_x_sequence, reg_w_sequence = reg_XW_sequence(num_inputs)
 
-    rst_receive = []
-    rst_receive.append(rst_space + "reg_out_ROM_act <= (OTHERS => '0');")
-    rst_receive.append("")
-
+    rst_receive = [f"{rst_space}reg_out_ROM_act <= (OTHERS => '0');", ""]
     for i in range(0, len(reg_x_sequence)):
         rst_receive.append(
             rst_space + reg_x_sequence[i]+" <= (OTHERS => '0');")
@@ -189,6 +186,10 @@ def Neuron_Gen_from_dict2(
         DOWNLOAD_VHD (bool, optional): Se deseja fazer o download do arquivo '.vhd' do neurônio. True = download. Defaults to True.
         DEBUG (bool, optional): Parâmetro para imprimir algumas etapas da função. True = imprime. Defaults to False.
     """
+    length = len(layers_dict_list)
+    is_last_layer = False
+    if  i == (length - 1):
+        is_last_layer = True
 
     # ADDER_obj = Adder(layers_dict_list[i])
     GLOBAL.ADDERS.New_obj(layers_dict_list[i], create=True)
@@ -445,7 +446,7 @@ def Neuron_Gen_from_dict2(
             print("ERROR: neuron_type not found")
             exit()
 
-        is_last_layer = True 
+        # is_last_layer = True 
         if is_last_layer:
             download_text_to_path(f"{OUTPUT_BASE_DIR_PATH}/{neuron_name}.vhd",
                                   neuron_txt)  # download neuron
