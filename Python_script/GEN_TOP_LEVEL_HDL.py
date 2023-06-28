@@ -53,7 +53,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
     # ]
 
     OUTPUT_BASE_DIR_PATH = generate_output_path(BIT_WIDTH, LAYER_NEURONS_NUMBER_LIST, BASE_DICT_HIDDEN,
-                                                OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS,INPUTS_NUMBER,
+                                                OUTPUT_BASE_DIR_PATH, INCLUDE_PARAMETERS_ON_FOLDERNAME, NUMBER_OF_LAYERS, INPUTS_NUMBER,
                                                 include_datetime=False)
 
     print(" == == == == == == == == == == == == == == == == == Creating Layers == == == == == == == == == == == == == == == == ==")
@@ -533,8 +533,8 @@ def optimize_signal_declaration(neurons_PM_matrix_local: list, layers_dict_list:
     signals_Wout_list = []
 
     for l, layer in enumerate(layers_dict_list):
-        for n, neuron in enumerate(neurons_PM_matrix_local):
-            if l != 0:
+        if l != 0:
+            for n, neuron in enumerate(neurons_PM_matrix_local):
                 try:
                     # (c1_n0_W_out).replace('out','in') => c0_n0_W_out;
                     assign_list.append(
@@ -543,7 +543,7 @@ def optimize_signal_declaration(neurons_PM_matrix_local: list, layers_dict_list:
                     signals_Wout_list.append(neurons_PM_matrix_local[n][0])
                     del neurons_PM_matrix_local[n][0]
 
-                except:
+                except Exception:
                     del neurons_PM_matrix_local[n]  # c0_n3_W_out retirar
     if signals_Wout_list != []:
         signals.signals_dec.append(
