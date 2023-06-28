@@ -1,2 +1,0 @@
-do wave_colors.do
-run 50 ms
