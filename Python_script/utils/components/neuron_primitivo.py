@@ -171,7 +171,9 @@ def Neuron_Gen_from_dict2(
         layers_dict_list: dict = [{}, {}],
         i: int = 0,
         OUTPUT_BASE_DIR_PATH: str = "./NN/Neuron",
-        DEBUG: bool = False):
+        DEBUG: bool = False,
+        PARAMS=None
+        ):
     """Função para criar o neurônio (está bem gambiarra pois só copiei do script 'Python_vhd_script' e não ajustei ou aprimorei nada)
 
     Args:
@@ -192,8 +194,8 @@ def Neuron_Gen_from_dict2(
         is_last_layer = True
 
     # ADDER_obj = Adder(layers_dict_list[i])
-    GLOBAL.ADDERS.New_obj(layers_dict_list[i], create=True)
-    GLOBAL.MULTIPLIERS.New_obj(layers_dict_list[i], create=True)
+    GLOBAL.ADDERS.New_obj(layers_dict_list[i], create=True, PARAMS=PARAMS)
+    GLOBAL.MULTIPLIERS.New_obj(layers_dict_list[i], create=True, PARAMS=PARAMS)
 
     if DEBUG:
         print(" ====================================  COMEÇO Neuron_Gen_from_dict() ==================================== ")
@@ -239,7 +241,7 @@ def Neuron_Gen_from_dict2(
 
     # =================================================
     activation_fx_component = activation_fx_gen(
-        layer_dict_arg=layers_dict_list[i])
+        layer_dict_arg=layers_dict_list[i], PARAMS=PARAMS)
 
     # =================================================
     # ---------------------------- LEAKY RELU -----------------------------------

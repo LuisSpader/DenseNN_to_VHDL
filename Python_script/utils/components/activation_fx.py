@@ -2,7 +2,7 @@
 
 # vhd_block = Block_Arith
 from utils.general.components import entity_to_component
-from utils.SETTINGS import PARAMS
+# from utils.SETTINGS import PARAMS
 import os
 from utils.general.dict_utils import find_True_dict_Output_print, find_True_dict_Output_print_above_level
 
@@ -224,7 +224,8 @@ def activation_fx_gen(ReLU_txt: str = ReLU_txt,
                       ReLU_entity: str = ReLU_entity,
                       Leaky_entity: str = Leaky_entity,
                       Leaky_ReLU_txt: str = Leaky_ReLU_txt,
-                      layer_dict_arg: dict = None):
+                      layer_dict_arg: dict = None,
+                      PARAMS=None):
 
     if layer_dict_arg is None:
         layer_dict_arg = {}

@@ -1,5 +1,5 @@
 import os
-from utils.SETTINGS import PARAMS
+# from utils.SETTINGS import PARAMS
 from utils.general.components import entity_to_component
 from utils.general.dict_utils import find_True_dict_split
 # from SETTINGS import PARAMS
@@ -37,7 +37,7 @@ class Block_Arith:
 
         self.bit_width_multiplication = 1
 
-    def Update_with_dict(self, create=False):
+    def Update_with_dict(self, create=False, PARAMS=None):
         self.Set_name()  # child method
         self.Set_arch()  # child method
         self.Set_component()

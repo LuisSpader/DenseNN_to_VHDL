@@ -1,7 +1,11 @@
 import datetime
 import copy
-from utils.GLOBALS import GLOBAL
-from utils.SETTINGS import PARAMS
+from utils.GLOBALS import GLOBAL, reset_GLOBAL
+from utils.SETTINGS import PARAMS, reset_objects
+
+# from utils.GLOBALS import Global_objects, reset_GLOBAL
+# from utils.SETTINGS import Params, Signals, reset_object
+
 from utils.components.top import topDict_to_entityTxt
 from utils.components.neuron_primitivo import *
 from utils.layer_utils import *
@@ -16,18 +20,22 @@ sys.path.append('./utils')
 
 # ! todo: colocar hierarquia na documentação -> de que forma quer essa hierarquia documentada?
 # Done: refatorar para GEN_TOP_LEVEL_HDL
-# TODO: modularizar FX ACTIVATION units
+# ok TODO: modularizar FX ACTIVATION units
 # import settings
 
 # settings.init()          # Call only once
 global remove_signals_list
 
-# TODO: colocar opção inteiramente combinacional -> Reg só dps FX ACTIVATION
-# TODO: gerar top level e controles(update_NN)
-# TODO: tamanho padrao da camada oculta (somente usado quando dead neurons = True)
+# OK TODO: colocar opção inteiramente combinacional -> Reg só dps FX ACTIVATION
+# OK TODO: gerar top level e controles(update_NN)
+# OK TODO: tamanho padrao da camada oculta (somente usado quando dead neurons = True)
 '''DEAD_NEURONS:
        só colocar pesos zerados'''
 
+
+# GLOBAL = Global_objects()
+# PARAMS = Params()
+# signals = Signals()
 
 def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                       BIT_WIDTH: int = 8,
@@ -42,6 +50,10 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                       DEBUG: bool = False
                       ):
     print(" ================================== starting GEN_TOP_LEVEL_HDL function  ... ==================================")
+    global PARAMS, GLOBAL, signals
+
+
+
 
     NUMBER_OF_LAYERS = len(LAYER_NEURONS_NUMBER_LIST)
     neurons_PM_matrix_local = PortMap_matrix(LAYER_NEURONS_NUMBER_LIST)
@@ -70,7 +82,7 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
         gen_dead_neurons=DEAD_NEURONS,  # gera neurônios mortos
         DEBUG=DEBUG
     )
-    PARAMS.layers_dict_list = layers_dict_list
+    PARAMS.layers_dict_list = copy.deepcopy(layers_dict_list)
 
     print(" ================================== Creating Neurons ==================================")
 
@@ -80,7 +92,9 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                               i=i,
                               layers_dict_list=layers_dict_list,
                               OUTPUT_BASE_DIR_PATH=f"{OUTPUT_BASE_DIR_PATH}/Neuron",
-                              DEBUG=DEBUG)
+                              DEBUG=DEBUG,
+                              PARAMS=PARAMS
+                              )
 
     parameters_vhd_gen(
         # layer_dict = layers_dict_list[i]
@@ -105,7 +119,20 @@ def GEN_TOP_LEVEL_HDL(INPUTS_NUMBER: int = 3,
                   id_W_in='W_in',
                   id_IO_out='IO_out'
                   )
-    print(' == == == == == == == == == == == == == == == == == Finished GEN_TOP_LEVEL_HDL function == == == == == == == == == == == == == == == == == ')
+    # GLOBAL = None
+    # PARAMS = None
+    # dict_list = None
+    # fx_activation_dict = None
+    # layer_dict_hidden = None
+    # layer_dict_softmax = None
+    # signals = None
+    
+
+    
+    # reset_objects()
+    GLOBAL = reset_GLOBAL()
+    PARAMS, signals = reset_objects()
+    print(' == == == == == == == == == == == == == == == == == Finished GEN_TOP_LEVEL_HDL function == == == == == == == == == == == == == == == == == \n \n \n')
 
 
 def Top_gen(OUTPUT_BASE_DIR_PATH: str, DEBUG: bool, neurons_PM_matrix_local: list, layers_dict_list: list):

@@ -47,3 +47,9 @@ PARAMS = Params()
 
 
 # PM = Port_map()
+
+def reset_objects():
+    # global signals, PARAMS
+    PARAMS = Params()
+    signals = Signals()
+    return PARAMS, signals

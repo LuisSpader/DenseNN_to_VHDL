@@ -116,18 +116,18 @@ END ENTITY;''')
 class Multiplier(Block_Arith):
     # MULTIPLIERS = []
 
-    def __init__(self, layer_dict, create) -> None:
+    def __init__(self, layer_dict, create, PARAMS) -> None:
         super().__init__(layer_dict)
-        self.Update_with_dict(layer_dict, create)  # updt da arch
+        self.Update_with_dict(layer_dict, create, PARAMS)  # updt da arch
 
-    def Update_with_dict(self, layer_dict, create=False):
+    def Update_with_dict(self, layer_dict, create=False, PARAMS=None):
         self.layer_dict = layer_dict
         self.arch_id = adder_multiplier_number(
             self.layer_dict, type='Multiplier')
         # if layer_dict['Neuron_arch']['Barriers']:
         #     self.bit_width_multiplication = 2
         # self.Set_arch(layer_dict)
-        super().Update_with_dict(create)
+        super().Update_with_dict(create, PARAMS)
 
     def Set_name(self):
         self.name = (f"mult{self.arch_id}_v{self.arch_version}")
@@ -149,8 +149,8 @@ class Multipliers:
     def __init__(self) -> None:
         self.mult_obj_list = []
 
-    def New_obj(self, layer_dict, create):
-        self.mult_obj_list.append(Multiplier(layer_dict, create))
+    def New_obj(self, layer_dict, create, PARAMS):
+        self.mult_obj_list.append(Multiplier(layer_dict, create, PARAMS))
 
 # multiplier = Multiplier()
 # print(multiplier.txt)

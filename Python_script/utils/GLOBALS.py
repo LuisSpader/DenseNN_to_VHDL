@@ -85,6 +85,11 @@ class Global_objects():
 GLOBAL = Global_objects()
 
 
+def reset_GLOBAL():
+    # global GLOBAL
+    GLOBAL = Global_objects()
+    return GLOBAL
+
 # items = [
 #     ['clk, rst, update_weights:  STD_LOGIC;'],
 #     ['IO_in:  signed(TOTAL_BITS - 1 DOWNTO 0);\nc0_n0_W_in, c0_n1_W_in, c0_n2_W_in, c0_n3_W_in, c0_n4_W_in:  signed(BITS - 1 DOWNTO 0);'],
