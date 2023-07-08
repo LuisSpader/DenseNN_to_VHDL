@@ -62,7 +62,7 @@ def topDict_to_entityTxt(
         DEBUG: bool = False) -> str:
     # https://youtu.be/hdPC2G8NPHI
 
-    bits = top_dict['bits']
+    bits = top_dict['BIT_WIDTH']
     num_inputs = top_dict['Inputs_number']
 
     if not isinstance(bits, int):

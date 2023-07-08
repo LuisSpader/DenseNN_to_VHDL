@@ -259,14 +259,14 @@ if gera_automatico == 1:
         inputs_list_index >= len(inputs_list_gen) - 1
     ):  # Quando chega no final da lista de 'inputs'
         inputs_list_index = 0
-        bits_list_index += 1  # Quando ainda não é o final da lista de 'bits'
+        bits_list_index += 1  # Quando ainda não é o final da lista de 'BIT_WIDTH'
 
     else:  # Quando ainda não é o final da lista de 'inputs'
         inputs_list_index += 1
 
     if bits_list_index >= len(
         bits_list_gen
-    ):  # Quando chega no final da lista de 'bits'
+    ):  # Quando chega no final da lista de 'BIT_WIDTH'
         bits_list_index = 0
 
     bits = bits_list_gen[

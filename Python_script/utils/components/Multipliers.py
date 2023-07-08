@@ -16,7 +16,7 @@ import os
 # ):
 #     multiplier_version = 0
 
-#     bits = layer_dict['bits']
+#     bits = layer_dict['BIT_WIDTH']
 #     multiplier_number = find_True_dict_split(
 #         split_str='-', dict=layer_dict['Neuron_arch']['Multiplier'])
 #     multiplier_number = int(multiplier_number)

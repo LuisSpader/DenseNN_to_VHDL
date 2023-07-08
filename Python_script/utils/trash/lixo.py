@@ -4,7 +4,7 @@
 # # layer_dict_hidden = {
 # #     # ========================== Parâmetros da camada ===========================
 # #     'Inputs_number': 3,  # número de entradas da camada
-# #     'bits': 8,
+# #     'BIT_WIDTH': 8,
 # #     'IO_type': True,     # 1= signed || 0= unsigned
 # #     'Neurons_number': 4,  # número de neurônios da camada
 # #     'Layer_name': '',  # nome do '.vhd' da camada
@@ -31,7 +31,7 @@
 # #         # número de entradas e pesos do perceptron
 # #         'Inputs_number': lambda: layer_dict_hidden['Inputs_number'],
 # #         # define o número de bits para as entradas e pesos
-# #         'Bit_WIDTH': lambda: layer_dict_hidden['bits'],
+# #         'Bit_WIDTH': lambda: layer_dict_hidden['BIT_WIDTH'],
 # #         # True= signed || 0= unsigned
 # #         'IO_type': lambda: layer_dict_hidden['IO_type'],
 
@@ -218,7 +218,7 @@ camada_outputs = [[['', ''], ['', ''], ['', ['c0_n0_y']], ['', ''], ['', ''], ['
     'c0_n1_y']], ['', ''], ['', ''], ['', ''], []], [['', ''], ['', ''], ['', ['c0_n2_y']], ['', ''], ['', ''], ['', ''], []]]
 
 dict_top = {'Inputs_number': 3,
-            'bits': 8,
+            'BIT_WIDTH': 8,
             'IO_type': 'signed',
             'Neurons_number': 4,
             'Top_name': 'top',

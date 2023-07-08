@@ -209,7 +209,7 @@ layers_dict_list = all_dense_layers_gen(
 
 topdict={
 'Inputs_number': 3,
-'bits': 8,
+'BIT_WIDTH': 8,
 'IO_type': 'signed',
 'Neurons_number': 4,
 'Top_name': 'top',

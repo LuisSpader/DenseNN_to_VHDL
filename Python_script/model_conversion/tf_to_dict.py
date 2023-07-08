@@ -42,7 +42,7 @@ def tf_to_dict(model, BIT_WIDTH: int, save_path: str = "models/model_conversion"
         if layer_dict["class_name"] == 'QActivation':
             layer_dict["config"] = {'name': layer_dict["config"]['name'],
                                     'dtype': layer_dict["config"]['dtype']
-                                    # 'bits': layer_dict["config"]['activation']['bits']
+                                    # 'BIT_WIDTH': layer_dict["config"]['activation']['BIT_WIDTH']
                                     }
 
         tf_dict[layer.name] = layer_dict
@@ -97,20 +97,22 @@ def tf_to_dict(model, BIT_WIDTH: int, save_path: str = "models/model_conversion"
 
     if not "InputLayer" in model_dict:
         model_dict["InputLayer"] = {"config": {}, "class_name": "InputLayer"}
-        model_dict["InputLayer"]['config']['batch_input_shape'] = [None,None]
+        model_dict["InputLayer"]['config']['batch_input_shape'] = [None, None]
         try:
-        # a = model.__class__.input_spec
-        # ['input_spec']
+            # a = model.__class__.input_spec
+            # ['input_spec']
             model_dict["InputLayer"]['config']['batch_input_shape'] = model.input_shape
         except AttributeError:
-            print("InputLayer and model['input_spech'][0]['ndim'] not found. They're used as information for the number of inputs 'INPUTS_NUMBER' in the model.json file. Please, add them manually.")
-            inputs_number = input("Enter the Neural Network number of inputs (on 1st layer): ")
-            model_dict["InputLayer"]['config']['batch_input_shape'][1] = int(inputs_number)
-            
+            print(
+                "InputLayer and model['input_spech'][0]['ndim'] not found. They're used as information for the number of inputs 'INPUTS_NUMBER' in the model.json file. Please, add them manually.")
+            inputs_number = input(
+                "Enter the Neural Network number of inputs (on 1st layer): ")
+            model_dict["InputLayer"]['config']['batch_input_shape'][1] = int(
+                inputs_number)
+
     model_dict["general_config"] = {}
     model_dict["general_config"]["bit_width"] = BIT_WIDTH
     model_dict["general_config"]["class_name"] = "general_config"
-
 
     # Save model dicts to a file
     dict_to_JSON(save_path, model_dict)

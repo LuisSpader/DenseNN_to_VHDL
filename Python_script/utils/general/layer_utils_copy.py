@@ -420,12 +420,12 @@ def layer_name(layer_dict_arg: dict,
         fx_activation = find_True_dict_Output_print_above_level(
             dict_slice=layer_dict_arg['Neuron_arch']['Activation_function'])
     #### Nome do arquivo .vhd ####
-    file_name = f"camada{str(layer_dict_arg['Layer_number'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['bits'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
+    file_name = f"camada{str(layer_dict_arg['Layer_number'])}_{fx_activation}_{str(layer_dict_arg['Neurons_number'])}neuron_{str(layer_dict_arg['BIT_WIDTH'])}bits_{str(layer_dict_arg['Inputs_number'])}n_{IO_type}"
     return file_name
 # EXEMPLO
 # file_name  = layer_name(layer_num =1,
 #                neuron_num = layer_dict_arg['Neurons_number'],
-#                bits = layer_dict_arg['bits'],
+#                bits = layer_dict_arg['BIT_WIDTH'],
 #                num_inputs = layer_dict_arg['Inputs_number'],
 #                IO_type = layer_dict_arg['IO_type'])
 # if (print_cells_result == 1):
@@ -460,7 +460,7 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
 {entity(name = output_dict['Layer_name'], 
-             bits = output_dict['bits'], 
+             bits = output_dict['BIT_WIDTH'], 
              num_inputs = output_dict['Inputs_number'],
              IO_dict_list = [output_dict['IO']]
              )}
@@ -496,7 +496,7 @@ def layer_dict_gen_base(base_dict: dict,
     # output_dict = copy.deepcopy(base_dict)
     output_dict = base_dict
     output_dict['Inputs_number'] = Inputs_number
-    output_dict['bits'] = bits
+    output_dict['BIT_WIDTH'] = bits
     output_dict['IO_type'] = IO_type
     output_dict['Neurons_number'] = Neurons_number
     output_dict['Layer_number'] = Layer_number
@@ -535,7 +535,7 @@ def layer_dict_gen_base(base_dict: dict,
         vhd_name=f"neuron_{fx_activation}",
         # Obs: dict_list 0: ReLU, 1: Leaky ReLU, 2: Sigmoid
         # Quantidade de bits para representação
-        bits=output_dict['bits'],
+        bits=output_dict['BIT_WIDTH'],
         # 1= signed || 0= unsigned
         IO_type=output_dict['IO_type'],
         # Quantidade de entradas
@@ -569,7 +569,7 @@ def all_dense_layers_gen(
     path: str,
     download_vhd: bool = True
 ) -> list:
-    """Função para gerar todas as camadas da NN com base em dicionários base e outros parâmetros passados. Dicionários base, são dicionários que serão utilizados em toda 1 ou mais vezes, só alterando os outros parâmetros passados como 'Inputs_number', 'bits', 'IO_type' e 'Layer_Neurons_number_list'. 
+    """Função para gerar todas as camadas da NN com base em dicionários base e outros parâmetros passados. Dicionários base, são dicionários que serão utilizados em toda 1 ou mais vezes, só alterando os outros parâmetros passados como 'Inputs_number', 'BIT_WIDTH', 'IO_type' e 'Layer_Neurons_number_list'. 
         Ao final, irá gerar os arquivos VHDL de todas as camadas, salvando napasta 'NNs/Camadas', caso o parâmetro download_vhd == True
 
     Args:
