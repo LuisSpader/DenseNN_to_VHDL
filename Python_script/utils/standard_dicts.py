@@ -515,14 +515,14 @@ layer_dict_softmax = {
             },
             'Sigmoid': {
                 # True = usar versão Sigmoid (Look Up Table)
-                'Using': False,
+                'Using': True,
                 'Memory': {
                     'bits_mem': 8,
                     # 'n' binary digits are the fractional part of `x`; = MANTISSA
                     'input_mem_bits': lambda: layer_dict_softmax['Neuron_arch']['Activation_function']['Sigmoid']['Memory']['bits_mem'],
                 }
             },
-            'Linear': True
+            'Linear': False
         }
     }
 
