@@ -188,7 +188,7 @@ def Neuron_Gen_from_dict2(
     """
     length = len(layers_dict_list)
     is_last_layer = False
-    if  i == (length - 1):
+    if i == (length - 1):
         is_last_layer = True
 
     # ADDER_obj = Adder(layers_dict_list[i])
@@ -239,7 +239,8 @@ def Neuron_Gen_from_dict2(
 
     # =================================================
     activation_fx_component = activation_fx_gen(
-        layer_dict_arg=layers_dict_list[i])
+        layer_dict_arg=layers_dict_list[i],
+        BIT_WIDTH=BIT_WIDTH)
 
     # =================================================
     # ---------------------------- LEAKY RELU -----------------------------------
@@ -446,7 +447,7 @@ def Neuron_Gen_from_dict2(
             print("ERROR: neuron_type not found")
             exit()
 
-        # is_last_layer = True 
+        # is_last_layer = True
         if is_last_layer:
             download_text_to_path(f"{OUTPUT_BASE_DIR_PATH}/{neuron_name}.vhd",
                                   neuron_txt)  # download neuron

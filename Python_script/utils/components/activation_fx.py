@@ -115,7 +115,10 @@ END ARCHITECTURE;''')
 
 def activation_fx_vhd_gen(ReLU_entity: str,
                           Leaky_entity: str,
-                          ACTIVATION_TYPE: int):
+                          ACTIVATION_TYPE: int,
+                          BIT_WIDTH: int):
+    ROM_name = f"ROM_fx_{BIT_WIDTH}bitaddr_{BIT_WIDTH}width"
+
     activation_fx_entity = f'''
 ENTITY activation_fx IS
     GENERIC (
@@ -144,11 +147,11 @@ ARCHITECTURE arch OF activation_fx IS
 {entity_to_component(Leaky_entity)}
 
     -- ROM
-    COMPONENT ROM_fx_8bitaddr_8width IS
+    COMPONENT {ROM_name} IS
         PORT (
-            address  : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+            address  : IN STD_LOGIC_VECTOR (BITS - 1 DOWNTO 0);
             ------------------------------------------
-            data_out : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
+            data_out : OUT STD_LOGIC_VECTOR (BITS - 1 DOWNTO 0)
         );
         -- input: address (8 bits)
         -- output: data_out (8 bits)
@@ -172,7 +175,7 @@ BEGIN
         -- BEGIN
         -- fx_in_ROM <= to_signed(to_integer(fx_in), fx_in_ROM'length); -- Numeric_std
         fx_in_ROM <= fx_in((2 * BITS) - 1 DOWNTO BITS);
-        U_ROM : ROM_fx_8bitaddr_8width PORT MAP(
+        U_ROM : {ROM_name} PORT MAP(
             STD_LOGIC_VECTOR(fx_in_ROM),
             s_fx_out_std
         ); -- input: address (8), output: data_out (8)
@@ -224,7 +227,8 @@ def activation_fx_gen(ReLU_txt: str = ReLU_txt,
                       ReLU_entity: str = ReLU_entity,
                       Leaky_entity: str = Leaky_entity,
                       Leaky_ReLU_txt: str = Leaky_ReLU_txt,
-                      layer_dict_arg: dict = None):
+                      layer_dict_arg: dict = None,
+                      BIT_WIDTH: int = 8):
 
     if layer_dict_arg is None:
         layer_dict_arg = {}
@@ -241,7 +245,8 @@ def activation_fx_gen(ReLU_txt: str = ReLU_txt,
 
     activation_fx_entity, activation_fx_txt = activation_fx_vhd_gen(ReLU_entity=ReLU_entity,
                                                                     Leaky_entity=Leaky_entity,
-                                                                    ACTIVATION_TYPE=ACTIVATION_TYPE)
+                                                                    ACTIVATION_TYPE=ACTIVATION_TYPE,
+                                                                    BIT_WIDTH=BIT_WIDTH)
 
     VHD_gen(name='ReLU', txt=ReLU_txt, path=PARAMS.path, create=True)
     VHD_gen(name='Leaky_ReLU', txt=Leaky_ReLU_txt,

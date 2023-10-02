@@ -279,7 +279,7 @@ architecture arch of {ROM_name} is
 {text_rom_to_asic}
 --	2 => "11111111" , --255
 --	3 => "11010101" ,
-others => "00000000000"
+others => "{str(memory_width*'0')}"
 ) ;
 begin
 	process(clk)
@@ -317,7 +317,7 @@ architecture arch of {ROM_name} is
 {text_rom_to_asic}
 --	2 => "11111111" , --255
 --	3 => "11010101" ,
-others => "00000000000"
+others => "{str(memory_width*'0')}"
 ) ;
 begin
 ---------------
