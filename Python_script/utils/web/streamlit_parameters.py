@@ -1,11 +1,26 @@
 from plot_relu_leaky import plot_fx_activations
 import streamlit as st
-from All_NN_gen import *
+import sys
 import os
+
+# Get the current directory of the script (web folder)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Get the parent directory of the current directory (Python_script folder)
+parent_dir = os.path.dirname(os.path.dirname(current_dir))
+
+# Add the parent directory to the Python path
+sys.path.append(parent_dir)
+
+# Now you can import the module from the Python_script folder
+# from Python_script.GEN_TOP_LEVEL_HDL import *
+
+# from All_NN_gen import *
+from GEN_TOP_LEVEL_HDL import *
 
 
 def streamlit_parameters():
-    st.sidebar.markdown("# ANN Parameters")
+    st.sidebar.markdown("# DNN Parameters")
 
     INPUTS_NUMBER = st.sidebar.number_input(label="First layer number of Inputs (int)",
                                             min_value=1,
@@ -15,7 +30,7 @@ def streamlit_parameters():
                                             )
     with st.sidebar.expander("See explanation"):
         st.write("""
-            The parameter above defines how much inputs the first ANN Layer has.
+            The parameter above defines how much inputs the first DNN Layer has.
             **You can see an example in the image below. 
             The blue edges are the inputs to the 1st Layer.**
         """)

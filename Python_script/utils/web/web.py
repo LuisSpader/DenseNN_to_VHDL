@@ -19,11 +19,11 @@ from streamlit_parameters import *
 # n_var = st.sidebar.slider("Nmos variability", 0.46, 0.59, 0.5166)
 # p_var = st.sidebar.slider("Pmos variability", -0.5, -0.4, -0.4341)
 # sdsds
-st.title("ANN Generator ")
+st.title("Dense NN to VHDL Generator ")
 st.info(
-    '''This website generates Artificial Neural Networks (ANNs) with the VHDL hardware description language. 
-        
-        Set you preference parameters to generate a custom ANN''')
+    '''This website generates Artificial Neural Networks (DNNs) with the VHDL hardware description language. 
+        This DNN is a multi-layer Perceptron (MLP) with a sigmoid layer at the end.
+        Set you preference parameters to generate a custom DNN''')
 # st.markdown("##")
 st.markdown("---")
 IO_TYPE_STR = 'signed'
@@ -143,7 +143,7 @@ with col1:
         with st.spinner('Wait for it...'):
             time.sleep(5)
         st.success(
-            "Done! Now click on 'Download Zip' button to download your VHDL ANN")
+            "Done! Now click on 'Download Zip' button to download your VHDL DNN")
         graph_text = network_flowchart(
             NUMBER_OF_LAYERS, LAYER_NEURONS_NUMBER_LIST)
         st.graphviz_chart(graph_text, use_container_width=False)
