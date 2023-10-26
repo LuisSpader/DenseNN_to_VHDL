@@ -1,8 +1,18 @@
 # import graphviz as graphviz
 import time
 from datetime import date
-import shutil
+# import shutil
 import streamlit as st
+
+# Get the current directory of the script (web folder)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Get the parent directory of the current directory (Python_script folder)
+parent_dir = os.path.dirname(os.path.dirname(current_dir))
+
+# Add the parent directory to the Python path
+sys.path.append(parent_dir)
+
 from streamlit_parameters import *
 
 # web_dict_hidden = copy.deepcopy(layer_dict_hidden)
