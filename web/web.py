@@ -6,14 +6,14 @@ import streamlit as st
 import sys
 import os
 
-# Get the current directory of the script (web folder)
-current_dir = os.path.dirname(os.path.abspath(__file__))
+# # Get the current directory of the script (web folder)
+# current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Get the parent directory of the current directory (Python_script folder)
-parent_dir = os.path.dirname(os.path.dirname(current_dir))
+# # Get the parent directory of the current directory (Python_script folder)
+# parent_dir = os.path.dirname(os.path.dirname(current_dir))
 
-# Add the parent directory to the Python path
-sys.path.append(parent_dir)
+# # Add the parent directory to the Python path
+# sys.path.append(parent_dir)
 
 from streamlit_parameters import *
 

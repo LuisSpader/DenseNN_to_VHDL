@@ -1,22 +1,22 @@
 from plot_relu_leaky import plot_fx_activations
 import streamlit as st
-import sys
-import os
+# import sys
+# import os
 
-# Get the current directory of the script (web folder)
-current_dir = os.path.dirname(os.path.abspath(__file__))
+# # Get the current directory of the script (web folder)
+# current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Get the parent directory of the current directory (Python_script folder)
-parent_dir = os.path.dirname(os.path.dirname(current_dir))
+# # Get the parent directory of the current directory (Python_script folder)
+# parent_dir = os.path.dirname(os.path.dirname(current_dir))
 
-# Add the parent directory to the Python path
-sys.path.append(parent_dir)
+# # Add the parent directory to the Python path
+# sys.path.append(parent_dir)
 
 # Now you can import the module from the Python_script folder
 # from Python_script.GEN_TOP_LEVEL_HDL import *
 
 # from All_NN_gen import *
-from GEN_TOP_LEVEL_HDL import *
+from ..Python_script.GEN_TOP_LEVEL_HDL import *
 
 
 def streamlit_parameters():
