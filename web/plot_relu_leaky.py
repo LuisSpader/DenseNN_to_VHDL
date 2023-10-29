@@ -1,6 +1,6 @@
 import numpy as np
-from plotly import graph_objects as go
-# import plotly.graph_objects as go
+# from plotly import graph_objects as go
+import plotly.graph_objects as go
 
 
 def relu(x: int = 1):
