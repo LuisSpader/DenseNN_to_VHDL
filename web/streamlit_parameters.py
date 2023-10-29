@@ -16,7 +16,19 @@ import streamlit as st
 # from Python_script.GEN_TOP_LEVEL_HDL import *
 
 # from All_NN_gen import *
-from Python_script.GEN_TOP_LEVEL_HDL import *
+
+import os
+import sys
+parent_dir_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+print(parent_dir_name)
+sys.path.append(
+    f"{parent_dir_name}/Python_script/"
+)
+from GEN_TOP_LEVEL_HDL import *
+# from Python_script.GEN_TOP_LEVEL_HDL import *
+# import your_script
+# your_script.a_function()
+
 
 
 def streamlit_parameters():
