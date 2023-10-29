@@ -15,7 +15,7 @@ import streamlit as st
 # # Add the parent directory to the Python path
 # sys.path.append(parent_dir)
 
-from streamlit_parameters import *
+from web.streamlit_parameters import *
 
 # web_dict_hidden = copy.deepcopy(layer_dict_hidden)
 # web_dict_softmax = copy.deepcopy(layer_dict_softmax)

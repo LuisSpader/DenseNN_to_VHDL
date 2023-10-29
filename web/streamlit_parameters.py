@@ -1,4 +1,4 @@
-from plot_relu_leaky import plot_fx_activations
+from web.plot_relu_leaky import plot_fx_activations
 import streamlit as st
 # import sys
 # import os
