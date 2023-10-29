@@ -20,7 +20,7 @@ import streamlit as st
 import os
 import sys
 parent_dir_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-print(parent_dir_name)
+# print(parent_dir_name)
 sys.path.append(
     f"{parent_dir_name}/Python_script/"
 )
