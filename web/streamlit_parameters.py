@@ -16,7 +16,7 @@ import streamlit as st
 # from Python_script.GEN_TOP_LEVEL_HDL import *
 
 # from All_NN_gen import *
-from ..Python_script.GEN_TOP_LEVEL_HDL import *
+from Python_script.GEN_TOP_LEVEL_HDL import *
 
 
 def streamlit_parameters():
